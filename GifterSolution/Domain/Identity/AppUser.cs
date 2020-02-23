@@ -42,15 +42,21 @@ namespace Domain.Identity
         public ICollection<Gift>? Gifts { get; set; }
         
         // List of all reserved gifts that correspond to this user
+        [InverseProperty(nameof(ReservedGift.UserGiver))]
         public ICollection<ReservedGift>? ReservedGiftsByUser { get; set; }
+        [InverseProperty(nameof(ReservedGift.UserReceiver))]
         public ICollection<ReservedGift>? ReservedGiftsForUser { get; set; }
 
         // List of all archived gifts that correspond to this user
+        [InverseProperty(nameof(ArchivedGift.UserGiver))]
         public ICollection<ArchivedGift>? ArchivedGiftsByUser { get; set; }
+        [InverseProperty(nameof(ArchivedGift.UserReceiver))]
         public ICollection<ArchivedGift>? ArchivedGiftsForUser { get; set; }
 
         // List of all friends/other users that correspond to this user
+        [InverseProperty(nameof(Friendship.AppUser1))]
         public ICollection<Friendship>? ConfirmedFriendships { get; set; }
+        [InverseProperty(nameof(Friendship.AppUser2))]
         public ICollection<Friendship>? PendingFriendships { get; set; }
 
         // List of all messages (sent or received) that correspond to this user

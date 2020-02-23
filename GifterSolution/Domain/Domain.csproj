@@ -7,15 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
-      <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.2" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2" />
-      <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+      <ProjectReference Include="..\DAL.Base\DAL.Base.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DAL.Base\DAL.Base.csproj" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
     </ItemGroup>
 
 </Project>
