@@ -40,6 +40,10 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // CUSTOM CODE START
+            UpdateDatabase(app, env, Configuration);
+            // CUSTOM CODE END
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -68,5 +72,24 @@ namespace WebApp
                 endpoints.MapRazorPages();
             });
         }
+        
+        // CUSTOM CODE START
+        private static void UpdateDatabase(IApplicationBuilder app, IWebHostEnvironment env,
+            IConfiguration Configuration)
+        {
+            // Give me the scoped services (everything created by it will be closed at the end of the service scope life)
+            using var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope();
+
+            // Use one context for the db in this whole function
+            using var ctx = serviceScope.ServiceProvider.GetService<AppDbContext>();
+
+            // Here you can do whatever you need .. for example migrate each time so don't have to update db manually
+            // ctx.Database.EnsureDeleted(); // Drop current db if you want to start from the scratch every time
+            // ctx.Database.Migrate(); // Add the new migration. Will automatically create db if not there. If only this is needed don't do the dropping step.
+            // These could also be done in configurations instead
+        }
+        // CUSTOM CODE END
     }
 }
