@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
+using DAL.App.EF.Repositories;
 using Domain;
 
 namespace WebApp.Controllers
@@ -13,16 +11,18 @@ namespace WebApp.Controllers
     public class GiftsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IGiftRepository _giftRepository;
 
         public GiftsController(AppDbContext context)
         {
             _context = context;
-        }
+            _giftRepository = new GiftRepository(context);
+        } 
 
         // GET: Gifts
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Gifts.ToListAsync());
+            return View(await _giftRepository.AllAsync());
         }
 
         // GET: Gifts/Details/5
@@ -33,8 +33,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var gift = await _context.Gifts
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var gift = await _giftRepository.FindAsyncLala(id);
             if (gift == null)
             {
                 return NotFound();
@@ -58,9 +57,10 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                gift.Id = Guid.NewGuid();
-                _context.Add(gift);
-                await _context.SaveChangesAsync();
+                //gift.Id = Guid.NewGuid(); // Probably not needed, already works?
+                _giftRepository.Add(gift);
+                await _giftRepository.SaveChangesAsync();
+                
                 return RedirectToAction(nameof(Index));
             }
             return View(gift);
@@ -74,7 +74,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var gift = await _context.Gifts.FindAsync(id);
+            var gift = await _giftRepository.FindAsyncLala(id);
             if (gift == null)
             {
                 return NotFound();
@@ -93,28 +93,16 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(gift);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GiftExists(gift.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(gift);
             }
-            return View(gift);
+            
+            // TODO: Validation in repository (this previously had try-catch, using "doesGiftExist" method, but shouldn't be done here
+            _giftRepository.Update(gift);
+            await _giftRepository.SaveChangesAsync();
+                
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Gifts/Delete/5
@@ -125,8 +113,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var gift = await _context.Gifts
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var gift = await _giftRepository.FindAsyncLala(id);
             if (gift == null)
             {
                 return NotFound();
@@ -140,15 +127,10 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var gift = await _context.Gifts.FindAsync(id);
-            _context.Gifts.Remove(gift);
-            await _context.SaveChangesAsync();
+            _giftRepository.Remove(id);
+            await _giftRepository.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool GiftExists(Guid id)
-        {
-            return _context.Gifts.Any(e => e.Id == id);
         }
     }
 }

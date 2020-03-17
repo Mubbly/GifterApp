@@ -28,56 +28,56 @@ namespace DAL.Base.EF.Repositories
             RepoDbSet = RepoDbContext.Set<TEntity>();
             if (RepoDbSet == null)
             {
-                throw new ArgumentException(typeof(TEntity).Name + " was not found as DbSet!");
+                throw new ArgumentNullException(typeof(TEntity).Name + " was not found as DbSet!");
             }
         }
         
-        public IEnumerable<TEntity> All()
+        public virtual IEnumerable<TEntity> All()
         {
             return RepoDbSet.ToList();
         }
 
-        public async Task<IEnumerable<TEntity>> AllAsync()
+        public virtual async Task<IEnumerable<TEntity>> AllAsync()
         {
             return await RepoDbSet.ToListAsync();
         }
 
-        public TEntity Find(params object[] id)
+        public virtual TEntity Find(params object[] id)
         {
             return RepoDbSet.Find(id);
         }
 
-        public async Task<TEntity> FindAsync(params object[] id)
+        public virtual async Task<TEntity> FindAsyncLala(params object[] id)
         {
             return await RepoDbSet.FindAsync(id);
         }
 
-        public TEntity Add(TEntity entity)
+        public virtual TEntity Add(TEntity entity)
         {
             return RepoDbSet.Add(entity).Entity;
         }
 
-        public TEntity Update(TEntity entity)
+        public virtual TEntity Update(TEntity entity)
         {
             return RepoDbSet.Update(entity).Entity;
         }
 
-        public TEntity Remove(TEntity entity)
+        public virtual TEntity Remove(TEntity entity)
         {
             return RepoDbSet.Remove(entity).Entity;
         }
 
-        public TEntity Remove(params object[] id)
+        public virtual TEntity Remove(params object[] id)
         {
             return Remove(Find(id));
         }
 
-        public int SaveChanges()
+        public virtual int SaveChanges()
         {
             return RepoDbContext.SaveChanges();
         }
 
-        public async Task<int> SaveChangesAsync()
+        public virtual async Task<int> SaveChangesAsync()
         {
             return await RepoDbContext.SaveChangesAsync();
         }

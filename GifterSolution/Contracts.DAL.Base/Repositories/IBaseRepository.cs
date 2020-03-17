@@ -18,7 +18,7 @@ namespace Contracts.DAL.Base.Repositories
         IEnumerable<TEntity> All();
         Task<IEnumerable<TEntity>> AllAsync();
         TEntity Find(params object[] id);
-        Task<TEntity> FindAsync(params object[] id);
+        Task<TEntity> FindAsyncLala(params object[] id);
         TEntity Add(TEntity entity);
         TEntity Update(TEntity entity);
         TEntity Remove(TEntity entity);

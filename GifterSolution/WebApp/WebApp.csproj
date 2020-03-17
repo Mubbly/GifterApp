@@ -11,20 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2" />
-        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.2" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
-    </ItemGroup>
-
-    <ItemGroup>
       <_ContentIncludedByDefault Remove="Views\Wishlists\Create.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Wishlists\Delete.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Wishlists\Details.cshtml" />
@@ -134,6 +120,20 @@
 
     <ItemGroup>
       <Folder Include="Areas" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.2" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.2" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.2" />
+      <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
     </ItemGroup>
 
 </Project>
