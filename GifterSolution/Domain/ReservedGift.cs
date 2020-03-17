@@ -12,7 +12,7 @@ namespace Domain
      * It should be possible to identify who asked for it and who and when reserved it
      * Has special actions that can be taken (more info in ActionType.cs)
      */
-    public class ReservedGift : DomainEntityMetadata
+    public class ReservedGift : DomainEntity
     {
         public DateTime ReservedFrom { get; set; }
         [MaxLength(2048)] [MinLength(3)] 
@@ -22,25 +22,21 @@ namespace Domain
         public DateTime DateToSendReminder => ReservedFrom.AddDays(30);
         public bool ShouldSendReminder => Convert.ToDateTime(DateToSendReminder).Equals(DateTime.Now);
 
-        [MaxLength(36)]
-        public string GiftId { get; set; } = default!;
+        public Guid GiftId { get; set; } = default!;
         public Gift? Gift { get; set; }
         
-        [MaxLength(36)]
-        public string ActionTypeId { get; set; } = default!;
+        public Guid ActionTypeId { get; set; } = default!;
         public ActionType? ActionType { get; set; }
         
-        [MaxLength(36)]
-        public string StatusId { get; set; } = default!;
+        public Guid StatusId { get; set; } = default!;
         public Status? Status { get; set; }
 
-        // TODO: Manual connections where two users!
-        [ForeignKey(nameof(UserGiver))] [MaxLength(36)]
-        public string UserGiverId { get; set; } = default!;
+        [ForeignKey(nameof(UserGiver))]
+        public Guid UserGiverId { get; set; } = default!;
         public AppUser? UserGiver { get; set; }
         
-        [ForeignKey(nameof(UserReceiver))] [MaxLength(36)]
-        public string UserReceiverId { get; set; } = default!;
+        [ForeignKey(nameof(UserReceiver))]
+        public Guid UserReceiverId { get; set; } = default!;
         public AppUser? UserReceiver { get; set; }
     }
 }

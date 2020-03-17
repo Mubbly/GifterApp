@@ -27,7 +27,7 @@ namespace WebApp.Controllers
         }
 
         // GET: UserCampaigns/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -50,7 +50,7 @@ namespace WebApp.Controllers
         public IActionResult Create()
         {
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Id");
+            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Name");
             return View();
         }
 
@@ -59,21 +59,22 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Comment,AppUserId,CampaignId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] UserCampaign userCampaign)
+        public async Task<IActionResult> Create([Bind("Comment,AppUserId,CampaignId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] UserCampaign userCampaign)
         {
             if (ModelState.IsValid)
             {
+                userCampaign.Id = Guid.NewGuid();
                 _context.Add(userCampaign);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userCampaign.AppUserId);
-            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Id", userCampaign.CampaignId);
+            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Name", userCampaign.CampaignId);
             return View(userCampaign);
         }
 
         // GET: UserCampaigns/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -86,7 +87,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userCampaign.AppUserId);
-            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Id", userCampaign.CampaignId);
+            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Name", userCampaign.CampaignId);
             return View(userCampaign);
         }
 
@@ -95,7 +96,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Comment,AppUserId,CampaignId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] UserCampaign userCampaign)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Comment,AppUserId,CampaignId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] UserCampaign userCampaign)
         {
             if (id != userCampaign.Id)
             {
@@ -123,12 +124,12 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userCampaign.AppUserId);
-            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Id", userCampaign.CampaignId);
+            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Name", userCampaign.CampaignId);
             return View(userCampaign);
         }
 
         // GET: UserCampaigns/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -150,7 +151,7 @@ namespace WebApp.Controllers
         // POST: UserCampaigns/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var userCampaign = await _context.UserCampaigns.FindAsync(id);
             _context.UserCampaigns.Remove(userCampaign);
@@ -158,7 +159,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserCampaignExists(string id)
+        private bool UserCampaignExists(Guid id)
         {
             return _context.UserCampaigns.Any(e => e.Id == id);
         }

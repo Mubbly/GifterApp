@@ -27,7 +27,7 @@ namespace WebApp.Controllers
         }
 
         // GET: UserNotifications/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -50,7 +50,7 @@ namespace WebApp.Controllers
         public IActionResult Create()
         {
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["NotificationId"] = new SelectList(_context.Notifications, "Id", "Id");
+            ViewData["NotificationId"] = new SelectList(_context.Notifications, "Id", "NotificationValue");
             return View();
         }
 
@@ -59,21 +59,22 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LastNotified,RenotifyAt,IsActive,IsDisabled,Comment,AppUserId,NotificationId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] UserNotification userNotification)
+        public async Task<IActionResult> Create([Bind("LastNotified,RenotifyAt,IsActive,IsDisabled,Comment,AppUserId,NotificationId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] UserNotification userNotification)
         {
             if (ModelState.IsValid)
             {
+                userNotification.Id = Guid.NewGuid();
                 _context.Add(userNotification);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userNotification.AppUserId);
-            ViewData["NotificationId"] = new SelectList(_context.Notifications, "Id", "Id", userNotification.NotificationId);
+            ViewData["NotificationId"] = new SelectList(_context.Notifications, "Id", "NotificationValue", userNotification.NotificationId);
             return View(userNotification);
         }
 
         // GET: UserNotifications/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -86,7 +87,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userNotification.AppUserId);
-            ViewData["NotificationId"] = new SelectList(_context.Notifications, "Id", "Id", userNotification.NotificationId);
+            ViewData["NotificationId"] = new SelectList(_context.Notifications, "Id", "NotificationValue", userNotification.NotificationId);
             return View(userNotification);
         }
 
@@ -95,7 +96,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("LastNotified,RenotifyAt,IsActive,IsDisabled,Comment,AppUserId,NotificationId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] UserNotification userNotification)
+        public async Task<IActionResult> Edit(Guid id, [Bind("LastNotified,RenotifyAt,IsActive,IsDisabled,Comment,AppUserId,NotificationId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] UserNotification userNotification)
         {
             if (id != userNotification.Id)
             {
@@ -123,12 +124,12 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userNotification.AppUserId);
-            ViewData["NotificationId"] = new SelectList(_context.Notifications, "Id", "Id", userNotification.NotificationId);
+            ViewData["NotificationId"] = new SelectList(_context.Notifications, "Id", "NotificationValue", userNotification.NotificationId);
             return View(userNotification);
         }
 
         // GET: UserNotifications/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -150,7 +151,7 @@ namespace WebApp.Controllers
         // POST: UserNotifications/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var userNotification = await _context.UserNotifications.FindAsync(id);
             _context.UserNotifications.Remove(userNotification);
@@ -158,7 +159,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserNotificationExists(string id)
+        private bool UserNotificationExists(Guid id)
         {
             return _context.UserNotifications.Any(e => e.Id == id);
         }

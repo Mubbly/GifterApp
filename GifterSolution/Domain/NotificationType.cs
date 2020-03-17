@@ -5,7 +5,7 @@ using DAL.Base;
 
 namespace Domain
 {
-    public class NotificationType : DomainEntityMetadata
+    public class NotificationType : DomainEntity
     {
         [MaxLength(64)] [MinLength(1)] 
         public string NotificationTypeValue { get; set; } = default!;

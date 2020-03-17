@@ -27,7 +27,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Wishlists/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -48,7 +48,7 @@ namespace WebApp.Controllers
         // GET: Wishlists/Create
         public IActionResult Create()
         {
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Id");
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId");
             return View();
         }
 
@@ -57,20 +57,21 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Comment,GiftId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] Wishlist wishlist)
+        public async Task<IActionResult> Create([Bind("Comment,GiftId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] Wishlist wishlist)
         {
             if (ModelState.IsValid)
             {
+                wishlist.Id = Guid.NewGuid();
                 _context.Add(wishlist);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Id", wishlist.GiftId);
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId", wishlist.GiftId);
             return View(wishlist);
         }
 
         // GET: Wishlists/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -82,7 +83,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Id", wishlist.GiftId);
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId", wishlist.GiftId);
             return View(wishlist);
         }
 
@@ -91,7 +92,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Comment,GiftId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] Wishlist wishlist)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Comment,GiftId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] Wishlist wishlist)
         {
             if (id != wishlist.Id)
             {
@@ -118,12 +119,12 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Id", wishlist.GiftId);
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId", wishlist.GiftId);
             return View(wishlist);
         }
 
         // GET: Wishlists/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -144,7 +145,7 @@ namespace WebApp.Controllers
         // POST: Wishlists/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var wishlist = await _context.Wishlists.FindAsync(id);
             _context.Wishlists.Remove(wishlist);
@@ -152,7 +153,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool WishlistExists(string id)
+        private bool WishlistExists(Guid id)
         {
             return _context.Wishlists.Any(e => e.Id == id);
         }

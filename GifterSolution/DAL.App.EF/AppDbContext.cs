@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Domain;
 using Domain.Identity;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF
 {
-    public class AppDbContext: IdentityDbContext<AppUser, AppRole, string>
+    public class AppDbContext: IdentityDbContext<AppUser, AppRole, Guid>
     {
         public DbSet<ActionType> ActionTypes { get; set; } = default!;
         public DbSet<ArchivedGift> ArchivedGifts { get; set; } = default!;
@@ -33,6 +34,80 @@ namespace DAL.App.EF
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
+        }
+        
+         protected override void OnModelCreating(ModelBuilder modelBuilder) 
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // This code is commented out because it only applies when using MSSQL and still had errors
+            
+            // Following code is to turn off Cascade Delete for relationships that have multiple FK references to the SAME table
+            // to avoid cycles and multiple cascade paths
+            // TODO: Remove repetitions, create general logic to target them at once
+            
+            /*
+                // Turn off cascade delete for every foreign key relationship
+                foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+                {
+                    relationship.DeleteBehavior = DeleteBehavior.Restrict;
+                }
+            */
+            
+            /*modelBuilder.Entity<Friendship>()
+                .HasOne(f => f.AppUser1)
+                .WithMany(t => t.ConfirmedFriendships)
+                .HasForeignKey(t => t.AppUser1Id)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Friendship>()
+                .HasOne(f => f.AppUser2)
+                .WithMany(t => t.PendingFriendships)
+                .HasForeignKey(t => t.AppUser2Id)
+                .OnDelete(DeleteBehavior.NoAction);
+            
+            modelBuilder.Entity<PrivateMessage>()
+                .HasOne(f => f.UserReceiver)
+                .WithMany(t => t.ReceivedPrivateMessages)
+                .HasForeignKey(t => t.UserReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<PrivateMessage>()
+                .HasOne(f => f.UserSender)
+                .WithMany(t => t.SentPrivateMessages)
+                .HasForeignKey(t => t.UserSenderId)
+                .OnDelete(DeleteBehavior.NoAction);
+            
+            modelBuilder.Entity<PrivateMessage>()
+                .HasOne(f => f.UserReceiver)
+                .WithMany(t => t.ReceivedPrivateMessages)
+                .HasForeignKey(t => t.UserReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<PrivateMessage>()
+                .HasOne(f => f.UserSender)
+                .WithMany(t => t.SentPrivateMessages)
+                .HasForeignKey(t => t.UserSenderId)
+                .OnDelete(DeleteBehavior.NoAction);
+            
+            modelBuilder.Entity<ReservedGift>()
+                .HasOne(f => f.UserReceiver)
+                .WithMany(t => t.ReservedGiftsForUser)
+                .HasForeignKey(t => t.UserReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ReservedGift>()
+                .HasOne(f => f.UserGiver)
+                .WithMany(t => t.ReservedGiftsByUser)
+                .HasForeignKey(t => t.UserGiverId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ArchivedGift>()
+                .HasOne(f => f.UserReceiver)
+                .WithMany(t => t.ArchivedGiftsForUser)
+                .HasForeignKey(t => t.UserReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ArchivedGift>()
+                .HasOne(f => f.UserGiver)
+                .WithMany(t => t.ArchivedGiftsByUser)
+                .HasForeignKey(t => t.UserGiverId)
+                .OnDelete(DeleteBehavior.NoAction);*/
         }
     }
 }

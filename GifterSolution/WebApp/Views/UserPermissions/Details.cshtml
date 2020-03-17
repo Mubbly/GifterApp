@@ -38,7 +38,7 @@
             @Html.DisplayNameFor(model => model.Permission)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Permission.Id)
+            @Html.DisplayFor(model => model.Permission.PermissionValue)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedBy)
@@ -63,18 +63,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EditedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DeletedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DeletedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DeletedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DeletedAt)
         </dd>
     </dl>
 </div>

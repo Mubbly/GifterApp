@@ -3,14 +3,15 @@ using Contracts.DAL.Base;
 
 namespace DAL.Base
 {
-    public abstract class DomainEntityMetadata : DomainEntity, IDomainEntityMetadata
+    public abstract class DomainEntityMetadata : IDomainEntityMetadata
     {
-        // TODO: Remove default! from not nullable types
-        public string? CreatedBy { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public string? EditedBy { get; set; }
-        public DateTime? EditedAt { get; set; }
-        public string? DeletedBy { get; set; }
-        public DateTime? DeletedAt { get; set; }
+        public virtual string? CreatedBy { get; set; }
+        public virtual DateTime CreatedAt { get; set; } = DateTime.Now;
+        public virtual string? EditedBy { get; set; }
+        public virtual DateTime? EditedAt { get; set; } = DateTime.Now;
+        
+        // No soft update/delete right now
+        // public string? DeletedBy { get; set; }
+        // public DateTime? DeletedAt { get; set; }
     }
 }

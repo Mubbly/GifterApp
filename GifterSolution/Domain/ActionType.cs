@@ -12,7 +12,7 @@ namespace Domain
      *     "Reserved" state gift: 1) Gifted/Archive 2) Cancel/Set active
      *     "Archived" state gift: 1) Confirm/Archive 2) Deny/Set active
      */
-    public class ActionType : DomainEntityMetadata
+    public class ActionType : DomainEntity
     {
         [MaxLength(64)] [MinLength(1)] 
         public string ActionTypeValue { get; set; } = default!;

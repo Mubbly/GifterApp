@@ -26,7 +26,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Campaigns/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -54,10 +54,11 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,AdImage,Institution,ActiveFromDate,ActiveToDate,IsActive,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] Campaign campaign)
+        public async Task<IActionResult> Create([Bind("Name,Description,AdImage,Institution,ActiveFromDate,ActiveToDate,IsActive,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] Campaign campaign)
         {
             if (ModelState.IsValid)
             {
+                campaign.Id = Guid.NewGuid();
                 _context.Add(campaign);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -66,7 +67,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Campaigns/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -86,7 +87,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,Description,AdImage,Institution,ActiveFromDate,ActiveToDate,IsActive,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] Campaign campaign)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Description,AdImage,Institution,ActiveFromDate,ActiveToDate,IsActive,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] Campaign campaign)
         {
             if (id != campaign.Id)
             {
@@ -117,7 +118,7 @@ namespace WebApp.Controllers
         }
 
         // GET: Campaigns/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -137,7 +138,7 @@ namespace WebApp.Controllers
         // POST: Campaigns/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var campaign = await _context.Campaigns.FindAsync(id);
             _context.Campaigns.Remove(campaign);
@@ -145,7 +146,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CampaignExists(string id)
+        private bool CampaignExists(Guid id)
         {
             return _context.Campaigns.Any(e => e.Id == id);
         }

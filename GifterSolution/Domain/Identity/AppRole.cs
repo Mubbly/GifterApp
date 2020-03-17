@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Identity
 {
-    public class AppRole : IdentityRole
+    [Table("AspNetUsers")]
+    public class AppRole : IdentityRole<Guid>
     {
-        [MaxLength(36)]
-        public override string Id { get; set; } = default!;
+        
     }
 }

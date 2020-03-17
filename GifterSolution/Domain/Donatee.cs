@@ -10,7 +10,7 @@ namespace Domain
      * These are temporary "person with a wish" tokens made by campaign manager user
      * so that participants wouldn't have to actually register one by one
      */
-    public class Donatee : DomainEntityMetadata
+    public class Donatee : DomainEntity
     {
         [MaxLength(256)] [MinLength(1)] 
         public string FirstName { get; set; } = default!;
@@ -34,12 +34,10 @@ namespace Domain
         public DateTime ActiveTo { get; set; }
         public bool IsActive { get; set; }
         
-        [MaxLength(36)]
-        public string ActionTypeId { get; set; } = default!;
+        public Guid ActionTypeId { get; set; } = default!;
         public ActionType? ActionType { get; set; }
 
-        [MaxLength(36)]
-        public string StatusId { get; set; } = default!;
+        public Guid StatusId { get; set; } = default!;
         public Status? Status { get; set; }
         
         // List of mapped campaigns and donatees

@@ -10,7 +10,7 @@ namespace Domain
      * Gift is an item that the user can add to their Wishlist on their Profile
      * Other users can see and interact with it
      */
-    public class Gift : DomainEntityMetadata
+    public class Gift : DomainEntity
     {
         [MaxLength(256)] [MinLength(1)] 
         public string Name { get; set; } = default!;

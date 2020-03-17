@@ -27,7 +27,7 @@ namespace WebApp.Controllers
         }
 
         // GET: UserPermissions/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -50,7 +50,7 @@ namespace WebApp.Controllers
         public IActionResult Create()
         {
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["PermissionId"] = new SelectList(_context.Permissions, "Id", "Id");
+            ViewData["PermissionId"] = new SelectList(_context.Permissions, "Id", "PermissionValue");
             return View();
         }
 
@@ -59,21 +59,22 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("From,To,Comment,AppUserId,PermissionId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] UserPermission userPermission)
+        public async Task<IActionResult> Create([Bind("From,To,Comment,AppUserId,PermissionId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] UserPermission userPermission)
         {
             if (ModelState.IsValid)
             {
+                userPermission.Id = Guid.NewGuid();
                 _context.Add(userPermission);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userPermission.AppUserId);
-            ViewData["PermissionId"] = new SelectList(_context.Permissions, "Id", "Id", userPermission.PermissionId);
+            ViewData["PermissionId"] = new SelectList(_context.Permissions, "Id", "PermissionValue", userPermission.PermissionId);
             return View(userPermission);
         }
 
         // GET: UserPermissions/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -86,7 +87,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userPermission.AppUserId);
-            ViewData["PermissionId"] = new SelectList(_context.Permissions, "Id", "Id", userPermission.PermissionId);
+            ViewData["PermissionId"] = new SelectList(_context.Permissions, "Id", "PermissionValue", userPermission.PermissionId);
             return View(userPermission);
         }
 
@@ -95,7 +96,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("From,To,Comment,AppUserId,PermissionId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] UserPermission userPermission)
+        public async Task<IActionResult> Edit(Guid id, [Bind("From,To,Comment,AppUserId,PermissionId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] UserPermission userPermission)
         {
             if (id != userPermission.Id)
             {
@@ -123,12 +124,12 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userPermission.AppUserId);
-            ViewData["PermissionId"] = new SelectList(_context.Permissions, "Id", "Id", userPermission.PermissionId);
+            ViewData["PermissionId"] = new SelectList(_context.Permissions, "Id", "PermissionValue", userPermission.PermissionId);
             return View(userPermission);
         }
 
         // GET: UserPermissions/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -150,7 +151,7 @@ namespace WebApp.Controllers
         // POST: UserPermissions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var userPermission = await _context.UserPermissions.FindAsync(id);
             _context.UserPermissions.Remove(userPermission);
@@ -158,7 +159,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserPermissionExists(string id)
+        private bool UserPermissionExists(Guid id)
         {
             return _context.UserPermissions.Any(e => e.Id == id);
         }

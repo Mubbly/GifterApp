@@ -5,17 +5,15 @@ using Domain.Identity;
 
 namespace Domain
 {
-    public class UserProfile : DomainEntityMetadata
+    public class UserProfile : DomainEntity
     {
         [MaxLength(2048)] [MinLength(3)] 
         public string? Comment { get; set; }
 
-        [MaxLength(36)]
-        public string AppUserId { get; set; } = default!;
+        public Guid AppUserId { get; set; } = default!;
         public AppUser? AppUser { get; set; }
 
-        [MaxLength(36)]
-        public string ProfileId { get; set; } = default!;
+        public Guid ProfileId { get; set; } = default!;
         public Profile? Profile { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace Domain
      * Each campaign has donatees/people you can donate certain gifts to
      * Example: Children from an orphanage during Christmas holidays
      */
-    public class Campaign : DomainEntityMetadata
+    public class Campaign : DomainEntity
     {
         [MaxLength(512)] [MinLength(1)] 
         public string Name { get; set; } = default!;

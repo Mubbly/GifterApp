@@ -12,13 +12,11 @@ namespace DAL.App.EF.Migrations
                 name: "ActionTypes",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     ActionTypeValue = table.Column<string>(maxLength: 64, nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true)
                 },
@@ -31,7 +29,7 @@ namespace DAL.App.EF.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
@@ -45,7 +43,7 @@ namespace DAL.App.EF.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
@@ -76,13 +74,11 @@ namespace DAL.App.EF.Migrations
                 name: "Campaigns",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(maxLength: 512, nullable: false),
                     Description = table.Column<string>(maxLength: 4096, nullable: true),
                     AdImage = table.Column<string>(maxLength: 2048, nullable: true),
@@ -100,13 +96,11 @@ namespace DAL.App.EF.Migrations
                 name: "NotificationTypes",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     NotificationTypeValue = table.Column<string>(maxLength: 64, nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true)
                 },
@@ -119,13 +113,11 @@ namespace DAL.App.EF.Migrations
                 name: "Permissions",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     PermissionValue = table.Column<string>(maxLength: 1024, nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true)
                 },
@@ -138,13 +130,11 @@ namespace DAL.App.EF.Migrations
                 name: "Statuses",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     StatusValue = table.Column<string>(maxLength: 64, nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true)
                 },
@@ -159,7 +149,7 @@ namespace DAL.App.EF.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    RoleId = table.Column<string>(nullable: false),
+                    RoleId = table.Column<Guid>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -180,7 +170,7 @@ namespace DAL.App.EF.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -202,7 +192,7 @@ namespace DAL.App.EF.Migrations
                     LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
                     ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -219,8 +209,8 @@ namespace DAL.App.EF.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false),
+                    RoleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -243,7 +233,7 @@ namespace DAL.App.EF.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
                     LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
                     Value = table.Column<string>(nullable: true)
@@ -263,17 +253,15 @@ namespace DAL.App.EF.Migrations
                 name: "Friendships",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     IsConfirmed = table.Column<bool>(nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true),
-                    AppUser1Id = table.Column<string>(maxLength: 36, nullable: false),
-                    AppUser2Id = table.Column<string>(maxLength: 36, nullable: false)
+                    AppUser1Id = table.Column<Guid>(nullable: false),
+                    AppUser2Id = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -296,19 +284,17 @@ namespace DAL.App.EF.Migrations
                 name: "InvitedUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     Email = table.Column<string>(maxLength: 128, nullable: false),
                     PhoneNumber = table.Column<string>(maxLength: 32, nullable: true),
                     Message = table.Column<string>(maxLength: 1024, nullable: true),
                     DateInvited = table.Column<DateTime>(nullable: false),
                     HasJoined = table.Column<bool>(nullable: false),
-                    InvitorUserId = table.Column<string>(maxLength: 36, nullable: false)
+                    InvitorUserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -325,18 +311,16 @@ namespace DAL.App.EF.Migrations
                 name: "PrivateMessages",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     Message = table.Column<string>(maxLength: 4096, nullable: false),
                     SentAt = table.Column<DateTime>(nullable: false),
                     IsSeen = table.Column<bool>(nullable: false),
-                    UserSenderId = table.Column<string>(maxLength: 36, nullable: false),
-                    UserReceiverId = table.Column<string>(maxLength: 36, nullable: false)
+                    UserSenderId = table.Column<Guid>(nullable: false),
+                    UserReceiverId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -359,16 +343,14 @@ namespace DAL.App.EF.Migrations
                 name: "UserCampaigns",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true),
-                    AppUserId = table.Column<string>(maxLength: 36, nullable: false),
-                    CampaignId = table.Column<string>(maxLength: 36, nullable: false)
+                    AppUserId = table.Column<Guid>(nullable: false),
+                    CampaignId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -391,16 +373,14 @@ namespace DAL.App.EF.Migrations
                 name: "Notifications",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     NotificationValue = table.Column<string>(maxLength: 1024, nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true),
-                    NotificationTypeId = table.Column<string>(maxLength: 36, nullable: false)
+                    NotificationTypeId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -417,18 +397,16 @@ namespace DAL.App.EF.Migrations
                 name: "UserPermissions",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     From = table.Column<DateTime>(nullable: false),
                     To = table.Column<DateTime>(nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true),
-                    AppUserId = table.Column<string>(maxLength: 36, nullable: false),
-                    PermissionId = table.Column<string>(maxLength: 36, nullable: false)
+                    AppUserId = table.Column<Guid>(nullable: false),
+                    PermissionId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -451,13 +429,11 @@ namespace DAL.App.EF.Migrations
                 name: "Donatees",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     FirstName = table.Column<string>(maxLength: 256, nullable: false),
                     LastName = table.Column<string>(maxLength: 256, nullable: true),
                     Gender = table.Column<string>(maxLength: 256, nullable: true),
@@ -471,8 +447,8 @@ namespace DAL.App.EF.Migrations
                     ActiveFrom = table.Column<DateTime>(nullable: false),
                     ActiveTo = table.Column<DateTime>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    ActionTypeId = table.Column<string>(maxLength: 36, nullable: false),
-                    StatusId = table.Column<string>(maxLength: 36, nullable: false)
+                    ActionTypeId = table.Column<Guid>(nullable: false),
+                    StatusId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -495,13 +471,11 @@ namespace DAL.App.EF.Migrations
                 name: "Gifts",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(maxLength: 256, nullable: false),
                     Description = table.Column<string>(maxLength: 1024, nullable: true),
                     Image = table.Column<string>(maxLength: 2048, nullable: true),
@@ -510,50 +484,51 @@ namespace DAL.App.EF.Migrations
                     IsPartnered = table.Column<bool>(nullable: false),
                     IsPinned = table.Column<bool>(nullable: false),
                     ActionTypeId = table.Column<string>(maxLength: 36, nullable: false),
+                    ActionTypeId1 = table.Column<Guid>(nullable: true),
                     AppUserId = table.Column<string>(maxLength: 36, nullable: false),
-                    StatusId = table.Column<string>(maxLength: 36, nullable: false)
+                    AppUserId1 = table.Column<Guid>(nullable: true),
+                    StatusId = table.Column<string>(maxLength: 36, nullable: false),
+                    StatusId1 = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Gifts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Gifts_ActionTypes_ActionTypeId",
-                        column: x => x.ActionTypeId,
+                        name: "FK_Gifts_ActionTypes_ActionTypeId1",
+                        column: x => x.ActionTypeId1,
                         principalTable: "ActionTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Gifts_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
+                        name: "FK_Gifts_AspNetUsers_AppUserId1",
+                        column: x => x.AppUserId1,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Gifts_Statuses_StatusId",
-                        column: x => x.StatusId,
+                        name: "FK_Gifts_Statuses_StatusId1",
+                        column: x => x.StatusId1,
                         principalTable: "Statuses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "UserNotifications",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     LastNotified = table.Column<DateTime>(nullable: false),
                     RenotifyAt = table.Column<DateTime>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     IsDisabled = table.Column<bool>(nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true),
-                    AppUserId = table.Column<string>(maxLength: 36, nullable: false),
-                    NotificationId = table.Column<string>(maxLength: 36, nullable: false)
+                    AppUserId = table.Column<Guid>(nullable: false),
+                    NotificationId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -576,17 +551,15 @@ namespace DAL.App.EF.Migrations
                 name: "CampaignDonatees",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     Comment = table.Column<string>(maxLength: 1024, nullable: true),
-                    CampaignId = table.Column<string>(maxLength: 36, nullable: false),
-                    DonateeId = table.Column<string>(maxLength: 36, nullable: false)
+                    CampaignId = table.Column<Guid>(nullable: false),
+                    DonateeId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -609,21 +582,19 @@ namespace DAL.App.EF.Migrations
                 name: "ArchivedGifts",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     DateArchived = table.Column<DateTime>(nullable: false),
                     IsConfirmed = table.Column<bool>(nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true),
-                    ActionTypeId = table.Column<string>(maxLength: 36, nullable: false),
-                    GiftId = table.Column<string>(maxLength: 36, nullable: false),
-                    StatusId = table.Column<string>(maxLength: 36, nullable: false),
-                    UserGiverId = table.Column<string>(maxLength: 36, nullable: false),
-                    UserReceiverId = table.Column<string>(maxLength: 36, nullable: false)
+                    ActionTypeId = table.Column<Guid>(nullable: false),
+                    GiftId = table.Column<Guid>(nullable: false),
+                    StatusId = table.Column<Guid>(nullable: false),
+                    UserGiverId = table.Column<Guid>(nullable: false),
+                    UserReceiverId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -664,20 +635,18 @@ namespace DAL.App.EF.Migrations
                 name: "ReservedGifts",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     ReservedFrom = table.Column<DateTime>(nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true),
-                    GiftId = table.Column<string>(maxLength: 36, nullable: false),
-                    ActionTypeId = table.Column<string>(maxLength: 36, nullable: false),
-                    StatusId = table.Column<string>(maxLength: 36, nullable: false),
-                    UserGiverId = table.Column<string>(maxLength: 36, nullable: false),
-                    UserReceiverId = table.Column<string>(maxLength: 36, nullable: false)
+                    GiftId = table.Column<Guid>(nullable: false),
+                    ActionTypeId = table.Column<Guid>(nullable: false),
+                    StatusId = table.Column<Guid>(nullable: false),
+                    UserGiverId = table.Column<Guid>(nullable: false),
+                    UserReceiverId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -718,15 +687,13 @@ namespace DAL.App.EF.Migrations
                 name: "Wishlists",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true),
-                    GiftId = table.Column<string>(maxLength: 36, nullable: false)
+                    GiftId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -743,20 +710,18 @@ namespace DAL.App.EF.Migrations
                 name: "Profiles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     ProfilePicture = table.Column<string>(maxLength: 2048, nullable: true),
                     Gender = table.Column<string>(maxLength: 256, nullable: true),
                     Bio = table.Column<string>(maxLength: 512, nullable: true),
                     Age = table.Column<int>(nullable: true),
                     IsPrivate = table.Column<bool>(nullable: false),
-                    AppUserId = table.Column<string>(maxLength: 36, nullable: false),
-                    WishlistId = table.Column<string>(maxLength: 36, nullable: false)
+                    AppUserId = table.Column<Guid>(nullable: false),
+                    WishlistId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -779,16 +744,14 @@ namespace DAL.App.EF.Migrations
                 name: "UserProfiles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(maxLength: 36, nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     EditedBy = table.Column<string>(nullable: true),
                     EditedAt = table.Column<DateTime>(nullable: true),
-                    DeletedBy = table.Column<string>(nullable: true),
-                    DeletedAt = table.Column<DateTime>(nullable: true),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true),
-                    AppUserId = table.Column<string>(maxLength: 36, nullable: false),
-                    ProfileId = table.Column<string>(maxLength: 36, nullable: false)
+                    AppUserId = table.Column<Guid>(nullable: false),
+                    ProfileId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -900,19 +863,19 @@ namespace DAL.App.EF.Migrations
                 column: "AppUser2Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gifts_ActionTypeId",
+                name: "IX_Gifts_ActionTypeId1",
                 table: "Gifts",
-                column: "ActionTypeId");
+                column: "ActionTypeId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gifts_AppUserId",
+                name: "IX_Gifts_AppUserId1",
                 table: "Gifts",
-                column: "AppUserId");
+                column: "AppUserId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gifts_StatusId",
+                name: "IX_Gifts_StatusId1",
                 table: "Gifts",
-                column: "StatusId");
+                column: "StatusId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InvitedUsers_InvitorUserId",

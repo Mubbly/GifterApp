@@ -9,7 +9,7 @@ using System.Collections.Generic;
      * Temporary table - will actually preexist from Identity?
      * Permissions restrict or allow users to do certain things within the app
      */
-    public class Permission : DomainEntityMetadata
+    public class Permission : DomainEntity
     {
         [MaxLength(1024)] [MinLength(1)] 
         public string PermissionValue { get; set; } = default!;

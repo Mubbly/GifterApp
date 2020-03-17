@@ -12,7 +12,7 @@ namespace Domain
      *     Reserved
      *     Archieved
      */    
-    public class Status : DomainEntityMetadata
+    public class Status : DomainEntity
     {
         [MaxLength(64)] [MinLength(1)] 
         public string StatusValue { get; set; } = default!;

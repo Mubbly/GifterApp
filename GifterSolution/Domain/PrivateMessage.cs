@@ -10,7 +10,7 @@ namespace Domain
      * Private message is a message sent from one user to another that only they can see
      * For example to ask for them to specify about something in their Wishlist
      */
-    public class PrivateMessage : DomainEntityMetadata
+    public class PrivateMessage : DomainEntity
     {
         [MaxLength(4096)] [MinLength(1)] 
         public string Message { get; set; } = default!;
@@ -18,12 +18,12 @@ namespace Domain
         public bool IsSeen { get; set; }
         
         // TODO: Manual connection
-        [ForeignKey(nameof(UserSender))] [MaxLength(36)]
-        public string UserSenderId { get; set; } = default!;
+        [ForeignKey(nameof(UserSender))]
+        public Guid UserSenderId { get; set; } = default!;
         public AppUser? UserSender { get; set; }
         
-        [ForeignKey(nameof(UserReceiver))] [MaxLength(36)]
-        public string UserReceiverId { get; set; } = default!;
+        [ForeignKey(nameof(UserReceiver))]
+        public Guid UserReceiverId { get; set; } = default!;
         public AppUser? UserReceiver { get; set; }
     }
 }

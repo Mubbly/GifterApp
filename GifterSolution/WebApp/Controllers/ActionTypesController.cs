@@ -26,7 +26,7 @@ namespace WebApp.Controllers
         }
 
         // GET: ActionTypes/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -54,10 +54,11 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ActionTypeValue,Comment,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] ActionType actionType)
+        public async Task<IActionResult> Create([Bind("ActionTypeValue,Comment,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] ActionType actionType)
         {
             if (ModelState.IsValid)
             {
+                actionType.Id = Guid.NewGuid();
                 _context.Add(actionType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -66,7 +67,7 @@ namespace WebApp.Controllers
         }
 
         // GET: ActionTypes/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -86,7 +87,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("ActionTypeValue,Comment,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] ActionType actionType)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ActionTypeValue,Comment,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] ActionType actionType)
         {
             if (id != actionType.Id)
             {
@@ -117,7 +118,7 @@ namespace WebApp.Controllers
         }
 
         // GET: ActionTypes/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -137,7 +138,7 @@ namespace WebApp.Controllers
         // POST: ActionTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var actionType = await _context.ActionTypes.FindAsync(id);
             _context.ActionTypes.Remove(actionType);
@@ -145,7 +146,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ActionTypeExists(string id)
+        private bool ActionTypeExists(Guid id)
         {
             return _context.ActionTypes.Any(e => e.Id == id);
         }

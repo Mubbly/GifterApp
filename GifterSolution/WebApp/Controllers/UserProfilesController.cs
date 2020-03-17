@@ -27,7 +27,7 @@ namespace WebApp.Controllers
         }
 
         // GET: UserProfiles/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -59,10 +59,11 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Comment,AppUserId,ProfileId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] UserProfile userProfile)
+        public async Task<IActionResult> Create([Bind("Comment,AppUserId,ProfileId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] UserProfile userProfile)
         {
             if (ModelState.IsValid)
             {
+                userProfile.Id = Guid.NewGuid();
                 _context.Add(userProfile);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -73,7 +74,7 @@ namespace WebApp.Controllers
         }
 
         // GET: UserProfiles/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -95,7 +96,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Comment,AppUserId,ProfileId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] UserProfile userProfile)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Comment,AppUserId,ProfileId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] UserProfile userProfile)
         {
             if (id != userProfile.Id)
             {
@@ -128,7 +129,7 @@ namespace WebApp.Controllers
         }
 
         // GET: UserProfiles/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -150,7 +151,7 @@ namespace WebApp.Controllers
         // POST: UserProfiles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var userProfile = await _context.UserProfiles.FindAsync(id);
             _context.UserProfiles.Remove(userProfile);
@@ -158,7 +159,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserProfileExists(string id)
+        private bool UserProfileExists(Guid id)
         {
             return _context.UserProfiles.Any(e => e.Id == id);
         }

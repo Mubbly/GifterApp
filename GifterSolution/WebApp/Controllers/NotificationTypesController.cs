@@ -26,7 +26,7 @@ namespace WebApp.Controllers
         }
 
         // GET: NotificationTypes/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -54,10 +54,11 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NotificationTypeValue,Comment,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] NotificationType notificationType)
+        public async Task<IActionResult> Create([Bind("NotificationTypeValue,Comment,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] NotificationType notificationType)
         {
             if (ModelState.IsValid)
             {
+                notificationType.Id = Guid.NewGuid();
                 _context.Add(notificationType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -66,7 +67,7 @@ namespace WebApp.Controllers
         }
 
         // GET: NotificationTypes/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -86,7 +87,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("NotificationTypeValue,Comment,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] NotificationType notificationType)
+        public async Task<IActionResult> Edit(Guid id, [Bind("NotificationTypeValue,Comment,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] NotificationType notificationType)
         {
             if (id != notificationType.Id)
             {
@@ -117,7 +118,7 @@ namespace WebApp.Controllers
         }
 
         // GET: NotificationTypes/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -137,7 +138,7 @@ namespace WebApp.Controllers
         // POST: NotificationTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var notificationType = await _context.NotificationTypes.FindAsync(id);
             _context.NotificationTypes.Remove(notificationType);
@@ -145,7 +146,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool NotificationTypeExists(string id)
+        private bool NotificationTypeExists(Guid id)
         {
             return _context.NotificationTypes.Any(e => e.Id == id);
         }

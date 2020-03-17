@@ -22,12 +22,11 @@ namespace WebApp.Controllers
         // GET: Gifts
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Gifts.Include(g => g.ActionType).Include(g => g.AppUser).Include(g => g.Status);
-            return View(await appDbContext.ToListAsync());
+            return View(await _context.Gifts.ToListAsync());
         }
 
         // GET: Gifts/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -35,9 +34,6 @@ namespace WebApp.Controllers
             }
 
             var gift = await _context.Gifts
-                .Include(g => g.ActionType)
-                .Include(g => g.AppUser)
-                .Include(g => g.Status)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (gift == null)
             {
@@ -50,9 +46,6 @@ namespace WebApp.Controllers
         // GET: Gifts/Create
         public IActionResult Create()
         {
-            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "Id");
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Id");
             return View();
         }
 
@@ -61,22 +54,20 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description,Image,Url,PartnerUrl,IsPartnered,IsPinned,ActionTypeId,AppUserId,StatusId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] Gift gift)
+        public async Task<IActionResult> Create([Bind("Name,Description,Image,Url,PartnerUrl,IsPartnered,IsPinned,ActionTypeId,AppUserId,StatusId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] Gift gift)
         {
             if (ModelState.IsValid)
             {
+                gift.Id = Guid.NewGuid();
                 _context.Add(gift);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "Id", gift.ActionTypeId);
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", gift.AppUserId);
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Id", gift.StatusId);
             return View(gift);
         }
 
         // GET: Gifts/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -88,9 +79,6 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "Id", gift.ActionTypeId);
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", gift.AppUserId);
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Id", gift.StatusId);
             return View(gift);
         }
 
@@ -99,7 +87,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,Description,Image,Url,PartnerUrl,IsPartnered,IsPinned,ActionTypeId,AppUserId,StatusId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] Gift gift)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Description,Image,Url,PartnerUrl,IsPartnered,IsPinned,ActionTypeId,AppUserId,StatusId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] Gift gift)
         {
             if (id != gift.Id)
             {
@@ -126,14 +114,11 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "Id", gift.ActionTypeId);
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", gift.AppUserId);
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Id", gift.StatusId);
             return View(gift);
         }
 
         // GET: Gifts/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -141,9 +126,6 @@ namespace WebApp.Controllers
             }
 
             var gift = await _context.Gifts
-                .Include(g => g.ActionType)
-                .Include(g => g.AppUser)
-                .Include(g => g.Status)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (gift == null)
             {
@@ -156,7 +138,7 @@ namespace WebApp.Controllers
         // POST: Gifts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var gift = await _context.Gifts.FindAsync(id);
             _context.Gifts.Remove(gift);
@@ -164,7 +146,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GiftExists(string id)
+        private bool GiftExists(Guid id)
         {
             return _context.Gifts.Any(e => e.Id == id);
         }

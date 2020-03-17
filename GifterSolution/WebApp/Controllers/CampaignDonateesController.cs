@@ -27,7 +27,7 @@ namespace WebApp.Controllers
         }
 
         // GET: CampaignDonatees/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -49,8 +49,8 @@ namespace WebApp.Controllers
         // GET: CampaignDonatees/Create
         public IActionResult Create()
         {
-            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Id");
-            ViewData["DonateeId"] = new SelectList(_context.Donatees, "Id", "Id");
+            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Name");
+            ViewData["DonateeId"] = new SelectList(_context.Donatees, "Id", "FirstName");
             return View();
         }
 
@@ -59,21 +59,22 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IsActive,Comment,CampaignId,DonateeId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] CampaignDonatee campaignDonatee)
+        public async Task<IActionResult> Create([Bind("IsActive,Comment,CampaignId,DonateeId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] CampaignDonatee campaignDonatee)
         {
             if (ModelState.IsValid)
             {
+                campaignDonatee.Id = Guid.NewGuid();
                 _context.Add(campaignDonatee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Id", campaignDonatee.CampaignId);
-            ViewData["DonateeId"] = new SelectList(_context.Donatees, "Id", "Id", campaignDonatee.DonateeId);
+            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Name", campaignDonatee.CampaignId);
+            ViewData["DonateeId"] = new SelectList(_context.Donatees, "Id", "FirstName", campaignDonatee.DonateeId);
             return View(campaignDonatee);
         }
 
         // GET: CampaignDonatees/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -85,8 +86,8 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Id", campaignDonatee.CampaignId);
-            ViewData["DonateeId"] = new SelectList(_context.Donatees, "Id", "Id", campaignDonatee.DonateeId);
+            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Name", campaignDonatee.CampaignId);
+            ViewData["DonateeId"] = new SelectList(_context.Donatees, "Id", "FirstName", campaignDonatee.DonateeId);
             return View(campaignDonatee);
         }
 
@@ -95,7 +96,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("IsActive,Comment,CampaignId,DonateeId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] CampaignDonatee campaignDonatee)
+        public async Task<IActionResult> Edit(Guid id, [Bind("IsActive,Comment,CampaignId,DonateeId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] CampaignDonatee campaignDonatee)
         {
             if (id != campaignDonatee.Id)
             {
@@ -122,13 +123,13 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Id", campaignDonatee.CampaignId);
-            ViewData["DonateeId"] = new SelectList(_context.Donatees, "Id", "Id", campaignDonatee.DonateeId);
+            ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Name", campaignDonatee.CampaignId);
+            ViewData["DonateeId"] = new SelectList(_context.Donatees, "Id", "FirstName", campaignDonatee.DonateeId);
             return View(campaignDonatee);
         }
 
         // GET: CampaignDonatees/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -150,7 +151,7 @@ namespace WebApp.Controllers
         // POST: CampaignDonatees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var campaignDonatee = await _context.CampaignDonatees.FindAsync(id);
             _context.CampaignDonatees.Remove(campaignDonatee);
@@ -158,7 +159,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CampaignDonateeExists(string id)
+        private bool CampaignDonateeExists(Guid id)
         {
             return _context.CampaignDonatees.Any(e => e.Id == id);
         }

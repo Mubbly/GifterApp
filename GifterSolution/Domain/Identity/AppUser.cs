@@ -8,12 +8,8 @@ using Microsoft.AspNetCore.Identity;
 namespace Domain.Identity
     
 {
-    public class AppUser : IdentityUser
+    public class AppUser : IdentityUser<Guid>
     {
-        // Overriden fields
-        [MaxLength(36)] 
-        public override string Id { get; set; } = default!; // To fix the PK length
-
         // Custom fields
         [MaxLength(256)] [MinLength(1)] 
         public string? FirstName { get; set; }

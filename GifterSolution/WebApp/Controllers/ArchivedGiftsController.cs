@@ -27,7 +27,7 @@ namespace WebApp.Controllers
         }
 
         // GET: ArchivedGifts/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -52,9 +52,9 @@ namespace WebApp.Controllers
         // GET: ArchivedGifts/Create
         public IActionResult Create()
         {
-            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "Id");
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Id");
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Id");
+            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue");
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId");
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue");
             ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "Id");
             ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
@@ -65,24 +65,25 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DateArchived,IsConfirmed,Comment,ActionTypeId,GiftId,StatusId,UserGiverId,UserReceiverId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] ArchivedGift archivedGift)
+        public async Task<IActionResult> Create([Bind("DateArchived,IsConfirmed,Comment,ActionTypeId,GiftId,StatusId,UserGiverId,UserReceiverId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] ArchivedGift archivedGift)
         {
             if (ModelState.IsValid)
             {
+                archivedGift.Id = Guid.NewGuid();
                 _context.Add(archivedGift);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "Id", archivedGift.ActionTypeId);
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Id", archivedGift.GiftId);
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Id", archivedGift.StatusId);
+            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", archivedGift.ActionTypeId);
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId", archivedGift.GiftId);
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", archivedGift.StatusId);
             ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "Id", archivedGift.UserGiverId);
             ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "Id", archivedGift.UserReceiverId);
             return View(archivedGift);
         }
 
         // GET: ArchivedGifts/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -94,9 +95,9 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "Id", archivedGift.ActionTypeId);
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Id", archivedGift.GiftId);
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Id", archivedGift.StatusId);
+            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", archivedGift.ActionTypeId);
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId", archivedGift.GiftId);
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", archivedGift.StatusId);
             ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "Id", archivedGift.UserGiverId);
             ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "Id", archivedGift.UserReceiverId);
             return View(archivedGift);
@@ -107,7 +108,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("DateArchived,IsConfirmed,Comment,ActionTypeId,GiftId,StatusId,UserGiverId,UserReceiverId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] ArchivedGift archivedGift)
+        public async Task<IActionResult> Edit(Guid id, [Bind("DateArchived,IsConfirmed,Comment,ActionTypeId,GiftId,StatusId,UserGiverId,UserReceiverId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] ArchivedGift archivedGift)
         {
             if (id != archivedGift.Id)
             {
@@ -134,16 +135,16 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "Id", archivedGift.ActionTypeId);
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Id", archivedGift.GiftId);
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Id", archivedGift.StatusId);
+            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", archivedGift.ActionTypeId);
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId", archivedGift.GiftId);
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", archivedGift.StatusId);
             ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "Id", archivedGift.UserGiverId);
             ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "Id", archivedGift.UserReceiverId);
             return View(archivedGift);
         }
 
         // GET: ArchivedGifts/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -168,7 +169,7 @@ namespace WebApp.Controllers
         // POST: ArchivedGifts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var archivedGift = await _context.ArchivedGifts.FindAsync(id);
             _context.ArchivedGifts.Remove(archivedGift);
@@ -176,7 +177,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ArchivedGiftExists(string id)
+        private bool ArchivedGiftExists(Guid id)
         {
             return _context.ArchivedGifts.Any(e => e.Id == id);
         }

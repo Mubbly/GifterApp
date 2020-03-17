@@ -27,7 +27,7 @@ namespace WebApp.Controllers
         }
 
         // GET: InvitedUsers/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -57,10 +57,11 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Email,PhoneNumber,Message,DateInvited,HasJoined,InvitorUserId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] InvitedUser invitedUser)
+        public async Task<IActionResult> Create([Bind("Email,PhoneNumber,Message,DateInvited,HasJoined,InvitorUserId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] InvitedUser invitedUser)
         {
             if (ModelState.IsValid)
             {
+                invitedUser.Id = Guid.NewGuid();
                 _context.Add(invitedUser);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -70,7 +71,7 @@ namespace WebApp.Controllers
         }
 
         // GET: InvitedUsers/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -91,7 +92,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Email,PhoneNumber,Message,DateInvited,HasJoined,InvitorUserId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] InvitedUser invitedUser)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Email,PhoneNumber,Message,DateInvited,HasJoined,InvitorUserId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] InvitedUser invitedUser)
         {
             if (id != invitedUser.Id)
             {
@@ -123,7 +124,7 @@ namespace WebApp.Controllers
         }
 
         // GET: InvitedUsers/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -144,7 +145,7 @@ namespace WebApp.Controllers
         // POST: InvitedUsers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var invitedUser = await _context.InvitedUsers.FindAsync(id);
             _context.InvitedUsers.Remove(invitedUser);
@@ -152,7 +153,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InvitedUserExists(string id)
+        private bool InvitedUserExists(Guid id)
         {
             return _context.InvitedUsers.Any(e => e.Id == id);
         }

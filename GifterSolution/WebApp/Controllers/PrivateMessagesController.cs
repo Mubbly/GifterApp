@@ -27,7 +27,7 @@ namespace WebApp.Controllers
         }
 
         // GET: PrivateMessages/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -59,10 +59,11 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Message,SentAt,IsSeen,UserSenderId,UserReceiverId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] PrivateMessage privateMessage)
+        public async Task<IActionResult> Create([Bind("Message,SentAt,IsSeen,UserSenderId,UserReceiverId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] PrivateMessage privateMessage)
         {
             if (ModelState.IsValid)
             {
+                privateMessage.Id = Guid.NewGuid();
                 _context.Add(privateMessage);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -73,7 +74,7 @@ namespace WebApp.Controllers
         }
 
         // GET: PrivateMessages/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -95,7 +96,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Message,SentAt,IsSeen,UserSenderId,UserReceiverId,CreatedBy,CreatedAt,EditedBy,EditedAt,DeletedBy,DeletedAt,Id")] PrivateMessage privateMessage)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Message,SentAt,IsSeen,UserSenderId,UserReceiverId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] PrivateMessage privateMessage)
         {
             if (id != privateMessage.Id)
             {
@@ -128,7 +129,7 @@ namespace WebApp.Controllers
         }
 
         // GET: PrivateMessages/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -150,7 +151,7 @@ namespace WebApp.Controllers
         // POST: PrivateMessages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var privateMessage = await _context.PrivateMessages.FindAsync(id);
             _context.PrivateMessages.Remove(privateMessage);
@@ -158,7 +159,7 @@ namespace WebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PrivateMessageExists(string id)
+        private bool PrivateMessageExists(Guid id)
         {
             return _context.PrivateMessages.Any(e => e.Id == id);
         }
