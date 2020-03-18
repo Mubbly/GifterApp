@@ -33,7 +33,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var gift = await _giftRepository.FindAsyncLala(id);
+            var gift = await _giftRepository.FindAsync(id);
             if (gift == null)
             {
                 return NotFound();
@@ -74,7 +74,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var gift = await _giftRepository.FindAsyncLala(id);
+            var gift = await _giftRepository.FindAsync(id);
             if (gift == null)
             {
                 return NotFound();
@@ -113,7 +113,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var gift = await _giftRepository.FindAsyncLala(id);
+            var gift = await _giftRepository.FindAsync(id);
             if (gift == null)
             {
                 return NotFound();

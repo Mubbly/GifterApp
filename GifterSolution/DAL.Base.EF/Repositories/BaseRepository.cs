@@ -47,7 +47,7 @@ namespace DAL.Base.EF.Repositories
             return RepoDbSet.Find(id);
         }
 
-        public virtual async Task<TEntity> FindAsyncLala(params object[] id)
+        public virtual async Task<TEntity> FindAsync(params object[] id)
         {
             return await RepoDbSet.FindAsync(id);
         }
