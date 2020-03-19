@@ -10,12 +10,11 @@ namespace WebApp.Controllers
 {
     public class GiftsController : Controller
     {
-        private readonly AppDbContext _context;
+        // TODO: Other controllers to use repos as well
         private readonly IGiftRepository _giftRepository;
 
         public GiftsController(AppDbContext context)
         {
-            _context = context;
             _giftRepository = new GiftRepository(context);
         } 
 

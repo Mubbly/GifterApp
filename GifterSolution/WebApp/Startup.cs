@@ -89,7 +89,7 @@ namespace WebApp
             // ctx.Database.EnsureDeleted(); // Drop current db if you want to start from the scratch every time
             // ctx.Database.Migrate(); // Add the new migration. Will automatically create db if not there. If only this is needed don't do the dropping step.
             // These could also be done in configurations instead
-            ctx.Database.EnsureDeleted();
+            //ctx.Database.EnsureDeleted();
             ctx.Database.Migrate();
         }
         // CUSTOM CODE END

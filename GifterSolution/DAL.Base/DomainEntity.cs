@@ -3,11 +3,11 @@ using Contracts.DAL.Base;
 
 namespace DAL.Base
 {
-    public class DomainEntity : DomainEntity<Guid>
+    public abstract class DomainEntity : DomainEntity<Guid>
     {
     }
     
-    public class DomainEntity<TKey> : IDomainEntity<TKey>
+    public abstract class DomainEntity<TKey> : IDomainEntity<TKey>
     where TKey : struct, IComparable
     {
         public virtual TKey Id { get; set; }

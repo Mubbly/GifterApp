@@ -3,7 +3,7 @@ using Domain;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IGiftRepository : IBaseRepository<Gift>
+    public interface IStatusRepository : IBaseRepository<Status>
     {
         // TODO: Add your custom db methods
     }

@@ -6,7 +6,6 @@ using System.Collections.Generic;
  namespace Domain
 {
     /**
-     * Temporary table - will actually preexist from Identity?
      * Permissions restrict or allow users to do certain things within the app
      */
     public class Permission : DomainEntity
