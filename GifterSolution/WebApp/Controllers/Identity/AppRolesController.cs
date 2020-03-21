@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.Identity;
 
-namespace WebApp.Controllers
+namespace WebApp.Controllers.Identity
 {
     public class AppRolesController : Controller
     {

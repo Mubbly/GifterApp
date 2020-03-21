@@ -12,8 +12,8 @@ namespace DAL.Base
     {
         public virtual TKey Id { get; set; }
         public virtual string? CreatedBy { get; set; }
-        public virtual DateTime CreatedAt { get; set; }
+        public virtual DateTime CreatedAt { get; set; } = DateTime.Now;
         public virtual string? EditedBy { get; set; }
-        public virtual DateTime? EditedAt { get; set; }
+        public virtual DateTime? EditedAt { get; set; } = DateTime.Now;
     }
 }

@@ -1,29 +1,29 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App.Repositories.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
+using DAL.App.EF.Repositories.Identity;
 using Domain.Identity;
 
-namespace WebApp.Controllers
+namespace WebApp.Controllers.Identity
 {
     public class AppUsersController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUserRepository _appUserRepository;
 
         // TODO: How to approach Identity repos?
         public AppUsersController(AppDbContext context)
         {
-            _context = context;
+            _appUserRepository = new AppUserRepository(context);
         }
 
         // GET: AppUsers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.ToListAsync());
+            return View(await _appUserRepository.AllAsync());
         }
 
         // GET: AppUsers/Details/5
@@ -34,8 +34,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var appUser = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var appUser = await _appUserRepository.FindAsync(id);
             if (appUser == null)
             {
                 return NotFound();
@@ -59,9 +58,9 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                appUser.Id = Guid.NewGuid();
-                _context.Add(appUser);
-                await _context.SaveChangesAsync();
+                //appUser.Id = Guid.NewGuid();
+                _appUserRepository.Add(appUser);
+                await _appUserRepository.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(appUser);
@@ -75,7 +74,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var appUser = await _context.Users.FindAsync(id);
+            var appUser = await _appUserRepository.FindAsync(id);
             if (appUser == null)
             {
                 return NotFound();
@@ -95,27 +94,14 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(appUser);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AppUserExists(appUser.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(appUser);
             }
-            return View(appUser);
+            
+            _appUserRepository.Update(appUser);
+            await _appUserRepository.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: AppUsers/Delete/5
@@ -126,8 +112,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var appUser = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var appUser = await _appUserRepository.FindAsync(id);
             if (appUser == null)
             {
                 return NotFound();
@@ -141,15 +126,9 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var appUser = await _context.Users.FindAsync(id);
-            _context.Users.Remove(appUser);
-            await _context.SaveChangesAsync();
+            _appUserRepository.Remove(id);
+            await _appUserRepository.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool AppUserExists(Guid id)
-        {
-            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

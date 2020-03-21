@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Identity
 {
-    [Table("AspNetUsers")]
+    [Table("AspNetRoles")]
     public class AppRole : IdentityRole<Guid>
     {
         

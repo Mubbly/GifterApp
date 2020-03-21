@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using Microsoft.AspNetCore.Identity;
+using DAL.Base.Identity;
 
 namespace Domain.Identity
     
 {
-    public class AppUser : IdentityUser<Guid>
+    [Table("AspNetUsers")]
+    public class AppUser : DomainIdentityEntity
     {
         // Custom fields
         [MaxLength(256)] [MinLength(1)] 

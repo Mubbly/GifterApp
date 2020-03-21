@@ -100,7 +100,6 @@ namespace WebApp.Controllers
             // TODO: Validation in repository (this previously had try-catch, using "doesGiftExist" method, but shouldn't be done here
             _giftRepository.Update(gift);
             await _giftRepository.SaveChangesAsync();
-                
             return RedirectToAction(nameof(Index));
         }
 

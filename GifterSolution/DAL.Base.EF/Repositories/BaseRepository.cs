@@ -54,11 +54,25 @@ namespace DAL.Base.EF.Repositories
 
         public virtual TEntity Add(TEntity entity)
         {
+            if (entity.GetType().GetInterface(nameof(IDomainEntityMetadata)) == null)
+            {
+                return RepoDbSet.Add(entity).Entity;
+            }
+            
+            var entityMetadata = (IDomainEntityMetadata) entity;
+            entityMetadata.CreatedAt = DateTime.UtcNow;
             return RepoDbSet.Add(entity).Entity;
         }
 
         public virtual TEntity Update(TEntity entity)
         {
+            if (entity.GetType().GetInterface(nameof(IDomainEntityMetadata)) == null)
+            {
+                return RepoDbSet.Update(entity).Entity;
+            }
+            
+            var entityMetadata = (IDomainEntityMetadata) entity;
+            entityMetadata.CreatedAt = DateTime.UtcNow;
             return RepoDbSet.Update(entity).Entity;
         }
 
