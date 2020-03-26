@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class InvitedUserRepository : BaseRepository<InvitedUser>, IInvitedUserRepository
+    public class InvitedUserRepository : EFBaseRepository<InvitedUser, AppDbContext>, IInvitedUserRepository
     {
-        public InvitedUserRepository(DbContext dbContext) : base(dbContext)
+        public InvitedUserRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

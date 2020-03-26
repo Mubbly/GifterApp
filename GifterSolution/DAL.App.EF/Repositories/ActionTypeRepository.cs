@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class ActionTypeRepository : BaseRepository<ActionType>, IActionTypeRepository
+    public class ActionTypeRepository : EFBaseRepository<ActionType, AppDbContext>, IActionTypeRepository
     {
-        public ActionTypeRepository(DbContext dbContext) : base(dbContext)
+        public ActionTypeRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

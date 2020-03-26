@@ -12,6 +12,7 @@ namespace WebApp.Controllers
 {
     public class NotificationsController : Controller
     {
+        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public NotificationsController(AppDbContext context)

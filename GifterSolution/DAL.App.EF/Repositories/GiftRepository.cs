@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class GiftRepository : BaseRepository<Gift>, IGiftRepository
+    public class GiftRepository : EFBaseRepository<Gift, AppDbContext>, IGiftRepository
     {
-        public GiftRepository(DbContext dbContext) : base(dbContext)
+        public GiftRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
 

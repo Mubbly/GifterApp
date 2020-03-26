@@ -12,6 +12,7 @@ namespace WebApp.Controllers
 {
     public class FriendshipsController : Controller
     {
+        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public FriendshipsController(AppDbContext context)

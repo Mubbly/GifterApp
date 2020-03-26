@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class FriendshipRepository : BaseRepository<Friendship>, IFriendshipRepository
+    public class FriendshipRepository : EFBaseRepository<Friendship, AppDbContext>, IFriendshipRepository
     {
-        public FriendshipRepository(DbContext dbContext) : base(dbContext)
+        public FriendshipRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

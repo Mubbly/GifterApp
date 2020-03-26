@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class UserPermissionRepository : BaseRepository<UserPermission>, IUserPermissionRepository
+    public class UserPermissionRepository : EFBaseRepository<UserPermission, AppDbContext>, IUserPermissionRepository
     {
-        public UserPermissionRepository(DbContext dbContext) : base(dbContext)
+        public UserPermissionRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

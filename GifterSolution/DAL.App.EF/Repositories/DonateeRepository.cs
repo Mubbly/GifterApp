@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class DonateeRepository : BaseRepository<Donatee>, IDonateeRepository
+    public class DonateeRepository : EFBaseRepository<Donatee, AppDbContext>, IDonateeRepository
     {
-        public DonateeRepository(DbContext dbContext) : base(dbContext)
+        public DonateeRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

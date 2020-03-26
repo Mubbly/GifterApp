@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class UserCampaignRepository : BaseRepository<UserCampaign>, IUserCampaignRepository
+    public class UserCampaignRepository : EFBaseRepository<UserCampaign, AppDbContext>, IUserCampaignRepository
     {
-        public UserCampaignRepository(DbContext dbContext) : base(dbContext)
+        public UserCampaignRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

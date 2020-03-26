@@ -10,9 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class ArchivedGiftRepository : BaseRepository<ArchivedGift>, IArchivedGiftRepository
+    public class ArchivedGiftRepository : EFBaseRepository<ArchivedGift, AppDbContext>, IArchivedGiftRepository
     {
-        public ArchivedGiftRepository(DbContext dbContext) : base(dbContext)
+        public ArchivedGiftRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
         

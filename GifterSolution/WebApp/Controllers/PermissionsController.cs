@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,17 +13,17 @@ namespace WebApp.Controllers
 {
     public class PermissionsController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public PermissionsController(AppDbContext context)
+        public PermissionsController(IAppUnitOfWork uow)
         {
-            _context = context;
-        }
+            _uow = uow;
+        } 
 
         // GET: Permissions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Permissions.ToListAsync());
+            return View(await _uow.Permissions.AllAsync());
         }
 
         // GET: Permissions/Details/5
@@ -33,8 +34,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var permission = await _context.Permissions
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var permission = await _uow.Permissions.FindAsync(id);
             if (permission == null)
             {
                 return NotFound();
@@ -58,9 +58,9 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                permission.Id = Guid.NewGuid();
-                _context.Add(permission);
-                await _context.SaveChangesAsync();
+                //permission.Id = Guid.NewGuid();
+                _uow.Permissions.Add(permission);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(permission);
@@ -74,7 +74,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var permission = await _context.Permissions.FindAsync(id);
+            var permission = await _uow.Permissions.FindAsync(id);
             if (permission == null)
             {
                 return NotFound();
@@ -94,27 +94,13 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(permission);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PermissionExists(permission.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(permission);
             }
-            return View(permission);
+            _uow.Permissions.Update(permission);
+            await _uow.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Permissions/Delete/5
@@ -125,8 +111,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var permission = await _context.Permissions
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var permission = await _uow.Permissions.FindAsync(id);
             if (permission == null)
             {
                 return NotFound();
@@ -140,15 +125,9 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var permission = await _context.Permissions.FindAsync(id);
-            _context.Permissions.Remove(permission);
-            await _context.SaveChangesAsync();
+            _uow.Permissions.Remove(id);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool PermissionExists(Guid id)
-        {
-            return _context.Permissions.Any(e => e.Id == id);
         }
     }
 }

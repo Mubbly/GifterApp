@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,17 +13,17 @@ namespace WebApp.Controllers
 {
     public class StatusesController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public StatusesController(AppDbContext context)
+        public StatusesController(IAppUnitOfWork uow)
         {
-            _context = context;
-        }
+            _uow = uow;
+        } 
 
         // GET: Statuses
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Statuses.ToListAsync());
+            return View(await _uow.Statuses.AllAsync());
         }
 
         // GET: Statuses/Details/5
@@ -33,8 +34,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var status = await _context.Statuses
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var status = await _uow.Statuses.FindAsync(id);
             if (status == null)
             {
                 return NotFound();
@@ -58,9 +58,9 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                status.Id = Guid.NewGuid();
-                _context.Add(status);
-                await _context.SaveChangesAsync();
+                //status.Id = Guid.NewGuid();
+                _uow.Statuses.Add(status);
+                await _uow.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(status);
@@ -74,7 +74,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var status = await _context.Statuses.FindAsync(id);
+            var status = await _uow.Statuses.FindAsync(id);
             if (status == null)
             {
                 return NotFound();
@@ -94,27 +94,13 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(status);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!StatusExists(status.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View(status);
             }
-            return View(status);
+            _uow.Statuses.Update(status);
+            await _uow.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Statuses/Delete/5
@@ -125,8 +111,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var status = await _context.Statuses
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var status = await _uow.Statuses.FindAsync(id);
             if (status == null)
             {
                 return NotFound();
@@ -140,15 +125,10 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var status = await _context.Statuses.FindAsync(id);
-            _context.Statuses.Remove(status);
-            await _context.SaveChangesAsync();
+            var status = await _uow.Statuses.FindAsync(id);
+            _uow.Statuses.Remove(status);
+            await _uow.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool StatusExists(Guid id)
-        {
-            return _context.Statuses.Any(e => e.Id == id);
         }
     }
 }

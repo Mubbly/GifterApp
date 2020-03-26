@@ -12,6 +12,7 @@ namespace WebApp.Controllers
 {
     public class UserProfilesController : Controller
     {
+        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public UserProfilesController(AppDbContext context)

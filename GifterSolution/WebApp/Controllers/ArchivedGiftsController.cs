@@ -12,6 +12,7 @@ namespace WebApp.Controllers
 {
     public class ArchivedGiftsController : Controller
     {
+        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public ArchivedGiftsController(AppDbContext context)

@@ -1,29 +1,31 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using DAL.App.EF.Repositories.Identity;
 using Domain.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebApp.Controllers.Identity
 {
     public class AppUsersController : Controller
     {
-        private readonly IAppUserRepository _appUserRepository;
+        private readonly IAppUnitOfWork _uow;
 
-        // TODO: How to approach Identity repos?
-        public AppUsersController(AppDbContext context)
+        // TODO: How to approach Identity repos/use UserManager?
+        public AppUsersController(IAppUnitOfWork uow)
         {
-            _appUserRepository = new AppUserRepository(context);
-        }
+            _uow = uow;
+        } 
 
         // GET: AppUsers
         public async Task<IActionResult> Index()
         {
-            return View(await _appUserRepository.AllAsync());
+            return View(await _uow.AppUsers.AllAsync());
         }
 
         // GET: AppUsers/Details/5
@@ -34,7 +36,7 @@ namespace WebApp.Controllers.Identity
                 return NotFound();
             }
 
-            var appUser = await _appUserRepository.FindAsync(id);
+            var appUser = await _uow.AppUsers.FindAsync(id);
             if (appUser == null)
             {
                 return NotFound();
@@ -59,8 +61,8 @@ namespace WebApp.Controllers.Identity
             if (ModelState.IsValid)
             {
                 //appUser.Id = Guid.NewGuid();
-                _appUserRepository.Add(appUser);
-                await _appUserRepository.SaveChangesAsync();
+                _uow.AppUsers.Add(appUser);
+                await _uow.AppUsers.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(appUser);
@@ -74,7 +76,7 @@ namespace WebApp.Controllers.Identity
                 return NotFound();
             }
 
-            var appUser = await _appUserRepository.FindAsync(id);
+            var appUser = await _uow.AppUsers.FindAsync(id);
             if (appUser == null)
             {
                 return NotFound();
@@ -99,8 +101,8 @@ namespace WebApp.Controllers.Identity
                 return View(appUser);
             }
             
-            _appUserRepository.Update(appUser);
-            await _appUserRepository.SaveChangesAsync();
+            _uow.AppUsers.Update(appUser);
+            await _uow.AppUsers.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -112,7 +114,7 @@ namespace WebApp.Controllers.Identity
                 return NotFound();
             }
 
-            var appUser = await _appUserRepository.FindAsync(id);
+            var appUser = await _uow.AppUsers.FindAsync(id);
             if (appUser == null)
             {
                 return NotFound();
@@ -126,8 +128,8 @@ namespace WebApp.Controllers.Identity
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _appUserRepository.Remove(id);
-            await _appUserRepository.SaveChangesAsync();
+            _uow.AppUsers.Remove(id);
+            await _uow.AppUsers.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
     }

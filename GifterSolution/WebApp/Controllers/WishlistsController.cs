@@ -12,6 +12,7 @@ namespace WebApp.Controllers
 {
     public class WishlistsController : Controller
     {
+        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public WishlistsController(AppDbContext context)

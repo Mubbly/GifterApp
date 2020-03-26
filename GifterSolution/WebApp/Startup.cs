@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
+using Contracts.DAL.App.Repositories;
 using DAL.App.EF;
+using DAL.App.EF.Repositories;
+using Domain;
 using Domain.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -31,6 +35,12 @@ namespace WebApp
             services.AddDbContext<AppDbContext>(options =>
                 options.UseMySql(
                     Configuration.GetConnectionString("MySqlConnection"))); // CUSTOM DB CONNECTION STRING
+
+            // CUSTOM CODE START - Add as scoped dependency, tie interface to the implementation
+            services.AddScoped<IAppUnitOfWork, AppUnitOfWork>(); 
+            // CUSTOM CODE END
+
+            
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AppDbContext>();
             services.AddControllersWithViews();

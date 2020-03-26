@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class NotificationTypeRepository : BaseRepository<NotificationType>, INotificationTypeRepository
+    public class NotificationTypeRepository : EFBaseRepository<NotificationType, AppDbContext>, INotificationTypeRepository
     {
-        public NotificationTypeRepository(DbContext dbContext) : base(dbContext)
+        public NotificationTypeRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

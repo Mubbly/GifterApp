@@ -12,6 +12,7 @@ namespace WebApp.Controllers
 {
     public class PrivateMessagesController : Controller
     {
+        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public PrivateMessagesController(AppDbContext context)

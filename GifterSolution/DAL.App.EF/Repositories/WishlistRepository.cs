@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class WishlistRepository : BaseRepository<Wishlist>, IWishlistRepository
+    public class WishlistRepository : EFBaseRepository<Wishlist, AppDbContext>, IWishlistRepository
     {
-        public WishlistRepository(DbContext dbContext) : base(dbContext)
+        public WishlistRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

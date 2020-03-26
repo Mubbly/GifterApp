@@ -10,9 +10,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories.Identity
 {
-    public class AppUserRepository : BaseRepository<AppUser>, IAppUserRepository
+    public class AppUserRepository : EFBaseRepository<AppUser, AppDbContext>, IAppUserRepository
     {
-        public AppUserRepository(DbContext dbContext) : base(dbContext)
+        public AppUserRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

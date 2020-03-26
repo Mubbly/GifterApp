@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class PrivateMessageRepository : BaseRepository<PrivateMessage>, IPrivateMessageRepository
+    public class PrivateMessageRepository : EFBaseRepository<PrivateMessage, AppDbContext>, IPrivateMessageRepository
     {
-        public PrivateMessageRepository(DbContext dbContext) : base(dbContext)
+        public PrivateMessageRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

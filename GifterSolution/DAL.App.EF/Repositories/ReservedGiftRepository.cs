@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class ReservedGiftRepository : BaseRepository<ReservedGift>, IReservedGiftRepository
+    public class ReservedGiftRepository : EFBaseRepository<ReservedGift, AppDbContext>, IReservedGiftRepository
     {
-        public ReservedGiftRepository(DbContext dbContext) : base(dbContext)
+        public ReservedGiftRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

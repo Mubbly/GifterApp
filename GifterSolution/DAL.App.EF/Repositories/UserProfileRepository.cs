@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class UserProfileRepository : BaseRepository<UserProfile>, IUserProfileRepository
+    public class UserProfileRepository : EFBaseRepository<UserProfile, AppDbContext>, IUserProfileRepository
     {
-        public UserProfileRepository(DbContext dbContext) : base(dbContext)
+        public UserProfileRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }

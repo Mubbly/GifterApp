@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,17 +15,17 @@ namespace WebApp.Controllers
 {
     public class ActionTypesController : Controller
     {
-        private readonly IActionTypeRepository _actionTypeRepository;
+        private readonly IAppUnitOfWork _uow;
 
-        public ActionTypesController(AppDbContext context)
+        public ActionTypesController(IAppUnitOfWork uow)
         {
-            _actionTypeRepository = new ActionTypeRepository(context);
-        }
+            _uow = uow;
+        } 
 
         // GET: ActionTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _actionTypeRepository.AllAsync());
+            return View(await _uow.ActionTypes.AllAsync());
         }
 
         // GET: ActionTypes/Details/5
@@ -35,7 +36,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var actionType = await _actionTypeRepository.FindAsync(id);
+            var actionType = await _uow.ActionTypes.FindAsync(id);
             if (actionType == null)
             {
                 return NotFound();
@@ -60,8 +61,8 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 //actionType.Id = Guid.NewGuid();
-                _actionTypeRepository.Add(actionType);
-                await _actionTypeRepository.SaveChangesAsync();
+                _uow.ActionTypes.Add(actionType);
+                await _uow.ActionTypes.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(actionType);
@@ -75,7 +76,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var actionType = await _actionTypeRepository.FindAsync(id);
+            var actionType = await _uow.ActionTypes.FindAsync(id);
             if (actionType == null)
             {
                 return NotFound();
@@ -99,8 +100,8 @@ namespace WebApp.Controllers
                 return View(actionType);
             }
             
-            _actionTypeRepository.Update(actionType);
-            await _actionTypeRepository.SaveChangesAsync();
+            _uow.ActionTypes.Update(actionType);
+            await _uow.ActionTypes.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -112,7 +113,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var actionType = await _actionTypeRepository.FindAsync(id);
+            var actionType = await _uow.ActionTypes.FindAsync(id);
             if (actionType == null)
             {
                 return NotFound();
@@ -126,8 +127,8 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _actionTypeRepository.Remove(id);
-            await _actionTypeRepository.SaveChangesAsync();
+            _uow.ActionTypes.Remove(id);
+            await _uow.ActionTypes.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
     }

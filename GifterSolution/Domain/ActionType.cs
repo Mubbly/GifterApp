@@ -20,7 +20,7 @@ namespace Domain
         public string? Comment { get; set; }
         
         // List of all the gifts that correspond to this action
-        public ICollection<Gift>? Gifts { get; set; }
+        public ICollection<Gift>? Gifts { get; set; } // = new List<Gift>(); TODO: Should lists be initialized?
         
         // List of all the reserved gifts that correspond to this action
         public ICollection<ReservedGift>? ReservedGifts { get; set; }

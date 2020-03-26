@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using DAL.App.EF;
@@ -10,18 +11,17 @@ namespace WebApp.Controllers
 {
     public class GiftsController : Controller
     {
-        // TODO: Other controllers to use repos as well
-        private readonly IGiftRepository _giftRepository;
+        private readonly IAppUnitOfWork _uow;
 
-        public GiftsController(AppDbContext context)
+        public GiftsController(IAppUnitOfWork uow)
         {
-            _giftRepository = new GiftRepository(context);
+            _uow = uow;
         } 
 
         // GET: Gifts
         public async Task<IActionResult> Index()
         {
-            return View(await _giftRepository.AllAsync());
+            return View(await _uow.Gifts.AllAsync());
         }
 
         // GET: Gifts/Details/5
@@ -32,7 +32,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var gift = await _giftRepository.FindAsync(id);
+            var gift = await _uow.Gifts.FindAsync(id);
             if (gift == null)
             {
                 return NotFound();
@@ -57,8 +57,8 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 //gift.Id = Guid.NewGuid(); // Probably not needed, already works?
-                _giftRepository.Add(gift);
-                await _giftRepository.SaveChangesAsync();
+                _uow.Gifts.Add(gift);
+                await _uow.Gifts.SaveChangesAsync();
                 
                 return RedirectToAction(nameof(Index));
             }
@@ -73,7 +73,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var gift = await _giftRepository.FindAsync(id);
+            var gift = await _uow.Gifts.FindAsync(id);
             if (gift == null)
             {
                 return NotFound();
@@ -98,8 +98,8 @@ namespace WebApp.Controllers
             }
             
             // TODO: Validation in repository (this previously had try-catch, using "doesGiftExist" method, but shouldn't be done here
-            _giftRepository.Update(gift);
-            await _giftRepository.SaveChangesAsync();
+            _uow.Gifts.Update(gift);
+            await _uow.Gifts.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -111,7 +111,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var gift = await _giftRepository.FindAsync(id);
+            var gift = await _uow.Gifts.FindAsync(id);
             if (gift == null)
             {
                 return NotFound();
@@ -125,8 +125,8 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _giftRepository.Remove(id);
-            await _giftRepository.SaveChangesAsync();
+            _uow.Gifts.Remove(id);
+            await _uow.Gifts.SaveChangesAsync();
             
             return RedirectToAction(nameof(Index));
         }

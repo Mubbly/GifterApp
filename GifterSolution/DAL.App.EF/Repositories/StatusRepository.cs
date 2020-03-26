@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.App.EF.Repositories
 {
-    public class StatusRepository : BaseRepository<Status>, IStatusRepository
+    public class StatusRepository : EFBaseRepository<Status, AppDbContext>, IStatusRepository
     {
-        public StatusRepository(DbContext dbContext) : base(dbContext)
+        public StatusRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
     }
