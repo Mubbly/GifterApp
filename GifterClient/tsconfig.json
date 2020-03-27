@@ -1,6 +1,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "strict": true,
+    "alwaysStrict": true,
     "module": "esnext",
     "skipLibCheck": true,
     "typeRoots": [
