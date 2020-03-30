@@ -25,16 +25,13 @@ namespace Domain
         public bool IsPartnered { get; set; }
         public bool IsPinned { get; set; }
 
-        [MaxLength(36)]
-        public string ActionTypeId { get; set; } = default!;
+        public Guid ActionTypeId { get; set; } = default!;
         public ActionType? ActionType { get; set; }
 
-        [MaxLength(36)]
-        public string AppUserId { get; set; } = default!;
+        public Guid AppUserId { get; set; } = default!;
         public AppUser? AppUser { get; set; }
         
-        [MaxLength(36)]
-        public string StatusId { get; set; } = default!;
+        public Guid StatusId { get; set; } = default!;
         public Status? Status { get; set; }
 
         // List of all wishlists that correspond to this gift

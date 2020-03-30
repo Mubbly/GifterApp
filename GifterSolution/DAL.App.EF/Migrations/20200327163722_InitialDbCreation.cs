@@ -447,7 +447,7 @@ namespace DAL.App.EF.Migrations
                     GiftDescription = table.Column<string>(maxLength: 1024, nullable: true),
                     GiftImage = table.Column<string>(maxLength: 2048, nullable: true),
                     GiftUrl = table.Column<string>(maxLength: 2048, nullable: true),
-                    GiftReservedFrom = table.Column<DateTime>(nullable: false),
+                    GiftReservedFrom = table.Column<DateTime>(nullable: true),
                     ActiveFrom = table.Column<DateTime>(nullable: false),
                     ActiveTo = table.Column<DateTime>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),

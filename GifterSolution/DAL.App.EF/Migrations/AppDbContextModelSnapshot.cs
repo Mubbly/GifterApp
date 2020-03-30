@@ -252,7 +252,7 @@ namespace DAL.App.EF.Migrations
                         .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
                         .HasMaxLength(256);
 
-                    b.Property<DateTime>("GiftReservedFrom")
+                    b.Property<DateTime?>("GiftReservedFrom")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("GiftUrl")
@@ -324,20 +324,10 @@ namespace DAL.App.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("ActionTypeId")
-                        .IsRequired()
-                        .HasColumnType("varchar(36) CHARACTER SET utf8mb4")
-                        .HasMaxLength(36);
-
-                    b.Property<Guid?>("ActionTypeId1")
+                    b.Property<Guid>("ActionTypeId")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("AppUserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(36) CHARACTER SET utf8mb4")
-                        .HasMaxLength(36);
-
-                    b.Property<Guid?>("AppUserId1")
+                    b.Property<Guid>("AppUserId")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -375,12 +365,7 @@ namespace DAL.App.EF.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4")
                         .HasMaxLength(2048);
 
-                    b.Property<string>("StatusId")
-                        .IsRequired()
-                        .HasColumnType("varchar(36) CHARACTER SET utf8mb4")
-                        .HasMaxLength(36);
-
-                    b.Property<Guid?>("StatusId1")
+                    b.Property<Guid>("StatusId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Url")
@@ -389,11 +374,11 @@ namespace DAL.App.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActionTypeId1");
+                    b.HasIndex("ActionTypeId");
 
-                    b.HasIndex("AppUserId1");
+                    b.HasIndex("AppUserId");
 
-                    b.HasIndex("StatusId1");
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Gifts");
                 });
@@ -1235,15 +1220,21 @@ namespace DAL.App.EF.Migrations
                 {
                     b.HasOne("Domain.ActionType", "ActionType")
                         .WithMany("Gifts")
-                        .HasForeignKey("ActionTypeId1");
+                        .HasForeignKey("ActionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Identity.AppUser", "AppUser")
                         .WithMany("Gifts")
-                        .HasForeignKey("AppUserId1");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Status", "Status")
                         .WithMany("Gifts")
-                        .HasForeignKey("StatusId1");
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.InvitedUser", b =>

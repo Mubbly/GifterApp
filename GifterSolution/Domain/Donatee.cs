@@ -29,7 +29,7 @@ namespace Domain
         public string? GiftImage { get; set; }
         [MaxLength(2048)] [MinLength(3)] 
         public string? GiftUrl { get; set; }
-        public DateTime GiftReservedFrom { get; set; }
+        public DateTime? GiftReservedFrom { get; set; }
         public DateTime ActiveFrom { get; set; }
         public DateTime ActiveTo { get; set; }
         public bool IsActive { get; set; }
