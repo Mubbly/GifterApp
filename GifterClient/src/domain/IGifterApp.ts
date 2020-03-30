@@ -1,4 +1,4 @@
-export interface ITodo {
+export interface IGifterApp {
     description: string;
     done: boolean;
 }

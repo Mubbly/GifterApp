@@ -1,4 +1,6 @@
 <template>
+  <require from="./components/add-gift-form"></require>
+
   <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="#">GifterApp</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
@@ -38,12 +40,13 @@
           <div class="col-lg-12">
             <div class="card px-3">
               <div class="card-body">
-                <h4 class="card-title">${_appTitle}</h4>
-                <form class="add-items d-flex" submit.delegate="submitForm($event)">
-                  <input type="text" class="form-control todo-list-input" placeholder="${_placeholder}"
-                    value.bind="_input">
-                  <button class="add btn btn-primary font-weight-bold todo-list-add-btn">Add</button>
-                </form>
+
+                <add-gift-form 
+                    app-title.bind="_appTitle"
+                    placeholder.bind="_placeholder"
+                    submit-button-title="_submitButtonTitle">
+                </add-gift-form>
+
                 <div class="list-wrapper">
                   <ul class="d-flex flex-column todo-list">
                     <!-- <li>
