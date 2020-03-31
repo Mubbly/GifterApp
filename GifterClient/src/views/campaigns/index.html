@@ -1,0 +1,77 @@
+<template>
+    <h1>Index</h1>
+
+    <p>
+        <a href="/Campaigns/Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    AdImage
+                </th>
+                <th>
+                    Institution
+                </th>
+                <th>
+                    ActiveFromDate
+                </th>
+                <th>
+                    ActiveToDate
+                </th>
+                <th>
+                    IsActive
+                </th>
+                <th>
+                    UserCampaignsCount
+                </th>
+                <th>
+                    CampaignDonateesCount
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr repeat.for="campaign of _campaigns">
+                <td>
+                    ${campaign.name}
+                </td>
+                <td>
+                    ${campaign.description}
+                </td>
+                <td>
+                    ${campaign.adImage}
+                </td>
+                <td>
+                    ${campaign.institution}
+                </td>
+                <td>
+                    ${campaign.activeFromDate}
+                </td>
+                <td>
+                    ${campaign.activeToDate}
+                </td>
+                <td>
+                    <input class="check-box" disabled="disabled" type="checkbox" checked.bind="campaign.isActive"/>
+                </td>
+                <td>
+                    ${campaign.userCampaignCount}
+                </td>
+                <td>
+                    ${campaign.campaignDonateeCount}
+                </td>
+                <td>
+                    <a href="/Campaigns/Edit/08d7d26d-705f-46ad-8559-44b072c93cac">Edit</a> |
+                    <a href="/Campaigns/Details/08d7d26d-705f-46ad-8559-44b072c93cac">Details</a> |
+                    <a href="/Campaigns/Delete/08d7d26d-705f-46ad-8559-44b072c93cac">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</template>
