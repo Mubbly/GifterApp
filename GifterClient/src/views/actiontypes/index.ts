@@ -1,17 +1,17 @@
 import { autoinject } from 'aurelia-framework';
-import { ActionTypeService } from '../../service/actiontype-service';
-import { IActionType } from '../../domain/IActionType';
+import { IActionType } from 'domain/IActionType';
+import { ActionTypeService } from 'service/actionTypeService';
 
 @autoinject
 export class ActionTypesIndex {
     private _actionTypes: IActionType[] = [];
 
-    constructor(private ActionTypeService: ActionTypeService) {
+    constructor(private actionTypeService: ActionTypeService) {
 
     }
 
     attached() {
-        this.ActionTypeService.getActionTypes().then(
+        this.actionTypeService.getActionTypes().then(
             data => this._actionTypes = data
         );
     }

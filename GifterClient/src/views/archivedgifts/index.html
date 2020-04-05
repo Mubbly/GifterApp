@@ -1,0 +1,72 @@
+<template>
+    <h1>Index</h1>
+
+    <p>
+        <a href="/ArchivedGifts/Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    DateArchived
+                </th>
+                <th>
+                    IsConfirmed
+                </th>
+                <th>
+                    Comment
+                </th>
+                <th>
+                    ActionType
+                </th>
+                <th>
+                    Gift
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    UserGiver
+                </th>
+                <th>
+                    UserReceiver
+                </th>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr repeat.for="archivedGift of _archivedGifts">
+                <td>
+                    ${archivedGift.dateArchived}  
+                </td>
+                <td>
+                    <input checked="checked" class="check-box" disabled="disabled" type="checkbox" checked.bind="archivedGift.isConfirmed"/>
+                </td>
+                <td>
+                    ${archivedGift.comment}  
+                </td>
+                <td>
+                    ${archivedGift.actionType.actionTypeValue}  
+                </td>
+                <td>
+                    ${archivedGift.gift.name}  
+                </td>
+                <td>
+                    ${archivedGift.status.statusValue}  
+                </td>
+                <td>
+                    ${archivedGift.userGiver.id}  
+                </td>
+                <td>
+                    ${archivedGift.userReceiver.id}  
+                </td>
+                <td>
+                    <a href="/ArchivedGifts/Edit/08d7d89f-26db-4bda-8012-ad32ced02428">Edit</a> |
+                    <a route-href="route: archivedgiftsDetails; params.bind: { id: archivedGift.id }">Details</a> |
+                    <a href="/ArchivedGifts/Delete/08d7d89f-26db-4bda-8012-ad32ced02428">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</template>

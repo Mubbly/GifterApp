@@ -1,17 +1,17 @@
 import { autoinject } from 'aurelia-framework';
-import { CampaignDonateeService } from '../../service/campaigndonatee-service';
-import { ICampaignDonatee } from '../../domain/ICampaignDonatee';
+import { ICampaignDonatee } from 'domain/ICampaignDonatee';
+import { CampaignDonateeService } from 'service/campaignDonateeService';
 
 @autoinject
 export class CampaignDonateesIndex {
     private _campaignDonatees: ICampaignDonatee[] = [];
 
-    constructor(private CampaignDonateeService: CampaignDonateeService) {
+    constructor(private campaignDonateeService: CampaignDonateeService) {
 
     }
 
     attached() {
-        this.CampaignDonateeService.getCampaignDonatees().then(
+        this.campaignDonateeService.getCampaignDonatees().then(
             data => this._campaignDonatees = data
         );
     }

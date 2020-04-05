@@ -1,3 +1,47 @@
 <template>
-    Campaign donatees index
+    <h1>Index</h1>
+
+<p>
+    <a href="/CampaignDonatees/Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                IsActive
+            </th>
+            <th>
+                Comment
+            </th>
+            <th>
+                Campaign
+            </th>
+            <th>
+                Donatee
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr repeat.for="campaignDonatee of _campaignDonatees">
+            <td>
+                <input class="check-box" disabled="disabled" type="checkbox" checked.bind="campaignDonatee.isActive"/>
+            </td>
+            <td>
+                ${campaignDonatee.comment}
+            </td>
+            <td>
+                ${campaignDonatee.campaign.name}
+            </td>
+            <td>
+                ${campaignDonatee.donatee.fullName}
+            </td>
+            <td>
+                <a href="/CampaignDonatees/Edit/d45696c7-b512-4afd-8880-c346ccd94606">Edit</a> |
+                <a href="/CampaignDonatees/Details/d45696c7-b512-4afd-8880-c346ccd94606">Details</a> |
+                <a href="/CampaignDonatees/Delete/d45696c7-b512-4afd-8880-c346ccd94606">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 </template>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
+using Microsoft.Extensions.Logging;
 using PublicApi.DTO.v1;
 
 namespace WebApp.ApiControllers
@@ -54,7 +55,7 @@ namespace WebApp.ApiControllers
         public async Task<ActionResult<DonateeDTO>> GetDonatee(Guid id)
         {
             var donatee = await _context.Donatees
-                .Select(d => new DonateeDTO() 
+                .Select(d => new DonateeDTO()
                 {
                     Id = d.Id,
                     ActionTypeId = d.ActionTypeId,
@@ -73,8 +74,8 @@ namespace WebApp.ApiControllers
                     LastName = d.LastName,
                     StatusId = d.StatusId,
                     GiftReservedFrom = d.GiftReservedFrom
-                }).SingleOrDefaultAsync();
-
+                }).FirstOrDefaultAsync(d => d.Id == id);
+            
             if (donatee == null)
             {
                 return NotFound();

@@ -1,0 +1,102 @@
+<template>
+    <h1>Index</h1>
+
+    <p>
+        <a route-href="route: giftsCreate; params.bind: {}">Create new</a>      
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Image
+                </th>
+                <th>
+                    Url
+                </th>
+                <th>
+                    PartnerUrl
+                </th>
+                <th>
+                    IsPartnered
+                </th>
+                <th>
+                    IsPinned
+                </th>
+                <th>
+                    ActionType
+                </th>
+                <th>
+                    AppUser
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    WishlistsCount
+                </th>
+                <th>
+                    ReservedGiftsCount
+                </th>
+                <th>
+                    ArchivedGiftsCount
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr repeat.for="gift of _gifts">
+                <td>
+                    ${gift.name}
+                </td>
+                <td>
+                    ${gift.description}
+                </td>
+                <td>
+                    ${gift.image}
+                </td>
+                <td>
+                    ${gift.url}
+                </td>
+                <td>
+                    ${gift.partnerUrl}
+                </td>
+                <td>
+                    <input class="check-box" disabled="disabled" type="checkbox" checked.bind="gift.isPartnered"/>
+                </td>
+                <td>
+                    <input class="check-box" disabled="disabled" type="checkbox" checked.bind="gift.isPinned" />
+                </td>
+                <td>
+                    ${gift.actionType.actionTypeValue}
+                </td>
+                <td>
+                    ${gift.appUser.id}
+                </td>
+                <td>
+                    ${gift.status.statusValue}
+                </td>
+                <td>
+                    ${gift.wishlistsCount}
+                </td>
+                <td>
+                    ${gift.reservedGiftsCount}
+                </td>
+                <td>
+                    ${gift.archivedGiftsCount}
+                </td>
+                <!-- Fix these so they wouldn't always point to the same gift -->
+                <td>
+                    <a route-href="route: giftsEdit; params.bind: { id: gift.id }">Edit</a> |        
+                    <a route-href="route: giftsDetails; params.bind: { id: gift.id }">Details</a> |
+                    <a route-href="route: giftsDelete; params.bind: { id: gift.id }">Delete</a> |        
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</template>

@@ -12,6 +12,9 @@ namespace PublicApi.DTO.v1
         public string? Comment { get; set; }
         
         public Guid CampaignId { get; set; }
+        public CampaignDTO Campaign { get; set; } = default!;
+
         public Guid DonateeId { get; set; }
+        public DonateeDTO Donatee { get; set; } = default!;
     }
 }

@@ -1,3 +1,59 @@
 <template>
-  Action types index
+    <h1>Index</h1>
+
+    <p>
+        <a href="/ActionTypes/Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    ActionTypeValue
+                </th>
+                <th>
+                    Comment
+                </th>
+                <th>
+                    GiftsCount
+                </th>
+                <th>
+                    ReservedGiftsCount
+                </th>
+                <th>
+                    ArchivedGiftsCount
+                </th>
+                <th>
+                    DonateesCount 
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr repeat.for="actionType of _actionTypes">
+                <td>
+                    ${actionType.actionTypeValue}
+                </td>
+                <td>
+                    ${actionType.comment}
+                </td>
+                <td>
+                    ${actionType.giftsCount}
+                </td>
+                <td>
+                    ${actionType.reservedGiftsCount}
+                </td>
+                <td>
+                    ${actionType.archivedGiftsCount}
+                </td>
+                <td>
+                    ${actionType.donateesCount}
+                </td>
+                <td>
+                    <a href="/ActionTypes/Edit/08d7d26d-4d40-46e0-8144-091acd062142">Edit</a> |
+                    <a route-href="route: actiontypesDetails; params.bind: { id: actionType.id }">Details</a> |
+                    <a href="/ActionTypes/Delete/08d7d26d-4d40-46e0-8144-091acd062142">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </template>

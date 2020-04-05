@@ -1,7 +1,9 @@
+import { Optional } from 'types/generalTypes';
+
 export interface IStatus {
   id: string;
   statusValue: string;
-  comment: string | null;
+  comment: Optional<string>;
 
   giftsCount: number;
   reservedGiftsCount: number;

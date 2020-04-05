@@ -1,6 +1,6 @@
 import { autoinject } from 'aurelia-framework';
-import { CampaignService } from '../../service/campaign-service';
-import { ICampaign } from '../../domain/ICampaign';
+import { ICampaign } from 'domain/ICampaign';
+import { CampaignService } from 'service/campaignService';
 
 @autoinject
 export class CampaignsIndex {

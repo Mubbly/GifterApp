@@ -1,17 +1,17 @@
 import { autoinject } from 'aurelia-framework';
-import { StatusService } from '../../service/status-service';
-import { IStatus } from '../../domain/IStatus';
+import { IStatus } from 'domain/IStatus';
+import { StatusService } from 'service/statusService';
 
 @autoinject
 export class StatusesIndex {
     private _statuses: IStatus[] = [];
 
-    constructor(private StatusService: StatusService) {
+    constructor(private statusService: StatusService) {
 
     }
 
     attached() {
-        this.StatusService.getStatuses().then(
+        this.statusService.getStatuses().then(
             data => this._statuses = data
         );
     }

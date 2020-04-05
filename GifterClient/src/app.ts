@@ -1,8 +1,7 @@
-import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
 import { autoinject, PLATFORM } from 'aurelia-framework';
-import { IGifterApp } from "domain/IGifterApp";
-import { EventTypes } from 'types/EventTypes';
-import { RouterConfiguration, Router } from 'aurelia-router';
+import { RouterConfiguration, Router, RouteConfig } from 'aurelia-router';
+import { GifterEntity, GifterEntities, ViewTypes } from './types/generalTypes';
+import routes from 'router';
 
 @autoinject
 export class App {
@@ -13,56 +12,88 @@ export class App {
     }
 
     configureRouter(config: RouterConfiguration, router: Router): void {
+        const DEFAULT_VIEW = routes[0].moduleId; // First route should always be home view
+
         this.router = router;
-        config.title = "Donatees";
-
-        config.map([
-            {
-                route: ['', 'home', 'home/index'],
-                name: 'home',
-                moduleId: PLATFORM.moduleName('views/home/index'),
-                nav: true,
-                title: 'Home'
-            },
-            {
-                route: ['statuses', 'statuses/index'],
-                name: 'statuses',
-                moduleId: PLATFORM.moduleName('views/statuses/index'),
-                nav: true,
-                title: 'Statuses'
-            },
-            {
-                route: ['actiontypes', 'actiontypes/index'],
-                name: 'actiontypes',
-                moduleId: PLATFORM.moduleName('views/actiontypes/index'),
-                nav: true,
-                title: 'ActionTypes'
-            },
-            {
-                route: ['campaigns', 'campaigns/index'],
-                name: 'campaigns',
-                moduleId: PLATFORM.moduleName('views/campaigns/index'),
-                nav: true,
-                title: 'Campaigns'
-            },
-            {
-                route: ['donatees', 'donatees/index'],
-                name: 'donatees',
-                moduleId: PLATFORM.moduleName('views/donatees/index'),
-                nav: true,
-                title: 'Donatees'
-            },
-            {
-                route: ['campaigndonatees', 'campaigndonatees/index'],
-                name: 'campaigndonatees',
-                moduleId: PLATFORM.moduleName('views/campaigndonatees/index'),
-                nav: true,
-                title: 'CampaignDonatees'
-            }
-        ]);
-
-        config.mapUnknownRoutes('views/home/index');
+        config.title = "GifterApp";
+        config.map(routes);
+        config.mapUnknownRoutes(DEFAULT_VIEW);
     }
+
+    //const routeConfigs = getRouteConfigs();
+    //console.log(routeConfigs);
+    //config.map(routeConfigs);
+
+    // /**
+    //  * Gets all RouteConfigs as list
+    //  * based on names present in GifterEntities enum
+    //  * and view types present in ViewTypes enum
+    //  */
+    // function getRouteConfigs(): RouteConfig[] {
+    //     let routerConfigs: RouteConfig[] = [];
+
+    //     for (let entity in GifterEntities) {
+    //         const viewName: GifterEntities = GifterEntities[entity as keyof typeof GifterEntities];
+    //         for(let type in ViewTypes) {
+    //             const viewType: ViewTypes = ViewTypes[type as keyof typeof ViewTypes];
+    //             const config: RouteConfig = getRouteConfig(viewName, viewType);
+    //             routerConfigs.push(config);
+    //         }
+    //     }
+    //     return routerConfigs;
+    // }
+
+    // /**
+    //  * Gets one config based on view name & view type.
+    //  * Example routeConfig:
+    //  *      {
+    //  *          route: ['campaigns', 'campaigns/index']
+    //  *          name: "campaignsIndex"
+    //  *          moduleId: PLATFORM.moduleName('views/campaigns/index');
+    //  *          nav: true
+    //  *          title: "Campaigns"
+    //  *      }
+    //  * @param viewName ex. User, Campaign etc
+    //  * @param viewType ex. Index, Edit etc
+    //  */
+    // function getRouteConfig(viewName: GifterEntity, viewType: ViewTypes): RouteConfig {
+    //     const VIEW_NAME = viewName.endsWith('s') ? `${viewName}es` : `${viewName}s`;
+    //     const VIEW_NAME_WITH_TYPE_PATH = (`${VIEW_NAME}/${viewType}`).toLowerCase();
+
+    //     let routePaths = [''];
+    //     let routeName = `${VIEW_NAME.toLowerCase()}${viewType}`;;
+    //     let routeModuleId = `views/${VIEW_NAME_WITH_TYPE_PATH}`;  
+    //     let routeNav = false;
+    //     let routeTitle = `${VIEW_NAME}${viewType}`;
+
+    //     switch(viewType) {
+    //         case ViewTypes.Index:
+    //             routePaths = [VIEW_NAME.toLowerCase(), VIEW_NAME_WITH_TYPE_PATH];
+    //             routeNav = true;
+    //             routeTitle = `${VIEW_NAME}`
+    //             break;
+    //         case ViewTypes.Details:
+    //         case ViewTypes.Edit:
+    //         case ViewTypes.Delete:
+    //             routePaths = [`${VIEW_NAME_WITH_TYPE_PATH}/:id`];
+    //             break;
+    //         case ViewTypes.Create:
+    //             routePaths = [VIEW_NAME_WITH_TYPE_PATH];
+    //             break;
+    //         default:
+    //             console.warn(`Not supported viewType was passed into getRouter(): ${viewType}`);
+    //     }
+
+    //     const routeConfig: RouteConfig = { 
+    //         route: routePaths, 
+    //         name: routeName, 
+    //         moduleId: PLATFORM.moduleName(routeModuleId), 
+    //         nav: routeNav, 
+    //         title: routeTitle
+    //     };
+
+    //     return routeConfig;
+    // }
 
 //   private _subscriptions: Subscription[] = [];
 //   private _todos: IGifterApp[] = [];
@@ -94,4 +125,3 @@ export class App {
 //     this._todos.splice(index, 1);
 //   }
 }
-

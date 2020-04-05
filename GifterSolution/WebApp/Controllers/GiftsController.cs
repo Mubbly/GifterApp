@@ -1,27 +1,29 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Contracts.DAL.App;
-using Contracts.DAL.App.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
-using DAL.App.EF.Repositories;
 using Domain;
 
 namespace WebApp.Controllers
 {
     public class GiftsController : Controller
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly AppDbContext _context;
 
-        public GiftsController(IAppUnitOfWork uow)
+        public GiftsController(AppDbContext context)
         {
-            _uow = uow;
-        } 
+            _context = context;
+        }
 
         // GET: Gifts
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.Gifts.AllAsync());
+            var appDbContext = _context.Gifts.Include(g => g.ActionType).Include(g => g.AppUser).Include(g => g.Status);
+            return View(await appDbContext.ToListAsync());
         }
 
         // GET: Gifts/Details/5
@@ -32,7 +34,11 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var gift = await _uow.Gifts.FindAsync(id);
+            var gift = await _context.Gifts
+                .Include(g => g.ActionType)
+                .Include(g => g.AppUser)
+                .Include(g => g.Status)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (gift == null)
             {
                 return NotFound();
@@ -44,6 +50,9 @@ namespace WebApp.Controllers
         // GET: Gifts/Create
         public IActionResult Create()
         {
+            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue");
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue");
             return View();
         }
 
@@ -56,12 +65,14 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                //gift.Id = Guid.NewGuid(); // Probably not needed, already works?
-                _uow.Gifts.Add(gift);
-                await _uow.Gifts.SaveChangesAsync();
-                
+                gift.Id = Guid.NewGuid();
+                _context.Add(gift);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", gift.ActionTypeId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", gift.AppUserId);
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", gift.StatusId);
             return View(gift);
         }
 
@@ -73,11 +84,14 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var gift = await _uow.Gifts.FindAsync(id);
+            var gift = await _context.Gifts.FindAsync(id);
             if (gift == null)
             {
                 return NotFound();
             }
+            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", gift.ActionTypeId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", gift.AppUserId);
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", gift.StatusId);
             return View(gift);
         }
 
@@ -92,15 +106,31 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            if (!ModelState.IsValid)
+
+            if (ModelState.IsValid)
             {
-                return View(gift);
+                try
+                {
+                    _context.Update(gift);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!GiftExists(gift.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
-            
-            // TODO: Validation in repository (this previously had try-catch, using "doesGiftExist" method, but shouldn't be done here
-            _uow.Gifts.Update(gift);
-            await _uow.Gifts.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", gift.ActionTypeId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", gift.AppUserId);
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", gift.StatusId);
+            return View(gift);
         }
 
         // GET: Gifts/Delete/5
@@ -111,7 +141,11 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var gift = await _uow.Gifts.FindAsync(id);
+            var gift = await _context.Gifts
+                .Include(g => g.ActionType)
+                .Include(g => g.AppUser)
+                .Include(g => g.Status)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (gift == null)
             {
                 return NotFound();
@@ -125,10 +159,15 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _uow.Gifts.Remove(id);
-            await _uow.Gifts.SaveChangesAsync();
-            
+            var gift = await _context.Gifts.FindAsync(id);
+            _context.Gifts.Remove(gift);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private bool GiftExists(Guid id)
+        {
+            return _context.Gifts.Any(e => e.Id == id);
         }
     }
 }

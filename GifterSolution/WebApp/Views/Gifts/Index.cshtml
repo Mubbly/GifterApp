@@ -34,13 +34,13 @@
                 @Html.DisplayNameFor(model => model.IsPinned)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ActionTypeId)
+                @Html.DisplayNameFor(model => model.ActionType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AppUserId)
+                @Html.DisplayNameFor(model => model.AppUser)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StatusId)
+                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedBy)
@@ -82,13 +82,13 @@
                 @Html.DisplayFor(modelItem => item.IsPinned)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ActionTypeId)
+                @Html.DisplayFor(modelItem => item.ActionType.ActionTypeValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AppUserId)
+                @Html.DisplayFor(modelItem => item.AppUser.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StatusId)
+                @Html.DisplayFor(modelItem => item.Status.StatusValue)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedBy)

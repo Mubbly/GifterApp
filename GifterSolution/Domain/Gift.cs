@@ -35,7 +35,7 @@ namespace Domain
         public Status? Status { get; set; }
 
         // List of all wishlists that correspond to this gift
-        public ICollection<Wishlist>? Wishlists { get; set; }
+        public ICollection<Wishlist>? Wishlists { get; set; } // TODO: Should be the other way around
 
         // List of all gifts that have reserved status
         public ICollection<ReservedGift>? ReservedGifts { get; set; }

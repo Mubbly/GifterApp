@@ -11,6 +11,7 @@ namespace PublicApi.DTO.v1
         public string? Comment { get; set; }
 
         public Guid GiftId { get; set; }
+        public GiftDTO Gift { get; set; } = default!;
 
         public int ProfilesCount { get; set; }
     }

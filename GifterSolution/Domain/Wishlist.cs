@@ -15,7 +15,7 @@ namespace Domain
         public string? Comment { get; set; }
 
         public Guid GiftId { get; set; } = default!;
-        public Gift? Gift { get; set; }
+        public Gift? Gift { get; set; }  // TODO: Should be the other way around
 
         // List of all profiles that correspond to this wishlist
         public ICollection<Profile>? Profiles { get; set; }

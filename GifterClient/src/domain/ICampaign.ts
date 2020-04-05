@@ -1,13 +1,15 @@
+import { Optional } from 'types/generalTypes';
+
 export interface ICampaign {
     id: string;
     name: string;
-    description: string | null;
-    adImage: string | null;
-    institution: string | null;
+    description: Optional<string>;
+    adImage: Optional<string>;
+    institution: Optional<string>;
     activeFromDate: string;
     activeToDate: string;
     isActive: boolean;
-    
+
     userCampaignsCount: number;
     campaignDonateesCount: number;
 }

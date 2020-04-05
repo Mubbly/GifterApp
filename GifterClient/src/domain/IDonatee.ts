@@ -1,18 +1,19 @@
 import { IActionType } from './IActionType';
 import { IStatus } from './IStatus';
+import { Optional } from 'types/generalTypes';
 
 export interface IDonatee {
   id: string;
   firstName: string;
-  lastName: string| null;
-  gender: string | null;
-  age: number | null;
-  bio: string | null;
+  lastName: Optional<string>;
+  gender: Optional<string>;
+  age: Optional<number>;
+  bio: Optional<string>;
   giftName: string;
-  giftDescription: string | null;
-  giftImage: string | null;
-  giftUrl: string | null;
-  giftReservedFrom: string | null;
+  giftDescription: Optional<string>;
+  giftImage: Optional<string>;
+  giftUrl: Optional<string>;
+  giftReservedFrom: Optional<string>;
   activeFrom: string;
   activeTo: string;
   isActive: boolean;

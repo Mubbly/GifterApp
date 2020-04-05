@@ -13,6 +13,8 @@ namespace PublicApi.DTO.v1
         public string? Comment { get; set; }
 
         public Guid AppUserId { get; set; }
+        public AppUsersDTO AppUser { get; set; } = default!;
         public Guid PermissionId { get; set; }
+        public PermissionDTO Permission { get; set; } = default!;
     }
 }

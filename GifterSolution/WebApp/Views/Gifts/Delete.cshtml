@@ -54,22 +54,22 @@
             @Html.DisplayFor(model => model.IsPinned)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ActionTypeId)
+            @Html.DisplayNameFor(model => model.ActionType)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ActionTypeId)
+            @Html.DisplayFor(model => model.ActionType.ActionTypeValue)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AppUserId)
+            @Html.DisplayNameFor(model => model.AppUser)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AppUserId)
+            @Html.DisplayFor(model => model.AppUser.Id)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusId)
+            @Html.DisplayNameFor(model => model.Status)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StatusId)
+            @Html.DisplayFor(model => model.Status.StatusValue)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedBy)

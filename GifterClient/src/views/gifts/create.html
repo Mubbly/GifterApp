@@ -1,0 +1,106 @@
+<template>
+    <h1>Create</h1>
+
+    <h4>Gift</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form submit.trigger="onSubmit($event)">
+                <div class="form-group">
+                    <label class="control-label" for="Name">Name</label>
+                    <input class="form-control" type="text" data-val="true"
+                        data-val-maxlength="The field Name must be a string or array type with a maximum length of &#x27;256&#x27;."
+                        data-val-maxlength-max="256"
+                        data-val-minlength="The field Name must be a string or array type with a minimum length of &#x27;1&#x27;."
+                        data-val-minlength-min="1" data-val-required="The Name field is required." id="Name"
+                        maxlength="256" name="Name" value.bind="_name" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="Name"
+                        data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="Description">Description</label>
+                    <input class="form-control" type="text" data-val="true"
+                        data-val-maxlength="The field Description must be a string or array type with a maximum length of &#x27;1024&#x27;."
+                        data-val-maxlength-max="1024"
+                        data-val-minlength="The field Description must be a string or array type with a minimum length of &#x27;3&#x27;."
+                        data-val-minlength-min="3" id="Description" maxlength="1024" name="Description"
+                        value.bind="_description" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="Description"
+                        data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="Image">Image</label>
+                    <input class="form-control" type="text" data-val="true"
+                        data-val-maxlength="The field Image must be a string or array type with a maximum length of &#x27;2048&#x27;."
+                        data-val-maxlength-max="2048"
+                        data-val-minlength="The field Image must be a string or array type with a minimum length of &#x27;3&#x27;."
+                        data-val-minlength-min="3" id="Image" maxlength="2048" name="Image" value.bind="_image" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="Image"
+                        data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="Url">Url</label>
+                    <input class="form-control" type="text" data-val="true"
+                        data-val-maxlength="The field Url must be a string or array type with a maximum length of &#x27;2048&#x27;."
+                        data-val-maxlength-max="2048"
+                        data-val-minlength="The field Url must be a string or array type with a minimum length of &#x27;3&#x27;."
+                        data-val-minlength-min="3" id="Url" maxlength="2048" name="Url" value.bind="_url" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="Url"
+                        data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="PartnerUrl">PartnerUrl</label>
+                    <input class="form-control" type="text" data-val="true"
+                        data-val-maxlength="The field PartnerUrl must be a string or array type with a maximum length of &#x27;2048&#x27;."
+                        data-val-maxlength-max="2048"
+                        data-val-minlength="The field PartnerUrl must be a string or array type with a minimum length of &#x27;3&#x27;."
+                        data-val-minlength-min="3" id="PartnerUrl" maxlength="2048" name="PartnerUrl"
+                        value.bind="_partnerUrl" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="PartnerUrl"
+                        data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" data-val="true"
+                            data-val-required="The IsPartnered field is required." id="IsPartnered" name="IsPartnered"
+                            checked.bind="_isPartnered" /> IsPartnered
+                    </label>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" data-val="true"
+                            data-val-required="The IsPinned field is required." id="IsPinned" name="IsPinned"
+                            checked.bind="_isPinned" /> IsPinned
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="ActionTypeId">ActionTypeId</label>
+                    <select class="form-control" data-val="true" data-val-required="The ActionTypeId field is required."
+                        id="ActionTypeId" name="ActionTypeId" value.bind="_actionTypeId">
+                        <option repeat.for="actionType of _actionTypes" value="${actionType.id}">${actionType.actionTypeValue}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="AppUserId">AppUserId</label>
+                    <select class="form-control" data-val="true" data-val-required="The AppUserId field is required."
+                        id="AppUserId" name="AppUserId" value.bind="_appUserId">
+                        <option repeat.for="appUser of _appUsers" value="${appUser.id}">${appUser.id}</option>
+                    </select>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="StatusId">StatusId</label>
+                    <select class="form-control" data-val="true" data-val-required="The StatusId field is required."
+                        id="StatusId" name="StatusId" value.bind="_statusId">
+                        <option repeat.for="status of _statuses" value="${status.id}">${status.statusValue}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+        </div>
+    </div>
+
+    <div>
+        <a route-href="route: giftsIndex; params.bind: {}">Back to List</a> </div>
+</template>

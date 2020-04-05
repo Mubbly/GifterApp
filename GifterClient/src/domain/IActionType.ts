@@ -1,7 +1,9 @@
+import { Optional } from 'types/generalTypes';
+
 export interface IActionType {
   id: string;
   actionTypeValue: string;
-  comment: string | null;
+  comment: Optional<string>;
 
   giftsCount: number;
   reservedGiftsCount: number;

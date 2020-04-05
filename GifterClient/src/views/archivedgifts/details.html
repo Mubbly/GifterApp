@@ -1,0 +1,62 @@
+<template>
+    <h1>Details</h1>
+
+    <div>
+        <h4>ArchivedGift</h4>
+        <hr />
+        <dl class="row">
+            <dt class = "col-sm-2">
+                DateArchived
+            </dt>
+            <dd class = "col-sm-10">
+                ${_archivedGift.dateArchived}
+            </dd>
+            <dt class = "col-sm-2">
+                IsConfirmed
+            </dt>
+            <dd class = "col-sm-10">
+                <input checked="checked" class="check-box" disabled="disabled" type="checkbox" checked.bind="_archivedGift.isConfirmed" />
+            </dd>
+            <dt class = "col-sm-2">
+                Comment
+            </dt>
+            <dd class = "col-sm-10">
+                ${_archivedGift.comment}
+            </dd>
+            <dt class = "col-sm-2">
+                ActionType
+            </dt>
+            <dd class = "col-sm-10">
+                ${_archivedGift.actionType.actionTypeValue}
+            </dd>
+            <dt class = "col-sm-2">
+                Gift
+            </dt>
+            <dd class = "col-sm-10">
+                ${_archivedGift.gift.name}
+            </dd>
+            <dt class = "col-sm-2">
+                Status
+            </dt>
+            <dd class = "col-sm-10">
+                ${_archivedGift.status.statusValue}
+            </dd>
+            <dt class = "col-sm-2">
+                UserGiver
+            </dt>
+            <dd class = "col-sm-10">
+                ${_archivedGift.userGiver.id}
+            </dd>
+            <dt class = "col-sm-2">
+                UserReceiver
+            </dt>
+            <dd class = "col-sm-10">
+                ${_archivedGift.userReceiver.id}
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a href="/ArchivedGifts/Edit/08d7d89f-26db-4bda-8012-ad32ced02428">Edit</a> |
+        <a href="/ArchivedGifts">Back to List</a>
+    </div>
+</template>

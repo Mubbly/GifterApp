@@ -29,9 +29,13 @@ namespace PublicApi.DTO.v1
         public DateTime ActiveTo { get; set; }
         public bool IsActive { get; set; }
         
+        public string? FullName => FirstName + " " + LastName;
+
         public Guid ActionTypeId { get; set; }
+        public ActionTypeDTO ActionType { get; set; } = default!;
         public Guid StatusId { get; set; }
-        
+        public StatusDTO Status { get; set; } = default!;
+
         public int CampaignDonateesCount { get; set; }
     }
 }

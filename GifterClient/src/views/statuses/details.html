@@ -1,0 +1,50 @@
+<template>
+    <h1>Details</h1>
+
+    <div>
+        <h4>Status</h4>
+        <hr />
+        <dl class="row">
+            <dt class = "col-sm-2">
+                StatusValue
+            </dt>
+            <dd class = "col-sm-10">
+                ${_status.statusValue}
+            </dd>
+            <dt class = "col-sm-2">
+                Comment
+            </dt>
+            <dd class = "col-sm-10">
+                ${_status.comment}
+            </dd>
+            <dt class = "col-sm-2">
+                GiftsCount
+            </dt>
+            <dd class = "col-sm-10">
+                ${_status.giftsCount}
+            </dd>
+            <dt class = "col-sm-2">
+                ReservedGiftsCount
+            </dt>
+            <dd class = "col-sm-10">
+                ${_status.reservedGiftsCount}
+            </dd>
+            <dt class = "col-sm-2">
+                ArchivedGiftsCount
+            </dt>
+            <dd class = "col-sm-10">
+                ${_status.archivedGiftsCount}
+            </dd>
+            <dt class = "col-sm-2">
+                DonateesCount
+            </dt>
+            <dd class = "col-sm-10">
+                ${_status.donateesCount}
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a href="/Statuses/Edit/08d7d26d-4d40-46e0-8144-091acd062142">Edit</a> |
+        <a href="/Statuses">Back to List</a>
+    </div>
+</template>

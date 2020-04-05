@@ -34,6 +34,8 @@ namespace Domain
         public DateTime ActiveTo { get; set; }
         public bool IsActive { get; set; }
         
+        public string? FullName => FirstName + " " + LastName;
+
         public Guid ActionTypeId { get; set; } = default!;
         public ActionType? ActionType { get; set; }
 

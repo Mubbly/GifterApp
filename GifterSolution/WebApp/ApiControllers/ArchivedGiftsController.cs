@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,49 +17,27 @@ namespace WebApp.ApiControllers
     public class ArchivedGiftsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public ArchivedGiftsController(AppDbContext context)
+        public ArchivedGiftsController(AppDbContext context, IAppUnitOfWork uow)
         {
             _context = context;
+            _uow = uow;
         }
 
         // GET: api/ArchivedGifts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ArchivedGiftDTO>>> GetArchivedGifts()
         {
-            return await _context.ArchivedGifts
-                .Select(ag => new ArchivedGiftDTO()
-                {
-                    Id = ag.Id,
-                    Comment = ag.Comment,
-                    DateArchived = ag.DateArchived,
-                    ActionTypeId = ag.ActionTypeId,
-                    GiftId = ag.GiftId,
-                    IsConfirmed = ag.IsConfirmed,
-                    StatusId = ag.StatusId,
-                    UserGiverId = ag.UserGiverId,
-                    UserReceiverId = ag.UserReceiverId
-                }).ToListAsync();
+            return Ok(await _uow.ArchivedGifts.DTOAllAsync());
         }
 
         // GET: api/ArchivedGifts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ArchivedGiftDTO>> GetArchivedGift(Guid id)
         {
-            var archivedGift = await _context.ArchivedGifts
-                .Select(ag => new ArchivedGiftDTO()
-                {
-                    Id = ag.Id,
-                    Comment = ag.Comment,
-                    DateArchived = ag.DateArchived,
-                    ActionTypeId = ag.ActionTypeId,
-                    GiftId = ag.GiftId,
-                    IsConfirmed = ag.IsConfirmed,
-                    StatusId = ag.StatusId,
-                    UserGiverId = ag.UserGiverId,
-                    UserReceiverId = ag.UserReceiverId
-                }).SingleOrDefaultAsync();
-
+            var archivedGift = await _uow.ArchivedGifts.DTOFirstOrDefaultAsync(id);
+            
             if (archivedGift == null)
             {
                 return NotFound();

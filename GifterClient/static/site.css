@@ -1,3 +1,12 @@
+.errormessage {
+    color: red;
+}
+
+.successmessage {
+    color: green;
+}
+
+
 /* From backend interface */
 
 

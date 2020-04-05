@@ -1,6 +1,6 @@
 import { bindable, autoinject } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
-import { EventTypes } from 'types/EventTypes';
+import { EventTypes } from 'types/eventTypes';
 
 @autoinject
 export class AddGiftForm {

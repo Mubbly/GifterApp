@@ -11,6 +11,8 @@ namespace PublicApi.DTO.v1
         public string? Comment { get; set; }
 
         public Guid AppUserId { get; set; }
+        public AppUsersDTO AppUser { get; set; } = default!;
         public Guid CampaignId { get; set; }
+        public CampaignDTO Campaign { get; set; } = default!;
     }
 }

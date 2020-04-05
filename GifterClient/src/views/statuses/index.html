@@ -1,3 +1,59 @@
 <template>
-    Statuses index
+    <h1>Index</h1>
+
+    <p>
+        <a href="/Statuses/Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    StatusValue
+                </th>
+                <th>
+                    Comment
+                </th>
+                <th>
+                    GiftsCount
+                </th>
+                <th>
+                    ReservedGiftsCount
+                </th>
+                <th>
+                    ArchivedGiftsCount
+                </th>
+                <th>
+                    DonateesCount 
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr repeat.for="status of _statuses">
+                <td>
+                    ${status.statusValue}
+                </td>
+                <td>
+                    ${status.comment}
+                </td>
+                <td>
+                    ${status.giftsCount}
+                </td>
+                <td>
+                    ${status.reservedGiftsCount}
+                </td>
+                <td>
+                    ${status.archivedGiftsCount}
+                </td>
+                <td>
+                    ${status.donateesCount}
+                </td>
+                <td>
+                    <a href="/Statuses/Edit/08d7d26d-534f-4bfe-801c-ef48e76594c6">Edit</a> |
+                    <a href="/Statuses/Details/08d7d26d-534f-4bfe-801c-ef48e76594c6">Details</a> |
+                    <a href="/Statuses/Delete/08d7d26d-534f-4bfe-801c-ef48e76594c6">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </template>

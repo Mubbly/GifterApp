@@ -17,5 +17,6 @@ namespace PublicApi.DTO.v1
         public bool HasJoined { get; set; }
 
         public Guid InvitorUserId { get; set; }
+        public AppUsersDTO InvitorUser { get; set; } = default!;
     }
 }

@@ -1,0 +1,112 @@
+<template>
+    <h1>Details</h1>
+
+    <div>
+        <h4>Donatee</h4>
+        <hr />
+        <dl class="row">
+            <dt class = "col-sm-2">
+                FirstName
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.firstName}
+            </dd>
+            <dt class = "col-sm-2">
+                LastName
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.lastName}
+            </dd>
+            <dt class = "col-sm-2">
+                Gender
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.gender}
+            </dd>
+            <dt class = "col-sm-2">
+                Age
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.age}
+            </dd>
+            <dt class = "col-sm-2">
+                Bio
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.bio}
+            </dd>
+            <dt class = "col-sm-2">
+                GiftName
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.giftName}
+            </dd>
+            <dt class = "col-sm-2">
+                GiftDescription
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.giftDescription}
+            </dd>
+            <dt class = "col-sm-2">
+                GiftImage
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.giftImage}
+            </dd>
+            <dt class = "col-sm-2">
+                GiftUrl
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.giftUrl}
+            </dd>
+            <dt class = "col-sm-2">
+                GiftReservedFrom
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.giftReservedFrom}
+            </dd>
+            <dt class = "col-sm-2">
+                ActiveFrom
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.activeFrom}
+            </dd>
+            <dt class = "col-sm-2">
+                ActiveTo
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.activeTo}
+            </dd>
+            <dt class = "col-sm-2">
+                IsActive
+            </dt>
+            <dd class = "col-sm-10">
+                <input class="check-box" disabled="disabled" type="checkbox" checked.bind="_donatee.isActive"/>
+            </dd>
+            <dt class = "col-sm-2">
+                ActionType
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.actionType.actionTypeValue}
+            </dd>
+            <dt class = "col-sm-2">
+                Status
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.status.statusValue}
+            </dd>
+            <dt class = "col-sm-2">
+                CampaignDonateesCount
+            </dt>
+            <dd class = "col-sm-10">
+                ${_donatee.campaignDonateesCount}
+            </dd>
+            <dd class = "col-sm-10">
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a href="/Donatees/Edit/5335a261-ba5f-4bd9-ba71-88a311f9870f">Edit</a> |
+        <a href="/Donatees">Back to List</a>
+    </div>    
+</template>

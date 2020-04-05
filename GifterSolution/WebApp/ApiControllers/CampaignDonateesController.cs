@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,41 +17,26 @@ namespace WebApp.ApiControllers
     public class CampaignDonateesController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public CampaignDonateesController(AppDbContext context)
+        public CampaignDonateesController(AppDbContext context, IAppUnitOfWork uow)
         {
             _context = context;
+            _uow = uow;
         }
 
         // GET: api/CampaignDonatees
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CampaignDonateeDTO>>> GetCampaignDonatees()
         {
-            return await _context.CampaignDonatees
-                .Select(cd => new CampaignDonateeDTO()
-                {
-                    Id = cd.Id,
-                    CampaignId = cd.CampaignId,
-                    Comment = cd.Comment,
-                    DonateeId = cd.DonateeId,
-                    IsActive = cd.IsActive
-                }).ToListAsync();
+            return Ok(await _uow.CampaignDonatees.DTOAllAsync());
         }
 
         // GET: api/CampaignDonatees/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CampaignDonateeDTO>> GetCampaignDonatee(Guid id)
         {
-            var campaignDonatee = await _context.CampaignDonatees
-                .Select(cd => new CampaignDonateeDTO()
-                {
-                    Id = cd.Id,
-                    CampaignId = cd.CampaignId,
-                    Comment = cd.Comment,
-                    DonateeId = cd.DonateeId,
-                    IsActive = cd.IsActive
-                }).SingleOrDefaultAsync();
-
+            var campaignDonatee = await _uow.CampaignDonatees.DTOFirstOrDefaultAsync(id);
             if (campaignDonatee == null)
             {
                 return NotFound();

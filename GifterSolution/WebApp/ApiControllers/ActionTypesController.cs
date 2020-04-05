@@ -53,7 +53,7 @@ namespace WebApp.ApiControllers
                     ActionTypeValue = at.ActionTypeValue,
                     ArchivedGiftsCount = at.ArchivedGifts.Count,
                     ReservedGiftsCount = at.ReservedGifts.Count,
-                }).SingleOrDefaultAsync();
+                }).FirstOrDefaultAsync(at => at.Id == id);
 
             if (actionType == null)
             {

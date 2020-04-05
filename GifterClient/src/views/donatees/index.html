@@ -1,3 +1,119 @@
 <template>
-    Donatees index
+    <h1>Index</h1>
+
+    <p>
+        <a href="/Donatees/Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    FirstName
+                </th>
+                <th>
+                    LastName
+                </th>
+                <th>
+                    Gender
+                </th>
+                <th>
+                    Age
+                </th>
+                <th>
+                    Bio
+                </th>
+                <th>
+                    GiftName
+                </th>
+                <th>
+                    GiftDescription
+                </th>
+                <th>
+                    GiftImage
+                </th>
+                <th>
+                    GiftUrl
+                </th>
+                <th>
+                    GiftReservedFrom
+                </th>
+                <th>
+                    ActiveFrom
+                </th>
+                <th>
+                    ActiveTo
+                </th>
+                <th>
+                    IsActive
+                </th>
+                <th>
+                    ActionType
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    CampaignDonateesCount
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr repeat.for="donatee of _donatees">
+                <td>
+                    ${donatee.firstName}
+                </td>
+                <td>
+                    ${donatee.lastName}
+                </td>
+                <td>
+                    ${donatee.gender}
+                </td>
+                <td>
+                    ${donatee.age}
+                </td>
+                <td>
+                    ${donatee.bio}
+                </td>
+                <td>
+                    ${donatee.giftName}
+                </td>
+                <td>
+                    ${donatee.giftDescription}
+                </td>
+                <td>
+                    ${donatee.giftImage}
+                </td>
+                <td>
+                    ${donatee.giftUrl}
+                </td>
+                <td>
+                    ${donatee.giftReservedFrom}
+                </td>
+                <td>
+                    ${donatee.activeFrom}
+                </td>
+                <td>
+                    ${donatee.activeTo}
+                </td>
+                <td>
+                    <input class="check-box" disabled="disabled" type="checkbox" checked.bind="donatee.isActive"/>
+                </td>
+                <td>
+                    ${donatee.actionType.actionTypeValue}
+                </td>
+                <td>
+                    ${donatee.status.statusValue}
+                </td>
+                <td>
+                    ${donatee.campaignDonateesCount}
+                </td>
+                <td>
+                    <a href="/Donatees/Edit/5335a261-ba5f-4bd9-ba71-88a311f9870f">Edit</a> |
+                    <a route-href="route: donateesDetails; params.bind: { id: donatee.id }">Details</a> |
+                    <a href="/Donatees/Delete/5335a261-ba5f-4bd9-ba71-88a311f9870f">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </template>
