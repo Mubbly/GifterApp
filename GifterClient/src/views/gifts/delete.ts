@@ -1,13 +1,12 @@
 import { autoinject } from 'aurelia-framework';
 import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
 import { GiftService } from 'service/giftService';
-import { IGiftEdit } from 'domain/IGiftEdit';
 import * as UtilFunctions from 'utils/utilFunctions';
-import { Optional } from 'types/generalTypes';
+import { IGift } from 'domain/IGift';
 
 @autoinject
-export class GiftsEdit {
-    private _gift?: IGiftEdit;
+export class GiftsDelete {
+    private _gift?: IGift;
 
     constructor(private giftService: GiftService, private router: Router) {
     }
@@ -31,7 +30,6 @@ export class GiftsEdit {
     }
 
     onSubmit(event: Event) {
-        // TODO: Confirmation asking
         this.giftService
         .deleteGift(this._gift!.id)
         .then(
@@ -45,5 +43,4 @@ export class GiftsEdit {
         );
         event.preventDefault();
     }
-
 }

@@ -9,18 +9,17 @@ import * as UtilFunctions from 'utils/utilFunctions';
 export class GiftDetails {
     private _gift: Optional<IGift> = null;
 
-    constructor(private giftService: GiftService) {
+    constructor(private giftService: GiftService) {}
 
-    }
-
-    attached() {
-
-    }
+    attached() {}
 
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-        const giftId = params.id;
-        if(UtilFunctions.existsAndIsString(giftId)) {
-            this.giftService.getGift(giftId).then(
+        this.getGift(params.id);
+    }
+
+    private getGift(id: string): void {
+        if(UtilFunctions.existsAndIsString(id)) {
+            this.giftService.getGift(id).then(
                 response => {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._gift = response.data!;

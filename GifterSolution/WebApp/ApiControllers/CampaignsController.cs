@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,50 +17,26 @@ namespace WebApp.ApiControllers
     public class CampaignsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IAppUnitOfWork _uow;
 
-        public CampaignsController(AppDbContext context)
+        public CampaignsController(AppDbContext context, IAppUnitOfWork uow)
         {
             _context = context;
+            _uow = uow;
         }
 
         // GET: api/Campaigns
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CampaignDTO>>> GetCampaigns()
         {
-            return await _context.Campaigns
-                .Select(c => new CampaignDTO()
-                {
-                    Id = c.Id,
-                    ActiveFromDate = c.ActiveFromDate,
-                    ActiveToDate = c.ActiveToDate,
-                    AdImage = c.AdImage,
-                    CampaignDonateesCount = c.CampaignDonatees.Count,
-                    Description = c.Description,
-                    Institution = c.Institution,
-                    IsActive = c.IsActive,
-                    Name = c.Name,
-                    UserCampaignsCount = c.UserCampaigns.Count
-                }).ToListAsync();
+            return Ok(await _uow.Campaigns.DTOAllAsync());
         }
 
         // GET: api/Campaigns/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CampaignDTO>> GetCampaign(Guid id)
         {
-            var campaign = await _context.Campaigns
-                .Select(c => new CampaignDTO() 
-                {
-                    Id = c.Id,
-                    ActiveFromDate = c.ActiveFromDate,
-                    ActiveToDate = c.ActiveToDate,
-                    AdImage = c.AdImage,
-                    CampaignDonateesCount = c.CampaignDonatees.Count,
-                    Description = c.Description,
-                    Institution = c.Institution,
-                    IsActive = c.IsActive,
-                    Name = c.Name,
-                    UserCampaignsCount = c.UserCampaigns.Count
-                }).SingleOrDefaultAsync();
+            var campaign = await _uow.Campaigns.DTOFirstOrDefaultAsync(id);
 
             if (campaign == null)
             {
@@ -73,22 +50,34 @@ namespace WebApp.ApiControllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCampaign(Guid id, Campaign campaign)
+        public async Task<IActionResult> PutCampaign(Guid id, CampaignEditDTO campaignEditDTO)
         {
-            if (id != campaign.Id)
+            if (id != campaignEditDTO.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(campaign).State = EntityState.Modified;
+            var campaign = await _uow.Campaigns.FirstOrDefaultAsync(campaignEditDTO.Id);
+            if (campaign == null)
+            {
+                return BadRequest();
+            }
+            campaign.Name = campaignEditDTO.Name;
+            campaign.Description = campaignEditDTO.Description;
+            campaign.AdImage = campaignEditDTO.AdImage;
+            campaign.Institution = campaignEditDTO.Institution;
+            campaign.ActiveFromDate = campaignEditDTO.ActiveFromDate;
+            campaign.ActiveToDate = campaignEditDTO.ActiveToDate;
 
+            _uow.Campaigns.Update(campaign);
+            
             try
             {
-                await _context.SaveChangesAsync();
+                await _uow.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CampaignExists(id))
+                if (!await _uow.Campaigns.ExistsAsync(id))
                 {
                     return NotFound();
                 }
@@ -105,10 +94,21 @@ namespace WebApp.ApiControllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Campaign>> PostCampaign(Campaign campaign)
+        public async Task<ActionResult<Campaign>> PostCampaign(CampaignCreateDTO campaignCreateDTO)
         {
-            _context.Campaigns.Add(campaign);
-            await _context.SaveChangesAsync();
+            var campaign = new Campaign
+            {
+                Name = campaignCreateDTO.Name,
+                Description = campaignCreateDTO.Description,
+                AdImage = campaignCreateDTO.AdImage,
+                Institution = campaignCreateDTO.Institution,
+                ActiveFromDate = campaignCreateDTO.ActiveFromDate,
+                ActiveToDate = campaignCreateDTO.ActiveToDate
+            };
+            
+            _uow.Campaigns.Add(campaign);
+            
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetCampaign", new { id = campaign.Id }, campaign);
         }
@@ -117,21 +117,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Campaign>> DeleteCampaign(Guid id)
         {
-            var campaign = await _context.Campaigns.FindAsync(id);
+            var campaign = await _uow.Campaigns.FirstOrDefaultAsync(id);
             if (campaign == null)
             {
                 return NotFound();
             }
 
-            _context.Campaigns.Remove(campaign);
-            await _context.SaveChangesAsync();
+            _uow.Campaigns.Remove(campaign);
+            await _uow.SaveChangesAsync();
 
-            return campaign;
-        }
-
-        private bool CampaignExists(Guid id)
-        {
-            return _context.Campaigns.Any(e => e.Id == id);
+            return Ok(campaign);
         }
     }
 }

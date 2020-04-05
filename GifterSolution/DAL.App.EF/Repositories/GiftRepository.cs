@@ -35,6 +35,7 @@ namespace DAL.App.EF.Repositories
         public async Task<Gift> FirstOrDefaultAsync(Guid id, Guid? userId = null)
         {
             var query = RepoDbSet
+                .Where(g => g.Id == id)
                 .Include(g => g.ActionType)
                 .Include(g => g.Status)
                 .Include(g => g.AppUser)
@@ -143,14 +144,11 @@ namespace DAL.App.EF.Repositories
         public async Task<GiftDTO> DTOFirstOrDefaultAsync(Guid id, Guid? userId = null)
         {
             var query = RepoDbSet
+                .Where(g => g.Id == id)
                 .Include(g => g.ActionType)
                 .Include(g => g.Status)
                 .Include(g => g.AppUser)
                 .AsQueryable();
-
-            if (userId != null)
-            {
-            }
 
             return await query.Select(g => new GiftDTO()
                     {
@@ -212,7 +210,7 @@ namespace DAL.App.EF.Repositories
                             ArchivedGiftsCount = g.Status!.ArchivedGifts.Count,
                             ReservedGiftsCount = g.Status!.ReservedGifts.Count
                         }
-            }).FirstOrDefaultAsync(g => g.Id == id);
+            }).FirstOrDefaultAsync();
         }
 
         /*

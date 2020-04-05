@@ -3,24 +3,30 @@ import { RouteConfig, NavigationInstruction } from 'aurelia-router';
 import { Optional } from 'types/generalTypes';
 import { IDonatee } from 'domain/IDonatee';
 import { DonateeService } from 'service/donateeService';
+import * as UtilFunctions from 'utils/utilFunctions';
 
 @autoinject
 export class DonateeDetails {
-    private _donatees: IDonatee[] = [];
     private _donatee: Optional<IDonatee> = null;
 
-    constructor(private donateeService: DonateeService) {
+    constructor(private donateeService: DonateeService) {}
 
-    }
-
-    attached() {
-
-    }
+    attached() {}
 
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-        if(params.id && typeof(params.id) === 'string') {
-            this.donateeService.getDonatee(params.id).then(
-                data => this._donatee = data
+        this.getDonatee(params.id);
+    }
+
+    private getDonatee(id: string): void {
+        if(UtilFunctions.existsAndIsString(id)) {
+            this.donateeService.getDonatee(id).then(
+                response => {
+                    if(UtilFunctions.isSuccessful(response)) {
+                        this._donatee = response.data!;
+                    } else {
+                        UtilFunctions.alertErrorMessage(response);
+                    }
+                }
             )
         }
     }

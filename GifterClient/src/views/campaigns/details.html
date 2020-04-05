@@ -1,3 +1,55 @@
 <template>
-  <h1>Details ${message}</h1>
+    <h1>Details</h1>
+
+    <div>
+        <h4>Campaign</h4>
+        <dl class="row">
+            <dt class = "col-sm-2">
+                Name
+            </dt>
+            <dd class = "col-sm-10">
+                ${_campaign.name}
+            </dd>
+            <dt class = "col-sm-2">
+                Description
+            </dt>
+            <dd class = "col-sm-10">
+                ${_campaign.description}
+            </dd>
+            <dt class = "col-sm-2">
+                AdImage
+            </dt>
+            <dd class = "col-sm-10">
+                ${_campaign.adImage}
+            </dd>
+            <dt class = "col-sm-2">
+                Institution
+            </dt>
+            <dd class = "col-sm-10">
+                ${_campaign.institution}
+            </dd>
+            <dt class = "col-sm-2">
+                ActiveFromDate
+            </dt>
+            <dd class = "col-sm-10">
+                ${_campaign.activeFromDate}
+            </dd>
+            <dt class = "col-sm-2">
+                ActiveToDate
+            </dt>
+            <dd class = "col-sm-10">
+                ${_campaign.activeToDate}
+            </dd>
+            <dt class = "col-sm-2">
+                IsActive
+            </dt>
+            <dd class = "col-sm-10">
+                <input class="check-box" disabled="disabled" type="checkbox" checked.bind="_campaign.isActive" />
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a route-href="route: campaignsEdit; params.bind: { id: _campaign.id }">Edit</a> |        
+        <a route-href="route: campaignsIndex; params.bind: {}">Back to List</a>    </div>
+    </div>
 </template>

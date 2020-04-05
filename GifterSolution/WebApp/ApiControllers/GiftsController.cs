@@ -61,7 +61,6 @@ namespace WebApp.ApiControllers
             {
                 return BadRequest();
             }
-            
             gift.Name = giftEditDTO.Name;
             gift.Description = giftEditDTO.Description;
             gift.Image = giftEditDTO.Image;
@@ -100,18 +99,19 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<GiftCreateDTO>> PostGift(GiftCreateDTO giftCreateDTO)
         {
-            var gift = new Gift();
-            
-            gift.Name = giftCreateDTO.Name;
-            gift.Description = giftCreateDTO.Description;
-            gift.Image = giftCreateDTO.Image;
-            gift.Url = giftCreateDTO.Url;
-            gift.IsPartnered = giftCreateDTO.IsPartnered;
-            gift.PartnerUrl = giftCreateDTO.PartnerUrl;
-            gift.IsPinned = giftCreateDTO.IsPinned;
-            gift.ActionTypeId = giftCreateDTO.ActionTypeId;
-            gift.StatusId = giftCreateDTO.StatusId;
-            gift.AppUserId = giftCreateDTO.AppUserId;
+            var gift = new Gift
+            {
+                Name = giftCreateDTO.Name,
+                Description = giftCreateDTO.Description,
+                Image = giftCreateDTO.Image,
+                Url = giftCreateDTO.Url,
+                IsPartnered = giftCreateDTO.IsPartnered,
+                PartnerUrl = giftCreateDTO.PartnerUrl,
+                IsPinned = giftCreateDTO.IsPinned,
+                ActionTypeId = giftCreateDTO.ActionTypeId,
+                StatusId = giftCreateDTO.StatusId,
+                AppUserId = giftCreateDTO.AppUserId
+            };
             
             _uow.Gifts.Add(gift);
             

@@ -12,8 +12,8 @@ import { ActionTypeService } from "service/actionTypeService";
 import { IGiftCreate } from '../../domain/IGiftCreate';
 
 @autoinject
-export class GiftsEdit {
-    private _gift?: IGiftEdit;
+export class GiftsCreate {
+    private _gift?: IGiftCreate;
 
     private _name = "";
     private _description = null;
@@ -25,7 +25,6 @@ export class GiftsEdit {
     private _actionTypeId = "";
     private _statusId = "";
     private _appUserId = "";
-
     // related tables
     private _appUsers: IAppUser[] = [];
     private _statuses: IStatus[] = [];
@@ -40,20 +39,10 @@ export class GiftsEdit {
     ) {}
 
     attached() {
-        // Get related tables data
-        this.actionTypeService.getActionTypes().then(
-            data => this._actionTypes = data
-        );
-        this.statusService.getStatuses().then(
-            data => this._statuses = data
-        );
-        this.appUserService.getAppUsers().then(
-            data => this._appUsers = data
-        );
+        this.getRelatedData();
     }
 
     onSubmit(event: Event) {
-        console.log(event);
         let newGift: IGiftCreate = {
             name: this._name,
             description: this._description,
@@ -67,7 +56,25 @@ export class GiftsEdit {
             appUserId: this._appUserId
         };
         console.log(newGift);
+        this.createGift(newGift);
 
+        event.preventDefault();
+    }
+
+    // From other tables that are connected to this one via foreign keys
+    private getRelatedData(): void {
+        this.actionTypeService.getActionTypes().then(
+            data => this._actionTypes = data
+        );
+        this.statusService.getStatuses().then(
+            data => this._statuses = data
+        );
+        this.appUserService.getAppUsers().then(
+            data => this._appUsers = data
+        );
+    }
+
+    private createGift(newGift: IGiftCreate): void {
         this.giftService
             .createGift(newGift)
             .then((response) => {
@@ -77,6 +84,5 @@ export class GiftsEdit {
                     UtilFunctions.alertErrorMessage(response);
                 }
             });
-        event.preventDefault();
     }
 }

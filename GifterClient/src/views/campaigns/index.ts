@@ -1,6 +1,8 @@
 import { autoinject } from 'aurelia-framework';
 import { ICampaign } from 'domain/ICampaign';
 import { CampaignService } from 'service/campaignService';
+import * as UtilFunctions from 'utils/utilFunctions';
+import { Optional } from 'types/generalTypes';
 
 @autoinject
 export class CampaignsIndex {
@@ -11,8 +13,18 @@ export class CampaignsIndex {
     }
 
     attached() {
+        this.getAllCampaigns();
+    }
+
+    private getAllCampaigns(): void {
         this.campaignService.getCampaigns().then(
-            data => this._campaigns = data
+            response => {
+                if(UtilFunctions.isSuccessful(response)) {
+                    this._campaigns = response.data!;
+                } else {
+                    UtilFunctions.alertErrorMessage(response);
+                }
+            }
         );
     }
 }

@@ -1,7 +1,10 @@
 import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
-import { Optional } from 'types/generalTypes';
+import { IFetchResponse } from 'types/IFetchResponse';
 import { IDonatee } from 'domain/IDonatee';
+import { IDonateeEdit } from 'domain/IDonateeEdit';
+import * as UtilFunctions from 'utils/utilFunctions';
+import { IDonateeCreate } from 'domain/IDonateeCreate';
 
 @autoinject
 export class DonateeService {
@@ -11,27 +14,118 @@ export class DonateeService {
 
     }
 
-    getDonatees(): Promise<IDonatee[]> {
-        return this.httpClient
-            .fetch(this._baseUrl)
-            .then(response => response.json())
-            .then((data: IDonatee[]) => data)
-            .catch(reason => { 
-                console.log(reason); 
-                return [];
-            });
+    async getDonatees(): Promise<IFetchResponse<IDonatee[]>> {
+        try {
+            const response = await this.httpClient.fetch(this._baseUrl);
+
+            if(UtilFunctions.isSuccessful(response)) {
+                const data = (await response.json()) as IDonatee[];
+                console.log(data);
+                return {
+                    status: response.status,
+                    data: data
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+        } catch(reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
     }
 
-    getDonatee(id: string): Promise<Optional<IDonatee>> {
-        return this.httpClient
-            .fetch(this._baseUrl + '/' + id)
-            .then(response => response.json())
-            .then((data: IDonatee) => data)
-            .catch(reason => { 
-                console.log(reason);
-                return null;
-            });
+    async getDonatee(id: string): Promise<IFetchResponse<IDonatee>> {
+        try {
+            const response = await this.httpClient.fetch(`${this._baseUrl}/${id}`);
+
+            if(UtilFunctions.isSuccessful(response)) {
+                const data = (await response.json()) as IDonatee;
+                console.log(data);
+                return {
+                    status: response.status,
+                    data: data
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+        } catch(reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
     }
 
-    // TODO: .. update, delete etc
+    async createDonatee(donatee: IDonateeCreate): Promise<IFetchResponse<string>> {
+        try {
+            const response = await this.httpClient.post(this._baseUrl, JSON.stringify(donatee));
+
+            if(UtilFunctions.isSuccessful(response)) {
+                console.log('response', response);
+                return {
+                    status: response.status
+                    // no data
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+        } catch (reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
+    }
+
+    async updateDonatee(donatee: IDonateeEdit): Promise<IFetchResponse<string>> {
+        try {
+            const response = await this.httpClient.put(`${this._baseUrl}/${donatee.id}`, JSON.stringify(donatee));
+
+            if(UtilFunctions.isSuccessful(response)) {
+                return {
+                    status: response.status
+                    // no data
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+        } catch (reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
+    }
+
+    async deleteDonatee(id: string): Promise<IFetchResponse<string>> {
+        try {
+            const response = await this.httpClient.delete(`${this._baseUrl}/${id}`, null);
+
+            if(UtilFunctions.isSuccessful(response)) {
+                return {
+                    status: response.status
+                    // no data
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+        } catch (reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
+    }
 }

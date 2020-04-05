@@ -2,7 +2,7 @@
     <h1>Index</h1>
 
     <p>
-        <a href="/Campaigns/Create">Create New</a>
+        <a route-href="route: campaignsCreate; params.bind: {}">Create new</a>      
     </p>
     <table class="table">
         <thead>
@@ -67,9 +67,9 @@
                     ${campaign.campaignDonateesCount}
                 </td>
                 <td>
-                    <a href="/Campaigns/Edit/08d7d26d-705f-46ad-8559-44b072c93cac">Edit</a> |
-                    <a href="/Campaigns/Details/08d7d26d-705f-46ad-8559-44b072c93cac">Details</a> |
-                    <a href="/Campaigns/Delete/08d7d26d-705f-46ad-8559-44b072c93cac">Delete</a>
+                    <a route-href="route: campaignsEdit; params.bind: { id: campaign.id }">Edit</a> |        
+                    <a route-href="route: campaignsDetails; params.bind: { id: campaign.id }">Details</a> |
+                    <a route-href="route: campaignsDelete; params.bind: { id: campaign.id }">Delete</a> |  
                 </td>
             </tr>
         </tbody>
