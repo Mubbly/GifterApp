@@ -19,7 +19,7 @@
                         data-val-minlength="The field FirstName must be a string or array type with a minimum length of &#x27;1&#x27;."
                         data-val-minlength-min="1" data-val-required="The FirstName field is required." id="FirstName"
                         maxlength="256" name="FirstName"
-                        value.bind="_donatee.firstName" />
+                        value.bind="_firstName" />
                     <span class="text-danger field-validation-valid" data-valmsg-for="FirstName"
                         data-valmsg-replace="true"></span>
                 </div>
@@ -30,7 +30,7 @@
                         data-val-maxlength-max="256"
                         data-val-minlength="The field LastName must be a string or array type with a minimum length of &#x27;1&#x27;."
                         data-val-minlength-min="1" id="LastName" maxlength="256" name="LastName"
-                        value.bind="_donatee.lastName" />
+                        value.bind="_lastName" />
                     <span class="text-danger field-validation-valid" data-valmsg-for="LastName"
                         data-valmsg-replace="true"></span>
                 </div>
@@ -41,13 +41,13 @@
                         data-val-maxlength-max="256"
                         data-val-minlength="The field Gender must be a string or array type with a minimum length of &#x27;1&#x27;."
                         data-val-minlength-min="1" id="Gender" maxlength="256" name="Gender" 
-                        value.bind="_donatee.gender"  />
+                        value.bind="_gender"  />
                     <span class="text-danger field-validation-valid" data-valmsg-for="Gender"
                         data-valmsg-replace="true"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="Age">Age</label>
-                    <input class="form-control" type="number" id="Age" name="Age" value.bind="_donatee.age"  />
+                    <input class="form-control" type="number" id="Age" name="Age" value.bind="_age"  />
                     <span class="text-danger field-validation-valid" data-valmsg-for="Age"
                         data-valmsg-replace="true"></span>
                 </div>
@@ -58,7 +58,7 @@
                         data-val-maxlength-max="4096"
                         data-val-minlength="The field Bio must be a string or array type with a minimum length of &#x27;3&#x27;."
                         data-val-minlength-min="3" id="Bio" maxlength="4096" name="Bio" 
-                        value.bind="_donatee.bio"  />
+                        value.bind="_bio"  />
                     <span class="text-danger field-validation-valid" data-valmsg-for="Bio"
                         data-valmsg-replace="true"></span>
                 </div>
@@ -70,7 +70,7 @@
                         data-val-minlength="The field GiftName must be a string or array type with a minimum length of &#x27;1&#x27;."
                         data-val-minlength-min="1" data-val-required="The GiftName field is required." id="GiftName"
                         maxlength="256" name="GiftName"
-                        value.bind="_donatee.giftName" />
+                        value.bind="_giftName" />
                     <span class="text-danger field-validation-valid" data-valmsg-for="GiftName"
                         data-valmsg-replace="true"></span>
                 </div>
@@ -81,7 +81,7 @@
                         data-val-maxlength-max="1024"
                         data-val-minlength="The field GiftDescription must be a string or array type with a minimum length of &#x27;3&#x27;."
                         data-val-minlength-min="3" id="GiftDescription" maxlength="1024" name="GiftDescription"
-                        value.bind="_donatee.giftDescription" />
+                        value.bind="_giftDescription" />
                     <span class="text-danger field-validation-valid" data-valmsg-for="GiftDescription"
                         data-valmsg-replace="true"></span>
                 </div>
@@ -92,7 +92,7 @@
                         data-val-maxlength-max="2048"
                         data-val-minlength="The field GiftImage must be a string or array type with a minimum length of &#x27;3&#x27;."
                         data-val-minlength-min="3" id="GiftImage" maxlength="2048" name="GiftImage" 
-                        value.bind="_donatee.giftImage" />
+                        value.bind="_giftImage" />
                     <span class="text-danger field-validation-valid" data-valmsg-for="GiftImage"
                         data-valmsg-replace="true"></span>
                 </div>
@@ -103,23 +103,23 @@
                         data-val-maxlength-max="2048"
                         data-val-minlength="The field GiftUrl must be a string or array type with a minimum length of &#x27;3&#x27;."
                         data-val-minlength-min="3" id="GiftUrl" maxlength="2048" name="GiftUrl"
-                        value.bind="_donatee.giftUrl" />
+                        value.bind="_giftUrl" />
                     <span class="text-danger field-validation-valid" data-valmsg-for="GiftUrl"
                         data-valmsg-replace="true"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="ActiveFrom">ActiveFrom</label>
-                    <input class="form-control" type="datetime-local" data-val="true"
+                    <input class="form-control" type="date" data-val="true"
                         data-val-required="The ActiveFrom field is required." id="ActiveFrom" name="ActiveFrom"
-                        value.bind="_donatee.activeFrom" />
+                        value.bind="_activeFrom" />
                     <span class="text-danger field-validation-valid" data-valmsg-for="ActiveFrom"
                         data-valmsg-replace="true"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="ActiveTo">ActiveTo</label>
-                    <input class="form-control" type="datetime-local" data-val="true"
+                    <input class="form-control" type="date" data-val="true"
                         data-val-required="The ActiveTo field is required." id="ActiveTo" name="ActiveTo"
-                        value.bind="_donatee.activeTo" />
+                        value.bind="_activeTo" />
                     <span class="text-danger field-validation-valid" data-valmsg-for="ActiveTo"
                         data-valmsg-replace="true"></span>
                 </div>

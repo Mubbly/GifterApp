@@ -12,8 +12,8 @@ import { ActionTypeService } from "service/actionTypeService";
 import { ICampaignCreate } from "../../domain/ICampaignCreate";
 
 @autoinject
-export class CampaignsEdit {
-    private _campaign?: ICampaignEdit;
+export class CampaignsCreate {
+    private _campaign?: ICampaignCreate;
 
     private _name = "";
     private _activeToDate = "";
@@ -44,7 +44,9 @@ export class CampaignsEdit {
     }
 
     private createCampaign(newCampaign: ICampaignCreate) {
-        this.campaignService.createCampaign(newCampaign).then((response) => {
+        this.campaignService
+        .createCampaign(newCampaign)
+        .then((response) => {
             if (UtilFunctions.isSuccessful(response)) {
                 this.router.navigateToRoute("campaignsIndex", {});
             } else {
