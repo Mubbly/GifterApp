@@ -212,7 +212,7 @@ namespace DAL.App.EF.Repositories
                             ArchivedGiftsCount = g.Status!.ArchivedGifts.Count,
                             ReservedGiftsCount = g.Status!.ReservedGifts.Count
                         }
-            }).FirstOrDefaultAsync();
+            }).FirstOrDefaultAsync(g => g.Id == id);
         }
 
         /*
