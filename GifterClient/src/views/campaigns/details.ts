@@ -27,8 +27,9 @@ export class CampaignDetails {
                 response => {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._campaign = response.data!;
+                    } else {
+                        UtilFunctions.alertErrorMessage(response);
                     }
-                    UtilFunctions.alertErrorMessage(response);
                 }
             )
         }
