@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ namespace WebApp.Controllers
 {
     public class FriendshipsController : Controller
     {
-        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public FriendshipsController(AppDbContext context)
@@ -49,8 +49,8 @@ namespace WebApp.Controllers
         // GET: Friendships/Create
         public IActionResult Create()
         {
-            ViewData["AppUser1Id"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["AppUser2Id"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["AppUser1Id"] = new SelectList(_context.Users, "Id", "FirstName");
+            ViewData["AppUser2Id"] = new SelectList(_context.Users, "Id", "FirstName");
             return View();
         }
 
@@ -68,8 +68,8 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUser1Id"] = new SelectList(_context.Users, "Id", "Id", friendship.AppUser1Id);
-            ViewData["AppUser2Id"] = new SelectList(_context.Users, "Id", "Id", friendship.AppUser2Id);
+            ViewData["AppUser1Id"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUser1Id);
+            ViewData["AppUser2Id"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUser2Id);
             return View(friendship);
         }
 
@@ -86,8 +86,8 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["AppUser1Id"] = new SelectList(_context.Users, "Id", "Id", friendship.AppUser1Id);
-            ViewData["AppUser2Id"] = new SelectList(_context.Users, "Id", "Id", friendship.AppUser2Id);
+            ViewData["AppUser1Id"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUser1Id);
+            ViewData["AppUser2Id"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUser2Id);
             return View(friendship);
         }
 
@@ -123,8 +123,8 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUser1Id"] = new SelectList(_context.Users, "Id", "Id", friendship.AppUser1Id);
-            ViewData["AppUser2Id"] = new SelectList(_context.Users, "Id", "Id", friendship.AppUser2Id);
+            ViewData["AppUser1Id"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUser1Id);
+            ViewData["AppUser2Id"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUser2Id);
             return View(friendship);
         }
 

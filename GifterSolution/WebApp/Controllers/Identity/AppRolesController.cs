@@ -1,18 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain.Identity;
 
-namespace WebApp.Controllers.Identity
+namespace WebApp.Controllers
 {
     public class AppRolesController : Controller
     {
         private readonly AppDbContext _context;
 
-        // TODO: How to approach Identity repos?
         public AppRolesController(AppDbContext context)
         {
             _context = context;

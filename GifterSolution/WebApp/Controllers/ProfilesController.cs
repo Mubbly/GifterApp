@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ namespace WebApp.Controllers
 {
     public class ProfilesController : Controller
     {
-        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public ProfilesController(AppDbContext context)
@@ -49,7 +49,7 @@ namespace WebApp.Controllers
         // GET: Profiles/Create
         public IActionResult Create()
         {
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName");
             ViewData["WishlistId"] = new SelectList(_context.Wishlists, "Id", "Id");
             return View();
         }
@@ -68,7 +68,7 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", profile.AppUserId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", profile.AppUserId);
             ViewData["WishlistId"] = new SelectList(_context.Wishlists, "Id", "Id", profile.WishlistId);
             return View(profile);
         }
@@ -86,7 +86,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", profile.AppUserId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", profile.AppUserId);
             ViewData["WishlistId"] = new SelectList(_context.Wishlists, "Id", "Id", profile.WishlistId);
             return View(profile);
         }
@@ -123,7 +123,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", profile.AppUserId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", profile.AppUserId);
             ViewData["WishlistId"] = new SelectList(_context.Wishlists, "Id", "Id", profile.WishlistId);
             return View(profile);
         }

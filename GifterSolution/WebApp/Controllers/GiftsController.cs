@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,7 @@ namespace WebApp.Controllers
         public IActionResult Create()
         {
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue");
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName");
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue");
             return View();
         }
@@ -70,7 +71,7 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", gift.ActionTypeId);
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", gift.AppUserId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", gift.AppUserId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", gift.StatusId);
             return View(gift);
         }
@@ -89,7 +90,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", gift.ActionTypeId);
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", gift.AppUserId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", gift.AppUserId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", gift.StatusId);
             return View(gift);
         }
@@ -127,7 +128,7 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", gift.ActionTypeId);
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", gift.AppUserId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", gift.AppUserId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", gift.StatusId);
             return View(gift);
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ namespace WebApp.Controllers
 {
     public class InvitedUsersController : Controller
     {
-        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public InvitedUsersController(AppDbContext context)
@@ -48,7 +48,7 @@ namespace WebApp.Controllers
         // GET: InvitedUsers/Create
         public IActionResult Create()
         {
-            ViewData["InvitorUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["InvitorUserId"] = new SelectList(_context.Users, "Id", "FirstName");
             return View();
         }
 
@@ -66,7 +66,7 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InvitorUserId"] = new SelectList(_context.Users, "Id", "Id", invitedUser.InvitorUserId);
+            ViewData["InvitorUserId"] = new SelectList(_context.Users, "Id", "FirstName", invitedUser.InvitorUserId);
             return View(invitedUser);
         }
 
@@ -83,7 +83,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["InvitorUserId"] = new SelectList(_context.Users, "Id", "Id", invitedUser.InvitorUserId);
+            ViewData["InvitorUserId"] = new SelectList(_context.Users, "Id", "FirstName", invitedUser.InvitorUserId);
             return View(invitedUser);
         }
 
@@ -119,7 +119,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["InvitorUserId"] = new SelectList(_context.Users, "Id", "Id", invitedUser.InvitorUserId);
+            ViewData["InvitorUserId"] = new SelectList(_context.Users, "Id", "FirstName", invitedUser.InvitorUserId);
             return View(invitedUser);
         }
 

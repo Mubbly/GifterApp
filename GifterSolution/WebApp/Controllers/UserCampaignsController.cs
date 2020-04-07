@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ namespace WebApp.Controllers
 {
     public class UserCampaignsController : Controller
     {
-        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public UserCampaignsController(AppDbContext context)
@@ -49,7 +49,7 @@ namespace WebApp.Controllers
         // GET: UserCampaigns/Create
         public IActionResult Create()
         {
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName");
             ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Name");
             return View();
         }
@@ -68,7 +68,7 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userCampaign.AppUserId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", userCampaign.AppUserId);
             ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Name", userCampaign.CampaignId);
             return View(userCampaign);
         }
@@ -86,7 +86,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userCampaign.AppUserId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", userCampaign.AppUserId);
             ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Name", userCampaign.CampaignId);
             return View(userCampaign);
         }
@@ -123,7 +123,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userCampaign.AppUserId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", userCampaign.AppUserId);
             ViewData["CampaignId"] = new SelectList(_context.Campaigns, "Id", "Name", userCampaign.CampaignId);
             return View(userCampaign);
         }

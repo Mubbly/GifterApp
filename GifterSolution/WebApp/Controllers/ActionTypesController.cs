@@ -1,24 +1,28 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using DAL.App.EF;
 using Domain;
 
 namespace WebApp.Controllers
 {
     public class ActionTypesController : Controller
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly AppDbContext _context;
 
-        public ActionTypesController(IAppUnitOfWork uow)
+        public ActionTypesController(AppDbContext context)
         {
-            _uow = uow;
-        } 
+            _context = context;
+        }
 
         // GET: ActionTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _uow.ActionTypes.AllAsync());
+            return View(await _context.ActionTypes.ToListAsync());
         }
 
         // GET: ActionTypes/Details/5
@@ -29,7 +33,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var actionType = await _uow.ActionTypes.FindAsync(id);
+            var actionType = await _context.ActionTypes
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (actionType == null)
             {
                 return NotFound();
@@ -53,9 +58,9 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                //actionType.Id = Guid.NewGuid();
-                _uow.ActionTypes.Add(actionType);
-                await _uow.ActionTypes.SaveChangesAsync();
+                actionType.Id = Guid.NewGuid();
+                _context.Add(actionType);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(actionType);
@@ -69,7 +74,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var actionType = await _uow.ActionTypes.FindAsync(id);
+            var actionType = await _context.ActionTypes.FindAsync(id);
             if (actionType == null)
             {
                 return NotFound();
@@ -88,14 +93,28 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            if (!ModelState.IsValid)
+
+            if (ModelState.IsValid)
             {
-                return View(actionType);
+                try
+                {
+                    _context.Update(actionType);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ActionTypeExists(actionType.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
-            
-            _uow.ActionTypes.Update(actionType);
-            await _uow.ActionTypes.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View(actionType);
         }
 
         // GET: ActionTypes/Delete/5
@@ -106,7 +125,8 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var actionType = await _uow.ActionTypes.FindAsync(id);
+            var actionType = await _context.ActionTypes
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (actionType == null)
             {
                 return NotFound();
@@ -120,9 +140,15 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            _uow.ActionTypes.Remove(id);
-            await _uow.ActionTypes.SaveChangesAsync();
+            var actionType = await _context.ActionTypes.FindAsync(id);
+            _context.ActionTypes.Remove(actionType);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private bool ActionTypeExists(Guid id)
+        {
+            return _context.ActionTypes.Any(e => e.Id == id);
         }
     }
 }

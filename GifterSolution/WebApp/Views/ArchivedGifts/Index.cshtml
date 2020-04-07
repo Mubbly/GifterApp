@@ -67,16 +67,16 @@
                 @Html.DisplayFor(modelItem => item.ActionType.ActionTypeValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Gift.ActionTypeId)
+                @Html.DisplayFor(modelItem => item.Gift.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status.StatusValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserGiver.Id)
+                @Html.DisplayFor(modelItem => item.UserGiver.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserReceiver.Id)
+                @Html.DisplayFor(modelItem => item.UserReceiver.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedBy)

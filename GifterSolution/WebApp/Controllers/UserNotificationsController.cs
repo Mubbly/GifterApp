@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ namespace WebApp.Controllers
 {
     public class UserNotificationsController : Controller
     {
-        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public UserNotificationsController(AppDbContext context)
@@ -49,7 +49,7 @@ namespace WebApp.Controllers
         // GET: UserNotifications/Create
         public IActionResult Create()
         {
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName");
             ViewData["NotificationId"] = new SelectList(_context.Notifications, "Id", "NotificationValue");
             return View();
         }
@@ -68,7 +68,7 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userNotification.AppUserId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", userNotification.AppUserId);
             ViewData["NotificationId"] = new SelectList(_context.Notifications, "Id", "NotificationValue", userNotification.NotificationId);
             return View(userNotification);
         }
@@ -86,7 +86,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userNotification.AppUserId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", userNotification.AppUserId);
             ViewData["NotificationId"] = new SelectList(_context.Notifications, "Id", "NotificationValue", userNotification.NotificationId);
             return View(userNotification);
         }
@@ -123,7 +123,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", userNotification.AppUserId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", userNotification.AppUserId);
             ViewData["NotificationId"] = new SelectList(_context.Notifications, "Id", "NotificationValue", userNotification.NotificationId);
             return View(userNotification);
         }

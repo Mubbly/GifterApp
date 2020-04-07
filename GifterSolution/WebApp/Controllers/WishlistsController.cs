@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ namespace WebApp.Controllers
 {
     public class WishlistsController : Controller
     {
-        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public WishlistsController(AppDbContext context)
@@ -48,7 +48,7 @@ namespace WebApp.Controllers
         // GET: Wishlists/Create
         public IActionResult Create()
         {
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId");
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name");
             return View();
         }
 
@@ -66,7 +66,7 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId", wishlist.GiftId);
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name", wishlist.GiftId);
             return View(wishlist);
         }
 
@@ -83,7 +83,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId", wishlist.GiftId);
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name", wishlist.GiftId);
             return View(wishlist);
         }
 
@@ -119,7 +119,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId", wishlist.GiftId);
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name", wishlist.GiftId);
             return View(wishlist);
         }
 

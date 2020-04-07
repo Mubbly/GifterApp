@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ namespace WebApp.Controllers
 {
     public class ReservedGiftsController : Controller
     {
-        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public ReservedGiftsController(AppDbContext context)
@@ -53,10 +53,10 @@ namespace WebApp.Controllers
         public IActionResult Create()
         {
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue");
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId");
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name");
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue");
-            ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "FirstName");
+            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "FirstName");
             return View();
         }
 
@@ -75,10 +75,10 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", reservedGift.ActionTypeId);
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId", reservedGift.GiftId);
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name", reservedGift.GiftId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", reservedGift.StatusId);
-            ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "Id", reservedGift.UserGiverId);
-            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "Id", reservedGift.UserReceiverId);
+            ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "FirstName", reservedGift.UserGiverId);
+            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "FirstName", reservedGift.UserReceiverId);
             return View(reservedGift);
         }
 
@@ -96,10 +96,10 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", reservedGift.ActionTypeId);
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId", reservedGift.GiftId);
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name", reservedGift.GiftId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", reservedGift.StatusId);
-            ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "Id", reservedGift.UserGiverId);
-            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "Id", reservedGift.UserReceiverId);
+            ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "FirstName", reservedGift.UserGiverId);
+            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "FirstName", reservedGift.UserReceiverId);
             return View(reservedGift);
         }
 
@@ -136,10 +136,10 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", reservedGift.ActionTypeId);
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "ActionTypeId", reservedGift.GiftId);
+            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name", reservedGift.GiftId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", reservedGift.StatusId);
-            ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "Id", reservedGift.UserGiverId);
-            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "Id", reservedGift.UserReceiverId);
+            ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "FirstName", reservedGift.UserGiverId);
+            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "FirstName", reservedGift.UserReceiverId);
             return View(reservedGift);
         }
 

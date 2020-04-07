@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ namespace WebApp.Controllers
 {
     public class PrivateMessagesController : Controller
     {
-        // TODO: Use uow
         private readonly AppDbContext _context;
 
         public PrivateMessagesController(AppDbContext context)
@@ -49,8 +49,8 @@ namespace WebApp.Controllers
         // GET: PrivateMessages/Create
         public IActionResult Create()
         {
-            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["UserSenderId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "FirstName");
+            ViewData["UserSenderId"] = new SelectList(_context.Users, "Id", "FirstName");
             return View();
         }
 
@@ -68,8 +68,8 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "Id", privateMessage.UserReceiverId);
-            ViewData["UserSenderId"] = new SelectList(_context.Users, "Id", "Id", privateMessage.UserSenderId);
+            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.UserReceiverId);
+            ViewData["UserSenderId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.UserSenderId);
             return View(privateMessage);
         }
 
@@ -86,8 +86,8 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "Id", privateMessage.UserReceiverId);
-            ViewData["UserSenderId"] = new SelectList(_context.Users, "Id", "Id", privateMessage.UserSenderId);
+            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.UserReceiverId);
+            ViewData["UserSenderId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.UserSenderId);
             return View(privateMessage);
         }
 
@@ -123,8 +123,8 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "Id", privateMessage.UserReceiverId);
-            ViewData["UserSenderId"] = new SelectList(_context.Users, "Id", "Id", privateMessage.UserSenderId);
+            ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.UserReceiverId);
+            ViewData["UserSenderId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.UserSenderId);
             return View(privateMessage);
         }
 
