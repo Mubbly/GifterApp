@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using Domain;
 using Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

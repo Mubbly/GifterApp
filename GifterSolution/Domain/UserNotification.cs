@@ -1,23 +1,30 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Contracts.DAL.Base;
 using DAL.Base;
 using Domain.Identity;
 
 namespace Domain
 {
-    public class UserNotification : DomainEntity
+    public class UserNotification : UserNotification<Guid>, IDomainEntity
     {
-        public DateTime LastNotified { get; set; }
-        public DateTime RenotifyAt { get; set; }
-        public bool IsActive { get; set; }
-        public bool IsDisabled { get; set; }
+        
+    }
+    
+    public class UserNotification<TKey> : DomainEntity<TKey>
+        where TKey: struct, IEquatable<TKey>
+    {
+        public virtual DateTime LastNotified { get; set; }
+        public virtual DateTime RenotifyAt { get; set; }
+        public virtual bool IsActive { get; set; }
+        public virtual bool IsDisabled { get; set; }
         [MaxLength(2048)] [MinLength(3)] 
-        public string? Comment { get; set; }
+        public virtual string? Comment { get; set; }
 
-        public Guid AppUserId { get; set; } = default!;
-        public AppUser? AppUser { get; set; }
+        public virtual TKey AppUserId { get; set; } = default!;
+        public virtual AppUser? AppUser { get; set; }
 
-        public Guid NotificationId { get; set; } = default!;
-        public Notification? Notification { get; set; }
+        public virtual TKey NotificationId { get; set; } = default!;
+        public virtual Notification? Notification { get; set; }
     }
 }

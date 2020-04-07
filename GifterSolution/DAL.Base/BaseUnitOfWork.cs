@@ -16,7 +16,7 @@ namespace DAL.Base
             }
 
             var repo2 = createRepo();
-            _repoCache.Add(typeof(TRepository), repo2);
+            _repoCache.Add(typeof(TRepository), repo2!);
             return (TRepository)repo2;
         }
     }

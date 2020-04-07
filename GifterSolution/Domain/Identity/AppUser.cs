@@ -3,23 +3,29 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DAL.Base.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Identity
-    
 {
-    [Table("AspNetUsers")]
-    public class AppUser : DomainIdentityEntity
+    //[Table("AspNetUsers")]
+    public class AppUser : AppUser<Guid>
+    {
+        
+    }
+
+    public class AppUser<TKey> : IdentityUser<TKey>
+        where TKey : IEquatable<TKey>
     {
         // Custom fields
         [MaxLength(256)] [MinLength(1)] 
-        public string? FirstName { get; set; }
+        public string FirstName { get; set; } = default!;
         [MaxLength(256)] [MinLength(1)] 
-        public string? LastName { get; set; }
+        public string LastName { get; set; } = default!;
         public bool? IsCampaignManager { get; set; }
         public bool? IsActive { get; set; }
         public DateTime? LastActive { get; set; }
-        public DateTime? DateJoined { get; set; }
-        
+        public DateTime DateJoined { get; set; } = DateTime.Now;
+
         public string? FullName => FirstName + " " + LastName;
 
         // List of all permissions that correspond to this user

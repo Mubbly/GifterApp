@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Contracts.DAL.Base;
 using DAL.Base;
 
 namespace Domain
 {
-    public class NotificationType : DomainEntity
+    public class NotificationType : NotificationType<Guid>, IDomainEntity
+    {
+        
+    }
+    
+    public class NotificationType<TKey> : DomainEntity<TKey>
+        where TKey: struct, IEquatable<TKey>
     {
         [MaxLength(64)] [MinLength(1)] 
-        public string NotificationTypeValue { get; set; } = default!;
+        public virtual string NotificationTypeValue { get; set; } = default!;
         [MaxLength(2048)] [MinLength(3)] 
-        public string? Comment { get; set; }
+        public virtual string? Comment { get; set; }
 
         // List of all notifications that correspond to this type
-        public ICollection<Notification>? Notifications { get; set; }
+        public virtual ICollection<Notification>? Notifications { get; set; }
     }
 }

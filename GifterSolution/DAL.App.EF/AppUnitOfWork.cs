@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Contracts.DAL.App;
+﻿using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
-using Contracts.DAL.App.Repositories.Identity;
 using DAL.App.EF.Repositories;
-using DAL.App.EF.Repositories.Identity;
 using DAL.Base.EF;
 
 namespace DAL.App.EF
@@ -17,8 +13,8 @@ namespace DAL.App.EF
         }
         
         // TODO: Should identity user be accessed differently? Look into UserManager
-        public IAppUserRepository AppUsers => 
-            GetRepository<IAppUserRepository>(() => new AppUserRepository(UOWDbContext));
+        // public IAppUserRepository AppUsers => 
+        //     GetRepository<IAppUserRepository>(() => new AppUserRepository(UOWDbContext));
         
         public IActionTypeRepository ActionTypes => 
             GetRepository<IActionTypeRepository>(() => new ActionTypeRepository(UOWDbContext));

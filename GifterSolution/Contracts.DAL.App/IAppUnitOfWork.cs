@@ -1,12 +1,11 @@
 ﻿using Contracts.DAL.App.Repositories;
-using Contracts.DAL.App.Repositories.Identity;
 using Contracts.DAL.Base;
 
 namespace Contracts.DAL.App
 {
     public interface IAppUnitOfWork : IBaseUnitOfWork
     {
-        IAppUserRepository AppUsers { get; }
+        //IAppUserRepository AppUsers { get; }
 
         IActionTypeRepository ActionTypes { get; }
         

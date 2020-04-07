@@ -1,28 +1,35 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Contracts.DAL.Base;
 using DAL.Base;
 using Domain.Identity;
 
 namespace Domain
 {
+    public class InvitedUser : InvitedUser<Guid>, IDomainEntity
+    {
+        
+    }
+    
     /**
      * Invited user is someone who has been invited to register
      * by an existing user via invitation link
      */
-    public class InvitedUser : DomainEntity
+    public class InvitedUser<TKey> : DomainEntity<TKey>
+        where TKey: struct, IEquatable<TKey>
     {
         [MaxLength(128)] [MinLength(3)] 
-        public string Email { get; set; } = default!;
+        public virtual string Email { get; set; } = default!;
         [MaxLength(32)] [MinLength(5)] 
-        public string? PhoneNumber { get; set; }
+        public virtual string? PhoneNumber { get; set; }
         [MaxLength(1024)] [MinLength(3)] 
-        public string? Message { get; set; }
-        public DateTime DateInvited { get; set; }
-        public bool HasJoined { get; set; }
+        public virtual string? Message { get; set; }
+        public virtual DateTime DateInvited { get; set; }
+        public virtual bool HasJoined { get; set; }
 
         [ForeignKey(nameof(InvitorUser))]
-        public Guid InvitorUserId { get; set; } = default!;
-        public AppUser? InvitorUser { get; set; }
+        public virtual TKey InvitorUserId { get; set; } = default!;
+        public virtual AppUser? InvitorUser { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace DAL.Base
     }
     
     public abstract class DomainEntity<TKey> : IDomainEntity<TKey>
-    where TKey : struct, IComparable
+    where TKey : struct, IEquatable<TKey>
     {
         public virtual TKey Id { get; set; }
         public virtual string? CreatedBy { get; set; }

@@ -58,16 +58,12 @@ namespace DAL.App.EF.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    EditedBy = table.Column<string>(nullable: true),
-                    EditedAt = table.Column<DateTime>(nullable: true),
-                    FirstName = table.Column<string>(maxLength: 256, nullable: true),
-                    LastName = table.Column<string>(maxLength: 256, nullable: true),
+                    FirstName = table.Column<string>(maxLength: 256, nullable: false),
+                    LastName = table.Column<string>(maxLength: 256, nullable: false),
                     IsCampaignManager = table.Column<bool>(nullable: true),
                     IsActive = table.Column<bool>(nullable: true),
                     LastActive = table.Column<DateTime>(nullable: true),
-                    DateJoined = table.Column<DateTime>(nullable: true)
+                    DateJoined = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -193,8 +189,8 @@ namespace DAL.App.EF.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false)
                 },
@@ -238,8 +234,8 @@ namespace DAL.App.EF.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -487,34 +483,31 @@ namespace DAL.App.EF.Migrations
                     PartnerUrl = table.Column<string>(maxLength: 2048, nullable: true),
                     IsPartnered = table.Column<bool>(nullable: false),
                     IsPinned = table.Column<bool>(nullable: false),
-                    ActionTypeId = table.Column<string>(maxLength: 36, nullable: false),
-                    ActionTypeId1 = table.Column<Guid>(nullable: true),
-                    AppUserId = table.Column<string>(maxLength: 36, nullable: false),
-                    AppUserId1 = table.Column<Guid>(nullable: true),
-                    StatusId = table.Column<string>(maxLength: 36, nullable: false),
-                    StatusId1 = table.Column<Guid>(nullable: true)
+                    ActionTypeId = table.Column<Guid>(nullable: false),
+                    AppUserId = table.Column<Guid>(nullable: false),
+                    StatusId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Gifts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Gifts_ActionTypes_ActionTypeId1",
-                        column: x => x.ActionTypeId1,
+                        name: "FK_Gifts_ActionTypes_ActionTypeId",
+                        column: x => x.ActionTypeId,
                         principalTable: "ActionTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Gifts_AspNetUsers_AppUserId1",
-                        column: x => x.AppUserId1,
+                        name: "FK_Gifts_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Gifts_Statuses_StatusId1",
-                        column: x => x.StatusId1,
+                        name: "FK_Gifts_Statuses_StatusId",
+                        column: x => x.StatusId,
                         principalTable: "Statuses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -867,19 +860,19 @@ namespace DAL.App.EF.Migrations
                 column: "AppUser2Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gifts_ActionTypeId1",
+                name: "IX_Gifts_ActionTypeId",
                 table: "Gifts",
-                column: "ActionTypeId1");
+                column: "ActionTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gifts_AppUserId1",
+                name: "IX_Gifts_AppUserId",
                 table: "Gifts",
-                column: "AppUserId1");
+                column: "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gifts_StatusId1",
+                name: "IX_Gifts_StatusId",
                 table: "Gifts",
-                column: "StatusId1");
+                column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InvitedUsers_InvitorUserId",

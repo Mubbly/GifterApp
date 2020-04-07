@@ -6,7 +6,6 @@ using Contracts.DAL.App.Repositories;
 using DAL.Base.EF.Repositories;
 using Domain;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using PublicApi.DTO.v1;
 
 namespace DAL.App.EF.Repositories

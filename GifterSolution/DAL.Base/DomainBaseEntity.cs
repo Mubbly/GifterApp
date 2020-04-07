@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using Contracts.DAL.Base;
 
 namespace DAL.Base

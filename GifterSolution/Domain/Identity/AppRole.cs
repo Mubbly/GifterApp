@@ -4,8 +4,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Identity
 {
-    [Table("AspNetRoles")]
+    //[Table("AspNetRoles")]
     public class AppRole : IdentityRole<Guid>
+    {
+        
+    }
+    
+    public class AppRole<TKey> : IdentityRole<TKey>
+        where TKey: IEquatable<TKey>
     {
         
     }

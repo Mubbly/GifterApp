@@ -1,18 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Contracts.DAL.App;
-using Contracts.DAL.App.Repositories;
 using DAL.App.EF;
-using DAL.App.EF.Repositories;
-using Domain;
 using Domain.Identity;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,8 +32,11 @@ namespace WebApp
             // CUSTOM CODE END
 
             
-            services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<AppDbContext>();
+            services.AddIdentity<AppUser, AppRole>()
+                .AddDefaultUI()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+            
             services.AddControllersWithViews();
             services.AddRazorPages();
 
@@ -97,8 +91,7 @@ namespace WebApp
         }
         
         // CUSTOM CODE START
-        private static void UpdateDatabase(IApplicationBuilder app, IWebHostEnvironment env,
-            IConfiguration Configuration)
+        private static void UpdateDatabase(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration Configuration)
         {
             // Give me the scoped services (everything created by it will be closed at the end of the service scope life)
             using var serviceScope = app.ApplicationServices
@@ -108,13 +101,33 @@ namespace WebApp
             // Use one context for the db in this whole function
             using var ctx = serviceScope.ServiceProvider.GetService<AppDbContext>();
 
+            // Set up user and role managers for Identity
+            using var userManager = serviceScope.ServiceProvider.GetService<UserManager<AppUser>>();
+            using var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<AppRole>>();
+            
             // Here you can do whatever you need .. for example migrate each time so don't have to update db manually
             // ctx.Database.EnsureDeleted(); // Drop current db if you want to start from the scratch every time
             // ctx.Database.Migrate(); // Add the new migration. Will automatically create db if not there. If only this is needed don't do the dropping step.
-            // These could also be done in configurations instead
-            
+            // These could also be done in configurations instead - ifs regarding it here
+
+            if (Configuration.GetValue<bool>("AppDataInitialization:DeleteDatabase"))
+            {
+                DAL.App.EF.Helpers.DataInitializers.DeleteDatabase(ctx);
+            }
+            if (Configuration.GetValue<bool>("AppDataInitialization:MigrateDatabase"))
+            {
+                DAL.App.EF.Helpers.DataInitializers.MigrateDatabase(ctx);
+            }
+            if (Configuration.GetValue<bool>("AppDataInitialization:SeedIdentity"))
+            {
+                DAL.App.EF.Helpers.DataInitializers.SeedIdentity(userManager, roleManager);
+            }
+            if (Configuration.GetValue<bool>("AppDataInitialization:SeedData"))
+            {
+                DAL.App.EF.Helpers.DataInitializers.SeedData(ctx);
+            }
             //ctx.Database.EnsureDeleted();
-            ctx.Database.Migrate();
+            //ctx.Database.Migrate();
         }
         // CUSTOM CODE END
     }

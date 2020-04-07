@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Contracts.DAL.Base;
 using DAL.Base;
 
 namespace Domain
 {
+    public class Notification : Notification<Guid>, IDomainEntity
+    {
+        
+    }
+    
     /**
      * Notification can be about:
      *     new private message;
@@ -13,17 +19,18 @@ namespace Domain
      *     someone you invited to register joining
      *     ...or other.
      */
-    public class Notification : DomainEntity
+    public class Notification<TKey> : DomainEntity<TKey>
+        where TKey: struct, IEquatable<TKey>
     {
         [MaxLength(1024)] [MinLength(1)] 
-        public string NotificationValue { get; set; } = default!;
+        public virtual string NotificationValue { get; set; } = default!;
         [MaxLength(2048)] [MinLength(3)] 
-        public string? Comment { get; set; }
+        public virtual string? Comment { get; set; }
         
-        public Guid NotificationTypeId { get; set; } = default!;
-        public NotificationType? NotificationType { get; set; }
+        public virtual TKey NotificationTypeId { get; set; } = default!;
+        public virtual NotificationType? NotificationType { get; set; }
 
         // List of all users that correspond to this notification
-        public ICollection<UserNotification>? UserNotifications { get; set; }
+        public virtual ICollection<UserNotification>? UserNotifications { get; set; }
     }
 }

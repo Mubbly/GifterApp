@@ -1,46 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Contracts.DAL.Base;
 using DAL.Base;
 using Domain.Identity;
 
 namespace Domain
 {
+    public class Gift : Gift<Guid>, IDomainEntity
+    {
+        
+    }
+    
     /**
      * Gift is an item that the user can add to their Wishlist on their Profile
      * Other users can see and interact with it
      */
-    public class Gift : DomainEntity
+    public class Gift<TKey> : DomainEntity<TKey>
+        where TKey: struct, IEquatable<TKey>
     {
         [MaxLength(256)] [MinLength(1)] 
-        public string Name { get; set; } = default!;
+        public virtual string Name { get; set; } = default!;
         [MaxLength(1024)] [MinLength(3)] 
-        public string? Description { get; set; }
+        public virtual string? Description { get; set; }
         [MaxLength(2048)] [MinLength(3)] 
-        public string? Image { get; set; }
+        public virtual string? Image { get; set; }
         [MaxLength(2048)] [MinLength(3)] 
-        public string? Url { get; set; }
+        public virtual string? Url { get; set; }
         [MaxLength(2048)] [MinLength(3)] 
-        public string? PartnerUrl { get; set; }
-        public bool IsPartnered { get; set; }
-        public bool IsPinned { get; set; }
+        public virtual string? PartnerUrl { get; set; }
+        public virtual bool IsPartnered { get; set; }
+        public virtual bool IsPinned { get; set; }
 
-        public Guid ActionTypeId { get; set; } = default!;
-        public ActionType? ActionType { get; set; }
+        public virtual TKey ActionTypeId { get; set; } = default!;
+        public virtual ActionType? ActionType { get; set; }
 
-        public Guid AppUserId { get; set; } = default!;
-        public AppUser? AppUser { get; set; }
+        public virtual TKey AppUserId { get; set; } = default!;
+        public virtual AppUser? AppUser { get; set; }
         
-        public Guid StatusId { get; set; } = default!;
-        public Status? Status { get; set; }
+        public virtual TKey StatusId { get; set; } = default!;
+        public virtual Status? Status { get; set; }
 
         // List of all wishlists that correspond to this gift
-        public ICollection<Wishlist>? Wishlists { get; set; } // TODO: Should be the other way around
+        public virtual ICollection<Wishlist>? Wishlists { get; set; } // TODO: Should be the other way around
 
         // List of all gifts that have reserved status
-        public ICollection<ReservedGift>? ReservedGifts { get; set; }
+        public virtual ICollection<ReservedGift>? ReservedGifts { get; set; }
 
         // List of all gifts that have archived status
-        public ICollection<ArchivedGift>? ArchivedGifts { get; set; }
+        public virtual ICollection<ArchivedGift>? ArchivedGifts { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace Contracts.DAL.Base.Repositories
 
     public interface IBaseRepository<TEntity, TKey>
         where TEntity : class, IDomainEntity<TKey>, new()
-        where TKey : struct, IComparable
+        where TKey : struct, IEquatable<TKey>
     {
         // CRUD methods here
         IEnumerable<TEntity> All();
