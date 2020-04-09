@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
 
 namespace WebApp.ApiControllers
 {
@@ -23,32 +23,16 @@ namespace WebApp.ApiControllers
 
         // GET: api/Notifications
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<NotificationDTO>>> GetNotifications()
+        public async Task<ActionResult<IEnumerable<Notification>>> GetNotifications()
         {
-            return await _context.Notifications
-                .Select(n => new NotificationDTO() 
-                {
-                    Id = n.Id,
-                    Comment = n.Comment,
-                    NotificationTypeId = n.NotificationTypeId,
-                    NotificationValue = n.NotificationValue,
-                    UserNotificationsCount = n.UserNotifications.Count
-                }).ToListAsync();
+            return await _context.Notifications.ToListAsync();
         }
 
         // GET: api/Notifications/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<NotificationDTO>> GetNotification(Guid id)
+        public async Task<ActionResult<Notification>> GetNotification(Guid id)
         {
-            var notification = await _context.Notifications
-                .Select(n => new NotificationDTO() 
-                {
-                    Id = n.Id,
-                    Comment = n.Comment,
-                    NotificationTypeId = n.NotificationTypeId,
-                    NotificationValue = n.NotificationValue,
-                    UserNotificationsCount = n.UserNotifications.Count
-                }).SingleOrDefaultAsync();
+            var notification = await _context.Notifications.FindAsync(id);
 
             if (notification == null)
             {

@@ -1,13 +1,18 @@
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using Contracts.DAL.App;
 using DAL.App.EF;
 using Domain.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApp
 {
@@ -27,11 +32,8 @@ namespace WebApp
                 options.UseMySql(
                     Configuration.GetConnectionString("MySqlConnection"))); // CUSTOM DB CONNECTION STRING
 
-            // CUSTOM CODE START - Add as scoped dependency, tie interface to the implementation
-            services.AddScoped<IAppUnitOfWork, AppUnitOfWork>(); 
-            // CUSTOM CODE END
+            services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
 
-            
             services.AddIdentity<AppUser, AppRole>()
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<AppDbContext>()
@@ -50,14 +52,39 @@ namespace WebApp
                         builder.AllowAnyMethod();
                     });
             });
+            
+            // =============== JWT support ===============
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+            services
+                .AddAuthentication()
+                .AddCookie(options => { options.SlidingExpiration = true; })
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.RequireHttpsMetadata = false;
+                    cfg.SaveToken = true;
+                    cfg.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = Configuration["JWT:Issuer"],
+                        ValidAudience = Configuration["JWT:Issuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:SigningKey"])),
+                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
+                    };
+                });
+
+            // TODO: Enable later and update ApiControllers with versions
+            // services.AddApiVersioning(options =>
+            // {
+            //     options.ReportApiVersions = true;
+            //     // bad idea?:
+            //     //options.DefaultApiVersion = new ApiVersion(1,0);
+            //     //options.AssumeDefaultVersionWhenUnspecified = false;
+            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            // CUSTOM CODE START
             UpdateDatabase(app, env, Configuration);
-            // CUSTOM CODE END
 
             if (env.IsDevelopment())
             {
@@ -73,7 +100,7 @@ namespace WebApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            
             app.UseCors("CorsAllowAll");
 
             app.UseRouting();

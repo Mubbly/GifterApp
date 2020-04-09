@@ -1,38 +1,40 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Contracts.DAL.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CampaignsController : ControllerBase
     {
-        private readonly IAppUnitOfWork _uow;
+        private readonly AppDbContext _context;
 
-        public CampaignsController(IAppUnitOfWork uow)
+        public CampaignsController(AppDbContext context)
         {
-            _uow = uow;
+            _context = context;
         }
 
         // GET: api/Campaigns
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CampaignDTO>>> GetCampaigns()
+        public async Task<ActionResult<IEnumerable<Campaign>>> GetCampaigns()
         {
-            return Ok(await _uow.Campaigns.DTOAllAsync());
+            return await _context.Campaigns.ToListAsync();
         }
 
         // GET: api/Campaigns/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CampaignDTO>> GetCampaign(Guid id)
+        public async Task<ActionResult<Campaign>> GetCampaign(Guid id)
         {
-            var campaign = await _uow.Campaigns.DTOFirstOrDefaultAsync(id);
+            var campaign = await _context.Campaigns.FindAsync(id);
 
             if (campaign == null)
             {
@@ -46,34 +48,22 @@ namespace WebApp.ApiControllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCampaign(Guid id, CampaignEditDTO campaignEditDTO)
+        public async Task<IActionResult> PutCampaign(Guid id, Campaign campaign)
         {
-            if (id != campaignEditDTO.Id)
+            if (id != campaign.Id)
             {
                 return BadRequest();
             }
 
-            var campaign = await _uow.Campaigns.FirstOrDefaultAsync(campaignEditDTO.Id);
-            if (campaign == null)
-            {
-                return BadRequest();
-            }
-            campaign.Name = campaignEditDTO.Name;
-            campaign.Description = campaignEditDTO.Description;
-            campaign.AdImage = campaignEditDTO.AdImage;
-            campaign.Institution = campaignEditDTO.Institution;
-            campaign.ActiveFromDate = campaignEditDTO.ActiveFromDate;
-            campaign.ActiveToDate = campaignEditDTO.ActiveToDate;
+            _context.Entry(campaign).State = EntityState.Modified;
 
-            _uow.Campaigns.Update(campaign);
-            
             try
             {
-                await _uow.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _uow.Campaigns.ExistsAsync(id))
+                if (!CampaignExists(id))
                 {
                     return NotFound();
                 }
@@ -90,21 +80,10 @@ namespace WebApp.ApiControllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Campaign>> PostCampaign(CampaignCreateDTO campaignCreateDTO)
+        public async Task<ActionResult<Campaign>> PostCampaign(Campaign campaign)
         {
-            var campaign = new Campaign
-            {
-                Name = campaignCreateDTO.Name,
-                Description = campaignCreateDTO.Description,
-                AdImage = campaignCreateDTO.AdImage,
-                Institution = campaignCreateDTO.Institution,
-                ActiveFromDate = campaignCreateDTO.ActiveFromDate,
-                ActiveToDate = campaignCreateDTO.ActiveToDate
-            };
-            
-            _uow.Campaigns.Add(campaign);
-            
-            await _uow.SaveChangesAsync();
+            _context.Campaigns.Add(campaign);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCampaign", new { id = campaign.Id }, campaign);
         }
@@ -113,16 +92,21 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Campaign>> DeleteCampaign(Guid id)
         {
-            var campaign = await _uow.Campaigns.FirstOrDefaultAsync(id);
+            var campaign = await _context.Campaigns.FindAsync(id);
             if (campaign == null)
             {
                 return NotFound();
             }
 
-            _uow.Campaigns.Remove(campaign);
-            await _uow.SaveChangesAsync();
+            _context.Campaigns.Remove(campaign);
+            await _context.SaveChangesAsync();
 
-            return Ok(campaign);
+            return campaign;
+        }
+
+        private bool CampaignExists(Guid id)
+        {
+            return _context.Campaigns.Any(e => e.Id == id);
         }
     }
 }

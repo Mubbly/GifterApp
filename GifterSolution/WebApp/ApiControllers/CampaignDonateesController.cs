@@ -2,40 +2,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Contracts.DAL.App;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CampaignDonateesController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly IAppUnitOfWork _uow;
 
-        public CampaignDonateesController(AppDbContext context, IAppUnitOfWork uow)
+        public CampaignDonateesController(AppDbContext context)
         {
             _context = context;
-            _uow = uow;
         }
 
         // GET: api/CampaignDonatees
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CampaignDonateeDTO>>> GetCampaignDonatees()
+        public async Task<ActionResult<IEnumerable<CampaignDonatee>>> GetCampaignDonatees()
         {
-            return Ok(await _uow.CampaignDonatees.DTOAllAsync());
+            return await _context.CampaignDonatees.ToListAsync();
         }
 
         // GET: api/CampaignDonatees/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CampaignDonateeDTO>> GetCampaignDonatee(Guid id)
+        public async Task<ActionResult<CampaignDonatee>> GetCampaignDonatee(Guid id)
         {
-            var campaignDonatee = await _uow.CampaignDonatees.DTOFirstOrDefaultAsync(id);
+            var campaignDonatee = await _context.CampaignDonatees.FindAsync(id);
+
             if (campaignDonatee == null)
             {
                 return NotFound();

@@ -2,16 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
+using Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProfilesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -23,40 +27,19 @@ namespace WebApp.ApiControllers
 
         // GET: api/Profiles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProfileDTO>>> GetProfiles()
+        public async Task<ActionResult<IEnumerable<Profile>>> GetProfiles()
         {
             return await _context.Profiles
-                .Select(p => new ProfileDTO() 
-                {
-                    Id = p.Id,
-                    Age = p.Age,
-                    Bio = p.Bio,
-                    Gender = p.Gender,
-                    IsPrivate = p.IsPrivate,
-                    ProfilePicture = p.ProfilePicture,
-                    WishlistId = p.WishlistId,
-                    AppUserId = p.AppUserId,
-                    UserProfilesCount = p.UserProfiles.Count
-                }).ToListAsync();
+                .Where(p => p.AppUserId == User.UserGuidId())
+                .ToListAsync();
         }
 
         // GET: api/Profiles/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProfileDTO>> GetProfile(Guid id)
+        public async Task<ActionResult<Profile>> GetProfile(Guid id)
         {
             var profile = await _context.Profiles
-                .Select(p => new ProfileDTO() 
-                {
-                    Id = p.Id,
-                    Age = p.Age,
-                    Bio = p.Bio,
-                    Gender = p.Gender,
-                    IsPrivate = p.IsPrivate,
-                    ProfilePicture = p.ProfilePicture,
-                    WishlistId = p.WishlistId,
-                    AppUserId = p.AppUserId,
-                    UserProfilesCount = p.UserProfiles.Count
-                }).SingleOrDefaultAsync();
+                .FirstOrDefaultAsync(p => p.Id == id && p.AppUserId == User.UserGuidId());
 
             if (profile == null)
             {

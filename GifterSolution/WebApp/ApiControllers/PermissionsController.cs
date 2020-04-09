@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
 
 namespace WebApp.ApiControllers
 {
@@ -23,30 +23,16 @@ namespace WebApp.ApiControllers
 
         // GET: api/Permissions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PermissionDTO>>> GetPermissions()
+        public async Task<ActionResult<IEnumerable<Permission>>> GetPermissions()
         {
-            return await _context.Permissions
-                .Select(p => new PermissionDTO() 
-                {
-                    Id = p.Id,
-                    Comment = p.Comment,
-                    PermissionValue = p.PermissionValue,
-                    UserPermissionsCount = p.UserPermissions.Count
-                }).ToListAsync();
+            return await _context.Permissions.ToListAsync();
         }
 
         // GET: api/Permissions/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PermissionDTO>> GetPermission(Guid id)
+        public async Task<ActionResult<Permission>> GetPermission(Guid id)
         {
-            var permission = await _context.Permissions
-                .Select(p => new PermissionDTO() 
-                {
-                    Id = p.Id,
-                    Comment = p.Comment,
-                    PermissionValue = p.PermissionValue,
-                    UserPermissionsCount = p.UserPermissions.Count
-                }).SingleOrDefaultAsync();
+            var permission = await _context.Permissions.FindAsync(id);
 
             if (permission == null)
             {

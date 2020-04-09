@@ -2,16 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ActionTypesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -23,36 +26,16 @@ namespace WebApp.ApiControllers
 
         // GET: api/ActionTypes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ActionTypeDTO>>> GetActionTypes()
+        public async Task<ActionResult<IEnumerable<ActionType>>> GetActionTypes()
         {
-            return await _context.ActionTypes
-                .Select(at => new ActionTypeDTO() 
-                {
-                    Id = at.Id,
-                    Comment = at.Comment,
-                    DonateesCount = at.Donatees.Count,
-                    GiftsCount = at.Gifts.Count,
-                    ActionTypeValue = at.ActionTypeValue,
-                    ArchivedGiftsCount = at.ArchivedGifts.Count,
-                    ReservedGiftsCount = at.ReservedGifts.Count,
-                }).ToListAsync();
+            return await _context.ActionTypes.ToListAsync();
         }
 
         // GET: api/ActionTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ActionTypeDTO>> GetActionType(Guid id)
+        public async Task<ActionResult<ActionType>> GetActionType(Guid id)
         {
-            var actionType = await _context.ActionTypes
-                .Select(at => new ActionTypeDTO()
-                {
-                    Id = at.Id,
-                    Comment = at.Comment,
-                    DonateesCount = at.Donatees.Count,
-                    GiftsCount = at.Gifts.Count,
-                    ActionTypeValue = at.ActionTypeValue,
-                    ArchivedGiftsCount = at.ArchivedGifts.Count,
-                    ReservedGiftsCount = at.ReservedGifts.Count,
-                }).FirstOrDefaultAsync(at => at.Id == id);
+            var actionType = await _context.ActionTypes.FindAsync(id);
 
             if (actionType == null)
             {

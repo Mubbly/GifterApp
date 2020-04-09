@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DAL.App.EF;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
 
 namespace WebApp.ApiControllers
 {
@@ -23,34 +23,16 @@ namespace WebApp.ApiControllers
 
         // GET: api/PrivateMessages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PrivateMessageDTO>>> GetPrivateMessages()
+        public async Task<ActionResult<IEnumerable<PrivateMessage>>> GetPrivateMessages()
         {
-            return await _context.PrivateMessages
-                .Select(pm => new PrivateMessageDTO() 
-                {
-                    Id = pm.Id,
-                    Message = pm.Message,
-                    IsSeen = pm.IsSeen,
-                    SentAt = pm.SentAt,
-                    UserReceiverId = pm.UserReceiverId,
-                    UserSenderId = pm.UserSenderId
-                }).ToListAsync();
+            return await _context.PrivateMessages.ToListAsync();
         }
 
         // GET: api/PrivateMessages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PrivateMessageDTO>> GetPrivateMessage(Guid id)
+        public async Task<ActionResult<PrivateMessage>> GetPrivateMessage(Guid id)
         {
-            var privateMessage = await _context.PrivateMessages
-                .Select(pm => new PrivateMessageDTO() 
-                {
-                    Id = pm.Id,
-                    Message = pm.Message,
-                    IsSeen = pm.IsSeen,
-                    SentAt = pm.SentAt,
-                    UserReceiverId = pm.UserReceiverId,
-                    UserSenderId = pm.UserSenderId
-                }).SingleOrDefaultAsync();
+            var privateMessage = await _context.PrivateMessages.FindAsync(id);
 
             if (privateMessage == null)
             {

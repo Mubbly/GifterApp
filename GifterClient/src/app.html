@@ -9,16 +9,21 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
 
-                    <ul class="navbar-nav">
+                    <ul if.bind="!appState.jwt" class="navbar-nav account">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">Register</a>
+                            <a class="nav-link text-dark" route-href="route: accountRegister; params.bind: {}">Register</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">Login</a>
+                            <a class="nav-link text-dark" route-href="route: accountLogin; params.bind: {}">Login</a>
+                        </li>
+                    </ul>
+                    <ul if.bind="appState.jwt" class="navbar-nav account">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" click.delegate="logoutOnClick()">Log out</a>
                         </li>
                     </ul>
 
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul if.bind="appState.jwt" class="navbar-nav flex-grow-1">
                         <li repeat.for="nav of router.navigation" class="nav-item ${nav.isActive ? 'active' : ''}">
                             <a class="nav-link text-dark" href.bind="nav.href">${nav.title}</a>
                         </li>

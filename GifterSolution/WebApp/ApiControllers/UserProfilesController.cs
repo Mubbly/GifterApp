@@ -2,16 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
+using Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserProfilesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -23,30 +27,19 @@ namespace WebApp.ApiControllers
 
         // GET: api/UserProfiles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserProfileDTO>>> GetUserProfiles()
+        public async Task<ActionResult<IEnumerable<UserProfile>>> GetUserProfiles()
         {
             return await _context.UserProfiles
-                .Select(up => new UserProfileDTO()
-                {
-                    Id = up.Id,
-                    Comment = up.Comment,
-                    ProfileId = up.ProfileId,
-                    AppUserId = up.AppUserId
-                }).ToListAsync();
+                .Where(up => up.AppUserId == User.UserGuidId())
+                .ToListAsync();
         }
 
         // GET: api/UserProfiles/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserProfileDTO>> GetUserProfile(Guid id)
+        public async Task<ActionResult<UserProfile>> GetUserProfile(Guid id)
         {
             var userProfile = await _context.UserProfiles
-                .Select(up => new UserProfileDTO()
-                {
-                    Id = up.Id,
-                    Comment = up.Comment,
-                    ProfileId = up.ProfileId,
-                    AppUserId = up.AppUserId
-                }).SingleOrDefaultAsync();
+                .FirstOrDefaultAsync(up => up.Id == id && up.AppUserId == User.UserGuidId());
 
             if (userProfile == null)
             {

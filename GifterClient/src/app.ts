@@ -1,13 +1,15 @@
-import { autoinject, PLATFORM } from 'aurelia-framework';
-import { RouterConfiguration, Router, RouteConfig } from 'aurelia-router';
-import { GifterEntity, GifterEntities, ViewTypes } from './types/generalTypes';
+import { autoinject } from 'aurelia-framework';
+import { RouterConfiguration, Router } from 'aurelia-router';
 import routes from 'router';
+import { AppState } from 'state/appState';
 
 @autoinject
 export class App {
+    public readonly APP_NAME = 'GifterApp';
+    public readonly HOME_ROUTE = 'homeIndex';
     router?: Router;
 
-    constructor() {
+    constructor(private appState: AppState) {
 
     }
 
@@ -15,9 +17,14 @@ export class App {
         const DEFAULT_VIEW = routes[0].moduleId; // First route should always be home view
 
         this.router = router;
-        config.title = "GifterApp";
+        config.title = this.APP_NAME;
         config.map(routes);
         config.mapUnknownRoutes(DEFAULT_VIEW);
+    }
+
+    logoutOnClick() {
+        this.appState.jwt = null;
+        this.router!.navigateToRoute(this.HOME_ROUTE);
     }
 
     //const routeConfigs = getRouteConfigs();

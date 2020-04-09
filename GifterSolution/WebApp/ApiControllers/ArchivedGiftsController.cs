@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Contracts.DAL.App;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
+using Extensions;
 
 namespace WebApp.ApiControllers
 {
@@ -16,27 +16,25 @@ namespace WebApp.ApiControllers
     public class ArchivedGiftsController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly IAppUnitOfWork _uow;
 
-        public ArchivedGiftsController(AppDbContext context, IAppUnitOfWork uow)
+        public ArchivedGiftsController(AppDbContext context)
         {
             _context = context;
-            _uow = uow;
         }
 
         // GET: api/ArchivedGifts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ArchivedGiftDTO>>> GetArchivedGifts()
+        public async Task<ActionResult<IEnumerable<ArchivedGift>>> GetArchivedGifts()
         {
-            return Ok(await _uow.ArchivedGifts.DTOAllAsync());
+            return await _context.ArchivedGifts.ToListAsync();
         }
 
         // GET: api/ArchivedGifts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ArchivedGiftDTO>> GetArchivedGift(Guid id)
+        public async Task<ActionResult<ArchivedGift>> GetArchivedGift(Guid id)
         {
-            var archivedGift = await _uow.ArchivedGifts.DTOFirstOrDefaultAsync(id);
-            
+            var archivedGift = await _context.ArchivedGifts.FindAsync(id);
+
             if (archivedGift == null)
             {
                 return NotFound();

@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
 
 namespace WebApp.ApiControllers
 {
@@ -23,38 +23,16 @@ namespace WebApp.ApiControllers
 
         // GET: api/ReservedGifts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReservedGiftDTO>>> GetReservedGifts()
+        public async Task<ActionResult<IEnumerable<ReservedGift>>> GetReservedGifts()
         {
-            return await _context.ReservedGifts
-                .Select(rg => new ReservedGiftDTO() 
-                {
-                    Id = rg.Id,
-                    Comment = rg.Comment,
-                    GiftId = rg.GiftId,
-                    ReservedFrom = rg.ReservedFrom,
-                    StatusId = rg.StatusId,
-                    ActionTypeId = rg.ActionTypeId,
-                    UserGiverId = rg.UserGiverId,
-                    UserReceiverId = rg.UserReceiverId
-                }).ToListAsync();
+            return await _context.ReservedGifts.ToListAsync();
         }
 
         // GET: api/ReservedGifts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReservedGiftDTO>> GetReservedGift(Guid id)
+        public async Task<ActionResult<ReservedGift>> GetReservedGift(Guid id)
         {
-            var reservedGift = await _context.ReservedGifts
-                .Select(rg => new ReservedGiftDTO() 
-                {
-                    Id = rg.Id,
-                    Comment = rg.Comment,
-                    GiftId = rg.GiftId,
-                    ReservedFrom = rg.ReservedFrom,
-                    StatusId = rg.StatusId,
-                    ActionTypeId = rg.ActionTypeId,
-                    UserGiverId = rg.UserGiverId,
-                    UserReceiverId = rg.UserReceiverId
-                }).SingleOrDefaultAsync();
+            var reservedGift = await _context.ReservedGifts.FindAsync(id);
 
             if (reservedGift == null)
             {

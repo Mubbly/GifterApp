@@ -2,16 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
+using Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class InvitedUsersController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -23,36 +27,19 @@ namespace WebApp.ApiControllers
 
         // GET: api/InvitedUsers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<InvitedUserDTO>>> GetInvitedUsers()
+        public async Task<ActionResult<IEnumerable<InvitedUser>>> GetInvitedUsers()
         {
             return await _context.InvitedUsers
-                .Select(iu => new InvitedUserDTO() 
-                {
-                    Id = iu.Id,
-                    Email = iu.Email,
-                    Message = iu.Email,
-                    DateInvited = iu.DateInvited,
-                    HasJoined = iu.HasJoined,
-                    InvitorUserId = iu.InvitorUserId,
-                    PhoneNumber = iu.PhoneNumber
-                }).ToListAsync();
+                .Where(iu => iu.InvitorUserId == User.UserGuidId())
+                .ToListAsync();
         }
 
         // GET: api/InvitedUsers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<InvitedUserDTO>> GetInvitedUser(Guid id)
+        public async Task<ActionResult<InvitedUser>> GetInvitedUser(Guid id)
         {
             var invitedUser = await _context.InvitedUsers
-                .Select(iu => new InvitedUserDTO() 
-                {
-                    Id = iu.Id,
-                    Email = iu.Email,
-                    Message = iu.Email,
-                    DateInvited = iu.DateInvited,
-                    HasJoined = iu.HasJoined,
-                    InvitorUserId = iu.InvitorUserId,
-                    PhoneNumber = iu.PhoneNumber
-                }).SingleOrDefaultAsync();
+                .FirstOrDefaultAsync(iu => iu.Id == id && iu.InvitorUserId == User.UserGuidId());
 
             if (invitedUser == null)
             {

@@ -6,6 +6,18 @@
     color: green;
 }
 
+a.navbar-brand {
+    word-break: normal !important;
+}
+
+ul.navbar-nav {
+    flex-wrap: wrap;
+}
+
+ul.navbar-nav.account {
+    flex-wrap: nowrap;
+}
+
 
 /* From backend interface */
 

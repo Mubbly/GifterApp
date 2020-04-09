@@ -4,6 +4,9 @@ import { PLATFORM } from 'aurelia-framework';
 export default [
         { route: ['', 'home', 'home/index'], name: 'homeIndex', moduleId: PLATFORM.moduleName('views/home/index'), nav: true, title: 'Home' },
         
+        { route: ['account/login'], name: 'accountLogin', moduleId: PLATFORM.moduleName('views/account/login'), nav: false, title: 'Login' },
+        { route: ['account/register'], name: 'accountRegister', moduleId: PLATFORM.moduleName('views/account/register'), nav: false, title: 'Register' },
+
         { route: ['actiontypes', 'actiontypes/index'], name: 'actiontypesIndex', moduleId: PLATFORM.moduleName('views/actiontypes/index'), nav: true, title: 'ActionTypes' },
         { route: ['actiontypes/details/:id'], name: 'actiontypesDetails', moduleId: PLATFORM.moduleName('views/actiontypes/details'), nav: false, title: 'ActionTypesDetails' },
         { route: ['actiontypes/edit/:id?'], name: 'actiontypesEdit', moduleId: PLATFORM.moduleName('views/actiontypes/edit'), nav: false, title: 'ActionTypesEdit' },

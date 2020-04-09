@@ -2,16 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class StatusesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -23,36 +26,16 @@ namespace WebApp.ApiControllers
 
         // GET: api/Statuses
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StatusDTO>>> GetStatuses()
+        public async Task<ActionResult<IEnumerable<Status>>> GetStatuses()
         {
-            return await _context.Statuses
-                .Select(s => new StatusDTO()
-                {
-                    Id = s.Id,
-                    Comment = s.Comment,
-                    DonateesCount = s.Donatees.Count,
-                    GiftsCount = s.Gifts.Count,
-                    StatusValue = s.StatusValue,
-                    ArchivedGiftsCount = s.ArchivedGifts.Count,
-                    ReservedGiftsCount = s.ReservedGifts.Count
-                }).ToListAsync();
+            return await _context.Statuses.ToListAsync();
         }
 
         // GET: api/Statuses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<StatusDTO>> GetStatus(Guid id)
+        public async Task<ActionResult<Status>> GetStatus(Guid id)
         {
-            var status = await _context.Statuses
-                .Select(s => new StatusDTO()
-                {
-                    Id = s.Id,
-                    Comment = s.Comment,
-                    DonateesCount = s.Donatees.Count,
-                    GiftsCount = s.Gifts.Count,
-                    StatusValue = s.StatusValue,
-                    ArchivedGiftsCount = s.ArchivedGifts.Count,
-                    ReservedGiftsCount = s.ReservedGifts.Count
-                }).SingleOrDefaultAsync();
+            var status = await _context.Statuses.FindAsync(id);
 
             if (status == null)
             {

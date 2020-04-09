@@ -1,40 +1,41 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Contracts.DAL.App;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DonateesController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly IAppUnitOfWork _uow;
 
-        public DonateesController(AppDbContext context, IAppUnitOfWork uow)
+        public DonateesController(AppDbContext context)
         {
             _context = context;
-            _uow = uow;
         }
 
         // GET: api/Donatees
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DonateeDTO>>> GetDonatees()
+        public async Task<ActionResult<IEnumerable<Donatee>>> GetDonatees()
         {
-            return Ok(await _uow.Donatees.DTOAllAsync());
+            return await _context.Donatees.ToListAsync();
         }
 
         // GET: api/Donatees/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DonateeDTO>> GetDonatee(Guid id)
+        public async Task<ActionResult<Donatee>> GetDonatee(Guid id)
         {
-            var donatee = await _uow.Donatees.DTOFirstOrDefaultAsync(id);
+            var donatee = await _context.Donatees.FindAsync(id);
 
             if (donatee == null)
             {
@@ -48,41 +49,22 @@ namespace WebApp.ApiControllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDonatee(Guid id, DonateeEditDTO donateeEditDTO)
+        public async Task<IActionResult> PutDonatee(Guid id, Donatee donatee)
         {
-            if (id != donateeEditDTO.Id)
+            if (id != donatee.Id)
             {
                 return BadRequest();
             }
 
-            var donatee = await _uow.Donatees.FirstOrDefaultAsync(donateeEditDTO.Id);
-            if (donatee == null)
-            {
-                return BadRequest();
-            }
-            donatee.FirstName = donateeEditDTO.FirstName;
-            donatee.LastName = donateeEditDTO.LastName;
-            donatee.Age = donateeEditDTO.Age;
-            donatee.Gender = donateeEditDTO.Gender;
-            donatee.Bio = donateeEditDTO.Bio;
-            donatee.GiftName = donateeEditDTO.GiftName;
-            donatee.GiftDescription = donateeEditDTO.GiftDescription;
-            donatee.GiftImage = donateeEditDTO.GiftImage;
-            donatee.GiftUrl = donateeEditDTO.GiftUrl;
-            donatee.ActiveFrom = donateeEditDTO.ActiveFrom;
-            donatee.ActiveTo = donateeEditDTO.ActiveTo;
-            donatee.ActionTypeId = donateeEditDTO.ActionTypeId;
-            donatee.StatusId = donateeEditDTO.StatusId;
+            _context.Entry(donatee).State = EntityState.Modified;
 
-            _uow.Donatees.Update(donatee);
-            
             try
             {
-                await _uow.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _uow.Donatees.ExistsAsync(id))
+                if (!DonateeExists(id))
                 {
                     return NotFound();
                 }
@@ -99,29 +81,10 @@ namespace WebApp.ApiControllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Donatee>> PostDonatee(DonateeCreateDTO donateeCreateDTO)
+        public async Task<ActionResult<Donatee>> PostDonatee(Donatee donatee)
         {
-            var donatee = new Donatee
-            {
-                Id = donateeCreateDTO.Id,
-                FirstName = donateeCreateDTO.FirstName,
-                LastName = donateeCreateDTO.LastName,
-                Age = donateeCreateDTO.Age,
-                Gender = donateeCreateDTO.Gender,
-                Bio = donateeCreateDTO.Bio,
-                GiftName = donateeCreateDTO.GiftName,
-                GiftDescription = donateeCreateDTO.GiftDescription,
-                GiftImage = donateeCreateDTO.GiftImage,
-                GiftUrl = donateeCreateDTO.GiftUrl,
-                ActiveFrom = donateeCreateDTO.ActiveFrom,
-                ActiveTo = donateeCreateDTO.ActiveTo,
-                ActionTypeId = donateeCreateDTO.ActionTypeId,
-                StatusId = donateeCreateDTO.StatusId
-            };
-            
-            _uow.Donatees.Add(donatee);
-            
-            await _uow.SaveChangesAsync();
+            _context.Donatees.Add(donatee);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetDonatee", new { id = donatee.Id }, donatee);
         }
@@ -130,16 +93,21 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Donatee>> DeleteDonatee(Guid id)
         {
-            var donatee = await _uow.Donatees.FirstOrDefaultAsync(id);
+            var donatee = await _context.Donatees.FindAsync(id);
             if (donatee == null)
             {
                 return NotFound();
             }
 
-            _uow.Donatees.Remove(donatee);
-            await _uow.SaveChangesAsync();
+            _context.Donatees.Remove(donatee);
+            await _context.SaveChangesAsync();
 
-            return Ok(donatee);
+            return donatee;
+        }
+
+        private bool DonateeExists(Guid id)
+        {
+            return _context.Donatees.Any(e => e.Id == id);
         }
     }
 }

@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
 
 namespace WebApp.ApiControllers
 {
@@ -23,30 +23,16 @@ namespace WebApp.ApiControllers
 
         // GET: api/Wishlists
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WishlistDTO>>> GetWishlists()
+        public async Task<ActionResult<IEnumerable<Wishlist>>> GetWishlists()
         {
-            return await _context.Wishlists
-                .Select(w => new WishlistDTO()
-                {
-                    Id = w.Id,
-                    Comment = w.Comment,
-                    GiftId = w.GiftId,
-                    ProfilesCount = w.Profiles.Count
-                }).ToListAsync();
+            return await _context.Wishlists.ToListAsync();
         }
 
         // GET: api/Wishlists/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<WishlistDTO>> GetWishlist(Guid id)
+        public async Task<ActionResult<Wishlist>> GetWishlist(Guid id)
         {
-            var wishlist = await _context.Wishlists
-                .Select(w => new WishlistDTO()
-                {
-                    Id = w.Id,
-                    Comment = w.Comment,
-                    GiftId = w.GiftId,
-                    ProfilesCount = w.Profiles.Count
-                }).SingleOrDefaultAsync();
+            var wishlist = await _context.Wishlists.FindAsync(id);
 
             if (wishlist == null)
             {

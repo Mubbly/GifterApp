@@ -2,16 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
+using Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserNotificationsController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -23,38 +27,19 @@ namespace WebApp.ApiControllers
 
         // GET: api/UserNotifications
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserNotificationDTO>>> GetUserNotifications()
+        public async Task<ActionResult<IEnumerable<UserNotification>>> GetUserNotifications()
         {
             return await _context.UserNotifications
-                .Select(un => new UserNotificationDTO()
-                {
-                    Id = un.Id,
-                    Comment = un.Comment,
-                    IsActive = un.IsActive,
-                    IsDisabled = un.IsDisabled,
-                    LastNotified = un.LastNotified,
-                    NotificationId = un.NotificationId,
-                    RenotifyAt = un.RenotifyAt,
-                    AppUserId = un.AppUserId
-                }).ToListAsync();
+                .Where(un => un.AppUserId == User.UserGuidId())
+                .ToListAsync();
         }
 
         // GET: api/UserNotifications/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserNotificationDTO>> GetUserNotification(Guid id)
+        public async Task<ActionResult<UserNotification>> GetUserNotification(Guid id)
         {
             var userNotification = await _context.UserNotifications
-                .Select(un => new UserNotificationDTO()
-                {
-                    Id = un.Id,
-                    Comment = un.Comment,
-                    IsActive = un.IsActive,
-                    IsDisabled = un.IsDisabled,
-                    LastNotified = un.LastNotified,
-                    NotificationId = un.NotificationId,
-                    RenotifyAt = un.RenotifyAt,
-                    AppUserId = un.AppUserId
-                }).SingleOrDefaultAsync();
+                .FirstOrDefaultAsync(un => un.Id == id && un.AppUserId == User.UserGuidId());
 
             if (userNotification == null)
             {

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Domain;
 using Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -62,6 +64,7 @@ namespace DAL.App.EF.Helpers
         
         public static void SeedData(AppDbContext context)
         {
+            
         }
         
     }

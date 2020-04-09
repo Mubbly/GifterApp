@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
-using PublicApi.DTO.v1;
 
 namespace WebApp.ApiControllers
 {
@@ -23,32 +23,16 @@ namespace WebApp.ApiControllers
 
         // GET: api/Friendships
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FriendshipDTO>>> GetFriendships()
+        public async Task<ActionResult<IEnumerable<Friendship>>> GetFriendships()
         {
-            return await _context.Friendships
-                .Select(f => new FriendshipDTO()
-                {
-                    Id = f.Id,
-                    Comment = f.Comment,
-                    AppUser1Id = f.AppUser1Id,
-                    AppUser2Id = f.AppUser2Id,
-                    IsConfirmed = f.IsConfirmed
-                }).ToListAsync();
+            return await _context.Friendships.ToListAsync();
         }
 
         // GET: api/Friendships/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<FriendshipDTO>> GetFriendship(Guid id)
+        public async Task<ActionResult<Friendship>> GetFriendship(Guid id)
         {
-            var friendship = await _context.Friendships
-                .Select(f => new FriendshipDTO()
-                {
-                    Id = f.Id,
-                    Comment = f.Comment,
-                    AppUser1Id = f.AppUser1Id,
-                    AppUser2Id = f.AppUser2Id,
-                    IsConfirmed = f.IsConfirmed
-                }).SingleOrDefaultAsync();
+            var friendship = await _context.Friendships.FindAsync(id);
 
             if (friendship == null)
             {
