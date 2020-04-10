@@ -8,6 +8,8 @@ import { App } from "app";
 
 @autoinject
 export class AccountLogin {
+    private readonly ERROR_MSG_CANT_FIND_USER = "Cannot find such user."+"\n"+"\n"+"Please overview your credentials and try again.";
+    
     private _email = "";
     private _password = "";
     private _errorMessage: Optional<string> = null;
@@ -20,20 +22,21 @@ export class AccountLogin {
     ) {}
 
     onSubmit(event: Event) {
-        console.log(this._email, this._password);
         event.preventDefault();
+        this.logIn(this._email, this._password);
+    }
 
+    logIn(email: string, password: string) {
         this.accountService
-            .login(this._email, this._password)
-            .then((response) => {
-                if (isSuccessful(response)) {
-                    console.log("If: ", response);
-                    this.appState.jwt = response.data!.token;
-                    this.router!.navigateToRoute(this.app.HOME_ROUTE);
-                } else {
-                    let statusCode = response.status.toString();
-                    this._errorMessage = `${statusCode} ${response.errorMessage}`;
-                }
-            });
+        .login(email, password)
+        .then((response) => {
+            if (isSuccessful(response)) {
+                this.appState.jwt = response.data!.token;
+                this.router!.navigateToRoute(this.app.HOME_ROUTE);
+            } else {
+                let statusCode = response.status.toString();
+                this._errorMessage = `${statusCode} ${response.errorMessage} - ${this.ERROR_MSG_CANT_FIND_USER}`;
+            }
+        });
     }
 }

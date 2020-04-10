@@ -18,6 +18,10 @@ ul.navbar-nav.account {
     flex-wrap: nowrap;
 }
 
+h1 {
+    font-size: 2rem;
+}
+
 
 /* From backend interface */
 

@@ -1,3 +1,7 @@
 <template>
-    Home index
+    <section if.bind="!appState.jwt">
+        <h1>Welcome to Gifter app!</h1>
+        <p>Please <a route-href="route: accountLogin; params.bind: {}">log in</a> to continue.</p>
+        <img src="/gift.png"/>
+    </section>
 </template>

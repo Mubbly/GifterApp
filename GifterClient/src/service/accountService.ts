@@ -42,5 +42,34 @@ export class AccountService {
         }
     }
 
-    
+    async register(email: string, firstName: string, lastName: string, password: string): Promise<IFetchResponse<ILoginResponse>> {
+        try {
+            const response = await this.httpClient.post('account/register', 
+                JSON.stringify({
+                    email: email, 
+                    firstname: firstName,
+                    lastname: lastName,
+                    password: password
+                }), 
+                {
+                    cache: 'no-store'
+                }
+            );
+
+            if(UtilFunctions.isSuccessful(response)) {
+                return {
+                    status: response.status
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+        } catch (reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
+    }
 }
