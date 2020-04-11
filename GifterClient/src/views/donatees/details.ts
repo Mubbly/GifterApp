@@ -8,6 +8,7 @@ import * as UtilFunctions from 'utils/utilFunctions';
 @autoinject
 export class DonateeDetails {
     private _donatee: Optional<IDonatee> = null;
+    private _errorMessage: Optional<string> = null;
 
     constructor(private donateeService: DonateeService) {}
 
@@ -24,7 +25,7 @@ export class DonateeDetails {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._donatee = response.data!;
                     } else {
-                        UtilFunctions.alertErrorMessage(response);
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
                     }
                 }
             )

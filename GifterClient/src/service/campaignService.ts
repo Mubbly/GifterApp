@@ -5,18 +5,26 @@ import { IFetchResponse } from 'types/IFetchResponse';
 import { ICampaign } from 'domain/ICampaign';
 import { ICampaignCreate } from 'domain/ICampaignCreate'
 import { ICampaignEdit } from 'domain/ICampaignEdit';
+import { AppState } from 'state/appState';
 
 @autoinject
 export class CampaignService {
     private readonly _baseUrl = 'https://localhost:5001/api/Campaigns';
 
-    constructor(private httpClient: HttpClient) {
-
+    constructor(private appState: AppState, private httpClient: HttpClient) {
+        this.httpClient.baseUrl = this.appState._baseUrl;
     }
 
     async getCampaigns(): Promise<IFetchResponse<ICampaign[]>> {
         try {
-            const response = await this.httpClient.fetch(this._baseUrl);
+            const response = await this.httpClient.fetch(this._baseUrl,
+                { 
+                    cache: "no-store",
+                    headers: {
+                        authorization: `Bearer ${this.appState.jwt}`
+                    }
+                }
+                );
 
             if(UtilFunctions.isSuccessful(response)) {
                 const data = (await response.json()) as ICampaign[];
@@ -40,7 +48,14 @@ export class CampaignService {
 
     async getCampaign(id: string): Promise<IFetchResponse<ICampaign>> {
         try {
-            const response = await this.httpClient.fetch(`${this._baseUrl}/${id}`);
+            const response = await this.httpClient.fetch(`${this._baseUrl}/${id}`,
+                { 
+                    cache: "no-store",
+                    headers: {
+                        authorization: `Bearer ${this.appState.jwt}`
+                    }
+                }
+            );
 
             if(UtilFunctions.isSuccessful(response)) {
                 const data = (await response.json()) as ICampaign;
@@ -64,7 +79,14 @@ export class CampaignService {
 
     async createCampaign(campaign: ICampaignCreate): Promise<IFetchResponse<string>> {
         try {
-            const response = await this.httpClient.post(this._baseUrl, JSON.stringify(campaign));
+            const response = await this.httpClient.post(this._baseUrl, JSON.stringify(campaign),
+                { 
+                    cache: "no-store",
+                    headers: {
+                        authorization: `Bearer ${this.appState.jwt}`
+                    }
+                }
+            );
 
             if(UtilFunctions.isSuccessful(response)) {
                 console.log('response', response);
@@ -87,8 +109,15 @@ export class CampaignService {
 
     async updateCampaign(campaign: ICampaignEdit): Promise<IFetchResponse<string>> {
         try {
-            const response = await this.httpClient.put(`${this._baseUrl}/${campaign.id}`, JSON.stringify(campaign));
-
+            const response = await this.httpClient.put(`${this._baseUrl}/${campaign.id}`, JSON.stringify(campaign),
+                { 
+                    cache: "no-store",
+                    headers: {
+                        authorization: `Bearer ${this.appState.jwt}`
+                    }
+                }
+            );
+        
             if(UtilFunctions.isSuccessful(response)) {
                 return {
                     status: response.status
@@ -109,7 +138,14 @@ export class CampaignService {
 
     async deleteCampaign(id: string): Promise<IFetchResponse<string>> {
         try {
-            const response = await this.httpClient.delete(`${this._baseUrl}/${id}`, null);
+            const response = await this.httpClient.delete(`${this._baseUrl}/${id}`, null, 
+                { 
+                    cache: "no-store",
+                    headers: {
+                        authorization: `Bearer ${this.appState.jwt}`
+                    }
+                }
+            );
 
             if(UtilFunctions.isSuccessful(response)) {
                 return {

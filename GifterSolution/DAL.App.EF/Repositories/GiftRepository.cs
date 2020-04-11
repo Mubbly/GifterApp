@@ -26,7 +26,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
-                //query = query.Where(o => o.Owner!.AppUserId == userId && o.Animal!.AppUserId == userId);
+                query = query.Where(g => g.AppUserId == userId);
             }
 
             return await query.ToListAsync();
@@ -43,7 +43,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
-                //query = query.Where(a => a.Owner!.AppUserId == userId && a.Animal!.AppUserId == userId);
+                query = query.Where(g => g.AppUserId == userId);
             }
             
             return await query.FirstOrDefaultAsync();
@@ -53,15 +53,15 @@ namespace DAL.App.EF.Repositories
         {
             if (userId != null)
             {
-                // return await RepoDbSet.AnyAsync(a =>
-                //     a.Id == id && a.Owner!.AppUserId == userId && a.Animal!.AppUserId == userId);
+                return await RepoDbSet.AnyAsync(g => g.Id == id && g.AppUserId == userId);
             }
             return await RepoDbSet.AnyAsync(g => g.Id == id);
         }
 
-        public Task DeleteAsync(Guid id, Guid? userId = null)
+        public async Task DeleteAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var gift = await FirstOrDefaultAsync(id, userId);
+            base.Remove(gift);
         }
 
         public async Task<IEnumerable<GiftDTO>> DTOAllAsync(Guid? userId = null)
@@ -71,10 +71,9 @@ namespace DAL.App.EF.Repositories
                 .Include(g => g.Status)
                 .Include(g => g.AppUser)
                 .AsQueryable();
-            
             if (userId != null)
             {
-                //query = query.Where(o => o.Donatee!.AppUserId == userId && o.Campaign!.AppUserId == userId);
+                query = query.Where(g => g.AppUserId == userId);
             }
 
             return await query
@@ -91,10 +90,10 @@ namespace DAL.App.EF.Repositories
                         AppUserId = g.AppUserId,
                         ActionTypeId = g.ActionTypeId,
                         StatusId = g.StatusId,
+                        WishlistId = g.WishlistId,
                         ArchivedGiftsCount = g.ArchivedGifts.Count,
                         ReservedGiftsCount = g.ReservedGifts.Count,
-                        WishlistsCount = g.Wishlists.Count,
-                        AppUser = new AppUsersDTO()
+                        AppUser = new AppUserDTO()
                         {
                             Id = g.AppUser!.Id,
                             FirstName = g.AppUser!.FirstName,
@@ -137,6 +136,13 @@ namespace DAL.App.EF.Repositories
                             StatusValue = g.Status!.StatusValue,
                             ArchivedGiftsCount = g.Status!.ArchivedGifts.Count,
                             ReservedGiftsCount = g.Status!.ReservedGifts.Count
+                        },
+                        Wishlist = new WishlistDTO()
+                        {
+                            Id = g.Wishlist!.Id,
+                            Comment = g.Wishlist!.Comment,
+                            GiftsCount = g.Wishlist!.Gifts.Count,
+                            ProfilesCount = g.Wishlist!.Profiles.Count
                         }
                     }).ToListAsync();
         }
@@ -149,7 +155,11 @@ namespace DAL.App.EF.Repositories
                 .Include(g => g.Status)
                 .Include(g => g.AppUser)
                 .AsQueryable();
-
+            if (userId != null)
+            {
+                query = query.Where(g => g.AppUserId == userId);
+            }
+            
             return await query.Select(g => new GiftDTO()
                     {
                         Id = g.Id,
@@ -163,10 +173,10 @@ namespace DAL.App.EF.Repositories
                         AppUserId = g.AppUserId,
                         ActionTypeId = g.ActionTypeId,
                         StatusId = g.StatusId,
+                        WishlistId = g.WishlistId,
                         ArchivedGiftsCount = g.ArchivedGifts.Count,
                         ReservedGiftsCount = g.ReservedGifts.Count,
-                        WishlistsCount = g.Wishlists.Count,
-                        AppUser = new AppUsersDTO()
+                        AppUser = new AppUserDTO()
                         {
                             Id = g.AppUser!.Id,
                             FirstName = g.AppUser!.FirstName,
@@ -209,6 +219,13 @@ namespace DAL.App.EF.Repositories
                             StatusValue = g.Status!.StatusValue,
                             ArchivedGiftsCount = g.Status!.ArchivedGifts.Count,
                             ReservedGiftsCount = g.Status!.ReservedGifts.Count
+                        },
+                        Wishlist = new WishlistDTO()
+                        {
+                            Id = g.Wishlist!.Id,
+                            Comment = g.Wishlist!.Comment,
+                            GiftsCount = g.Wishlist!.Gifts.Count,
+                            ProfilesCount = g.Wishlist!.Profiles.Count
                         }
             }).FirstOrDefaultAsync();
         }

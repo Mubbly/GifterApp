@@ -21,12 +21,13 @@ namespace Domain.Identity
         public string FirstName { get; set; } = default!;
         [MaxLength(256)] [MinLength(1)] 
         public string LastName { get; set; } = default!;
-        public bool? IsCampaignManager { get; set; }
-        public bool? IsActive { get; set; }
-        public DateTime? LastActive { get; set; }
+
+        public bool IsCampaignManager { get; set; } = false;
+        public bool IsActive { get; set; } = false;
+        public DateTime LastActive { get; set; } = DateTime.Now;
         public DateTime DateJoined { get; set; } = DateTime.Now;
 
-        public string? FullName => FirstName + " " + LastName;
+        public string FullName => FirstName + " " + LastName;
 
         // List of all permissions that correspond to this user
         public ICollection<UserPermission>? UserPermissions { get; set; }

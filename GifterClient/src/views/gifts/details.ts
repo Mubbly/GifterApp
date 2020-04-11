@@ -8,6 +8,7 @@ import * as UtilFunctions from 'utils/utilFunctions';
 @autoinject
 export class GiftDetails {
     private _gift: Optional<IGift> = null;
+    private _errorMessage: Optional<string> = null;
 
     constructor(private giftService: GiftService) {}
 
@@ -24,7 +25,8 @@ export class GiftDetails {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._gift = response.data!;
                     } else {
-                        UtilFunctions.alertErrorMessage(response);
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
                     }
                 }
             )

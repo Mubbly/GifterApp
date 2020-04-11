@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Contracts.DAL.Base;
 using DAL.Base;
+using Domain.Identity;
 
 namespace Domain
 {
@@ -20,10 +21,13 @@ namespace Domain
     {
         [MaxLength(2048)] [MinLength(3)] 
         public virtual string? Comment { get; set; }
-
-        public virtual TKey GiftId { get; set; } = default!;
-        public virtual Gift? Gift { get; set; }  // TODO: Should be the other way around
-
+        
+        // To connect to logged in user
+        public virtual TKey AppUserId { get; set; } = default!;
+        public virtual AppUser? AppUser { get; set; }
+        
+        // List of all gifts that are in this wishlist
+        public virtual ICollection<Gift>? Gifts { get; set; }
         // List of all profiles that correspond to this wishlist
         public virtual ICollection<Profile>? Profiles { get; set; }
     }

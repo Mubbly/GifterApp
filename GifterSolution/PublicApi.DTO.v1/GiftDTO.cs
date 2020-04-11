@@ -23,11 +23,13 @@ namespace PublicApi.DTO.v1
         public Guid ActionTypeId { get; set; }
         public ActionTypeDTO ActionType { get; set; } = default!;
         public Guid AppUserId { get; set; }
-        public AppUsersDTO AppUser { get; set; } = default!;
+        public AppUserDTO AppUser { get; set; } = default!;
         public Guid StatusId { get; set; }
         public StatusDTO Status { get; set; } = default!;
 
-        public int WishlistsCount { get; set; }
+        public Guid WishlistId { get; set; }
+        public WishlistDTO Wishlist { get; set; } = default!;
+        
         public int ReservedGiftsCount { get; set; }
         public int ArchivedGiftsCount { get; set; }
     }

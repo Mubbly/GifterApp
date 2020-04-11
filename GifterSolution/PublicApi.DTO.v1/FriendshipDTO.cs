@@ -13,9 +13,9 @@ namespace PublicApi.DTO.v1
 
         // Requester
         public Guid AppUser1Id { get; set; }
-        public AppUsersDTO AppUser1 { get; set; } = default!;
+        public AppUserDTO AppUser1 { get; set; } = default!;
         // Addressee
         public Guid AppUser2Id { get; set; }
-        public AppUsersDTO AppUser2 { get; set; } = default!;
+        public AppUserDTO AppUser2 { get; set; } = default!;
     }
 }

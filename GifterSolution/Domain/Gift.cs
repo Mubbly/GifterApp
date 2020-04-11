@@ -35,14 +35,14 @@ namespace Domain
         public virtual TKey ActionTypeId { get; set; } = default!;
         public virtual ActionType? ActionType { get; set; }
 
-        public virtual TKey AppUserId { get; set; } = default!;
-        public virtual AppUser? AppUser { get; set; }
-        
         public virtual TKey StatusId { get; set; } = default!;
         public virtual Status? Status { get; set; }
 
-        // List of all wishlists that correspond to this gift
-        public virtual ICollection<Wishlist>? Wishlists { get; set; } // TODO: Should be the other way around
+        public virtual TKey WishlistId { get; set; } = default!;
+        public virtual Wishlist? Wishlist { get; set; }
+        
+        public virtual TKey AppUserId { get; set; } = default!;
+        public virtual AppUser? AppUser { get; set; }
 
         // List of all gifts that have reserved status
         public virtual ICollection<ReservedGift>? ReservedGifts { get; set; }

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.App.EF;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Controllers
 {
+    [Authorize(Roles="User")]
     public class WishlistsController : Controller
     {
         private readonly AppDbContext _context;
@@ -22,7 +24,7 @@ namespace WebApp.Controllers
         // GET: Wishlists
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Wishlists.Include(w => w.Gift);
+            var appDbContext = _context.Wishlists.Include(w => w.AppUser);
             return View(await appDbContext.ToListAsync());
         }
 
@@ -35,7 +37,7 @@ namespace WebApp.Controllers
             }
 
             var wishlist = await _context.Wishlists
-                .Include(w => w.Gift)
+                .Include(w => w.AppUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (wishlist == null)
             {
@@ -48,7 +50,7 @@ namespace WebApp.Controllers
         // GET: Wishlists/Create
         public IActionResult Create()
         {
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name");
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName");
             return View();
         }
 
@@ -57,7 +59,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Comment,GiftId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] Wishlist wishlist)
+        public async Task<IActionResult> Create([Bind("Comment,AppUserId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] Wishlist wishlist)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +68,7 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name", wishlist.GiftId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", wishlist.AppUserId);
             return View(wishlist);
         }
 
@@ -83,7 +85,7 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name", wishlist.GiftId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", wishlist.AppUserId);
             return View(wishlist);
         }
 
@@ -92,7 +94,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Comment,GiftId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] Wishlist wishlist)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Comment,AppUserId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] Wishlist wishlist)
         {
             if (id != wishlist.Id)
             {
@@ -119,7 +121,7 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name", wishlist.GiftId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", wishlist.AppUserId);
             return View(wishlist);
         }
 
@@ -132,7 +134,7 @@ namespace WebApp.Controllers
             }
 
             var wishlist = await _context.Wishlists
-                .Include(w => w.Gift)
+                .Include(w => w.AppUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (wishlist == null)
             {

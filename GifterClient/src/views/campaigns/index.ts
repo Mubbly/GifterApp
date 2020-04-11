@@ -7,6 +7,7 @@ import { Optional } from 'types/generalTypes';
 @autoinject
 export class CampaignsIndex {
     private _campaigns: ICampaign[] = [];
+    private _errorMessage: Optional<string> = null;
 
     constructor(private campaignService: CampaignService) {
 
@@ -22,7 +23,7 @@ export class CampaignsIndex {
                 if(UtilFunctions.isSuccessful(response)) {
                     this._campaigns = response.data!;
                 } else {
-                    UtilFunctions.alertErrorMessage(response);
+                    this._errorMessage = UtilFunctions.getErrorMessage(response);
                 }
             }
         );

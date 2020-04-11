@@ -9,7 +9,8 @@ import { IStatus } from "domain/IStatus";
 import { IActionType } from "domain/IActionType";
 import { StatusService } from "service/statusService";
 import { ActionTypeService } from "service/actionTypeService";
-import { ICampaignCreate } from "../../domain/ICampaignCreate";
+import { ICampaignCreate } from "domain/ICampaignCreate";
+import { Optional } from "types/generalTypes";
 
 @autoinject
 export class CampaignsCreate {
@@ -21,6 +22,8 @@ export class CampaignsCreate {
     private _description = null;
     private _adImage = null;
     private _institution = null;
+
+    private _errorMessage: Optional<string> = null;
 
     constructor(private campaignService: CampaignService, private router: Router) {
 
@@ -50,7 +53,7 @@ export class CampaignsCreate {
             if (UtilFunctions.isSuccessful(response)) {
                 this.router.navigateToRoute("campaignsIndex", {});
             } else {
-                UtilFunctions.alertErrorMessage(response);
+                this._errorMessage = UtilFunctions.getErrorMessage(response);
             }
         });
     }

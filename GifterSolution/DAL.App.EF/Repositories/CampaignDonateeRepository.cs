@@ -16,6 +16,8 @@ namespace DAL.App.EF.Repositories
         {
         }
         
+        // TODO: User stuff
+
         public async Task<IEnumerable<CampaignDonatee>> AllAsync(Guid? userId = null)
         {
             var query = RepoDbSet

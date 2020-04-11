@@ -48,7 +48,14 @@ export class GiftService {
 
     async getGift(id: string): Promise<IFetchResponse<IGift>> {
         try {
-            const response = await this.httpClient.fetch(`${this._baseUrl}/${id}`);
+            const response = await this.httpClient.fetch(`${this._baseUrl}/${id}`,
+                { 
+                    cache: "no-store",
+                    headers: {
+                        authorization: `Bearer ${this.appState.jwt}`
+                    }
+                }
+            );
 
             if(UtilFunctions.isSuccessful(response)) {
                 const data = (await response.json()) as IGift;
@@ -72,7 +79,14 @@ export class GiftService {
 
     async createGift(gift: IGiftCreate): Promise<IFetchResponse<string>> {
         try {
-            const response = await this.httpClient.post(this._baseUrl, JSON.stringify(gift));
+            const response = await this.httpClient.post(this._baseUrl, JSON.stringify(gift),
+                { 
+                    cache: "no-store",
+                    headers: {
+                        authorization: `Bearer ${this.appState.jwt}`
+                    }
+                }
+            );
 
             if(UtilFunctions.isSuccessful(response)) {
                 console.log('response', response);

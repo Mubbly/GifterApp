@@ -16,6 +16,8 @@ namespace DAL.App.EF.Repositories
         {
         }
         
+        // TODO: User stuff
+
         public async Task<IEnumerable<ArchivedGift>> AllAsync(Guid? userId = null)
         {
             var query = RepoDbSet
@@ -111,7 +113,7 @@ namespace DAL.App.EF.Repositories
                         PartnerUrl = ag.Gift!.PartnerUrl,
                         Url = ag.Gift!.Url,
                         StatusId = ag.Gift!.StatusId,
-                        WishlistsCount = ag.Gift!.Wishlists.Count,
+                        WishlistId = ag.Gift!.WishlistId,
                         ReservedGiftsCount = ag.Gift!.ReservedGifts.Count
                     },
                     ActionType = new ActionTypeDTO()
@@ -134,7 +136,7 @@ namespace DAL.App.EF.Repositories
                         ArchivedGiftsCount = ag.Status!.ArchivedGifts.Count,
                         ReservedGiftsCount = ag.Status!.ReservedGifts.Count
                     },
-                    UserGiver = new AppUsersDTO()
+                    UserGiver = new AppUserDTO()
                     {
                         Id = ag.UserGiver!.Id,
                         FirstName = ag.UserGiver!.FirstName,
@@ -158,7 +160,7 @@ namespace DAL.App.EF.Repositories
                         ReceivedPrivateMessagesCount = ag.UserGiver!.ReceivedPrivateMessages.Count,
                         InvitedUsersCount = ag.UserGiver!.InvitedUsers.Count
                     },
-                    UserReceiver = new AppUsersDTO()
+                    UserReceiver = new AppUserDTO()
                     {
                         Id = ag.UserReceiver!.Id,
                         FirstName = ag.UserReceiver!.FirstName,
@@ -224,7 +226,7 @@ namespace DAL.App.EF.Repositories
                         PartnerUrl = ag.Gift!.PartnerUrl,
                         Url = ag.Gift!.Url,
                         StatusId = ag.Gift!.StatusId,
-                        WishlistsCount = ag.Gift!.Wishlists.Count,
+                        WishlistId = ag.Gift!.WishlistId,
                         ReservedGiftsCount = ag.Gift!.ReservedGifts.Count
                     },
                     ActionType = new ActionTypeDTO()
@@ -247,7 +249,7 @@ namespace DAL.App.EF.Repositories
                         ArchivedGiftsCount = ag.Status!.ArchivedGifts.Count,
                         ReservedGiftsCount = ag.Status!.ReservedGifts.Count
                     },
-                    UserGiver = new AppUsersDTO()
+                    UserGiver = new AppUserDTO()
                     {
                         Id = ag.UserGiver!.Id,
                         FirstName = ag.UserGiver!.FirstName,
@@ -271,7 +273,7 @@ namespace DAL.App.EF.Repositories
                         ReceivedPrivateMessagesCount = ag.UserGiver!.ReceivedPrivateMessages.Count,
                         InvitedUsersCount = ag.UserGiver!.InvitedUsers.Count
                     },
-                    UserReceiver = new AppUsersDTO()
+                    UserReceiver = new AppUserDTO()
                     {
                         Id = ag.UserReceiver!.Id,
                         FirstName = ag.UserReceiver!.FirstName,

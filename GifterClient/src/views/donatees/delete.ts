@@ -3,10 +3,12 @@ import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
 import { DonateeService } from 'service/donateeService';
 import * as UtilFunctions from 'utils/utilFunctions';
 import { IDonatee } from 'domain/IDonatee';
+import { Optional } from 'types/generalTypes';
 
 @autoinject
 export class DonateesDelete {
     private _donatee?: IDonatee;
+    private _errorMessage: Optional<string> = null;
 
     constructor(private donateeService: DonateeService, private router: Router) {
     }
@@ -22,7 +24,8 @@ export class DonateesDelete {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._donatee = response.data!;
                     } else {
-                        UtilFunctions.alertErrorMessage(response);
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
                     }
                 }
             )
@@ -37,7 +40,8 @@ export class DonateesDelete {
                 if (UtilFunctions.isSuccessful(response)) {
                     this.router.navigateToRoute('donateesIndex', {});
                 } else {
-                    UtilFunctions.alertErrorMessage(response);
+                    this._errorMessage = UtilFunctions.getErrorMessage(response);
+
                 }
             }
         );

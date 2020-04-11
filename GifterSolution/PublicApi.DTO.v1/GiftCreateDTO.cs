@@ -26,5 +26,7 @@ namespace PublicApi.DTO.v1
         //public AppUsersDTO AppUser { get; set; } = default!;
         public Guid StatusId { get; set; }
         //public StatusDTO Status { get; set; } = default!;
+        public Guid WishlistId { get; set; }
+        //public WishlistDTO Wishlist { get; set; } = default!;
     }
 }

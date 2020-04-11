@@ -15,11 +15,10 @@ namespace DAL.App.EF.Repositories
         public CampaignRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
-
+        
        public async Task<IEnumerable<Campaign>> AllAsync(Guid? userId = null)
         {
-            var query = RepoDbSet.AsQueryable();
-            return await query.ToListAsync();
+            return await base.AllAsync();
         }
 
         public async Task<Campaign> FirstOrDefaultAsync(Guid id, Guid? userId = null)
@@ -27,7 +26,7 @@ namespace DAL.App.EF.Repositories
             var query = RepoDbSet
                 .Where(c => c.Id == id)
                 .AsQueryable();
-            return await query.FirstOrDefaultAsync(d => d.Id == id);
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task<bool> ExistsAsync(Guid id, Guid? userId = null)
@@ -35,15 +34,16 @@ namespace DAL.App.EF.Repositories
             return await RepoDbSet.AnyAsync(d => d.Id == id);
         }
 
-        public Task DeleteAsync(Guid id, Guid? userId = null)
+        public async Task DeleteAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var campaign = await FirstOrDefaultAsync(id, userId);
+            base.Remove(campaign);        
         }
-
+        
         public async Task<IEnumerable<CampaignDTO>> DTOAllAsync(Guid? userId = null)
         {
             var query = RepoDbSet.AsQueryable();
-            
+
             return await query
                 .Select(c => new CampaignDTO() 
                     {
@@ -78,7 +78,7 @@ namespace DAL.App.EF.Repositories
                     IsActive = c.IsActive,
                     UserCampaignsCount = c.UserCampaigns.Count,
                     CampaignDonateesCount = c.CampaignDonatees.Count
-            }).FirstOrDefaultAsync(d => d.Id == id);
+            }).FirstOrDefaultAsync();
         }
     }
 }

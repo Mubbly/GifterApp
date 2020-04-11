@@ -16,18 +16,14 @@ namespace DAL.App.EF.Repositories
         {
         }
 
+        // TODO: User stuff 
+        
         public async Task<IEnumerable<Donatee>> AllAsync(Guid? userId = null)
         {
             var query = RepoDbSet
                 .Include(d => d.ActionType)
                 .Include(d => d.Status)
                 .AsQueryable();
-
-            if (userId != null)
-            {
-                //query = query.Where(o => o.Owner!.AppUserId == userId && o.Animal!.AppUserId == userId);
-            }
-
             return await query.ToListAsync();
         }
 
@@ -38,28 +34,18 @@ namespace DAL.App.EF.Repositories
                 .Include(d => d.ActionType)
                 .Include(d => d.Status)
                 .AsQueryable();
-
-            if (userId != null)
-            {
-                //query = query.Where(a => a.Owner!.AppUserId == userId && a.Animal!.AppUserId == userId);
-            }
-            
             return await query.FirstOrDefaultAsync();
         }
 
         public async Task<bool> ExistsAsync(Guid id, Guid? userId = null)
         {
-            if (userId != null)
-            {
-                // return await RepoDbSet.AnyAsync(a =>
-                //     a.Id == id && a.Owner!.AppUserId == userId && a.Animal!.AppUserId == userId);
-            }
             return await RepoDbSet.AnyAsync(d => d.Id == id);
         }
 
-        public Task DeleteAsync(Guid id, Guid? userId = null)
+        public async Task DeleteAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var donatee = await FirstOrDefaultAsync(id, userId);
+            base.Remove(donatee);
         }
 
         public async Task<IEnumerable<DonateeDTO>> DTOAllAsync(Guid? userId = null)

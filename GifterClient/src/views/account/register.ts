@@ -6,6 +6,7 @@ import { AppState } from 'state/appState';
 import { isSuccessful } from 'utils/utilFunctions';
 import { Optional } from 'types/generalTypes';
 import { AccountLogin } from './login';
+import * as UtilFunctions from 'utils/utilFunctions';
 
 @autoinject
 export class AccountRegister {    
@@ -45,7 +46,7 @@ export class AccountRegister {
                 } else {
                     console.log("Account NOT registered");
                     let statusCode = response.status.toString();
-                    this._errorMessage = `${statusCode} ${response.errorMessage} - ${this.ERROR_MSG_CANT_REGISTER}`;
+                    this._errorMessage = UtilFunctions.getErrorMessage(response, this.ERROR_MSG_CANT_REGISTER);
                 }
             });
         // this.accountService

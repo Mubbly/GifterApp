@@ -5,6 +5,7 @@
     <hr />
     <div class="row">
         <div class="col-md-4">
+            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
             <form submit.trigger="onSubmit($event)">
                 <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
                     <ul>

@@ -8,7 +8,7 @@ import { App } from "app";
 
 @autoinject
 export class AccountLogin {
-    private readonly ERROR_MSG_CANT_FIND_USER = "Cannot find such user."+"\n"+"\n"+"Please overview your credentials and try again.";
+    private readonly ERROR_MSG_CANT_FIND_USER = "Cannot find such user. Please overview your credentials and try again.";
     
     private _email = "";
     private _password = "";
@@ -35,7 +35,7 @@ export class AccountLogin {
                 this.router!.navigateToRoute(this.app.HOME_ROUTE);
             } else {
                 let statusCode = response.status.toString();
-                this._errorMessage = `${statusCode} ${response.errorMessage} - ${this.ERROR_MSG_CANT_FIND_USER}`;
+                this._errorMessage = this.ERROR_MSG_CANT_FIND_USER;
             }
         });
     }

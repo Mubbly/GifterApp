@@ -139,4 +139,12 @@
       <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Views\Wishlists\Create.cshtml" />
+      <UpToDateCheckInput Remove="Views\Wishlists\Delete.cshtml" />
+      <UpToDateCheckInput Remove="Views\Wishlists\Details.cshtml" />
+      <UpToDateCheckInput Remove="Views\Wishlists\Edit.cshtml" />
+      <UpToDateCheckInput Remove="Views\Wishlists\Index.cshtml" />
+    </ItemGroup>
+
 </Project>

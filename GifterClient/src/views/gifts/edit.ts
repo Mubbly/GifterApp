@@ -8,6 +8,7 @@ import { Optional } from 'types/generalTypes';
 @autoinject
 export class GiftsEdit {
     private _gift?: IGiftEdit;
+    private _errorMessage: Optional<string> = null;
 
     constructor(private giftService: GiftService, private router: Router) {
     }
@@ -23,7 +24,8 @@ export class GiftsEdit {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._gift = response.data!;
                     } else {
-                        UtilFunctions.alertErrorMessage(response);
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
                     }
                 }
             )
@@ -55,7 +57,8 @@ export class GiftsEdit {
                     if (UtilFunctions.isSuccessful(response)) {
                         this.router.navigateToRoute('giftsIndex', {});
                     } else {
-                        UtilFunctions.alertErrorMessage(response);
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
                     }
                 }
             );

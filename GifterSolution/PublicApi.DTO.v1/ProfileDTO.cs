@@ -17,7 +17,7 @@ namespace PublicApi.DTO.v1
         public bool IsPrivate { get; set; }
         
         public Guid AppUserId { get; set; }
-        public AppUsersDTO AppUser { get; set; } = default!;
+        public AppUserDTO AppUser { get; set; } = default!;
         public Guid WishlistId { get; set; }
         public WishlistDTO Wishlist { get; set; } = default!;
 

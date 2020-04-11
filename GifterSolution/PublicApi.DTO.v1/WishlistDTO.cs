@@ -9,10 +9,11 @@ namespace PublicApi.DTO.v1
         
         [MaxLength(2048)] [MinLength(3)] 
         public string? Comment { get; set; }
-
-        public Guid GiftId { get; set; }
-        public GiftDTO Gift { get; set; } = default!;
-
+        
+        public Guid AppUserId { get; set; }
+        public AppUserDTO AppUser { get; set; } = default!;
+        
+        public int GiftsCount { get; set; }
         public int ProfilesCount { get; set; }
     }
 }

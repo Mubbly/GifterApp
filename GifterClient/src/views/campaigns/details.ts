@@ -9,6 +9,7 @@ import { PermissionDetails } from '../permissions/details';
 @autoinject
 export class CampaignDetails {
     private _campaign: Optional<ICampaign> = null;
+    private _errorMessage: Optional<string> = null;
 
     constructor(private campaignService: CampaignService) {
 
@@ -28,7 +29,7 @@ export class CampaignDetails {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._campaign = response.data!;
                     } else {
-                        UtilFunctions.alertErrorMessage(response);
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
                     }
                 }
             )

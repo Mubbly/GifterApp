@@ -3,10 +3,13 @@ import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
 import { CampaignService } from 'service/campaignService';
 import * as UtilFunctions from 'utils/utilFunctions';
 import { ICampaign } from 'domain/ICampaign';
+import { Optional } from 'types/generalTypes';
 
 @autoinject
 export class CampaignsDelete {
     private _campaign?: ICampaign;
+
+    private _errorMessage: Optional<string> = null;
 
     constructor(private campaignService: CampaignService, private router: Router) {
     }
@@ -31,7 +34,7 @@ export class CampaignsDelete {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._campaign = response.data!;
                     } else {
-                        UtilFunctions.alertErrorMessage(response);
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
                     }
                 }
             )
@@ -46,7 +49,7 @@ export class CampaignsDelete {
                 if (UtilFunctions.isSuccessful(response)) {
                     this.router.navigateToRoute('campaignsIndex', {});
                 } else {
-                    UtilFunctions.alertErrorMessage(response);
+                    this._errorMessage = UtilFunctions.getErrorMessage(response);
                 }
             }
         );

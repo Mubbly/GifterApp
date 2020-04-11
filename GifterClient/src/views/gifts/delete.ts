@@ -3,10 +3,12 @@ import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
 import { GiftService } from 'service/giftService';
 import * as UtilFunctions from 'utils/utilFunctions';
 import { IGift } from 'domain/IGift';
+import { Optional } from 'types/generalTypes';
 
 @autoinject
 export class GiftsDelete {
     private _gift?: IGift;
+    private _errorMessage: Optional<string> = null;
 
     constructor(private giftService: GiftService, private router: Router) {
     }
@@ -22,7 +24,8 @@ export class GiftsDelete {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._gift = response.data!;
                     } else {
-                        UtilFunctions.alertErrorMessage(response);
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
                     }
                 }
             )
@@ -37,7 +40,8 @@ export class GiftsDelete {
                 if (UtilFunctions.isSuccessful(response)) {
                     this.router.navigateToRoute('giftsIndex', {});
                 } else {
-                    UtilFunctions.alertErrorMessage(response);
+                    this._errorMessage = UtilFunctions.getErrorMessage(response);
+
                 }
             }
         );

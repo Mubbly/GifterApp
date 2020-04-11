@@ -15,6 +15,6 @@ export function existsAndIsString(value: any): value is string {
     return value && typeof value === 'string';
 }
 
-export function alertErrorMessage(response: IFetchResponse<any>) {
-    return alert(`${response.status.toString()} - ${response.errorMessage}`);
+export function getErrorMessage(response: IFetchResponse<any>, comment?: string) {
+    return `${response.status.toString()} ${response.errorMessage} ${comment ? ' - ' + comment : ''}`;
 }

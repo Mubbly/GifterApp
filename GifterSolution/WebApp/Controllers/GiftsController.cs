@@ -29,6 +29,7 @@ namespace WebApp.Controllers
                 .Include(g => g.ActionType)
                 .Include(g => g.AppUser)
                 .Include(g => g.Status)
+                .Include(g => g.Wishlist)
                 .Where(g => g.AppUserId == User.UserGuidId());
             return View(await appDbContext.ToListAsync());
         }
@@ -45,6 +46,7 @@ namespace WebApp.Controllers
                 .Include(g => g.ActionType)
                 .Include(g => g.AppUser)
                 .Include(g => g.Status)
+                .Include(g => g.Wishlist)
                 .FirstOrDefaultAsync(m => m.Id == id && m.AppUserId == User.UserGuidId());
             if (gift == null)
             {
@@ -58,7 +60,9 @@ namespace WebApp.Controllers
         public IActionResult Create()
         {
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue");
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName");
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue");
+            ViewData["WishlistId"] = new SelectList(_context.Wishlists, "Id", "Id");
             return View();
         }
 
@@ -67,10 +71,10 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Gift gift)
+        public async Task<IActionResult> Create([Bind("Name,Description,Image,Url,PartnerUrl,IsPartnered,IsPinned,ActionTypeId,StatusId,WishlistId,AppUserId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] Gift gift)
         {
             gift.AppUserId = User.UserGuidId();
-            
+
             if (ModelState.IsValid)
             {
                 //gift.Id = Guid.NewGuid();
@@ -81,6 +85,7 @@ namespace WebApp.Controllers
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", gift.ActionTypeId);
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", gift.AppUserId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", gift.StatusId);
+            ViewData["WishlistId"] = new SelectList(_context.Wishlists, "Id", "Id", gift.WishlistId);
             return View(gift);
         }
 
@@ -99,7 +104,9 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", gift.ActionTypeId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", gift.AppUserId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", gift.StatusId);
+            ViewData["WishlistId"] = new SelectList(_context.Wishlists, "Id", "Id", gift.WishlistId);
             return View(gift);
         }
 
@@ -108,7 +115,7 @@ namespace WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, Gift gift)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Description,Image,Url,PartnerUrl,IsPartnered,IsPinned,ActionTypeId,StatusId,WishlistId,AppUserId,Id,CreatedBy,CreatedAt,EditedBy,EditedAt")] Gift gift)
         {
             gift.AppUserId = User.UserGuidId();
             if (id != gift.Id)
@@ -137,7 +144,9 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", gift.ActionTypeId);
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", gift.AppUserId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", gift.StatusId);
+            ViewData["WishlistId"] = new SelectList(_context.Wishlists, "Id", "Id", gift.WishlistId);
             return View(gift);
         }
 
@@ -153,6 +162,7 @@ namespace WebApp.Controllers
                 .Include(g => g.ActionType)
                 .Include(g => g.AppUser)
                 .Include(g => g.Status)
+                .Include(g => g.Wishlist)
                 .FirstOrDefaultAsync(m => m.Id == id  && m.AppUserId == User.UserGuidId());
             if (gift == null)
             {

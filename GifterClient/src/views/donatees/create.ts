@@ -11,6 +11,7 @@ import { StatusService } from "service/statusService";
 import { ActionTypeService } from "service/actionTypeService";
 import { IDonateeCreate } from '../../domain/IDonateeCreate';
 import { Agent } from "http";
+import { Optional } from "types/generalTypes";
 
 @autoinject
 export class DonateesCreate {
@@ -32,6 +33,8 @@ export class DonateesCreate {
     // related tables
     private _statuses: IStatus[] = [];
     private _actionTypes: IActionType[] = [];
+
+    private _errorMessage: Optional<string> = null;
 
     constructor(
         private donateeService: DonateeService,
@@ -83,7 +86,8 @@ export class DonateesCreate {
                 if (UtilFunctions.isSuccessful(response)) {
                     this.router.navigateToRoute("donateesIndex", {});
                 } else {
-                    UtilFunctions.alertErrorMessage(response);
+                    this._errorMessage = UtilFunctions.getErrorMessage(response);
+
                 }
             });
     }

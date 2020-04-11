@@ -7,7 +7,7 @@ namespace PublicApi.DTO.v1
     {
         public Guid Id { get; set; }
         
-        [MaxLength(512)] [MinLength(1)] 
+        [MaxLength(512)] [MinLength(1)]
         public string Name { get; set; } = default!;
         [MaxLength(4096)] [MinLength(3)] 
         public string? Description { get; set; }
@@ -18,7 +18,6 @@ namespace PublicApi.DTO.v1
         public DateTime ActiveFromDate { get; set; }
         public DateTime ActiveToDate { get; set; }
         public bool IsActive { get; set; }
-        
         public int UserCampaignsCount { get; set; }
         public int CampaignDonateesCount { get; set; }
     }

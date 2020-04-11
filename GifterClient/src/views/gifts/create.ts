@@ -10,10 +10,12 @@ import { IActionType } from "domain/IActionType";
 import { StatusService } from "service/statusService";
 import { ActionTypeService } from "service/actionTypeService";
 import { IGiftCreate } from '../../domain/IGiftCreate';
+import { Optional } from "types/generalTypes";
 
 @autoinject
 export class GiftsCreate {
     private _gift?: IGiftCreate;
+    private _errorMessage: Optional<string> = null;
 
     private _name = "";
     private _description = null;
@@ -81,7 +83,8 @@ export class GiftsCreate {
                 if (UtilFunctions.isSuccessful(response)) {
                     this.router.navigateToRoute("giftsIndex", {});
                 } else {
-                    UtilFunctions.alertErrorMessage(response);
+                    this._errorMessage = UtilFunctions.getErrorMessage(response);
+
                 }
             });
     }

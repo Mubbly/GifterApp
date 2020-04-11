@@ -15,7 +15,7 @@ namespace PublicApi.DTO.v1
         public string? Comment { get; set; }
 
         public Guid AppUserId { get; set; }
-        public AppUsersDTO AppUser { get; set; } = default!;
+        public AppUserDTO AppUser { get; set; } = default!;
         public Guid NotificationId { get; set; }
         public NotificationDTO Notification { get; set; } = default!;
     }

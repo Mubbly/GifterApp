@@ -9,6 +9,7 @@ import { PermissionDetails } from '../permissions/details';
 @autoinject
 export class CampaignsEdit {
     private _campaign?: ICampaignEdit;
+    private _errorMessage: Optional<string> = null;
 
     constructor(private campaignService: CampaignService, private router: Router) {
     }
@@ -56,7 +57,7 @@ export class CampaignsEdit {
                     if (UtilFunctions.isSuccessful(response)) {
                         this.router.navigateToRoute('campaignsIndex', {});
                     } else {
-                        UtilFunctions.alertErrorMessage(response);
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
                     }
                 }
             );
@@ -69,7 +70,7 @@ export class CampaignsEdit {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._campaign = response.data!;
                     } else {
-                        UtilFunctions.alertErrorMessage(response);
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
                     }
                 }
             )

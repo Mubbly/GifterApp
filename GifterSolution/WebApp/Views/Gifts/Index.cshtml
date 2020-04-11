@@ -37,10 +37,13 @@
                 @Html.DisplayNameFor(model => model.ActionType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AppUser)
+                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                @Html.DisplayNameFor(model => model.Wishlist)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AppUser)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedBy)
@@ -85,10 +88,13 @@
                 @Html.DisplayFor(modelItem => item.ActionType.ActionTypeValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AppUser.FirstName)
+                @Html.DisplayFor(modelItem => item.Status.StatusValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status.StatusValue)
+                @Html.DisplayFor(modelItem => item.Wishlist.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AppUser.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedBy)

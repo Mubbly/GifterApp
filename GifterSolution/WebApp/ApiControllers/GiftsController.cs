@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.DAL.App;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Domain;
 using Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using PublicApi.DTO.v1;
 
 namespace WebApp.ApiControllers
 {
@@ -20,57 +22,68 @@ namespace WebApp.ApiControllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class GiftsController : ControllerBase
     {
-        private readonly AppDbContext _context;
-
-        public GiftsController(AppDbContext context)
+        private readonly IAppUnitOfWork _uow;
+        public GiftsController(IAppUnitOfWork uow)
         {
-            _context = context;
+            _uow = uow;
         }
 
         // GET: api/Gifts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Gift>>> GetGifts()
+        public async Task<ActionResult<IEnumerable<GiftDTO>>> GetGifts()
         {
-            return await _context.Gifts
-                .Where(g => g.AppUserId == User.UserGuidId())
-                .ToListAsync();
+            return Ok(await _uow.Gifts.DTOAllAsync(User.UserGuidId()));
         }
 
         // GET: api/Gifts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Gift>> GetGift(Guid id)
+        public async Task<ActionResult<GiftDTO>> GetGift(Guid id)
         {
-            var gift = await _context.Gifts
-                .FirstOrDefaultAsync(g => g.Id == id && g.AppUserId == User.UserGuidId());
-
-            if (gift == null)
+            var giftDTO = await _uow.Gifts.DTOFirstOrDefaultAsync(id, User.UserGuidId());
+            if (giftDTO == null)
             {
                 return NotFound();
             }
-
-            return gift;
+            return Ok(giftDTO);
         }
 
         // PUT: api/Gifts/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGift(Guid id, Gift gift)
+        public async Task<IActionResult> PutGift(Guid id, GiftEditDTO giftEditDTO)
         {
-            if (id != gift.Id)
+            if (id != giftEditDTO.Id)
             {
                 return BadRequest();
             }
+            
+            var gift = await _uow.Gifts.FirstOrDefaultAsync(giftEditDTO.Id, User.UserGuidId());
+            if (gift == null)
+            {
+                return BadRequest();
+            }
+            gift.Name = giftEditDTO.Name;
+            gift.Description = giftEditDTO.Description;
+            gift.Image = giftEditDTO.Image;
+            gift.Url = giftEditDTO.Url;
+            gift.IsPartnered = giftEditDTO.IsPartnered;
+            gift.PartnerUrl = giftEditDTO.PartnerUrl;
+            gift.IsPinned = giftEditDTO.IsPinned;
+            gift.ActionTypeId = giftEditDTO.ActionTypeId;
+            gift.StatusId = giftEditDTO.StatusId;
+            gift.AppUserId = giftEditDTO.AppUserId;
+            gift.WishlistId = giftEditDTO.WishlistId;
 
-            _context.Entry(gift).State = EntityState.Modified;
-
+            _uow.Gifts.Update(gift);
+            
             try
             {
-                await _context.SaveChangesAsync();
+                await _uow.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!GiftExists(id))
+                if (!await _uow.Gifts.ExistsAsync(id, User.UserGuidId()))
                 {
                     return NotFound();
                 }
@@ -87,10 +100,25 @@ namespace WebApp.ApiControllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Gift>> PostGift(Gift gift)
+        public async Task<ActionResult<GiftCreateDTO>> PostGift(GiftCreateDTO giftCreateDTO)
         {
-            _context.Gifts.Add(gift);
-            await _context.SaveChangesAsync();
+            var gift = new Gift
+            {
+                Name = giftCreateDTO.Name,
+                Description = giftCreateDTO.Description,
+                Image = giftCreateDTO.Image,
+                Url = giftCreateDTO.Url,
+                IsPartnered = giftCreateDTO.IsPartnered,
+                PartnerUrl = giftCreateDTO.PartnerUrl,
+                IsPinned = giftCreateDTO.IsPinned,
+                ActionTypeId = giftCreateDTO.ActionTypeId,
+                StatusId = giftCreateDTO.StatusId,
+                AppUserId = User.UserGuidId()
+            };
+            
+            _uow.Gifts.Add(gift);
+            
+            await _uow.SaveChangesAsync();
 
             return CreatedAtAction("GetGift", new { id = gift.Id }, gift);
         }
@@ -99,21 +127,16 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Gift>> DeleteGift(Guid id)
         {
-            var gift = await _context.Gifts.FindAsync(id);
+            var gift = await _uow.Gifts.FirstOrDefaultAsync(id, User.UserGuidId());
             if (gift == null)
             {
                 return NotFound();
             }
 
-            _context.Gifts.Remove(gift);
-            await _context.SaveChangesAsync();
+            _uow.Gifts.Remove(gift);
+            await _uow.SaveChangesAsync();
 
-            return gift;
-        }
-
-        private bool GiftExists(Guid id)
-        {
-            return _context.Gifts.Any(e => e.Id == id);
+            return Ok(gift);
         }
     }
 }

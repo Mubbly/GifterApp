@@ -8,6 +8,7 @@ import { Optional } from 'types/generalTypes';
 @autoinject
 export class DonateesEdit {
     private _donatee?: IDonateeEdit;
+    private _errorMessage: Optional<string> = null;
 
     constructor(private donateeService: DonateeService, private router: Router) {
     }
@@ -23,7 +24,8 @@ export class DonateesEdit {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._donatee = response.data!;
                     } else {
-                        UtilFunctions.alertErrorMessage(response);
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
                     }
                 }
             )
@@ -68,7 +70,8 @@ export class DonateesEdit {
                     if (UtilFunctions.isSuccessful(response)) {
                         this.router.navigateToRoute('donateesIndex', {});
                     } else {
-                        UtilFunctions.alertErrorMessage(response);
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
                     }
                 }
             );

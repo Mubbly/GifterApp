@@ -21,8 +21,8 @@ namespace PublicApi.DTO.v1
         public Guid StatusId { get; set; }
         public StatusDTO Status { get; set; } = default!;
         public Guid UserGiverId { get; set; }
-        public AppUsersDTO UserGiver { get; set; } = default!;
+        public AppUserDTO UserGiver { get; set; } = default!;
         public Guid UserReceiverId { get; set; }
-        public AppUsersDTO UserReceiver { get; set; } = default!;
+        public AppUserDTO UserReceiver { get; set; } = default!;
     }
 }
