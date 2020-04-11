@@ -16,7 +16,9 @@ namespace DAL.App.EF.Repositories
         {
         }
         
-       public async Task<IEnumerable<Campaign>> AllAsync(Guid? userId = null)
+        // TODO: User stuff 
+
+        public async Task<IEnumerable<Campaign>> AllAsync(Guid? userId = null)
         {
             return await base.AllAsync();
         }

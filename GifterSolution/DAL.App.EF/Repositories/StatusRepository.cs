@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using DAL.Base.EF.Repositories;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 using PublicApi.DTO.v1;
 
 namespace DAL.App.EF.Repositories
@@ -14,34 +16,62 @@ namespace DAL.App.EF.Repositories
         {
         }
 
-        public Task<IEnumerable<Status>> AllAsync(Guid? userId = null)
+        public async Task<IEnumerable<Status>> AllAsync(Guid? userId = null)
         {
-            throw new NotImplementedException();
+            return await base.AllAsync();
         }
 
-        public Task<Status> FirstOrDefaultAsync(Guid id, Guid? userId = null)
+        public async Task<Status> FirstOrDefaultAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var query = RepoDbSet
+                .Where(s => s.Id == id)
+                .AsQueryable();
+            return await query.FirstOrDefaultAsync();
         }
 
-        public Task<bool> ExistsAsync(Guid id, Guid? userId = null)
+        public async Task<bool> ExistsAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            return await RepoDbSet.AnyAsync(s => s.Id == id);
         }
 
-        public Task DeleteAsync(Guid id, Guid? userId = null)
+        public async Task DeleteAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var status = await FirstOrDefaultAsync(id, userId);
+            base.Remove(status);
         }
 
-        public Task<IEnumerable<StatusDTO>> DTOAllAsync(Guid? userId = null)
+        public async Task<IEnumerable<StatusDTO>> DTOAllAsync(Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var query = RepoDbSet.AsQueryable();
+            return await query
+                .Select(s => new StatusDTO()
+                {
+                    Id = s.Id,
+                    StatusValue = s.StatusValue,
+                    Comment = s.Comment,
+                    DonateesCount = s.Donatees.Count,
+                    GiftsCount = s.Gifts.Count,
+                    ArchivedGiftsCount = s.ArchivedGifts.Count,
+                    ReservedGiftsCount = s.ReservedGifts.Count
+                }).ToListAsync();
         }
 
-        public Task<StatusDTO> DTOFirstOrDefaultAsync(Guid id, Guid? userId = null)
+        public async Task<StatusDTO> DTOFirstOrDefaultAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var query = RepoDbSet
+                .Where(s => s.Id == id)
+                .AsQueryable();
+            return await query
+                .Select(s => new StatusDTO()
+                {
+                    Id = s.Id,
+                    StatusValue = s.StatusValue,
+                    Comment = s.Comment,
+                    DonateesCount = s.Donatees.Count,
+                    GiftsCount = s.Gifts.Count,
+                    ArchivedGiftsCount = s.ArchivedGifts.Count,
+                    ReservedGiftsCount = s.ReservedGifts.Count
+                }).FirstOrDefaultAsync();
         }
     }
 }

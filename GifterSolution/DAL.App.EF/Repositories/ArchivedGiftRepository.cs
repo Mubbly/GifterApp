@@ -16,8 +16,6 @@ namespace DAL.App.EF.Repositories
         {
         }
         
-        // TODO: User stuff
-
         public async Task<IEnumerable<ArchivedGift>> AllAsync(Guid? userId = null)
         {
             var query = RepoDbSet
@@ -30,7 +28,8 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null) 
             { 
-                //query = query.Where(o => o.Campaign!.AppUserId == userId && o.Donatee!.AppUserId == userId);
+                // See others gifts that you have archived as well as your own gifts that others have archived
+                query = query.Where(a => a.UserGiverId == userId || a.UserReceiverId == userId);
             }
 
             return await query.ToListAsync();
@@ -49,7 +48,8 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
-                //query = query.Where(a => a.Campaign!.AppUserId == userId && a.Donatee!.AppUserId == userId);
+                // See others gifts that you have archived as well as your own gifts that others have archived
+                query = query.Where(a => a.UserGiverId == userId || a.UserReceiverId == userId);
             }
 
             return await query.FirstOrDefaultAsync();
@@ -59,8 +59,7 @@ namespace DAL.App.EF.Repositories
         {
             if (userId != null)
             {
-                // return await RepoDbSet.AnyAsync(a =>
-                //     a.Id == id && a.Campaign!.AppUserId == userId && a.Donatee!.AppUserId == userId);
+                return await RepoDbSet.AnyAsync(a => a.UserGiverId == userId || a.UserReceiverId == userId);
             }
             
             return await RepoDbSet.AnyAsync(a => a.Id == id);
@@ -68,7 +67,7 @@ namespace DAL.App.EF.Repositories
 
         public async Task DeleteAsync(Guid id, Guid? userId = null)
         {
-            var archivedGift = await FirstOrDefaultAsync(id); // (id, userId);
+            var archivedGift = await FirstOrDefaultAsync(id, userId);
             base.Remove(archivedGift);
         }
 
@@ -84,7 +83,8 @@ namespace DAL.App.EF.Repositories
             
             if (userId != null)
             {
-                //query = query.Where(o => o.Donatee!.AppUserId == userId && o.Campaign!.AppUserId == userId);
+                // See others gifts that you have archived as well as your own gifts that others have archived
+                query = query.Where(a => a.UserGiverId == userId || a.UserReceiverId == userId);
             }
 
             return await query
@@ -199,6 +199,8 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See others gifts that you have archived as well as your own gifts that others have archived
+                query = query.Where(a => a.UserGiverId == userId || a.UserReceiverId == userId);
             }
 
             return await query.Select(ag => new ArchivedGiftDTO()

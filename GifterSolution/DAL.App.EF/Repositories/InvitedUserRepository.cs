@@ -24,6 +24,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See only who you have invited
                 query = query.Where(iu => iu.InvitorUserId == userId);
             }
             return await query.ToListAsync();
@@ -38,6 +39,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See only who you have invited
                 query = query.Where(iu => iu.InvitorUserId == userId);
             }
             return await query.FirstOrDefaultAsync();
@@ -66,6 +68,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See only who you have invited
                 query = query.Where(iu => iu.InvitorUserId == userId);
             }
             return await query
@@ -114,6 +117,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See only who you have invited
                 query = query.Where(iu => iu.InvitorUserId == userId);
             }
             return await query

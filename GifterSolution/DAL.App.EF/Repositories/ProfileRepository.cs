@@ -19,41 +19,106 @@ namespace DAL.App.EF.Repositories
         public async Task<IEnumerable<Profile>> AllAsync(Guid? userId = null)
         {
             var query = RepoDbSet
-                .Include(g => g.Wishlist)
-                .Include(g => g.AppUser)
+                .Include(p => p.Wishlist)
+                .Include(p => p.AppUser)
                 .AsQueryable();
 
             if (userId != null)
             {
-                query = query.Where(g => g.AppUserId == userId);
+                // See your own profile
+                query = query.Where(p => p.AppUserId == userId);
             }
 
             return await query.ToListAsync();
         }
 
-        public Task<Profile> FirstOrDefaultAsync(Guid id, Guid? userId = null)
+        public async Task<Profile> FirstOrDefaultAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var query = RepoDbSet
+                .Include(p => p.Wishlist)
+                .Include(p => p.AppUser)
+                .Where(p => p.Id == id)
+                .AsQueryable();
+
+            if (userId != null)
+            {
+                // See your own profile
+                query = query.Where(p => p.AppUserId == userId);
+            }
+
+            return await query.FirstOrDefaultAsync();
         }
 
-        public Task<bool> ExistsAsync(Guid id, Guid? userId = null)
+        public async Task<bool> ExistsAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            if (userId != null)
+            {
+                return await RepoDbSet.AnyAsync(p => p.Id == id && p.AppUserId == userId);
+            }
+            return await RepoDbSet.AnyAsync(p => p.Id == id);
         }
 
-        public Task DeleteAsync(Guid id, Guid? userId = null)
+        public async Task DeleteAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var profile = await FirstOrDefaultAsync(id, userId);
+            base.Remove(profile);
         }
 
-        public Task<IEnumerable<ProfileDTO>> DTOAllAsync(Guid? userId = null)
+        public async Task<IEnumerable<ProfileDTO>> DTOAllAsync(Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var query = RepoDbSet
+                .Include(p => p.Wishlist)
+                .Include(p => p.AppUser)
+                .AsQueryable();
+
+            if (userId != null)
+            {
+                // See your own profile
+                query = query.Where(p => p.AppUserId == userId);
+            }
+            
+            return await query
+                .Select(p => new ProfileDTO() 
+                {
+                    Id = p.Id,
+                    Bio = p.Bio,
+                    Age = p.Age,
+                    Gender = p.Gender,
+                    ProfilePicture = p.ProfilePicture,
+                    IsPrivate = p.IsPrivate,
+                    WishlistId = p.WishlistId,
+                    AppUserId = p.AppUserId,
+                    UserProfilesCount = p.UserProfiles.Count
+                }).ToListAsync();
         }
 
-        public Task<ProfileDTO> DTOFirstOrDefaultAsync(Guid id, Guid? userId = null)
+        public async Task<ProfileDTO> DTOFirstOrDefaultAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var query = RepoDbSet
+                .Include(p => p.Wishlist)
+                .Include(p => p.AppUser)
+                .Where(p => p.Id == id)
+                .AsQueryable();
+
+            if (userId != null)
+            {
+                // See your own profile
+                query = query.Where(p => p.AppUserId == userId);
+            }
+            
+            return await query
+                .Select(p => new ProfileDTO() 
+                {
+                    Id = p.Id,
+                    Bio = p.Bio,
+                    Age = p.Age,
+                    Gender = p.Gender,
+                    ProfilePicture = p.ProfilePicture,
+                    IsPrivate = p.IsPrivate,
+                    WishlistId = p.WishlistId,
+                    AppUserId = p.AppUserId,
+                    UserProfilesCount = p.UserProfiles.Count
+                }).FirstOrDefaultAsync();
         }
     }
 }

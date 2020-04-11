@@ -15,6 +15,8 @@ namespace DAL.App.EF.Repositories
         public NotificationTypeRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
+        
+        // TODO: User stuff
 
         public async Task<IEnumerable<NotificationType>> AllAsync(Guid? userId = null)
         {

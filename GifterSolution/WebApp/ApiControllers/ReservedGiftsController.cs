@@ -10,6 +10,10 @@ using Domain;
 
 namespace WebApp.ApiControllers
 {
+    /**
+     * User can see gifts they have reserved themselves (other people created),
+     * but not what others have reserved (even if reserved gift is a gift they created)
+     */
     [Route("api/[controller]")]
     [ApiController]
     public class ReservedGiftsController : ControllerBase

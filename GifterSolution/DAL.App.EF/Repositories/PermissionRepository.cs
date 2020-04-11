@@ -15,6 +15,8 @@ namespace DAL.App.EF.Repositories
         public PermissionRepository(AppDbContext dbContext) : base(dbContext)
         {
         }
+        
+        // TODO: User stuff
 
         public async Task<IEnumerable<Permission>> AllAsync(Guid? userId = null)
         {

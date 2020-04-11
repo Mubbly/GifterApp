@@ -28,7 +28,8 @@ namespace DAL.App.EF.Repositories
             var query = RepoDbSet
                 .Where(at => at.Id == id)
                 .AsQueryable();
-            return await query.FirstOrDefaultAsync();        }
+            return await query.FirstOrDefaultAsync();
+        }
 
         public async Task<bool> ExistsAsync(Guid id, Guid? userId = null)
         {

@@ -23,6 +23,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See your own wishlist
                 query = query.Where(w => w.AppUserId == userId);
             }
 
@@ -38,6 +39,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See your own wishlist
                 query = query.Where(w => w.AppUserId == userId);
             }
             
@@ -66,6 +68,7 @@ namespace DAL.App.EF.Repositories
                 .AsQueryable();
             if (userId != null)
             {
+                // See your own wishlist
                 query = query.Where(w => w.AppUserId == userId);
             }
 
@@ -112,6 +115,7 @@ namespace DAL.App.EF.Repositories
                 .AsQueryable();
             if (userId != null)
             {
+                // See your own wishlist
                 query = query.Where(w => w.AppUserId == userId);
             }
             

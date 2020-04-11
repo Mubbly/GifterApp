@@ -25,6 +25,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See your own campaigns
                 query = query.Where(uc => uc.AppUserId == userId);
             }
 
@@ -41,6 +42,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See your own campaigns
                 query = query.Where(uc => uc.AppUserId == userId);
             }
             
@@ -70,6 +72,7 @@ namespace DAL.App.EF.Repositories
                 .AsQueryable();
             if (userId != null)
             {
+                // See your own campaigns
                 query = query.Where(uc => uc.AppUserId == userId);
             }
 
@@ -129,6 +132,7 @@ namespace DAL.App.EF.Repositories
                 .AsQueryable();
             if (userId != null)
             {
+                // See your own campaigns
                 query = query.Where(uc => uc.AppUserId == userId);
             }
             

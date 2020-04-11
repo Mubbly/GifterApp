@@ -24,12 +24,6 @@ namespace DAL.App.EF.Repositories
                 .Include(a => a.Donatee)
                 .Include(a => a.Campaign)
                 .AsQueryable();
-
-            if (userId != null)
-            {
-                //query = query.Where(o => o.Campaign!.AppUserId == userId && o.Donatee!.AppUserId == userId);
-            }
-
             return await query.ToListAsync();
         }
 
@@ -40,29 +34,17 @@ namespace DAL.App.EF.Repositories
                 .Include(a => a.Campaign)
                 .Where(a => a.Id == id)
                 .AsQueryable();
-
-            if (userId != null)
-            {
-                //query = query.Where(a => a.Campaign!.AppUserId == userId && a.Donatee!.AppUserId == userId);
-            }
-
             return await query.FirstOrDefaultAsync();
         }
 
         public async Task<bool> ExistsAsync(Guid id, Guid? userId = null)
         {
-            if (userId != null)
-            {
-                // return await RepoDbSet.AnyAsync(a =>
-                //     a.Id == id && a.Campaign!.AppUserId == userId && a.Donatee!.AppUserId == userId);
-            }
-            
             return await RepoDbSet.AnyAsync(a => a.Id == id);
         }
 
         public async Task DeleteAsync(Guid id, Guid? userId = null)
         {
-            var campaign = await FirstOrDefaultAsync(id); // (id, userId);
+            var campaign = await FirstOrDefaultAsync(id, userId);
             base.Remove(campaign);
         }
 
@@ -73,11 +55,6 @@ namespace DAL.App.EF.Repositories
                 .Include(o => o.Donatee)
                 .AsQueryable();
             
-            if (userId != null)
-            {
-                //query = query.Where(o => o.Donatee!.AppUserId == userId && o.Campaign!.AppUserId == userId);
-            }
-
             return await query
                 .Select(cd => new CampaignDonateeDTO()
                 {
@@ -130,11 +107,6 @@ namespace DAL.App.EF.Repositories
                 .Include(a => a.Campaign)
                 .Where(a => a.Id == id)
                 .AsQueryable();
-
-            if (userId != null)
-            {
-                //query = query.Where(a => a.Campaign!.AppUserId == userId && a.Donatee!.AppUserId == userId);
-            }
 
             return await query.Select(cd => new CampaignDonateeDTO()
             {

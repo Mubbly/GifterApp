@@ -26,6 +26,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See your own gifts
                 query = query.Where(g => g.AppUserId == userId);
             }
 
@@ -43,6 +44,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See your own gifts
                 query = query.Where(g => g.AppUserId == userId);
             }
             
@@ -73,6 +75,7 @@ namespace DAL.App.EF.Repositories
                 .AsQueryable();
             if (userId != null)
             {
+                // See your own gifts
                 query = query.Where(g => g.AppUserId == userId);
             }
 
@@ -157,6 +160,7 @@ namespace DAL.App.EF.Repositories
                 .AsQueryable();
             if (userId != null)
             {
+                // See your own gifts
                 query = query.Where(g => g.AppUserId == userId);
             }
             

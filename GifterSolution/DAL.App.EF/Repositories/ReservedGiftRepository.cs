@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
 using DAL.Base.EF.Repositories;
 using Domain;
+using Microsoft.EntityFrameworkCore;
 using PublicApi.DTO.v1;
 
 namespace DAL.App.EF.Repositories
@@ -14,34 +16,115 @@ namespace DAL.App.EF.Repositories
         {
         }
 
-        public Task<IEnumerable<ReservedGift>> AllAsync(Guid? userId = null)
+        public async Task<IEnumerable<ReservedGift>> AllAsync(Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var query = RepoDbSet
+                .Include(rg => rg.ActionType)
+                .Include(rg => rg.Status)
+                .Include(rg => rg.UserGiver)
+                .Include(rg => rg.UserReceiver)
+                .AsQueryable();
+
+            if (userId != null)
+            {
+                // Only see gifts you have reserved
+                query = query.Where(rg => rg.UserGiverId == userId);
+            }
+
+            return await query.ToListAsync();
         }
 
-        public Task<ReservedGift> FirstOrDefaultAsync(Guid id, Guid? userId = null)
+        public async Task<ReservedGift> FirstOrDefaultAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var query = RepoDbSet
+                .Include(rg => rg.ActionType)
+                .Include(rg => rg.Status)
+                .Include(rg => rg.UserGiver)
+                .Include(rg => rg.UserReceiver)
+                .Where(rg => rg.Id == id)
+                .AsQueryable();
+
+            if (userId != null)
+            {
+                // Only see gifts you have reserved
+                query = query.Where(rg => rg.UserGiverId == userId);
+            }
+
+            return await query.FirstOrDefaultAsync();
         }
 
-        public Task<bool> ExistsAsync(Guid id, Guid? userId = null)
+        public async Task<bool> ExistsAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            if (userId != null)
+            {
+                return await RepoDbSet.AnyAsync(rg => rg.Id == id && rg.UserGiverId == userId);
+            }
+            return await RepoDbSet.AnyAsync(rg => rg.Id == id);
         }
 
-        public Task DeleteAsync(Guid id, Guid? userId = null)
+        public async Task DeleteAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var reservedGift = await FirstOrDefaultAsync(id, userId);
+            base.Remove(reservedGift);
         }
 
-        public Task<IEnumerable<ReservedGiftDTO>> DTOAllAsync(Guid? userId = null)
+        public async Task<IEnumerable<ReservedGiftDTO>> DTOAllAsync(Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var query = RepoDbSet
+                .Include(rg => rg.ActionType)
+                .Include(rg => rg.Status)
+                .Include(rg => rg.UserGiver)
+                .Include(rg => rg.UserReceiver)
+                .AsQueryable();
+
+            if (userId != null)
+            {
+                // Only see gifts you have reserved
+                query = query.Where(rg => rg.UserGiverId == userId);
+            }
+
+            return await query
+                .Select(rg => new ReservedGiftDTO() 
+                {
+                    Id = rg.Id,
+                    Comment = rg.Comment,
+                    ReservedFrom = rg.ReservedFrom,
+                    GiftId = rg.GiftId,
+                    StatusId = rg.StatusId,
+                    ActionTypeId = rg.ActionTypeId,
+                    UserGiverId = rg.UserGiverId,
+                    UserReceiverId = rg.UserReceiverId
+                }).ToListAsync();
         }
 
-        public Task<ReservedGiftDTO> DTOFirstOrDefaultAsync(Guid id, Guid? userId = null)
+        public async Task<ReservedGiftDTO> DTOFirstOrDefaultAsync(Guid id, Guid? userId = null)
         {
-            throw new NotImplementedException();
+            var query = RepoDbSet
+                .Include(rg => rg.ActionType)
+                .Include(rg => rg.Status)
+                .Include(rg => rg.UserGiver)
+                .Include(rg => rg.UserReceiver)
+                .Where(rg => rg.Id == id)
+                .AsQueryable();
+
+            if (userId != null)
+            {
+                // Only see gifts you have reserved
+                query = query.Where(rg => rg.UserGiverId == userId);
+            }
+
+            return await query
+                .Select(rg => new ReservedGiftDTO() 
+                {
+                    Id = rg.Id,
+                    Comment = rg.Comment,
+                    ReservedFrom = rg.ReservedFrom,
+                    GiftId = rg.GiftId,
+                    StatusId = rg.StatusId,
+                    ActionTypeId = rg.ActionTypeId,
+                    UserGiverId = rg.UserGiverId,
+                    UserReceiverId = rg.UserReceiverId
+                }).FirstOrDefaultAsync();
         }
     }
 }

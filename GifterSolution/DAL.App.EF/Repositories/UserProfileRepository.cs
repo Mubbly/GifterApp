@@ -25,6 +25,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See your own profile
                 query = query.Where(up => up.AppUserId == userId);
             }
 
@@ -41,6 +42,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See your own profile
                 query = query.Where(up => up.AppUserId == userId);
             }
             
@@ -70,6 +72,7 @@ namespace DAL.App.EF.Repositories
                 .AsQueryable();
             if (userId != null)
             {
+                // See your own profile
                 query = query.Where(up => up.AppUserId == userId);
             }
 
@@ -159,6 +162,7 @@ namespace DAL.App.EF.Repositories
                 .AsQueryable();
             if (userId != null)
             {
+                // See your own profile
                 query = query.Where(up => up.AppUserId == userId);
             }
             

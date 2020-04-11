@@ -24,6 +24,7 @@ namespace DAL.App.EF.Repositories
                 .AsQueryable();
             if (userId != null)
             {
+                // See only your friends
                 query = query.Where(g => g.AppUser1Id == userId);
             }
             return await query.ToListAsync();
@@ -38,6 +39,7 @@ namespace DAL.App.EF.Repositories
                 .AsQueryable();
             if (userId != null)
             {
+                // See only your friends
                 query = query.Where(f => f.AppUser1Id == userId);
             }
             return await query.FirstOrDefaultAsync();
@@ -66,6 +68,7 @@ namespace DAL.App.EF.Repositories
                 .AsQueryable();
             if (userId != null)
             {
+                // See only your friends
                 query = query.Where(f => f.AppUser1Id == userId);
             }
 
@@ -138,6 +141,7 @@ namespace DAL.App.EF.Repositories
 
             if (userId != null)
             {
+                // See only your friends
                 query = query.Where(f => f.AppUser1Id == userId);
             }
             
