@@ -1,83 +1,83 @@
 <template>
     <h1>My campaigns</h1>
 
+    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
     <section if.bind="_isCampaignManager">
         <p class="successmessage">✓ Campaign manager</p>
         <p>
-            <a route-href="route: campaignsCreate; params.bind: {}">Create new</a> 
+            <a route-href="route: campaignsCreate; params.bind: {}">Create new</a>
         </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        AdImage
+                    </th>
+                    <th>
+                        Institution
+                    </th>
+                    <th>
+                        ActiveFromDate
+                    </th>
+                    <th>
+                        ActiveToDate
+                    </th>
+                    <th>
+                        IsActive
+                    </th>
+                    <th>
+                        UserCampaignsCount
+                    </th>
+                    <th>
+                        CampaignDonateesCount
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr repeat.for="campaign of _campaigns">
+                    <td>
+                        ${campaign.name}
+                    </td>
+                    <td>
+                        ${campaign.description}
+                    </td>
+                    <td>
+                        ${campaign.adImage}
+                    </td>
+                    <td>
+                        ${campaign.institution}
+                    </td>
+                    <td>
+                        ${campaign.activeFromDate}
+                    </td>
+                    <td>
+                        ${campaign.activeToDate}
+                    </td>
+                    <td>
+                        <input class="check-box" disabled="disabled" type="checkbox" checked.bind="campaign.isActive" />
+                    </td>
+                    <td>
+                        ${campaign.userCampaignsCount}
+                    </td>
+                    <td>
+                        ${campaign.campaignDonateesCount}
+                    </td>
+                    <td>
+                        <a route-href="route: campaignsEdit; params.bind: { id: campaign.id }">Edit</a> |
+                        <a route-href="route: campaignsDetails; params.bind: { id: campaign.id }">Details</a> |
+                        <a route-href="route: campaignsDelete; params.bind: { id: campaign.id }">Delete</a> |
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </section>
-    
-    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    AdImage
-                </th>
-                <th>
-                    Institution
-                </th>
-                <th>
-                    ActiveFromDate
-                </th>
-                <th>
-                    ActiveToDate
-                </th>
-                <th>
-                    IsActive
-                </th>
-                <th>
-                    UserCampaignsCount
-                </th>
-                <th>
-                    CampaignDonateesCount
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr repeat.for="campaign of _campaigns">
-                <td>
-                    ${campaign.name}
-                </td>
-                <td>
-                    ${campaign.description}
-                </td>
-                <td>
-                    ${campaign.adImage}
-                </td>
-                <td>
-                    ${campaign.institution}
-                </td>
-                <td>
-                    ${campaign.activeFromDate}
-                </td>
-                <td>
-                    ${campaign.activeToDate}
-                </td>
-                <td>
-                    <input class="check-box" disabled="disabled" type="checkbox" checked.bind="campaign.isActive"/>
-                </td>
-                <td>
-                    ${campaign.userCampaignsCount}
-                </td>
-                <td>
-                    ${campaign.campaignDonateesCount}
-                </td>
-                <td>
-                    <a route-href="route: campaignsEdit; params.bind: { id: campaign.id }">Edit</a> |        
-                    <a route-href="route: campaignsDetails; params.bind: { id: campaign.id }">Details</a> |
-                    <a route-href="route: campaignsDelete; params.bind: { id: campaign.id }">Delete</a> |  
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
     <a route-href="route: campaignsIndex; params.bind: {}">Back to all campaigns</a>
 </template>

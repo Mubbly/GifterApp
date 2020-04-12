@@ -13,7 +13,7 @@ export class CampaignsPersonal {
 
     private _campaigns: ICampaign[] = [];
     private _errorMessage: Optional<string> = null;
-    private _isCampaignManager = true;
+    private _isCampaignManager = false;
 
     constructor(
         private campaignService: CampaignService,
@@ -21,7 +21,9 @@ export class CampaignsPersonal {
         private appState: AppState
     ) {}
 
-    attached() {
+    attached() {}
+
+    activate() {
         if(!this.appState.jwt) {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         } else {
@@ -36,6 +38,7 @@ export class CampaignsPersonal {
             if (!Utils.isSuccessful(response)) {
                 this.handleErrors(response);
             } else {
+                this._isCampaignManager = true;
                 this._campaigns = response.data!;
             }
         })
