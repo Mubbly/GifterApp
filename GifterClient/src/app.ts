@@ -7,6 +7,7 @@ import { AppState } from 'state/appState';
 export class App {
     public readonly APP_NAME = 'GifterApp';
     public readonly HOME_ROUTE = 'homeIndex';
+    public readonly LOGIN_ROUTE = 'accountLogin';
     router?: Router;
 
     constructor(private appState: AppState) {

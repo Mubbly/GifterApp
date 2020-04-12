@@ -32,9 +32,10 @@ export class AccountLogin {
         .then((response) => {
             if (isSuccessful(response)) {
                 this.appState.jwt = response.data!.token;
+                console.log(this.appState.jwt);
                 this.router!.navigateToRoute(this.app.HOME_ROUTE);
             } else {
-                let statusCode = response.status.toString();
+                //let statusCode = response.status.toString();
                 this._errorMessage = this.ERROR_MSG_CANT_FIND_USER;
             }
         });

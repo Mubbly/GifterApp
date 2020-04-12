@@ -1,35 +1,35 @@
 import { autoinject } from "aurelia-framework";
 import { RouteConfig, NavigationInstruction, Router } from "aurelia-router";
 import { CampaignService } from "service/campaignService";
-import { AppUserService } from "service/appUserService";
-import { ICampaignEdit } from "domain/ICampaignEdit";
-import * as UtilFunctions from "utils/utilFunctions";
-import { IAppUser } from "domain/IAppUser";
-import { IStatus } from "domain/IStatus";
-import { IActionType } from "domain/IActionType";
-import { StatusService } from "service/statusService";
-import { ActionTypeService } from "service/actionTypeService";
+import * as Utils from "utils/utilFunctions";
 import { ICampaignCreate } from "domain/ICampaignCreate";
 import { Optional } from "types/generalTypes";
+import { AppState } from "state/appState";
+import { App } from "app";
 
 @autoinject
 export class CampaignsCreate {
     private _campaign?: ICampaignCreate;
-
     private _name = "";
     private _activeToDate = "";
     private _activeFromDate = "";
     private _description = null;
     private _adImage = null;
     private _institution = null;
-
     private _errorMessage: Optional<string> = null;
+    private _jwt: boolean = false;
 
-    constructor(private campaignService: CampaignService, private router: Router) {
+    constructor(
+        private campaignService: CampaignService,
+        private router: Router,
+        private appState: AppState,
+    ) {}
 
+    attached() {
+        if(!this.appState.jwt) {
+            this.router.navigateToRoute(Utils.LOGIN_ROUTE);
+        }
     }
-
-    attached() {}
 
     onSubmit(event: Event) {
         let newCampaign: ICampaignCreate = {
@@ -38,22 +38,19 @@ export class CampaignsCreate {
             adImage: this._adImage,
             institution: this._institution,
             activeFromDate: this._activeFromDate,
-            activeToDate: this._activeToDate
+            activeToDate: this._activeToDate,
         };
-        console.log(newCampaign);
         this.createCampaign(newCampaign);
-        
+
         event.preventDefault();
     }
 
     private createCampaign(newCampaign: ICampaignCreate) {
-        this.campaignService
-        .createCampaign(newCampaign)
-        .then((response) => {
-            if (UtilFunctions.isSuccessful(response)) {
-                this.router.navigateToRoute("campaignsIndex", {});
+        this.campaignService.createCampaign(newCampaign).then((response) => {
+            if (!Utils.isSuccessful(response)) {
+                this._errorMessage = Utils.getErrorMessage(response);
             } else {
-                this._errorMessage = UtilFunctions.getErrorMessage(response);
+                this.router.navigateToRoute("campaignsIndex", {});
             }
         });
     }

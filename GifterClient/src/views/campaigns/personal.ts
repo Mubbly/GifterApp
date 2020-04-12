@@ -8,9 +8,12 @@ import { IFetchResponse } from '../../types/IFetchResponse';
 import { AppState } from "state/appState";
 
 @autoinject
-export class CampaignsIndex {
+export class CampaignsPersonal {
+    private readonly ERROR_NOT_CAMPAIGN_MANAGER = "You have to be a campaign manager to create new campaigns";
+
     private _campaigns: ICampaign[] = [];
     private _errorMessage: Optional<string> = null;
+    private _isCampaignManager = true;
 
     constructor(
         private campaignService: CampaignService,
@@ -28,7 +31,7 @@ export class CampaignsIndex {
     
     private getAllCampaigns(): void {
         this.campaignService
-        .getCampaigns()
+        .getPersonalCampaigns()
         .then((response) => {
             if (!Utils.isSuccessful(response)) {
                 this.handleErrors(response);
@@ -48,6 +51,10 @@ export class CampaignsIndex {
         switch(response.status) {
             case Utils.STATUS_CODE_UNAUTHORIZED:
                 this.router.navigateToRoute(Utils.LOGIN_ROUTE);
+                break;
+            case Utils.STATUS_CODE_FORBIDDEN:
+                this._isCampaignManager = false;
+                this._errorMessage = this.ERROR_NOT_CAMPAIGN_MANAGER;
                 break;
             default:
                 this._errorMessage = Utils.getErrorMessage(response);

@@ -1,25 +1,31 @@
 import { autoinject } from 'aurelia-framework';
 import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
 import { CampaignService } from 'service/campaignService';
-import * as UtilFunctions from 'utils/utilFunctions';
+import * as Utils from 'utils/utilFunctions';
 import { ICampaign } from 'domain/ICampaign';
-import { Optional } from 'types/generalTypes';
+import { Optional, GifterInterface } from 'types/generalTypes';
+import { AppState } from 'state/appState';
+import { IFetchResponse } from 'types/IFetchResponse';
 
 @autoinject
 export class CampaignsDelete {
-    private _campaign?: ICampaign;
+    private readonly CAMPAIGNS_ROUTE = 'campaignsIndex';
 
+    private _campaign?: ICampaign;
     private _errorMessage: Optional<string> = null;
 
-    constructor(private campaignService: CampaignService, private router: Router) {
+    constructor(private campaignService: CampaignService, private router: Router, private appState: AppState) {
     }
 
     attached() {
     }
 
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-        const campaignId = params.id;
-        this.getCampaign(campaignId);
+        if(!this.appState.jwt) {
+            this.router.navigateToRoute(Utils.LOGIN_ROUTE);
+        } else {
+            this.getCampaign(params.id);
+        }
     }
 
     onSubmit(event: Event) {
@@ -27,17 +33,15 @@ export class CampaignsDelete {
         event.preventDefault();
     }
 
-    private getCampaign(id: string) {
-        if(UtilFunctions.existsAndIsString(id)) {
-            this.campaignService.getCampaign(id).then(
-                response => {
-                    if(UtilFunctions.isSuccessful(response)) {
-                        this._campaign = response.data!;
-                    } else {
-                        this._errorMessage = UtilFunctions.getErrorMessage(response);
-                    }
+    private getCampaign(id: string): void {
+        if (Utils.existsAndIsString(id)) {
+            this.campaignService.getCampaign(id).then((response) => {
+                if (!Utils.isSuccessful(response)) {
+                    this.handleErrors(response);
+                } else {
+                    this._campaign = response.data!;
                 }
-            )
+            });
         }
     }
 
@@ -46,12 +50,25 @@ export class CampaignsDelete {
         .deleteCampaign(id)
         .then(
             response => {
-                if (UtilFunctions.isSuccessful(response)) {
-                    this.router.navigateToRoute('campaignsIndex', {});
+                if (!Utils.isSuccessful(response)) {
+                    this._errorMessage = Utils.getErrorMessage(response);
                 } else {
-                    this._errorMessage = UtilFunctions.getErrorMessage(response);
+                    this.router.navigateToRoute(this.CAMPAIGNS_ROUTE, {});
                 }
             }
         );
+    }
+
+    /**
+     * Set error message or route to login/home page
+     */
+    private handleErrors(response: IFetchResponse<GifterInterface | GifterInterface[]>) {
+        switch (response.status) {
+            case Utils.STATUS_CODE_UNAUTHORIZED:
+                this.router.navigateToRoute(Utils.LOGIN_ROUTE);
+                break;
+            default:
+                this._errorMessage = Utils.getErrorMessage(response);
+        }
     }
 }

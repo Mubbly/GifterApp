@@ -42,7 +42,39 @@ namespace WebApp.ApiControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CampaignDTO>>> GetCampaigns()
         {
-            return Ok(await _uow.Campaigns.DTOAllAsync(User.UserGuidId()));
+            return Ok(await _uow.Campaigns.DTOAllAsync());
+        }
+        
+        // GET: api/Campaigns/Personal
+        [HttpGet("personal")]
+        public async Task<ActionResult<IEnumerable<CampaignDTO>>> GetPersonalCampaigns()
+        {
+            var campaigns = new List<CampaignDTO>();
+            
+            // Only allow users who are campaign managers create new campaigns
+            var currentUser = await _userManager.FindByIdAsync(User.UserId());
+            if (currentUser == null || !currentUser.IsCampaignManager)
+            {
+                _logger.LogError($"GET/PERSONAL. This user is not a campaign manager: {User.UserGuidId()}");
+                return StatusCode(403);
+            }
+            // Find IDs of current user's campaigns
+            var currentUserCampaigns = await _uow.UserCampaigns.DTOAllAsync(User.UserGuidId());
+            if (currentUserCampaigns == null)
+            {
+                _logger.LogWarning($"GET/PERSONAL. This user does not have any campaigns: {User.UserGuidId()}");
+                return NotFound();
+            }
+            // Get only these campaigns
+            foreach (var userCampaign in currentUserCampaigns)
+            {
+                var campaign = await _uow.Campaigns.DTOFirstOrDefaultAsync(userCampaign.CampaignId);
+                if (campaign != null)
+                {
+                    campaigns.Add(campaign);
+                }
+            }
+            return Ok(campaigns);
         }
 
         // GET: api/Campaigns/5
@@ -52,6 +84,7 @@ namespace WebApp.ApiControllers
             var campaignDTO = await _uow.Campaigns.DTOFirstOrDefaultAsync(id);
             if (campaignDTO == null)
             {
+                _logger.LogInformation($"GET/ID. No such campaign: {id}");
                 return NotFound();
             }
             return Ok(campaignDTO);
@@ -67,27 +100,37 @@ namespace WebApp.ApiControllers
             var currentUser = await _userManager.FindByIdAsync(User.UserId());
             if (currentUser == null)
             {
+                _logger.LogError($"EDIT. This user does not exist: {User.UserGuidId()}");
                 return NotFound();
             }
             if (!currentUser.IsCampaignManager)
             {
+                _logger.LogError($"EDIT. This user is not campaign manager: {User.UserGuidId()}");
                 return Forbid();
             }
             // Only allow users to edit their own campaigns
-            var userCampaign = await _uow.UserCampaigns.FirstOrDefaultAsync(id, User.UserGuidId());
-            if (userCampaign == null)
+            var currentUserCampaigns = await _uow.UserCampaigns.DTOAllAsync(User.UserGuidId());
+            if (currentUserCampaigns == null)
             {
+                _logger.LogError($"EDIT. This user does not have any campaigns: {User.UserGuidId()}");
                 return Forbid();
             }
-            
-            // No such campaign or wrong data
+            if (currentUserCampaigns.All(uc => uc.CampaignId != id))
+            {
+                _logger.LogError($"EDIT. This user does not own this campaign: {id}, user: {User.UserGuidId()}");
+                return Forbid();
+            }
+
+            // Don't allow wrong data
             if (id != campaignEditDTO.Id)
             {
+                _logger.LogError($"EDIT. Initial and edited campaign IDs don't match: {id}, {campaignEditDTO.Id}");
                 return BadRequest();
             }
             var campaign = await _uow.Campaigns.FirstOrDefaultAsync(campaignEditDTO.Id, User.UserGuidId());
             if (campaign == null)
             {
+                _logger.LogError($"EDIT. No such campaign: {campaignEditDTO.Id}, user: {User.UserGuidId()}");
                 return BadRequest();
             }
             
@@ -101,6 +144,7 @@ namespace WebApp.ApiControllers
 
             _uow.Campaigns.Update(campaign);
             
+            // Save to db
             try
             {
                 await _uow.SaveChangesAsync();
@@ -109,11 +153,11 @@ namespace WebApp.ApiControllers
             {
                 if (!await _uow.Campaigns.ExistsAsync(id, User.UserGuidId()))
                 {
+                    _logger.LogError($"EDIT. Campaign does not exist - cannot save to db: {id}, user: {User.UserGuidId()}");
                     return NotFound();
                 }
                 throw;
             }
-            
             return NoContent();
         }
 
@@ -127,10 +171,12 @@ namespace WebApp.ApiControllers
             var currentUser = await _userManager.FindByIdAsync(User.UserId());
             if (currentUser == null)
             {
+                _logger.LogError($"CREATE. This user does not exist: {User.UserGuidId()}");
                 return NotFound();
             }
             if (!currentUser.IsCampaignManager)
             {
+                _logger.LogError($"CREATE. This user is not campaign manager: {User.UserGuidId()}");
                 return BadRequest();
             }
             
@@ -145,6 +191,7 @@ namespace WebApp.ApiControllers
                 ActiveToDate = campaignCreateDTO.ActiveToDate,
             };
             _uow.Campaigns.Add(campaign);
+            
             // Create UserCampaign table entry to connect campaign to user
             var userCampaign = new UserCampaign
             {
@@ -168,6 +215,7 @@ namespace WebApp.ApiControllers
             var campaign = await _uow.Campaigns.FirstOrDefaultAsync(id, User.UserGuidId());
             if (campaign == null)
             {
+                _logger.LogError($"DELETE. No such campaign: {id}, user: {User.UserGuidId()}");
                 return NotFound();
             }
             _uow.Campaigns.Remove(campaign);

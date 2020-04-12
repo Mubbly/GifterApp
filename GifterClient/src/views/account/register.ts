@@ -29,9 +29,9 @@ export class AccountRegister {
     ) {}
 
     onSubmit(event: Event) {
-        console.log(this._email, this._firstName, this._lastName, this._password, this._passwordConfirm);
         event.preventDefault();
 
+        // Check password inputs match
         if(this._password !== this._passwordConfirm) {
             this._errorMessage = this.ERROR_MSG_PASSWORDS_DONT_MATCH;
             return;
@@ -40,27 +40,12 @@ export class AccountRegister {
         this.accountService
             .register(this._email, this._firstName, this._lastName, this._password)
             .then((response) => {
-                if(isSuccessful(response)) {
-                    console.log("Account registered");
-                    this._successMessage = this.REGISTRATION_SUCCESSFUL;
-                } else {
-                    console.log("Account NOT registered");
-                    let statusCode = response.status.toString();
+                if(!isSuccessful(response)) {
+                    //let statusCode = response.status.toString();
                     this._errorMessage = UtilFunctions.getErrorMessage(response, this.ERROR_MSG_CANT_REGISTER);
+                } else {
+                    this._successMessage = this.REGISTRATION_SUCCESSFUL;
                 }
             });
-        // this.accountService
-        //     .login(this._email, this._password)
-        //     .then((response) => {
-        //         if (isSuccessful(response)) {
-        //             console.log("If: ", response);
-        //             this.appState.jwt = response.data!.token;
-        //             this.router!.navigateToRoute(this.app.HOME_ROUTE);
-        //         } else {
-        //             let statusCode = response.status.toString();
-        //             this._errorMessage = `${statusCode} ${response.errorMessage}`;
-        //             alert(this.ERROR_MSG_CANT_FIND_USER);
-        //         }
-        //     });
     }
 }

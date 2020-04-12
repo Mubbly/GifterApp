@@ -26,6 +26,7 @@ export default [
         { route: ['campaigndonatees/create'], name: 'campaigndonateesCreate', moduleId: PLATFORM.moduleName('views/campaigndonatees/create'), nav: false, title: 'CampaignDonateesCreate' },
 
         { route: ['campaigns', 'campaigns/index'], name: 'campaignsIndex', moduleId: PLATFORM.moduleName('views/campaigns/index'), nav: true, title: 'Campaigns' },
+        { route: ['campaigns/personal'], name: 'campaignsPersonal', moduleId: PLATFORM.moduleName('views/campaigns/personal'), nav: true, title: 'CampaignsPersonal' },
         { route: ['campaigns/details/:id'], name: 'campaignsDetails', moduleId: PLATFORM.moduleName('views/campaigns/details'), nav: false, title: 'CampaignsDetails' },
         { route: ['campaigns/edit/:id?'], name: 'campaignsEdit', moduleId: PLATFORM.moduleName('views/campaigns/edit'), nav: false, title: 'CampaignsEdit' },
         { route: ['campaigns/delete/:id?'], name: 'campaignsDelete', moduleId: PLATFORM.moduleName('views/campaigns/delete'), nav: false, title: 'CampaignsDelete' },

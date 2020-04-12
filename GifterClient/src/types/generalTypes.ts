@@ -44,6 +44,8 @@ import { WishlistService } from "service/wishlistService";
 export type Optional<TValue> = TValue | null;
 export type ErrorMessage = string;
 export type Id = string;
+/** Expected format: YYYY-MM-DD */
+export type HTML5DateString = string;
 
 export enum GifterEntities {
     ActionType = "ActionType",

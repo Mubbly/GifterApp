@@ -10,6 +10,7 @@ import { AppState } from 'state/appState';
 @autoinject
 export class CampaignService {
     private readonly _baseUrl = 'https://localhost:5001/api/Campaigns';
+    private readonly _personalBaseUrl = 'https://localhost:5001/api/Campaigns/Personal';
 
     constructor(private appState: AppState, private httpClient: HttpClient) {
         this.httpClient.baseUrl = this.appState._baseUrl;
@@ -29,6 +30,36 @@ export class CampaignService {
             if(UtilFunctions.isSuccessful(response)) {
                 const data = (await response.json()) as ICampaign[];
                 console.log(data);
+                return {
+                    status: response.status,
+                    data: data
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+        } catch(reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
+    }
+
+    async getPersonalCampaigns(): Promise<IFetchResponse<ICampaign[]>> {
+        try {
+            const response = await this.httpClient.fetch(this._personalBaseUrl,
+                { 
+                    cache: "no-store",
+                    headers: {
+                        authorization: `Bearer ${this.appState.jwt}`
+                    }
+                }
+                );
+
+            if(UtilFunctions.isSuccessful(response)) {
+                const data = (await response.json()) as ICampaign[];
                 return {
                     status: response.status,
                     data: data

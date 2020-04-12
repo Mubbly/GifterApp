@@ -1,10 +1,19 @@
 import { IFetchResponse } from 'types/IFetchResponse';
 import { Optional } from 'types/generalTypes';
 
+export const STATUS_CODE_OK = 200;
+export const STATUS_CODE_LAST_SUCCESS = 300;
+export const STATUS_CODE_REQUEST = 400;
+export const STATUS_CODE_UNAUTHORIZED = 401;
+export const STATUS_CODE_FORBIDDEN = 403;
+export const STATUS_CODE_NOT_FOUND = 404;
+export const STATUS_CODE_SERVER_ERROR = 500;
+
+export const HOME_ROUTE = "homeIndex";
+export const LOGIN_ROUTE = "accountLogin";
+
 export function isSuccessful(response: Response | IFetchResponse<any>): boolean {
-    const OK_STATUS = 200;
-    const LAST_SUCCESS_STATUS = 300;
-    return response.status >= OK_STATUS && response.status < LAST_SUCCESS_STATUS;
+    return response.status >= STATUS_CODE_OK && response.status < STATUS_CODE_LAST_SUCCESS;
 }
 
 export function isEmpty(inputValue: Optional<string>): boolean {

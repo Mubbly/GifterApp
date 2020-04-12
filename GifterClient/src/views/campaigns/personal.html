@@ -1,8 +1,13 @@
 <template>
-    <h1>All campaigns</h1>
-    <p>
-        <a route-href="route: campaignsPersonal; params.bind: {}">My campaigns</a> 
-    </p>
+    <h1>My campaigns</h1>
+
+    <section if.bind="_isCampaignManager">
+        <p class="successmessage">✓ Campaign manager</p>
+        <p>
+            <a route-href="route: campaignsCreate; params.bind: {}">Create new</a> 
+        </p>
+    </section>
+    
     <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
     <table class="table">
         <thead>
@@ -66,7 +71,13 @@
                 <td>
                     ${campaign.campaignDonateesCount}
                 </td>
+                <td>
+                    <a route-href="route: campaignsEdit; params.bind: { id: campaign.id }">Edit</a> |        
+                    <a route-href="route: campaignsDetails; params.bind: { id: campaign.id }">Details</a> |
+                    <a route-href="route: campaignsDelete; params.bind: { id: campaign.id }">Delete</a> |  
+                </td>
             </tr>
         </tbody>
     </table>
+    <a route-href="route: campaignsIndex; params.bind: {}">Back to all campaigns</a>
 </template>
