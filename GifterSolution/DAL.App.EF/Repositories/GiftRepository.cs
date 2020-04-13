@@ -22,6 +22,7 @@ namespace DAL.App.EF.Repositories
                 .Include(g => g.ActionType)
                 .Include(g => g.Status)
                 .Include(g => g.AppUser)
+                .Include(g => g.Wishlist)
                 .AsQueryable();
 
             if (userId != null)
@@ -40,6 +41,7 @@ namespace DAL.App.EF.Repositories
                 .Include(g => g.ActionType)
                 .Include(g => g.Status)
                 .Include(g => g.AppUser)
+                .Include(g => g.Wishlist)
                 .AsQueryable();
 
             if (userId != null)
@@ -72,6 +74,7 @@ namespace DAL.App.EF.Repositories
                 .Include(g => g.ActionType)
                 .Include(g => g.Status)
                 .Include(g => g.AppUser)
+                .Include(g => g.Wishlist)
                 .AsQueryable();
             if (userId != null)
             {
@@ -157,6 +160,7 @@ namespace DAL.App.EF.Repositories
                 .Include(g => g.ActionType)
                 .Include(g => g.Status)
                 .Include(g => g.AppUser)
+                .Include(g => g.Wishlist)
                 .AsQueryable();
             if (userId != null)
             {

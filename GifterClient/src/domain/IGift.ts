@@ -2,6 +2,7 @@ import { Optional } from "types/generalTypes";
 import { IActionType } from "./IActionType";
 import { IStatus } from "./IStatus";
 import { IAppUser } from "./IAppUser";
+import { IWishlist } from './IWishlist';
 
 export interface IGift {
     id: string;
@@ -22,7 +23,9 @@ export interface IGift {
     appUserId: string;
     appUser: IAppUser;
 
-    wishlistsCount: number;  // TODO: Should be the other way around
+    wishlistId: string;
+    wishlist: IWishlist;
+
     reservedGiftsCount: number;
     archivedGiftsCount: number;
 }

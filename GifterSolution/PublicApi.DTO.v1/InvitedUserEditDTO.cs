@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PublicApi.DTO.v1
 {
-    public class InvitedUserDTO
+    public class InvitedUserEditDTO
     {
         public Guid Id { get; set; }
         
@@ -13,10 +13,5 @@ namespace PublicApi.DTO.v1
         public string? PhoneNumber { get; set; }
         [MaxLength(1024)] [MinLength(3)] 
         public string? Message { get; set; }
-        public DateTime DateInvited { get; set; }
-        public bool HasJoined { get; set; }
-
-        public Guid InvitorUserId { get; set; }
-        public AppUserDTO InvitorUser { get; set; } = default!;
     }
 }

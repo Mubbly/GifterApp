@@ -28,10 +28,10 @@ namespace WebApp.ApiControllers
     public class CampaignsController : ControllerBase
     {
         private readonly IAppUnitOfWork _uow;
-        private readonly ILogger<AccountController> _logger;
+        private readonly ILogger<CampaignsController> _logger;
         private readonly UserManager<AppUser> _userManager;
         
-        public CampaignsController(IAppUnitOfWork uow, UserManager<AppUser> userManager, ILogger<AccountController> logger)
+        public CampaignsController(IAppUnitOfWork uow, UserManager<AppUser> userManager, ILogger<CampaignsController> logger)
         {
             _uow = uow;
             _userManager = userManager;
@@ -42,6 +42,7 @@ namespace WebApp.ApiControllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CampaignDTO>>> GetCampaigns()
         {
+            // Allow all users see campaigns
             return Ok(await _uow.Campaigns.DTOAllAsync());
         }
         
@@ -81,6 +82,7 @@ namespace WebApp.ApiControllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CampaignDTO>> GetCampaign(Guid id)
         {
+            // Allow all users see campaigns
             var campaignDTO = await _uow.Campaigns.DTOFirstOrDefaultAsync(id);
             if (campaignDTO == null)
             {
@@ -106,19 +108,19 @@ namespace WebApp.ApiControllers
             if (!currentUser.IsCampaignManager)
             {
                 _logger.LogError($"EDIT. This user is not campaign manager: {User.UserGuidId()}");
-                return Forbid();
+                return StatusCode(403);
             }
             // Only allow users to edit their own campaigns
             var currentUserCampaigns = await _uow.UserCampaigns.DTOAllAsync(User.UserGuidId());
             if (currentUserCampaigns == null)
             {
                 _logger.LogError($"EDIT. This user does not have any campaigns: {User.UserGuidId()}");
-                return Forbid();
+                return StatusCode(403);
             }
             if (currentUserCampaigns.All(uc => uc.CampaignId != id))
             {
                 _logger.LogError($"EDIT. This user does not own this campaign: {id}, user: {User.UserGuidId()}");
-                return Forbid();
+                return StatusCode(403);
             }
 
             // Don't allow wrong data
@@ -177,7 +179,7 @@ namespace WebApp.ApiControllers
             if (!currentUser.IsCampaignManager)
             {
                 _logger.LogError($"CREATE. This user is not campaign manager: {User.UserGuidId()}");
-                return BadRequest();
+                return StatusCode(403);
             }
             
             // Create campaign
@@ -212,12 +214,26 @@ namespace WebApp.ApiControllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Campaign>> DeleteCampaign(Guid id)
         {
+            // Only allow users who are campaign managers delete campaigns
+            var currentUser = await _userManager.FindByIdAsync(User.UserId());
+            if (currentUser == null)
+            {
+                _logger.LogError($"DELETE. This user does not exist: {User.UserGuidId()}");
+                return NotFound();
+            }
+            if (!currentUser.IsCampaignManager)
+            {
+                _logger.LogError($"DELETE. This user is not campaign manager: {User.UserGuidId()}");
+                return BadRequest();
+            }
+            // Get campaign
             var campaign = await _uow.Campaigns.FirstOrDefaultAsync(id, User.UserGuidId());
             if (campaign == null)
             {
                 _logger.LogError($"DELETE. No such campaign: {id}, user: {User.UserGuidId()}");
                 return NotFound();
             }
+            // Delete campaign
             _uow.Campaigns.Remove(campaign);
             
             await _uow.SaveChangesAsync();

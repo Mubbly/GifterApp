@@ -21,7 +21,8 @@ export class CampaignDetails {
     attached() {}
 
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-        if(!this.appState.jwt) {
+        const isLoggedIn = this.appState.jwt;
+        if(!isLoggedIn) {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         } else {
             this.getCampaign(params.id);

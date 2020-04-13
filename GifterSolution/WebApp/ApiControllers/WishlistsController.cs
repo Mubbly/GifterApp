@@ -11,6 +11,7 @@ using Domain;
 using Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using PublicApi.DTO.v1;
 
 namespace WebApp.ApiControllers
@@ -21,16 +22,27 @@ namespace WebApp.ApiControllers
     public class WishlistsController : ControllerBase
     {
         private readonly IAppUnitOfWork _uow;
-
-        public WishlistsController(IAppUnitOfWork uow)
+        private readonly ILogger<CampaignsController> _logger;
+        
+        public WishlistsController(IAppUnitOfWork uow, ILogger<CampaignsController> logger)
         {
             _uow = uow;
+            _logger = logger;
         }
 
         // GET: api/Wishlists
         [HttpGet]
         public async Task<ActionResult<IEnumerable<WishlistDTO>>> GetWishlists()
         {
+            // Allow all users see all wishlists
+            return Ok(await _uow.Wishlists.DTOAllAsync());
+        }
+        
+        // GET: api/Wishlists/Personal
+        [HttpGet("personal")]
+        public async Task<ActionResult<IEnumerable<WishlistDTO>>> GetPersonalWishlists()
+        {
+            // Get only your own wishlists
             return Ok(await _uow.Wishlists.DTOAllAsync(User.UserGuidId()));
         }
 
@@ -38,13 +50,12 @@ namespace WebApp.ApiControllers
         [HttpGet("{id}")]
         public async Task<ActionResult<WishlistDTO>> GetWishlist(Guid id)
         {
-            var wishlistDTO = await _uow.Wishlists.DTOFirstOrDefaultAsync(id, User.UserGuidId());
-
+            // Allow all users see all wishlists
+            var wishlistDTO = await _uow.Wishlists.DTOFirstOrDefaultAsync(id);
             if (wishlistDTO == null)
             {
                 return NotFound();
             }
-
             return Ok(wishlistDTO);
         }
 
@@ -59,6 +70,7 @@ namespace WebApp.ApiControllers
                 return BadRequest();
             }
 
+            // Only allow users to edit their own wishlist
             var wishlist = await _uow.Wishlists.FirstOrDefaultAsync(wishlistEditDTO.Id, User.UserGuidId());
             if (wishlist == null)
             {
@@ -66,7 +78,7 @@ namespace WebApp.ApiControllers
             }
             
             wishlist.Comment = wishlistEditDTO.Comment;
-            wishlist.AppUserId = wishlistEditDTO.AppUserId;
+            wishlist.AppUserId = User.UserGuidId();
 
             _uow.Wishlists.Update(wishlist);
             
@@ -95,6 +107,7 @@ namespace WebApp.ApiControllers
         [HttpPost]
         public async Task<ActionResult<WishlistCreateDTO>> PostWishlist(WishlistCreateDTO wishlistCreateDTO)
         {
+            // Allow all users create wishlists
             var wishlist = new Wishlist
             {
                 Comment = wishlistCreateDTO.Comment,
@@ -102,16 +115,18 @@ namespace WebApp.ApiControllers
             };
             
             _uow.Wishlists.Add(wishlist);
-            
             await _uow.SaveChangesAsync();
 
-            return CreatedAtAction("GetWishlist", new { id = wishlist.Id }, wishlist);
+            // Send response back to user
+            wishlistCreateDTO.Id = wishlist.Id;
+            return CreatedAtAction("GetWishlist", new { id = wishlist.Id }, wishlistCreateDTO);
         }
 
         // DELETE: api/Wishlists/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Wishlist>> DeleteWishlist(Guid id)
         {
+            // Only allow users to delete their own wishlist
             var wishlist = await _uow.Wishlists.FirstOrDefaultAsync(id, User.UserGuidId());
             if (wishlist == null)
             {

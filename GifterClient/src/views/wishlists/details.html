@@ -1,3 +1,26 @@
 <template>
-  <h1>Details ${message}</h1>
+    <h1>Details</h1>
+
+    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+    <div>
+        <h4>Wishlist</h4>
+        <dl class="row">
+            <dt class = "col-sm-2">
+                Comment
+            </dt>
+            <dd class = "col-sm-10">
+                ${_wishlist.comment}
+            </dd>
+            <dt class = "col-sm-2">
+                AppUser
+            </dt>
+            <dd class = "col-sm-10">
+                ${_wishlist.appUser.fullName} (${_wishlist.appUser.id})
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a route-href="route: wishlistsEdit; params.bind: { id: _wishlist.id }">Edit</a> |        
+        <a route-href="route: wishlistsIndex; params.bind: {}">Back to List</a>
+    </div>
 </template>

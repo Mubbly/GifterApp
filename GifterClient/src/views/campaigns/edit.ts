@@ -10,11 +10,13 @@ import { IFetchResponse } from 'types/IFetchResponse';
 @autoinject
 export class CampaignsEdit {
     private readonly CAMPAIGN_ROUTE = 'campaignsIndex';
+    private readonly ERROR_NOT_CAMPAIGN_MANAGER = "You have to be a campaign manager to create new campaigns";
     private readonly ERROR_REQUIRED_FIELDS = "Please fill in required fields!";
 
     private _campaign?: ICampaignEdit;
 
     private _errorMessage: Optional<string> = null;
+    private _isCampaignManager = false;
 
     constructor(private campaignService: CampaignService, private router: Router, private appState: AppState) {
     }
@@ -31,13 +33,14 @@ export class CampaignsEdit {
     }
 
     onSubmit(event: Event) {
-        this.setNewValuesToFields();
+        this.getNewValuesFromInputs();
         this.updateCampaign();
         
         event.preventDefault();
     }
 
-    private setNewValuesToFields() {
+    /** Reassigns _campaign props */
+    private getNewValuesFromInputs() {
         let nameInput = <string>this._campaign!.name;
         let activeToInput = <string>this._campaign!.activeToDate;
         let activeFromInput = <string>(this._campaign!.activeFromDate);
@@ -77,9 +80,10 @@ export class CampaignsEdit {
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {
+                    this.setCampaignManager(true);
                     this._campaign = response.data!;
-                    this._campaign.activeFromDate = this.formatAsHtml5Date(this._campaign!.activeFromDate);
-                    this._campaign.activeToDate = this.formatAsHtml5Date(this._campaign!.activeToDate);
+                    this._campaign.activeFromDate = Utils.formatAsHtml5Date(this._campaign!.activeFromDate);
+                    this._campaign.activeToDate = Utils.formatAsHtml5Date(this._campaign!.activeToDate);
                 }
             });
         }
@@ -93,38 +97,20 @@ export class CampaignsEdit {
             case Utils.STATUS_CODE_UNAUTHORIZED:
                 this.router.navigateToRoute(Utils.LOGIN_ROUTE);
                 break;
+            case Utils.STATUS_CODE_FORBIDDEN:
+                this.setCampaignManager(false);
+                break;
             default:
                 this._errorMessage = Utils.getErrorMessage(response);
         }
     }
 
-    /**
-     * Returns date as YYYY-MM-DD (or the same unedited date if parsing fails)
-     * so that html5 date input value could be filled in
-     * TODO: GET RID OF THIS STUPID TEMPORARY WORKAROUND AND USE SOME LIBRARY!
+    /** 
+     * Sets _isCampaignManager and _errorMessage based on param. 
+     * HTML view depends on it 
      */
-    private formatAsHtml5Date(date: string): HTML5DateString | string {
-        if(Utils.existsAndIsString(date)) {
-            let newDate: Date = new Date();
-
-            try {
-               newDate = new Date(date);
-               if(newDate) {
-                    let year = newDate.getFullYear();
-                    let month: number | string = newDate.getMonth() + 1; // +1 because january is 0
-                    month = month < 10 ? `0${month}` : month; // add 0 before one digit numbers
-                    let day: number | string = newDate.getDate();
-                    day = day < 10 ? `0${day}` : day; // add 0 before one digit numbers
-            
-                    let html5Date = `${year}-${month}-${day}`;
-                    return html5Date;
-               }
-            } catch(error) {
-                console.warn(`Could not parse given date (${date}) into html5 format: ${error}`);
-                return date;
-            }
-        }
-        console.warn(`Could not parse given date (${date}) into html5 format`);
-        return date;
+    private setCampaignManager(isCampaignManager: boolean) {
+        this._isCampaignManager = isCampaignManager;
+        this._errorMessage = isCampaignManager ? null : this.ERROR_NOT_CAMPAIGN_MANAGER;
     }
 }

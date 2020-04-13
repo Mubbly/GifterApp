@@ -1,0 +1,38 @@
+<template>
+    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+    <section>
+        <h1>My wishlists</h1>
+
+        <p>
+            <a route-href="route: wishlistsCreate; params.bind: {}">Create new</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Comment
+                    </th>
+                    <th>
+                        AppUser
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr repeat.for="wishlist of _wishlists">
+                    <td>
+                        ${wishlist.comment}
+                    </td>
+                    <td>
+                        ${wishlist.appUser.fullName} (${wishlist.appUser.id})
+                    </td>
+                    <td>
+                        <a route-href="route: wishlistsEdit; params.bind: { id: wishlist.id }">Edit</a> |
+                        <a route-href="route: wishlistsDetails; params.bind: { id: wishlist.id }">Details</a> |
+                        <a route-href="route: wishlistsDelete; params.bind: { id: wishlist.id }">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</template>

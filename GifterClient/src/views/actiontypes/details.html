@@ -1,50 +1,53 @@
 <template>
-    <h1>Details</h1>
+    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+    <section if.bind="_isAdmin">
+        <h1>Details</h1>
 
-    <div>
-        <h4>ActionType</h4>
-        <hr />
-        <dl class="row">
-            <dt class = "col-sm-2">
-                ActionTypeValue
-            </dt>
-            <dd class = "col-sm-10">
-                ${_actionType.actionTypeValue}
-            </dd>
-            <dt class = "col-sm-2">
-                Comment
-            </dt>
-            <dd class = "col-sm-10">
-                ${_actionType.comment}
-            </dd>
-            <dt class = "col-sm-2">
-                GiftsCount
-            </dt>
-            <dd class = "col-sm-10">
-                ${_actionType.giftsCount}
-            </dd>
-            <dt class = "col-sm-2">
-                ReservedGiftsCount
-            </dt>
-            <dd class = "col-sm-10">
-                ${_actionType.reservedGiftsCount}
-            </dd>
-            <dt class = "col-sm-2">
-                ArchivedGiftsCount
-            </dt>
-            <dd class = "col-sm-10">
-                ${_actionType.archivedGiftsCount}
-            </dd>
-            <dt class = "col-sm-2">
-                DonateesCount
-            </dt>
-            <dd class = "col-sm-10">
-                ${_actionType.donateesCount}
-            </dd>
-        </dl>
-    </div>
-    <div>
-        <a href="/ActionTypes/Edit/08d7d26d-4d40-46e0-8144-091acd062142">Edit</a> |
-        <a href="/ActionTypes">Back to List</a>
-    </div>
+        <div>
+            <h4>ActionType</h4>
+            <hr />
+            <dl class="row">
+                <dt class = "col-sm-2">
+                    ActionTypeValue
+                </dt>
+                <dd class = "col-sm-10">
+                    ${_actionType.actionTypeValue}
+                </dd>
+                <dt class = "col-sm-2">
+                    Comment
+                </dt>
+                <dd class = "col-sm-10">
+                    ${_actionType.comment}
+                </dd>
+                <dt class = "col-sm-2">
+                    GiftsCount
+                </dt>
+                <dd class = "col-sm-10">
+                    ${_actionType.giftsCount}
+                </dd>
+                <dt class = "col-sm-2">
+                    ReservedGiftsCount
+                </dt>
+                <dd class = "col-sm-10">
+                    ${_actionType.reservedGiftsCount}
+                </dd>
+                <dt class = "col-sm-2">
+                    ArchivedGiftsCount
+                </dt>
+                <dd class = "col-sm-10">
+                    ${_actionType.archivedGiftsCount}
+                </dd>
+                <dt class = "col-sm-2">
+                    DonateesCount
+                </dt>
+                <dd class = "col-sm-10">
+                    ${_actionType.donateesCount}
+                </dd>
+            </dl>
+        </div>
+        <div>
+            <a route-href="route: actiontypesEdit; params.bind: {}">Edit</a>
+            <a route-href="route: actiontypesIndex; params.bind: {}">Back to list</a>
+        </div>
+    </section>
 </template>

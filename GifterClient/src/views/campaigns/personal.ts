@@ -13,7 +13,7 @@ export class CampaignsPersonal {
 
     private _campaigns: ICampaign[] = [];
     private _errorMessage: Optional<string> = null;
-    private _isCampaignManager = false;
+    public _isCampaignManager = false;
 
     constructor(
         private campaignService: CampaignService,
@@ -27,18 +27,21 @@ export class CampaignsPersonal {
         if(!this.appState.jwt) {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         } else {
-            this.getAllCampaigns();
+            this.getAllPersonalCampaigns();
         }
     }
     
-    private getAllCampaigns(): void {
+    /**
+     * Get campaigns that the user has created
+     */
+    private getAllPersonalCampaigns(): void {
         this.campaignService
         .getPersonalCampaigns()
         .then((response) => {
             if (!Utils.isSuccessful(response)) {
                 this.handleErrors(response);
             } else {
-                this._isCampaignManager = true;
+                this.setCampaignManager(true);
                 this._campaigns = response.data!;
             }
         })
@@ -56,11 +59,19 @@ export class CampaignsPersonal {
                 this.router.navigateToRoute(Utils.LOGIN_ROUTE);
                 break;
             case Utils.STATUS_CODE_FORBIDDEN:
-                this._isCampaignManager = false;
-                this._errorMessage = this.ERROR_NOT_CAMPAIGN_MANAGER;
+                this.setCampaignManager(false);
                 break;
             default:
                 this._errorMessage = Utils.getErrorMessage(response);
         }
+    }
+
+    /** 
+     * Sets _isCampaignManager and _errorMessage based on param. 
+     * HTML view depends on it 
+     */
+    private setCampaignManager(isCampaignManager: boolean) {
+        this._isCampaignManager = isCampaignManager;
+        this._errorMessage = isCampaignManager ? null : this.ERROR_NOT_CAMPAIGN_MANAGER;
     }
 }

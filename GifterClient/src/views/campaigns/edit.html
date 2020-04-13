@@ -1,88 +1,88 @@
 <template>
-    <h1>Edit</h1>
+    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+    <section if.bind="_isCampaignManager">
+        <h1>Edit</h1>
 
-    <h4>Campaign</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-            <form submit.trigger="onSubmit($event)">
-                <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
-                    <ul>
-                        <li style="display:none"></li>
-                    </ul>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="Name">Name</label>
-                    <input class="form-control" type="text" data-val="true"
-                        data-val-maxlength="The field Name must be a string or array type with a maximum length of &#x27;512&#x27;."
-                        data-val-maxlength-max="512"
-                        data-val-minlength="The field Name must be a string or array type with a minimum length of &#x27;1&#x27;."
-                        data-val-minlength-min="1" data-val-required="The Name field is required." id="Name"
-                        maxlength="512" name="Name"
-                        value.bind="_campaign.name" />
-                    <span class="text-danger field-validation-valid" data-valmsg-for="Name"
-                        data-valmsg-replace="true"></span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="Description">Description</label>
-                    <input class="form-control" type="text" data-val="true"
-                        data-val-maxlength="The field Description must be a string or array type with a maximum length of &#x27;4096&#x27;."
-                        data-val-maxlength-max="4096"
-                        data-val-minlength="The field Description must be a string or array type with a minimum length of &#x27;3&#x27;."
-                        data-val-minlength-min="3" id="Description" maxlength="4096" name="Description" 
-                        value.bind="_campaign.description" />
-                    <span class="text-danger field-validation-valid" data-valmsg-for="Description"
-                        data-valmsg-replace="true"></span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="AdImage">AdImage</label>
-                    <input class="form-control" type="text" data-val="true"
-                        data-val-maxlength="The field AdImage must be a string or array type with a maximum length of &#x27;2048&#x27;."
-                        data-val-maxlength-max="2048"
-                        data-val-minlength="The field AdImage must be a string or array type with a minimum length of &#x27;3&#x27;."
-                        data-val-minlength-min="3" id="AdImage" maxlength="2048" name="AdImage"
-                        value.bind="_campaign.adImage" />
-                    <span class="text-danger field-validation-valid" data-valmsg-for="AdImage"
-                        data-valmsg-replace="true"></span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="Institution">Institution</label>
-                    <input class="form-control" type="text" data-val="true"
-                        data-val-maxlength="The field Institution must be a string or array type with a maximum length of &#x27;512&#x27;."
-                        data-val-maxlength-max="512"
-                        data-val-minlength="The field Institution must be a string or array type with a minimum length of &#x27;1&#x27;."
-                        data-val-minlength-min="1" id="Institution" maxlength="512" name="Institution"
-                        value.bind="_campaign.institution" />
-                    <span class="text-danger field-validation-valid" data-valmsg-for="Institution"
-                        data-valmsg-replace="true"></span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="ActiveFromDate">ActiveFromDate</label>
-                    <input class="form-control" type="date" data-val="true"
-                        data-val-required="The ActiveFromDate field is required." id="ActiveFromDate"
-                        name="ActiveFromDate" value.bind="_campaign.activeFromDate" />
-                    <span class="text-danger field-validation-valid" data-valmsg-for="ActiveFromDate"
-                        data-valmsg-replace="true"></span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="ActiveToDate">ActiveToDate</label>
-                    <input class="form-control" type="date" data-val="true"
-                        data-val-required="The ActiveToDate field is required." id="ActiveToDate" name="ActiveToDate"
-                        value.bind="_campaign.activeToDate" />
-                    <span class="text-danger field-validation-valid" data-valmsg-for="ActiveToDate"
-                        data-valmsg-replace="true"></span>
-                </div>
-                <input type="hidden" data-val="true" data-val-required="The Id field is required." id="Id" name="Id"
-                    value="08d7d26d-705f-46ad-8559-44b072c93cac" />
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                </div>
-            </form>
+        <h4>Campaign</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form submit.trigger="onSubmit($event)">
+                    <div class="text-danger validation-summary-valid" data-valmsg-summary="true">
+                        <ul>
+                            <li style="display:none"></li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="Name">Name</label>
+                        <input class="form-control" type="text" data-val="true"
+                            data-val-maxlength="The field Name must be a string or array type with a maximum length of &#x27;512&#x27;."
+                            data-val-maxlength-max="512"
+                            data-val-minlength="The field Name must be a string or array type with a minimum length of &#x27;1&#x27;."
+                            data-val-minlength-min="1" data-val-required="The Name field is required." id="Name"
+                            maxlength="512" name="Name"
+                            value.bind="_campaign.name" />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="Name"
+                            data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="Description">Description</label>
+                        <input class="form-control" type="text" data-val="true"
+                            data-val-maxlength="The field Description must be a string or array type with a maximum length of &#x27;4096&#x27;."
+                            data-val-maxlength-max="4096"
+                            data-val-minlength="The field Description must be a string or array type with a minimum length of &#x27;3&#x27;."
+                            data-val-minlength-min="3" id="Description" maxlength="4096" name="Description" 
+                            value.bind="_campaign.description" />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="Description"
+                            data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="AdImage">AdImage</label>
+                        <input class="form-control" type="text" data-val="true"
+                            data-val-maxlength="The field AdImage must be a string or array type with a maximum length of &#x27;2048&#x27;."
+                            data-val-maxlength-max="2048"
+                            data-val-minlength="The field AdImage must be a string or array type with a minimum length of &#x27;3&#x27;."
+                            data-val-minlength-min="3" id="AdImage" maxlength="2048" name="AdImage"
+                            value.bind="_campaign.adImage" />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="AdImage"
+                            data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="Institution">Institution</label>
+                        <input class="form-control" type="text" data-val="true"
+                            data-val-maxlength="The field Institution must be a string or array type with a maximum length of &#x27;512&#x27;."
+                            data-val-maxlength-max="512"
+                            data-val-minlength="The field Institution must be a string or array type with a minimum length of &#x27;1&#x27;."
+                            data-val-minlength-min="1" id="Institution" maxlength="512" name="Institution"
+                            value.bind="_campaign.institution" />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="Institution"
+                            data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="ActiveFromDate">ActiveFromDate</label>
+                        <input class="form-control" type="date" data-val="true"
+                            data-val-required="The ActiveFromDate field is required." id="ActiveFromDate"
+                            name="ActiveFromDate" value.bind="_campaign.activeFromDate" />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="ActiveFromDate"
+                            data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="ActiveToDate">ActiveToDate</label>
+                        <input class="form-control" type="date" data-val="true"
+                            data-val-required="The ActiveToDate field is required." id="ActiveToDate" name="ActiveToDate"
+                            value.bind="_campaign.activeToDate" />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="ActiveToDate"
+                            data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <div>
-        <a route-href="route: campaignsIndex; params.bind: {}">Back to List</a>
-    </div>
+        <div>
+            <a route-href="route: campaignsIndex; params.bind: {}">Back to List</a>
+        </div>
+    </section>
 </template>

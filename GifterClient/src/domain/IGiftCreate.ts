@@ -17,4 +17,6 @@ export interface IGiftCreate {
     //status: string;
     appUserId: string;
     //appUser: string;
+    wishlistId: string;
+    //wishlist: string;
 }

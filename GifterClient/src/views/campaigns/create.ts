@@ -17,6 +17,7 @@ export class CampaignsCreate {
     private _adImage = null;
     private _institution = null;
     private _errorMessage: Optional<string> = null;
+    private _isCampaignManager = false;
     private _jwt: boolean = false;
 
     constructor(
@@ -25,10 +26,14 @@ export class CampaignsCreate {
         private appState: AppState,
     ) {}
 
-    attached() {
-        if(!this.appState.jwt) {
+    attached() {}
+
+    activate() {
+        const isLoggedIn = this.appState.jwt;
+        if(!isLoggedIn) {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         }
+        this._isCampaignManager = true; // TODO: Create logic for this
     }
 
     onSubmit(event: Event) {

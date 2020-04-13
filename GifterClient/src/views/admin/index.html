@@ -1,0 +1,11 @@
+<template>
+    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+    <section if.bind="_isAdmin">
+        <h1>Welcome to admin panel</h1>
+
+        <ul>
+            <li><a route-href="route: actiontypesIndex; params.bind: {}">ActionTypes</a></li>
+            <li><a route-href="route: statusesIndex; params.bind: {}">Statuses</a></li>
+        </ul>
+    </section>
+</template>

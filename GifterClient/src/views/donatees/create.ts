@@ -71,12 +71,12 @@ export class DonateesCreate {
 
     // From other tables that are connected to this one via foreign keys
     private getRelatedData() {
-        this.actionTypeService.getActionTypes().then(
-            data => this._actionTypes = data
-        );
-        this.statusService.getStatuses().then(
-            data => this._statuses = data
-        );
+        // this.actionTypeService.getActionTypes().then(
+        //     data => this._actionTypes = data
+        // );
+        // this.statusService.getStatuses().then(
+        //     data => this._statuses = data
+        // ); TODO
     }
 
     private createDonatee(newDonatee: IDonateeCreate) {

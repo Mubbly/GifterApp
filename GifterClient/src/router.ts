@@ -7,7 +7,9 @@ export default [
         { route: ['account/login'], name: 'accountLogin', moduleId: PLATFORM.moduleName('views/account/login'), nav: false, title: 'Login' },
         { route: ['account/register'], name: 'accountRegister', moduleId: PLATFORM.moduleName('views/account/register'), nav: false, title: 'Register' },
 
-        { route: ['actiontypes', 'actiontypes/index'], name: 'actiontypesIndex', moduleId: PLATFORM.moduleName('views/actiontypes/index'), nav: true, title: 'ActionTypes' },
+        { route: ['admin', 'admin/index'], name: 'adminIndex', moduleId: PLATFORM.moduleName('views/admin/index'), nav: true, title: 'Admin' },
+
+        { route: ['actiontypes', 'actiontypes/index'], name: 'actiontypesIndex', moduleId: PLATFORM.moduleName('views/actiontypes/index'), nav: false, title: 'ActionTypes' },
         { route: ['actiontypes/details/:id'], name: 'actiontypesDetails', moduleId: PLATFORM.moduleName('views/actiontypes/details'), nav: false, title: 'ActionTypesDetails' },
         { route: ['actiontypes/edit/:id?'], name: 'actiontypesEdit', moduleId: PLATFORM.moduleName('views/actiontypes/edit'), nav: false, title: 'ActionTypesEdit' },
         { route: ['actiontypes/delete/:id?'], name: 'actiontypesDelete', moduleId: PLATFORM.moduleName('views/actiontypes/delete'), nav: false, title: 'ActionTypesDelete' },
@@ -26,7 +28,7 @@ export default [
         { route: ['campaigndonatees/create'], name: 'campaigndonateesCreate', moduleId: PLATFORM.moduleName('views/campaigndonatees/create'), nav: false, title: 'CampaignDonateesCreate' },
 
         { route: ['campaigns', 'campaigns/index'], name: 'campaignsIndex', moduleId: PLATFORM.moduleName('views/campaigns/index'), nav: true, title: 'Campaigns' },
-        { route: ['campaigns/personal'], name: 'campaignsPersonal', moduleId: PLATFORM.moduleName('views/campaigns/personal'), nav: true, title: 'CampaignsPersonal' },
+        { route: ['campaigns/personal'], name: 'campaignsPersonal', moduleId: PLATFORM.moduleName('views/campaigns/personal'), nav: false, title: 'CampaignsPersonal' },
         { route: ['campaigns/details/:id'], name: 'campaignsDetails', moduleId: PLATFORM.moduleName('views/campaigns/details'), nav: false, title: 'CampaignsDetails' },
         { route: ['campaigns/edit/:id?'], name: 'campaignsEdit', moduleId: PLATFORM.moduleName('views/campaigns/edit'), nav: false, title: 'CampaignsEdit' },
         { route: ['campaigns/delete/:id?'], name: 'campaignsDelete', moduleId: PLATFORM.moduleName('views/campaigns/delete'), nav: false, title: 'CampaignsDelete' },
@@ -92,7 +94,7 @@ export default [
         { route: ['reservedgifts/delete/:id?'], name: 'reservedgiftsDelete', moduleId: PLATFORM.moduleName('views/reservedgifts/delete'), nav: false, title: 'ReservedGiftsDelete' },
         { route: ['reservedgifts/create'], name: 'reservedgiftsCreate', moduleId: PLATFORM.moduleName('views/reservedgifts/create'), nav: false, title: 'ReservedGiftsCreate' },
 
-        { route: ['statuses', 'statuses/index'], name: 'statusesIndex', moduleId: PLATFORM.moduleName('views/statuses/index'), nav: true, title: 'Statuses' },
+        { route: ['statuses', 'statuses/index'], name: 'statusesIndex', moduleId: PLATFORM.moduleName('views/statuses/index'), nav: false, title: 'Statuses' },
         { route: ['statuses/details/:id'], name: 'statusesDetails', moduleId: PLATFORM.moduleName('views/statuses/details'), nav: false, title: 'StatusesDetails' },
         { route: ['statuses/edit/:id?'], name: 'statusesEdit', moduleId: PLATFORM.moduleName('views/statuses/edit'), nav: false, title: 'StatusesEdit' },
         { route: ['statuses/delete/:id?'], name: 'statusesDelete', moduleId: PLATFORM.moduleName('views/statuses/delete'), nav: false, title: 'StatusesDelete' },
@@ -123,6 +125,7 @@ export default [
         { route: ['userprofiles/create'], name: 'userprofilesCreate', moduleId: PLATFORM.moduleName('views/userprofiles/create'), nav: false, title: 'UserProfilesCreate' },
 
         { route: ['wishlists', 'wishlists/index'], name: 'wishlistsIndex', moduleId: PLATFORM.moduleName('views/wishlists/index'), nav: true, title: 'Wishlists' },
+        { route: ['wishlists/personal'], name: 'wishlistsPersonal', moduleId: PLATFORM.moduleName('views/wishlists/personal'), nav: false, title: 'WishlistsPersonal' },
         { route: ['wishlists/details/:id'], name: 'wishlistsDetails', moduleId: PLATFORM.moduleName('views/wishlists/details'), nav: false, title: 'WishlistsDetails' },
         { route: ['wishlists/edit/:id?'], name: 'wishlistsEdit', moduleId: PLATFORM.moduleName('views/wishlists/edit'), nav: false, title: 'WishlistsEdit' },
         { route: ['wishlists/delete/:id?'], name: 'wishlistsDelete', moduleId: PLATFORM.moduleName('views/wishlists/delete'), nav: false, title: 'WishlistsDelete' },

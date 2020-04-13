@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PublicApi.DTO.v1.Identity;
 
 namespace WebApp.ApiControllers.Identity
 {
@@ -74,22 +75,6 @@ namespace WebApp.ApiControllers.Identity
             
             _logger.LogInformation($"Web-Api login. User {registerDTO.Email} registered!");
             return Ok();
-        }
-
-        public class LoginDTO
-        {
-            public string Email { get; set; }
-            public string Password { get; set; }
-            
-        }
-
-        public class RegisterDTO
-        {
-            public string Email { get; set; }
-            public string Password { get; set; }
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-            
         }
     }
 }

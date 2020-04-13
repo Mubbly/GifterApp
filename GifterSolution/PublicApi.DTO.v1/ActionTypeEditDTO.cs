@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PublicApi.DTO.v1
 {
-    public class ActionTypeCreateDTO
+    public class ActionTypeEditDTO
     {
         public Guid Id { get; set; }
         

@@ -15,4 +15,5 @@ export interface IGiftEdit {
     actionTypeId: string;
     statusId: string;
     appUserId: string;
+    wishlistId: string;
 }

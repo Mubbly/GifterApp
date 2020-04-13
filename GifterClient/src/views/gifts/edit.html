@@ -97,11 +97,17 @@
                         <option repeat.for="status of _statuses" value="${status.id}">${status.statusValue}</option>
                     </select>
                 </div>
-                <input type="hidden" data-val="true" data-val-required="The Id field is required." id="Id" name="Id"
-                    value="94065055-ed25-4a98-bb8f-7450207a6119" />
+                <div class="form-group">
+                    <label class="control-label" for="WishlistId">WishlistId</label>
+                    <select class="form-control" data-val="true" data-val-required="The WishlistId field is required."
+                        id="WishlistId" name="WishlistId" value.bind="_wishlistId">
+                        <option repeat.for="wishlist of _wishlists" value="${wishlist.id}">${wishlist.id}</option>
+                    </select>
+                </div>
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-primary" />
                 </div>
+            </form>
         </div>
     </div>
 

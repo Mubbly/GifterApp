@@ -11,6 +11,7 @@ import { StatusService } from "service/statusService";
 import { ActionTypeService } from "service/actionTypeService";
 import { IGiftCreate } from '../../domain/IGiftCreate';
 import { Optional } from "types/generalTypes";
+import { WishlistService } from '../../service/wishlistService';
 
 @autoinject
 export class GiftsCreate {
@@ -27,6 +28,7 @@ export class GiftsCreate {
     private _actionTypeId = "";
     private _statusId = "";
     private _appUserId = "";
+    private _wishlistId = "";
     // related tables
     private _appUsers: IAppUser[] = [];
     private _statuses: IStatus[] = [];
@@ -37,6 +39,7 @@ export class GiftsCreate {
         private appUserService: AppUserService,
         private statusService: StatusService,
         private actionTypeService: ActionTypeService,
+        private WishlistService: WishlistService,
         private router: Router
     ) {}
 
@@ -55,7 +58,8 @@ export class GiftsCreate {
             isPinned: this._isPinned,
             actionTypeId: this._actionTypeId,
             statusId: this._statusId,
-            appUserId: this._appUserId
+            appUserId: this._appUserId,
+            wishlistId: this._wishlistId
         };
         console.log(newGift);
         this.createGift(newGift);
@@ -65,15 +69,7 @@ export class GiftsCreate {
 
     // From other tables that are connected to this one via foreign keys
     private getRelatedData(): void {
-        this.actionTypeService.getActionTypes().then(
-            data => this._actionTypes = data
-        );
-        this.statusService.getStatuses().then(
-            data => this._statuses = data
-        );
-        this.appUserService.getAppUsers().then(
-            data => this._appUsers = data
-        );
+
     }
 
     private createGift(newGift: IGiftCreate): void {
