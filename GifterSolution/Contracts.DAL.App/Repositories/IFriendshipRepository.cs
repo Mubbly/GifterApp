@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Contracts.DAL.Base.Repositories;
-using Domain;
-using PublicApi.DTO.v1;
+﻿using Contracts.DAL.Base.Repositories;
+using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IFriendshipRepository : IBaseRepository<Friendship>
+    public interface IFriendshipRepository : IBaseRepository<DALAppDTO.Friendship>, IFriendshipRepositoryCustom
     {
-        Task<IEnumerable<Friendship>> AllAsync(Guid? userId = null);
-        Task<Friendship> FirstOrDefaultAsync(Guid id, Guid? userId = null);
-
-        Task<bool> ExistsAsync(Guid id, Guid? userId = null);
-        Task DeleteAsync(Guid id, Guid? userId = null);
-
-        // DTO methods
-        Task<IEnumerable<FriendshipDTO>> DTOAllAsync(Guid? userId = null);
-        Task<FriendshipDTO> DTOFirstOrDefaultAsync(Guid id, Guid? userId = null);     
     }
 }

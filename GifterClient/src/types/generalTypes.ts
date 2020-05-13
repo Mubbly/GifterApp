@@ -2,7 +2,7 @@ import { IActionType } from "domain/IActionType";
 import { IAppUser } from "domain/IAppUser";
 import { IArchivedGift } from "domain/IArchivedGift";
 import { ICampaign } from "domain/ICampaign";
-import { ICampaignDonatee } from "domain/ICampaignDonatee";
+// import { ICampaignDonatee } from "domain/ICampaignDonatee";
 import { IDonatee } from "domain/IDonatee";
 import { IFriendship } from "domain/IFriendship";
 import { IGift } from "domain/IGift";
@@ -14,16 +14,16 @@ import { IPrivateMessage } from "domain/IPrivateMessage";
 import { IProfile } from "domain/IProfile";
 import { IReservedGift } from "domain/IReservedGift";
 import { IStatus } from "domain/IStatus";
-import { IUserCampaign } from "domain/IUserCampaign";
-import { IUserNotification } from "domain/IUserNotification";
-import { IUserPermission } from "domain/IUserPermission";
-import { IUserProfile } from "domain/IUserProfile";
+// import { IUserCampaign } from "domain/IUserCampaign";
+// import { IUserNotification } from "domain/IUserNotification";
+// import { IUserPermission } from "domain/IUserPermission";
+// import { IUserProfile } from "domain/IUserProfile";
 import { IWishlist } from "domain/IWishlist";
 import { ActionTypeService } from "service/actionTypeService";
 import { CampaignService } from "service/campaignService";
-import { CampaignDonateeService } from "service/campaignDonateeService";
+// import { CampaignDonateeService } from "service/campaignDonateeService";
 import { StatusService } from "service/statusService";
-import { AppUserService } from "service/appUserService";
+import { AppUserService } from "service/base/appUserService";
 import { ArchivedGiftService } from "service/archivedGiftService";
 import { DonateeService } from "service/donateeService";
 import { FriendshipService } from "service/friendshipService";
@@ -35,10 +35,10 @@ import { PermissionService } from "service/permissionService";
 import { PrivateMessageService } from "service/privateMessageService";
 import { ProfileService } from "service/profileService";
 import { ReservedGiftService } from "service/reservedGiftService";
-import { UserCampaignService } from "service/userCampaignService";
-import { UserNotificationService } from "service/userNotificationService";
-import { UserPermissionService } from "service/userPermissionService";
-import { UserProfileService } from "service/userProfileService";
+// import { UserCampaignService } from "service/userCampaignService";
+// import { UserNotificationService } from "service/userNotificationService";
+// import { UserPermissionService } from "service/userPermissionService";
+// import { UserProfileService } from "service/userProfileService";
 import { WishlistService } from "service/wishlistService";
 
 export type Optional<TValue> = TValue | null;
@@ -99,7 +99,7 @@ export type GifterInterface =
     | IAppUser
     | IArchivedGift
     | ICampaign
-    | ICampaignDonatee
+    // | ICampaignDonatee
     | IDonatee
     | IFriendship
     | IGift
@@ -111,10 +111,10 @@ export type GifterInterface =
     | IProfile
     | IReservedGift
     | IStatus
-    | IUserCampaign
-    | IUserNotification
-    | IUserPermission
-    | IUserProfile
+    // | IUserCampaign
+    // | IUserNotification
+    // | IUserPermission
+    // | IUserProfile
     | IWishlist;
 
 export type GeneralInterface<GifterInterface> = { props: GifterInterface };
@@ -124,7 +124,7 @@ export type GifterService =
     | AppUserService
     | ArchivedGiftService
     | CampaignService
-    | CampaignDonateeService
+    // | CampaignDonateeService
     | DonateeService
     | FriendshipService
     | GiftService
@@ -136,10 +136,10 @@ export type GifterService =
     | ProfileService
     | ReservedGiftService
     | StatusService
-    | UserCampaignService
-    | UserNotificationService
-    | UserPermissionService
-    | UserProfileService
+    // | UserCampaignService
+    // | UserNotificationService
+    // | UserPermissionService
+    // | UserProfileService
     | WishlistService;
 
 export enum ViewTypes {

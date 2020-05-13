@@ -8,52 +8,52 @@ namespace DAL.App.EF.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Wishlists_Gifts_GiftId",
-                table: "Wishlists");
+                "FK_Wishlists_Gifts_GiftId",
+                "Wishlists");
 
             migrationBuilder.DropIndex(
-                name: "IX_Wishlists_GiftId",
-                table: "Wishlists");
+                "IX_Wishlists_GiftId",
+                "Wishlists");
 
             migrationBuilder.DropColumn(
-                name: "GiftId",
-                table: "Wishlists");
+                "GiftId",
+                "Wishlists");
 
             migrationBuilder.AddColumn<Guid>(
-                name: "AppUserId",
-                table: "Wishlists",
+                "AppUserId",
+                "Wishlists",
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
             migrationBuilder.AddColumn<Guid>(
-                name: "WishlistId",
-                table: "Gifts",
+                "WishlistId",
+                "Gifts",
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
             migrationBuilder.CreateIndex(
-                name: "IX_Wishlists_AppUserId",
-                table: "Wishlists",
-                column: "AppUserId");
+                "IX_Wishlists_AppUserId",
+                "Wishlists",
+                "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gifts_WishlistId",
-                table: "Gifts",
-                column: "WishlistId");
+                "IX_Gifts_WishlistId",
+                "Gifts",
+                "WishlistId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Gifts_Wishlists_WishlistId",
-                table: "Gifts",
-                column: "WishlistId",
-                principalTable: "Wishlists",
+                "FK_Gifts_Wishlists_WishlistId",
+                "Gifts",
+                "WishlistId",
+                "Wishlists",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Wishlists_AspNetUsers_AppUserId",
-                table: "Wishlists",
-                column: "AppUserId",
-                principalTable: "AspNetUsers",
+                "FK_Wishlists_AspNetUsers_AppUserId",
+                "Wishlists",
+                "AppUserId",
+                "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -61,46 +61,46 @@ namespace DAL.App.EF.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Gifts_Wishlists_WishlistId",
-                table: "Gifts");
+                "FK_Gifts_Wishlists_WishlistId",
+                "Gifts");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Wishlists_AspNetUsers_AppUserId",
-                table: "Wishlists");
+                "FK_Wishlists_AspNetUsers_AppUserId",
+                "Wishlists");
 
             migrationBuilder.DropIndex(
-                name: "IX_Wishlists_AppUserId",
-                table: "Wishlists");
+                "IX_Wishlists_AppUserId",
+                "Wishlists");
 
             migrationBuilder.DropIndex(
-                name: "IX_Gifts_WishlistId",
-                table: "Gifts");
+                "IX_Gifts_WishlistId",
+                "Gifts");
 
             migrationBuilder.DropColumn(
-                name: "AppUserId",
-                table: "Wishlists");
+                "AppUserId",
+                "Wishlists");
 
             migrationBuilder.DropColumn(
-                name: "WishlistId",
-                table: "Gifts");
+                "WishlistId",
+                "Gifts");
 
             migrationBuilder.AddColumn<string>(
-                name: "GiftId",
-                table: "Wishlists",
-                type: "char(36)",
+                "GiftId",
+                "Wishlists",
+                "char(36)",
                 nullable: false,
                 defaultValue: "");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Wishlists_GiftId",
-                table: "Wishlists",
-                column: "GiftId");
+                "IX_Wishlists_GiftId",
+                "Wishlists",
+                "GiftId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Wishlists_Gifts_GiftId",
-                table: "Wishlists",
-                column: "GiftId",
-                principalTable: "Gifts",
+                "FK_Wishlists_Gifts_GiftId",
+                "Wishlists",
+                "GiftId",
+                "Gifts",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }

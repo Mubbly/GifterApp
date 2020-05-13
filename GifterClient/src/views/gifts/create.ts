@@ -1,17 +1,17 @@
 import { autoinject } from "aurelia-framework";
-import { RouteConfig, NavigationInstruction, Router } from "aurelia-router";
+import { Router } from "aurelia-router";
 import { GiftService } from "service/giftService";
-import { AppUserService } from "service/appUserService";
-import { IGiftEdit } from "domain/IGiftEdit";
+import { AppUserService } from "service/base/appUserService";
 import * as UtilFunctions from "utils/utilFunctions";
 import { IAppUser } from "domain/IAppUser";
 import { IStatus } from "domain/IStatus";
 import { IActionType } from "domain/IActionType";
 import { StatusService } from "service/statusService";
 import { ActionTypeService } from "service/actionTypeService";
-import { IGiftCreate } from '../../domain/IGiftCreate';
+import { IGiftCreate } from '../../domain/IGift';
 import { Optional } from "types/generalTypes";
 import { WishlistService } from '../../service/wishlistService';
+import { IFetchResponse } from "types/IFetchResponse";
 
 @autoinject
 export class GiftsCreate {
@@ -74,8 +74,8 @@ export class GiftsCreate {
 
     private createGift(newGift: IGiftCreate): void {
         this.giftService
-            .createGift(newGift)
-            .then((response) => {
+            .create(newGift)
+            .then((response: IFetchResponse<IGiftCreate>) => {
                 if (UtilFunctions.isSuccessful(response)) {
                     this.router.navigateToRoute("giftsIndex", {});
                 } else {

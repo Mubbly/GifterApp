@@ -1,6 +1,6 @@
 import { autoinject } from 'aurelia-framework';
 import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
-import { IStatusEdit } from 'domain/IStatusEdit';
+import { IStatusEdit } from 'domain/IStatus';
 import * as Utils from 'utils/utilFunctions';
 import { Optional, GifterInterface, HTML5DateString } from 'types/generalTypes';
 import { StatusService } from 'service/statusService';
@@ -53,9 +53,9 @@ export class StatusesEdit {
 
     private updateStatus(): void {
         this.statusService
-            .updateStatus(this._status!)
+            .update(this._status!)
             .then(
-                response => {
+                (response: IFetchResponse<IStatusEdit>) => {
                     if (!Utils.isSuccessful(response)) {
                         this._errorMessage = Utils.getErrorMessage(response);
                     } else {
@@ -68,8 +68,8 @@ export class StatusesEdit {
     private getStatus(id: string): void {
         if (Utils.existsAndIsString(id)) {
             this.statusService
-                .getStatus(id)
-                .then((response) => {
+                .get(id)
+                .then(response => {
                     if (!Utils.isSuccessful(response)) {
                         this.handleErrors(response);
                     } else {

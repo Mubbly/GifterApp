@@ -1,27 +1,28 @@
-﻿using System.Threading.Tasks;
-using Contracts.DAL.Base;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Base.EF
 {
-    public class EFBaseUnitOfWork<TDbContext> : BaseUnitOfWork, IBaseUnitOfWork
-    where TDbContext : DbContext
+    public class EFBaseUnitOfWork<TKey, TDbContext> : BaseUnitOfWork<TKey>
+        where TKey : IEquatable<TKey>
+        where TDbContext : DbContext
     {
-        protected TDbContext UOWDbContext;
+        protected readonly TDbContext UOWDbContext;
 
         public EFBaseUnitOfWork(TDbContext uowDbContext)
         {
             UOWDbContext = uowDbContext;
         }
-        
-        public int SaveChanges()
+
+        public override async Task<int> SaveChangesAsync()
         {
-            return UOWDbContext.SaveChanges();
+            return await UOWDbContext.SaveChangesAsync();
         }
 
-        public Task<int> SaveChangesAsync()
+        public override int SaveChanges()
         {
-            return UOWDbContext.SaveChangesAsync();
+            return UOWDbContext.SaveChanges();
         }
     }
 }

@@ -31,7 +31,7 @@ export class CampaignDetails {
 
     private getCampaign(id: string): void {
         if (Utils.existsAndIsString(id)) {
-            this.campaignService.getCampaign(id).then((response) => {
+            this.campaignService.get(id).then((response) => {
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {

@@ -8,8 +8,8 @@ namespace DAL.App.EF.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<DateTime>(
-                name: "LastActive",
-                table: "AspNetUsers",
+                "LastActive",
+                "AspNetUsers",
                 nullable: true,
                 oldClrType: typeof(DateTime),
                 oldType: "datetime(6)");
@@ -18,9 +18,9 @@ namespace DAL.App.EF.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<DateTime>(
-                name: "LastActive",
-                table: "AspNetUsers",
-                type: "datetime(6)",
+                "LastActive",
+                "AspNetUsers",
+                "datetime(6)",
                 nullable: false,
                 oldClrType: typeof(DateTime),
                 oldNullable: true);

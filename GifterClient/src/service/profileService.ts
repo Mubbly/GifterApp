@@ -1,37 +1,13 @@
 import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
-import { Optional } from 'types/generalTypes';
-import { IProfile } from 'domain/IProfile';
+import { BaseService } from './base/baseService';
+import { IProfile, IProfileCreate, IProfileEdit } from 'domain/IProfile';
+import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
+import { AppState } from 'state/appState';
 
 @autoinject
-export class ProfileService {
-    private readonly _baseUrl = 'https://localhost:5001/api/Profiles';
-
-    constructor(private httpClient: HttpClient) {
-
+export class ProfileService extends BaseService<IProfile, IProfileCreate, IProfileEdit> {
+    constructor(protected httpClient: HttpClient, appState: AppState) {
+        super(ApiEndpointUrls.PROFILES, httpClient, appState);
     }
-
-    getProfiles(): Promise<IProfile[]> {
-        return this.httpClient
-            .fetch(this._baseUrl)
-            .then(response => response.json())
-            .then((data: IProfile[]) => data)
-            .catch(reason => { 
-                console.log(reason); 
-                return [];
-            });
-    }
-
-    getProfile(id: string): Promise<Optional<IProfile>> {
-        return this.httpClient
-            .fetch(this._baseUrl + '/' + id)
-            .then(response => response.json())
-            .then((data: IProfile) => data)
-            .catch(reason => { 
-                console.log(reason);
-                return null;
-            });
-    }
-
-    // TODO: .. update, delete etc
 }

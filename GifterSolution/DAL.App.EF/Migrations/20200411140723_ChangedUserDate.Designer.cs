@@ -19,7 +19,7 @@ namespace DAL.App.EF.Migrations
                 .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Domain.ActionType", b =>
+            modelBuilder.Entity("Domain.App.ActionType", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("ActionTypes");
                 });
 
-            modelBuilder.Entity("Domain.ArchivedGift", b =>
+            modelBuilder.Entity("Domain.App.ArchivedGift", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -109,7 +109,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("ArchivedGifts");
                 });
 
-            modelBuilder.Entity("Domain.Campaign", b =>
+            modelBuilder.Entity("Domain.App.Campaign", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -158,7 +158,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("Campaigns");
                 });
 
-            modelBuilder.Entity("Domain.CampaignDonatee", b =>
+            modelBuilder.Entity("Domain.App.CampaignDonatee", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -198,7 +198,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("CampaignDonatees");
                 });
 
-            modelBuilder.Entity("Domain.Donatee", b =>
+            modelBuilder.Entity("Domain.App.Donatee", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -280,7 +280,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("Donatees");
                 });
 
-            modelBuilder.Entity("Domain.Friendship", b =>
+            modelBuilder.Entity("Domain.App.Friendship", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -320,7 +320,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("Friendships");
                 });
 
-            modelBuilder.Entity("Domain.Gift", b =>
+            modelBuilder.Entity("Domain.App.Gift", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -390,7 +390,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("Gifts");
                 });
 
-            modelBuilder.Entity("Domain.Identity.AppRole", b =>
+            modelBuilder.Entity("Domain.App.Identity.AppRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -417,7 +417,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("Domain.Identity.AppUser", b =>
+            modelBuilder.Entity("Domain.App.Identity.AppUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -504,7 +504,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Domain.InvitedUser", b =>
+            modelBuilder.Entity("Domain.App.InvitedUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -551,7 +551,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("InvitedUsers");
                 });
 
-            modelBuilder.Entity("Domain.Notification", b =>
+            modelBuilder.Entity("Domain.App.Notification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -588,7 +588,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("Domain.NotificationType", b =>
+            modelBuilder.Entity("Domain.App.NotificationType", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -620,7 +620,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("NotificationTypes");
                 });
 
-            modelBuilder.Entity("Domain.Permission", b =>
+            modelBuilder.Entity("Domain.App.Permission", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -652,7 +652,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("Permissions");
                 });
 
-            modelBuilder.Entity("Domain.PrivateMessage", b =>
+            modelBuilder.Entity("Domain.App.PrivateMessage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -696,7 +696,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("PrivateMessages");
                 });
 
-            modelBuilder.Entity("Domain.Profile", b =>
+            modelBuilder.Entity("Domain.App.Profile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -747,7 +747,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("Profiles");
                 });
 
-            modelBuilder.Entity("Domain.ReservedGift", b =>
+            modelBuilder.Entity("Domain.App.ReservedGift", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -802,7 +802,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("ReservedGifts");
                 });
 
-            modelBuilder.Entity("Domain.Status", b =>
+            modelBuilder.Entity("Domain.App.Status", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -834,7 +834,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("Statuses");
                 });
 
-            modelBuilder.Entity("Domain.UserCampaign", b =>
+            modelBuilder.Entity("Domain.App.UserCampaign", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -871,7 +871,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("UserCampaigns");
                 });
 
-            modelBuilder.Entity("Domain.UserNotification", b =>
+            modelBuilder.Entity("Domain.App.UserNotification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -920,7 +920,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("UserNotifications");
                 });
 
-            modelBuilder.Entity("Domain.UserPermission", b =>
+            modelBuilder.Entity("Domain.App.UserPermission", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -963,7 +963,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("UserPermissions");
                 });
 
-            modelBuilder.Entity("Domain.UserProfile", b =>
+            modelBuilder.Entity("Domain.App.UserProfile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1000,7 +1000,7 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("UserProfiles");
                 });
 
-            modelBuilder.Entity("Domain.Wishlist", b =>
+            modelBuilder.Entity("Domain.App.Wishlist", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1131,255 +1131,255 @@ namespace DAL.App.EF.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Domain.ArchivedGift", b =>
+            modelBuilder.Entity("Domain.App.ArchivedGift", b =>
                 {
-                    b.HasOne("Domain.ActionType", "ActionType")
+                    b.HasOne("Domain.App.ActionType", "ActionType")
                         .WithMany("ArchivedGifts")
                         .HasForeignKey("ActionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Gift", "Gift")
+                    b.HasOne("Domain.App.Gift", "Gift")
                         .WithMany("ArchivedGifts")
                         .HasForeignKey("GiftId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Status", "Status")
+                    b.HasOne("Domain.App.Status", "Status")
                         .WithMany("ArchivedGifts")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Identity.AppUser", "UserGiver")
+                    b.HasOne("Domain.App.Identity.AppUser", "UserGiver")
                         .WithMany("ArchivedGiftsByUser")
                         .HasForeignKey("UserGiverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Identity.AppUser", "UserReceiver")
+                    b.HasOne("Domain.App.Identity.AppUser", "UserReceiver")
                         .WithMany("ArchivedGiftsForUser")
                         .HasForeignKey("UserReceiverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.CampaignDonatee", b =>
+            modelBuilder.Entity("Domain.App.CampaignDonatee", b =>
                 {
-                    b.HasOne("Domain.Campaign", "Campaign")
+                    b.HasOne("Domain.App.Campaign", "Campaign")
                         .WithMany("CampaignDonatees")
                         .HasForeignKey("CampaignId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Donatee", "Donatee")
+                    b.HasOne("Domain.App.Donatee", "Donatee")
                         .WithMany("CampaignDonatees")
                         .HasForeignKey("DonateeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Donatee", b =>
+            modelBuilder.Entity("Domain.App.Donatee", b =>
                 {
-                    b.HasOne("Domain.ActionType", "ActionType")
+                    b.HasOne("Domain.App.ActionType", "ActionType")
                         .WithMany("Donatees")
                         .HasForeignKey("ActionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Status", "Status")
+                    b.HasOne("Domain.App.Status", "Status")
                         .WithMany("Donatees")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Friendship", b =>
+            modelBuilder.Entity("Domain.App.Friendship", b =>
                 {
-                    b.HasOne("Domain.Identity.AppUser", "AppUser1")
+                    b.HasOne("Domain.App.Identity.AppUser", "AppUser1")
                         .WithMany("ConfirmedFriendships")
                         .HasForeignKey("AppUser1Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Identity.AppUser", "AppUser2")
+                    b.HasOne("Domain.App.Identity.AppUser", "AppUser2")
                         .WithMany("PendingFriendships")
                         .HasForeignKey("AppUser2Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Gift", b =>
+            modelBuilder.Entity("Domain.App.Gift", b =>
                 {
-                    b.HasOne("Domain.ActionType", "ActionType")
+                    b.HasOne("Domain.App.ActionType", "ActionType")
                         .WithMany("Gifts")
                         .HasForeignKey("ActionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Identity.AppUser", "AppUser")
+                    b.HasOne("Domain.App.Identity.AppUser", "AppUser")
                         .WithMany("Gifts")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Status", "Status")
+                    b.HasOne("Domain.App.Status", "Status")
                         .WithMany("Gifts")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Wishlist", "Wishlist")
+                    b.HasOne("Domain.App.Wishlist", "Wishlist")
                         .WithMany("Gifts")
                         .HasForeignKey("WishlistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.InvitedUser", b =>
+            modelBuilder.Entity("Domain.App.InvitedUser", b =>
                 {
-                    b.HasOne("Domain.Identity.AppUser", "InvitorUser")
+                    b.HasOne("Domain.App.Identity.AppUser", "InvitorUser")
                         .WithMany("InvitedUsers")
                         .HasForeignKey("InvitorUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Notification", b =>
+            modelBuilder.Entity("Domain.App.Notification", b =>
                 {
-                    b.HasOne("Domain.NotificationType", "NotificationType")
+                    b.HasOne("Domain.App.NotificationType", "NotificationType")
                         .WithMany("Notifications")
                         .HasForeignKey("NotificationTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.PrivateMessage", b =>
+            modelBuilder.Entity("Domain.App.PrivateMessage", b =>
                 {
-                    b.HasOne("Domain.Identity.AppUser", "UserReceiver")
+                    b.HasOne("Domain.App.Identity.AppUser", "UserReceiver")
                         .WithMany("ReceivedPrivateMessages")
                         .HasForeignKey("UserReceiverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Identity.AppUser", "UserSender")
+                    b.HasOne("Domain.App.Identity.AppUser", "UserSender")
                         .WithMany("SentPrivateMessages")
                         .HasForeignKey("UserSenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Profile", b =>
+            modelBuilder.Entity("Domain.App.Profile", b =>
                 {
-                    b.HasOne("Domain.Identity.AppUser", "AppUser")
+                    b.HasOne("Domain.App.Identity.AppUser", "AppUser")
                         .WithMany()
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Wishlist", "Wishlist")
+                    b.HasOne("Domain.App.Wishlist", "Wishlist")
                         .WithMany("Profiles")
                         .HasForeignKey("WishlistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.ReservedGift", b =>
+            modelBuilder.Entity("Domain.App.ReservedGift", b =>
                 {
-                    b.HasOne("Domain.ActionType", "ActionType")
+                    b.HasOne("Domain.App.ActionType", "ActionType")
                         .WithMany("ReservedGifts")
                         .HasForeignKey("ActionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Gift", "Gift")
+                    b.HasOne("Domain.App.Gift", "Gift")
                         .WithMany("ReservedGifts")
                         .HasForeignKey("GiftId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Status", "Status")
+                    b.HasOne("Domain.App.Status", "Status")
                         .WithMany("ReservedGifts")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Identity.AppUser", "UserGiver")
+                    b.HasOne("Domain.App.Identity.AppUser", "UserGiver")
                         .WithMany("ReservedGiftsByUser")
                         .HasForeignKey("UserGiverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Identity.AppUser", "UserReceiver")
+                    b.HasOne("Domain.App.Identity.AppUser", "UserReceiver")
                         .WithMany("ReservedGiftsForUser")
                         .HasForeignKey("UserReceiverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.UserCampaign", b =>
+            modelBuilder.Entity("Domain.App.UserCampaign", b =>
                 {
-                    b.HasOne("Domain.Identity.AppUser", "AppUser")
+                    b.HasOne("Domain.App.Identity.AppUser", "AppUser")
                         .WithMany("UserCampaigns")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Campaign", "Campaign")
+                    b.HasOne("Domain.App.Campaign", "Campaign")
                         .WithMany("UserCampaigns")
                         .HasForeignKey("CampaignId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.UserNotification", b =>
+            modelBuilder.Entity("Domain.App.UserNotification", b =>
                 {
-                    b.HasOne("Domain.Identity.AppUser", "AppUser")
+                    b.HasOne("Domain.App.Identity.AppUser", "AppUser")
                         .WithMany("UserNotifications")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Notification", "Notification")
+                    b.HasOne("Domain.App.Notification", "Notification")
                         .WithMany("UserNotifications")
                         .HasForeignKey("NotificationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.UserPermission", b =>
+            modelBuilder.Entity("Domain.App.UserPermission", b =>
                 {
-                    b.HasOne("Domain.Identity.AppUser", "AppUser")
+                    b.HasOne("Domain.App.Identity.AppUser", "AppUser")
                         .WithMany("UserPermissions")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Permission", "Permission")
+                    b.HasOne("Domain.App.Permission", "Permission")
                         .WithMany("UserPermissions")
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.UserProfile", b =>
+            modelBuilder.Entity("Domain.App.UserProfile", b =>
                 {
-                    b.HasOne("Domain.Identity.AppUser", "AppUser")
+                    b.HasOne("Domain.App.Identity.AppUser", "AppUser")
                         .WithMany("UserProfiles")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Profile", "Profile")
+                    b.HasOne("Domain.App.Profile", "Profile")
                         .WithMany("UserProfiles")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Wishlist", b =>
+            modelBuilder.Entity("Domain.App.Wishlist", b =>
                 {
-                    b.HasOne("Domain.Identity.AppUser", "AppUser")
+                    b.HasOne("Domain.App.Identity.AppUser", "AppUser")
                         .WithMany()
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1388,7 +1388,7 @@ namespace DAL.App.EF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Domain.Identity.AppRole", null)
+                    b.HasOne("Domain.App.Identity.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1397,7 +1397,7 @@ namespace DAL.App.EF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Domain.Identity.AppUser", null)
+                    b.HasOne("Domain.App.Identity.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1406,7 +1406,7 @@ namespace DAL.App.EF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("Domain.Identity.AppUser", null)
+                    b.HasOne("Domain.App.Identity.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1415,13 +1415,13 @@ namespace DAL.App.EF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Domain.Identity.AppRole", null)
+                    b.HasOne("Domain.App.Identity.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Identity.AppUser", null)
+                    b.HasOne("Domain.App.Identity.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1430,7 +1430,7 @@ namespace DAL.App.EF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("Domain.Identity.AppUser", null)
+                    b.HasOne("Domain.App.Identity.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

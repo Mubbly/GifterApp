@@ -1,6 +1,6 @@
 import { Router } from "aurelia-router";
 import { autoinject } from "aurelia-framework";
-import { AccountService } from "service/accountService";
+import { AccountService } from "service/base/accountService";
 import { Optional } from "types/generalTypes";
 import { AppState } from "state/appState";
 import { isSuccessful } from "utils/utilFunctions";
@@ -30,9 +30,9 @@ export class AccountLogin {
         this.accountService
         .login(email, password)
         .then((response) => {
+            console.log(response);
             if (isSuccessful(response)) {
                 this.appState.jwt = response.data!.token;
-                console.log(this.appState.jwt);
                 this.router!.navigateToRoute(this.app.HOME_ROUTE);
             } else {
                 //let statusCode = response.status.toString();

@@ -12,11 +12,11 @@ export class GiftsIndex {
     constructor(private giftService: GiftService) {}
 
     attached() {
-        this.getAllGifts();
+        this.getGifts();
     }
 
-    private getAllGifts(): void {
-        this.giftService.getGifts().then((response) => {
+    private getGifts(): void {
+        this.giftService.getAll().then((response) => {
             if (UtilFunctions.isSuccessful(response)) {
                 this._gifts = response.data!;
             } else {

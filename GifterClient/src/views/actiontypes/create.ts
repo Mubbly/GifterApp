@@ -2,9 +2,10 @@ import { autoinject } from "aurelia-framework";
 import { RouteConfig, NavigationInstruction, Router } from "aurelia-router";
 import { ActionTypeService } from "service/actionTypeService";
 import * as Utils from "utils/utilFunctions";
-import { IActionTypeCreate } from "domain/IActionTypeCreate";
+import { IActionTypeCreate } from "domain/IActionType";
 import { Optional } from "types/generalTypes";
 import { AppState } from "state/appState";
+import { IFetchResponse } from "types/IFetchResponse";
 
 @autoinject
 export class ActionTypesCreate {
@@ -53,8 +54,8 @@ export class ActionTypesCreate {
 
     private createActionType(newActionType: IActionTypeCreate) {
         this.actionTypeService
-        .createActionType(newActionType)
-        .then((response) => {
+        .create(newActionType)
+        .then((response: IFetchResponse<IActionTypeCreate>) => {
             if (!Utils.isSuccessful(response)) {
                 this._errorMessage = Utils.getErrorMessage(response);
             } else {

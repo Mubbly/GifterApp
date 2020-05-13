@@ -2,10 +2,11 @@ import { autoinject } from "aurelia-framework";
 import { RouteConfig, NavigationInstruction, Router } from "aurelia-router";
 import { CampaignService } from "service/campaignService";
 import * as Utils from "utils/utilFunctions";
-import { ICampaignCreate } from "domain/ICampaignCreate";
+import { ICampaignCreate } from "domain/ICampaign";
 import { Optional } from "types/generalTypes";
 import { AppState } from "state/appState";
 import { App } from "app";
+import { IFetchResponse } from "types/IFetchResponse";
 
 @autoinject
 export class CampaignsCreate {
@@ -51,12 +52,14 @@ export class CampaignsCreate {
     }
 
     private createCampaign(newCampaign: ICampaignCreate) {
-        this.campaignService.createCampaign(newCampaign).then((response) => {
-            if (!Utils.isSuccessful(response)) {
-                this._errorMessage = Utils.getErrorMessage(response);
-            } else {
-                this.router.navigateToRoute("campaignsIndex", {});
-            }
-        });
+        this.campaignService
+            .create(newCampaign)
+            .then((response: IFetchResponse<ICampaignCreate>) => {
+                if (!Utils.isSuccessful(response)) {
+                    this._errorMessage = Utils.getErrorMessage(response);
+                } else {
+                    this.router.navigateToRoute("campaignsIndex", {});
+                }
+            });
     }
 }

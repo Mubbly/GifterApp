@@ -15,7 +15,7 @@ namespace Extensions
             return user.Claims
                 .Single(c => c.Type == ClaimTypes.NameIdentifier).Value;
         }
-        
+
         public static TKey UserId<TKey>(this ClaimsPrincipal user)
         {
             var stringId = user.Claims
@@ -23,27 +23,19 @@ namespace Extensions
 
             // String
             if (typeof(TKey) == typeof(string))
-            {
                 return (TKey) Convert.ChangeType(stringId, typeof(TKey));
-            } 
             // Int, Long or Guid
-            else if(typeof(TKey) == typeof(int) || typeof(TKey) == typeof(long))
+
+            if (typeof(TKey) == typeof(int) || typeof(TKey) == typeof(long))
             {
-                if (stringId == null)
-                {
-                    return (TKey) Convert.ChangeType(0, typeof(TKey));
-                }
+                if (stringId == null) return (TKey) Convert.ChangeType(0, typeof(TKey));
                 return (TKey) Convert.ChangeType(stringId, typeof(TKey));
-            }
-            else if (typeof(TKey) == typeof(Guid))
-            {
-                return (TKey) Convert.ChangeType(new Guid(stringId), typeof(TKey));
             }
 
-            else
-            {
-                throw new Exception("Invalid userId type provided");
-            }
+            if (typeof(TKey) == typeof(Guid))
+                return (TKey) Convert.ChangeType(new Guid(stringId), typeof(TKey));
+
+            throw new Exception("Invalid userId type provided");
         }
 
         public static Guid UserGuidId(this ClaimsPrincipal user)
@@ -68,8 +60,8 @@ namespace Extensions
                 expires,
                 signingCredentials
             );
-            
-            return new JwtSecurityTokenHandler().WriteToken(token); 
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

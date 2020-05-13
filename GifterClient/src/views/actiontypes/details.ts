@@ -32,7 +32,7 @@ export class ActionTypeDetails {
 
     private getActionType(id: string): void {
         if (Utils.existsAndIsString(id)) {
-            this.actionTypeService.getActionType(id).then((response) => {
+            this.actionTypeService.get(id).then((response) => {
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {

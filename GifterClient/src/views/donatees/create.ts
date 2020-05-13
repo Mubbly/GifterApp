@@ -1,17 +1,14 @@
 import { autoinject } from "aurelia-framework";
-import { RouteConfig, NavigationInstruction, Router } from "aurelia-router";
+import { Router } from "aurelia-router";
 import { DonateeService } from "service/donateeService";
-import { AppUserService } from "service/appUserService";
-import { IDonateeEdit } from "domain/IDonateeEdit";
 import * as UtilFunctions from "utils/utilFunctions";
-import { IAppUser } from "domain/IAppUser";
 import { IStatus } from "domain/IStatus";
 import { IActionType } from "domain/IActionType";
 import { StatusService } from "service/statusService";
 import { ActionTypeService } from "service/actionTypeService";
-import { IDonateeCreate } from '../../domain/IDonateeCreate';
-import { Agent } from "http";
+import { IDonateeCreate } from '../../domain/IDonatee';
 import { Optional } from "types/generalTypes";
+import { IFetchResponse } from "types/IFetchResponse";
 
 @autoinject
 export class DonateesCreate {
@@ -81,8 +78,8 @@ export class DonateesCreate {
 
     private createDonatee(newDonatee: IDonateeCreate) {
         this.donateeService
-            .createDonatee(newDonatee)
-            .then((response) => {
+            .create(newDonatee)
+            .then((response: IFetchResponse<IDonateeCreate>) => {
                 if (UtilFunctions.isSuccessful(response)) {
                     this.router.navigateToRoute("donateesIndex", {});
                 } else {

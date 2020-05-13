@@ -22,13 +22,13 @@ export class CampaignsIndex {
         if(!this.appState.jwt) {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         } else {
-            this.getAllCampaigns();
+            this.getCampaigns();
         }
     }
     
-    private getAllCampaigns(): void {
+    private getCampaigns(): void {
         this.campaignService
-        .getCampaigns()
+        .getAll()
         .then((response) => {
             if (!Utils.isSuccessful(response)) {
                 this.handleErrors(response);

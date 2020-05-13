@@ -1,6 +1,6 @@
 import { autoinject } from 'aurelia-framework';
 import { IAppUser } from 'domain/IAppUser';
-import { AppUserService } from 'service/appUserService';
+import { AppUserService } from 'service/base/appUserService';
 
 @autoinject
 export class AppUsersIndex {

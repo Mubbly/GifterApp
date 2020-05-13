@@ -38,7 +38,7 @@ export class ActionTypesDelete {
     private getActionType(id: string): void {
         if (Utils.existsAndIsString(id)) {
             this.actionTypeService
-                .getActionType(id)
+                .get(id)
                 .then((response) => {
                     if (!Utils.isSuccessful(response)) {
                         this.handleErrors(response);
@@ -52,7 +52,7 @@ export class ActionTypesDelete {
 
     private deleteActionType(id: string) {
         this.actionTypeService
-        .deleteActionType(id)
+        .delete(id)
         .then(
             response => {
                 if (!Utils.isSuccessful(response)) {

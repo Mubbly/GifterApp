@@ -19,7 +19,7 @@ export class DonateesDelete {
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
         const donateeId = params.id;
         if(UtilFunctions.existsAndIsString(donateeId)) {
-            this.donateeService.getDonatee(donateeId).then(
+            this.donateeService.get(donateeId).then(
                 response => {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._donatee = response.data!;
@@ -34,7 +34,7 @@ export class DonateesDelete {
 
     onSubmit(event: Event) {
         this.donateeService
-        .deleteDonatee(this._donatee!.id)
+        .delete(this._donatee!.id)
         .then(
             response => {
                 if (UtilFunctions.isSuccessful(response)) {

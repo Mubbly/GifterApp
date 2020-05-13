@@ -1,18 +1,18 @@
 import { Router } from 'aurelia-router';
 import { autoinject } from 'aurelia-framework';
-import { App } from 'app';
-import { AccountService } from 'service/accountService';
-import { AppState } from 'state/appState';
+import { AccountService } from 'service/base/accountService';
 import { isSuccessful } from 'utils/utilFunctions';
 import { Optional } from 'types/generalTypes';
-import { AccountLogin } from './login';
 import * as UtilFunctions from 'utils/utilFunctions';
+import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
+import * as Utils from 'utils/utilFunctions';
+import { AccountLogin } from './login';
 
 @autoinject
 export class AccountRegister {    
     private readonly ERROR_MSG_PASSWORDS_DONT_MATCH = "Password and confirmation password don't match";
     private readonly ERROR_MSG_CANT_REGISTER = "Cannot register user";
-    private readonly REGISTRATION_SUCCESSFUL = "Registration was successful. We've sent a message to your e-mail, please confirm it to log in!"
+    private readonly REGISTRATION_SUCCESSFUL = "Registration was successful! Please log in."
     private readonly LOGIN_ROUTE = "accountLogin"
 
     private _email = "";
@@ -22,9 +22,11 @@ export class AccountRegister {
     private _passwordConfirm = "";
     private _errorMessage: Optional<string> = null;
     private _successMessage: Optional<string> = null;
+    private _jwt: Optional<string> = null;
 
     constructor(
         private accountService: AccountService,
+        private loginAction: AccountLogin,
         private router: Router
     ) {}
 
@@ -41,10 +43,13 @@ export class AccountRegister {
             .register(this._email, this._firstName, this._lastName, this._password)
             .then((response) => {
                 if(!isSuccessful(response)) {
-                    //let statusCode = response.status.toString();
                     this._errorMessage = UtilFunctions.getErrorMessage(response, this.ERROR_MSG_CANT_REGISTER);
                 } else {
-                    this._successMessage = this.REGISTRATION_SUCCESSFUL;
+                    // Automatic login after successful registration
+                    this._jwt = response.data ? response.data.token : null;
+                    if(this._jwt != null) {
+                        this.loginAction.logIn(this._email, this._password);
+                    }
                 }
             });
     }

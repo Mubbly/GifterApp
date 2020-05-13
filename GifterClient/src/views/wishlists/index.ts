@@ -28,7 +28,7 @@ export class WishlistsIndex {
     
     private getAllWishlists(): void {
         this.wishlistService
-        .getWishlists()
+        .getAll()
         .then((response) => {
             if (!Utils.isSuccessful(response)) {
                 this.handleErrors(response);

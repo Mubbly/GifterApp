@@ -2,7 +2,7 @@ import { autoinject } from 'aurelia-framework';
 import { RouteConfig, NavigationInstruction } from 'aurelia-router';
 import { Optional } from 'types/generalTypes';
 import { IAppUser } from 'domain/IAppUser';
-import { AppUserService } from 'service/appUserService';
+import { AppUserService } from 'service/base/appUserService';
 
 @autoinject
 export class AppUserDetails {

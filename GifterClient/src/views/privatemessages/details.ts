@@ -3,24 +3,32 @@ import { RouteConfig, NavigationInstruction } from 'aurelia-router';
 import { Optional } from 'types/generalTypes';
 import { IPrivateMessage } from 'domain/IPrivateMessage';
 import { PrivateMessageService } from 'service/privateMessageService';
+import * as UtilFunctions from 'utils/utilFunctions';
 
 @autoinject
 export class PrivateMessageDetails {
-    private _privateMessages: IPrivateMessage[] = [];
     private _privateMessage: Optional<IPrivateMessage> = null;
+    private _errorMessage: Optional<string> = null;
 
-    constructor(private privateMessageService: PrivateMessageService) {
+    constructor(private privateMessageService: PrivateMessageService) {}
 
-    }
-
-    attached() {
-
-    }
+    attached() {}
 
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-        if(params.id && typeof(params.id) === 'string') {
-            this.privateMessageService.getPrivateMessage(params.id).then(
-                data => this._privateMessage = data
+        this.getPrivateMessage(params.id);
+    }
+
+    private getPrivateMessage(id: string): void {
+        if(UtilFunctions.existsAndIsString(id)) {
+            this.privateMessageService.get(id).then(
+                response => {
+                    if(UtilFunctions.isSuccessful(response)) {
+                        this._privateMessage = response.data!;
+                    } else {
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
+                    }
+                }
             )
         }
     }

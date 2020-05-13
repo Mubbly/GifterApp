@@ -31,7 +31,7 @@ export class WishlistDetails {
 
     private getWishlist(id: string): void {
         if (Utils.existsAndIsString(id)) {
-            this.wishlistService.getWishlist(id).then((response) => {
+            this.wishlistService.get(id).then((response) => {
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {

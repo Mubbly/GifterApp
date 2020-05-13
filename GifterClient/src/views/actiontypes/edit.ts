@@ -1,6 +1,6 @@
 import { autoinject } from 'aurelia-framework';
 import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
-import { IActionTypeEdit } from 'domain/IActionTypeEdit';
+import { IActionTypeEdit } from 'domain/IActionType';
 import * as Utils from 'utils/utilFunctions';
 import { Optional, GifterInterface, HTML5DateString } from 'types/generalTypes';
 import { ActionTypeService } from 'service/actionTypeService';
@@ -53,9 +53,9 @@ export class ActionTypesEdit {
 
     private updateActionType(): void {
         this.actionTypeService
-            .updateActionType(this._actionType!)
+            .update(this._actionType!)
             .then(
-                response => {
+                (response: IFetchResponse<IActionTypeEdit>) => {
                     if (!Utils.isSuccessful(response)) {
                         this._errorMessage = Utils.getErrorMessage(response);
                     } else {
@@ -68,7 +68,7 @@ export class ActionTypesEdit {
     private getActionType(id: string): void {
         if (Utils.existsAndIsString(id)) {
             this.actionTypeService
-                .getActionType(id)
+                .get(id)
                 .then((response) => {
                     if (!Utils.isSuccessful(response)) {
                         this.handleErrors(response);

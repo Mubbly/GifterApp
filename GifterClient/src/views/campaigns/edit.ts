@@ -1,6 +1,6 @@
 import { autoinject } from 'aurelia-framework';
 import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
-import { ICampaignEdit } from 'domain/ICampaignEdit';
+import { ICampaignEdit } from 'domain/ICampaign';
 import * as Utils from 'utils/utilFunctions';
 import { Optional, GifterInterface, HTML5DateString } from 'types/generalTypes';
 import { CampaignService } from 'service/campaignService';
@@ -62,9 +62,9 @@ export class CampaignsEdit {
 
     private updateCampaign(): void {
         this.campaignService
-            .updateCampaign(this._campaign!)
+            .update(this._campaign!)
             .then(
-                response => {
+                (response: IFetchResponse<ICampaignEdit>) => {
                     if (Utils.isSuccessful(response)) {
                         this.router.navigateToRoute(this.CAMPAIGN_ROUTE, {});
                     } else {
@@ -76,7 +76,7 @@ export class CampaignsEdit {
 
     private getCampaign(id: string): void {
         if (Utils.existsAndIsString(id)) {
-            this.campaignService.getCampaign(id).then((response) => {
+            this.campaignService.get(id).then((response) => {
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {

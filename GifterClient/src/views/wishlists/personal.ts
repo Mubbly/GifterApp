@@ -24,16 +24,16 @@ export class WishlistsPersonal {
         if(!this.appState.jwt) {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         } else {
-            this.getAllPersonalWishlists();
+            this.getPersonalWishlists();
         }
     }
     
     /**
      * Get wishlists that the user has created
      */
-    private getAllPersonalWishlists(): void {
+    private getPersonalWishlists(): void {
         this.wishlistService
-        .getPersonalWishlists()
+        .getAllPersonal()
         .then((response) => {
             if (!Utils.isSuccessful(response)) {
                 this.handleErrors(response);

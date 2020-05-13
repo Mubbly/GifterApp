@@ -20,7 +20,7 @@ export class DonateeDetails {
 
     private getDonatee(id: string): void {
         if(UtilFunctions.existsAndIsString(id)) {
-            this.donateeService.getDonatee(id).then(
+            this.donateeService.get(id).then(
                 response => {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._donatee = response.data!;

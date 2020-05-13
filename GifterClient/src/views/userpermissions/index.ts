@@ -1,18 +1,18 @@
-import { autoinject } from 'aurelia-framework';
-import { IUserPermission } from 'domain/IUserPermission';
-import { UserPermissionService } from 'service/userPermissionService';
+// import { autoinject } from 'aurelia-framework';
+// import { IUserPermission } from 'domain/IUserPermission';
+// import { UserPermissionService } from 'service/userPermissionService';
 
-@autoinject
-export class UserPermissionsIndex {
-    private _userPermissions: IUserPermission[] = [];
+// @autoinject
+// export class UserPermissionsIndex {
+//     private _userPermissions: IUserPermission[] = [];
 
-    constructor(private userPermissionService: UserPermissionService) {
+//     constructor(private userPermissionService: UserPermissionService) {
 
-    }
+//     }
 
-    attached() {
-        this.userPermissionService.getUserPermissions().then(
-            data => this._userPermissions = data
-        );
-    }
-}
+//     attached() {
+//         this.userPermissionService.getUserPermissions().then(
+//             data => this._userPermissions = data
+//         );
+//     }
+// }

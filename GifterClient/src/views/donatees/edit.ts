@@ -1,9 +1,10 @@
 import { autoinject } from 'aurelia-framework';
 import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
 import { DonateeService } from 'service/donateeService';
-import { IDonateeEdit } from 'domain/IDonateeEdit';
+import { IDonateeEdit } from 'domain/IDonatee';
 import * as UtilFunctions from 'utils/utilFunctions';
 import { Optional } from 'types/generalTypes';
+import { IFetchResponse } from 'types/IFetchResponse';
 
 @autoinject
 export class DonateesEdit {
@@ -19,7 +20,7 @@ export class DonateesEdit {
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
         const donateeId = params.id;
         if(UtilFunctions.existsAndIsString(donateeId)) {
-            this.donateeService.getDonatee(donateeId).then(
+            this.donateeService.get(donateeId).then(
                 response => {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._donatee = response.data!;
@@ -64,9 +65,9 @@ export class DonateesEdit {
         console.log(this._donatee);
 
         this.donateeService
-            .updateDonatee(this._donatee!)
+            .update(this._donatee!)
             .then(
-                response => {
+                (response: IFetchResponse<IDonateeEdit>) => {
                     if (UtilFunctions.isSuccessful(response)) {
                         this.router.navigateToRoute('donateesIndex', {});
                     } else {

@@ -2,10 +2,11 @@ import { autoinject } from "aurelia-framework";
 import { RouteConfig, NavigationInstruction, Router } from "aurelia-router";
 import { WishlistService } from "service/wishlistService";
 import * as Utils from "utils/utilFunctions";
-import { IWishlistCreate } from "domain/IWishlistCreate";
+import { IWishlistCreate } from "domain/IWishlist";
 import { Optional } from "types/generalTypes";
 import { AppState } from "state/appState";
 import { App } from "app";
+import { IFetchResponse } from "types/IFetchResponse";
 
 @autoinject
 export class WishlistsCreate {
@@ -40,8 +41,8 @@ export class WishlistsCreate {
 
     private createWishlist(newWishlist: IWishlistCreate) {
         this.wishlistService
-            .createWishlist(newWishlist)
-            .then((response) => {
+            .create(newWishlist)
+            .then((response: IFetchResponse<IWishlistCreate>) => {
                 if (!Utils.isSuccessful(response)) {
                     this._errorMessage = Utils.getErrorMessage(response);
                 } else {

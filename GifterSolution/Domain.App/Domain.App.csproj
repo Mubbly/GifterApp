@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Contracts.Domain\Contracts.Domain.csproj" />
+      <ProjectReference Include="..\DAL.Base\DAL.Base.csproj" />
+      <ProjectReference Include="..\Domain.Base\Domain.Base.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.2" />
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
+    </ItemGroup>
+
+</Project>

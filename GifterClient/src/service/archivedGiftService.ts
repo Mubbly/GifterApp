@@ -1,37 +1,13 @@
 import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
-import { Optional } from 'types/generalTypes';
-import { IArchivedGift } from 'domain/IArchivedGift';
+import { BaseService } from './base/baseService';
+import { IArchivedGift, IArchivedGiftCreate, IArchivedGiftEdit } from 'domain/IArchivedGift';
+import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
+import { AppState } from 'state/appState';
 
 @autoinject
-export class ArchivedGiftService {
-    private readonly _baseUrl = 'https://localhost:5001/api/ArchivedGifts';
-
-    constructor(private httpClient: HttpClient) {
-
+export class ArchivedGiftService extends BaseService<IArchivedGift, IArchivedGiftCreate, IArchivedGiftEdit> {
+    constructor(protected httpClient: HttpClient, appState: AppState) {
+        super(ApiEndpointUrls.ARCHIVED_GIFTS, httpClient, appState);
     }
-
-    getArchivedGifts(): Promise<IArchivedGift[]> {
-        return this.httpClient
-            .fetch(this._baseUrl)
-            .then(response => response.json())
-            .then((data: IArchivedGift[]) => data)
-            .catch(reason => { 
-                console.log(reason); 
-                return [];
-            });
-    }
-
-    getArchivedGift(id: string): Promise<Optional<IArchivedGift>> {
-        return this.httpClient
-            .fetch(this._baseUrl + '/' + id)
-            .then(response => response.json())
-            .then((data: IArchivedGift) => data)
-            .catch(reason => { 
-                console.log(reason);
-                return null;
-            });
-    }
-
-    // TODO: .. update, delete etc
 }

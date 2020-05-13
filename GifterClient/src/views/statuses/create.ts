@@ -1,8 +1,8 @@
 import { autoinject } from "aurelia-framework";
-import { RouteConfig, NavigationInstruction, Router } from "aurelia-router";
+import { Router } from "aurelia-router";
 import { StatusService } from "service/statusService";
 import * as Utils from "utils/utilFunctions";
-import { IStatusCreate } from "domain/IStatusCreate";
+import { IStatusCreate } from "domain/IStatus";
 import { Optional } from "types/generalTypes";
 import { AppState } from "state/appState";
 
@@ -53,8 +53,8 @@ export class StatusesCreate {
 
     private createStatus(newStatus: IStatusCreate) {
         this.statusService
-        .createStatus(newStatus)
-        .then((response) => {
+        .create(newStatus)
+        .then(response => {
             if (!Utils.isSuccessful(response)) {
                 this._errorMessage = Utils.getErrorMessage(response);
             } else {

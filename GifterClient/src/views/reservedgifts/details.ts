@@ -3,24 +3,32 @@ import { RouteConfig, NavigationInstruction } from 'aurelia-router';
 import { Optional } from 'types/generalTypes';
 import { IReservedGift } from 'domain/IReservedGift';
 import { ReservedGiftService } from 'service/reservedGiftService';
+import * as UtilFunctions from 'utils/utilFunctions';
 
 @autoinject
 export class ReservedGiftDetails {
-    private _reservedGifts: IReservedGift[] = [];
     private _reservedGift: Optional<IReservedGift> = null;
+    private _errorMessage: Optional<string> = null;
 
-    constructor(private reservedGiftService: ReservedGiftService) {
+    constructor(private reservedGiftService: ReservedGiftService) {}
 
-    }
-
-    attached() {
-
-    }
+    attached() {}
 
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-        if(params.id && typeof(params.id) === 'string') {
-            this.reservedGiftService.getReservedGift(params.id).then(
-                data => this._reservedGift = data
+        this.getReservedGift(params.id);
+    }
+
+    private getReservedGift(id: string): void {
+        if(UtilFunctions.existsAndIsString(id)) {
+            this.reservedGiftService.get(id).then(
+                response => {
+                    if(UtilFunctions.isSuccessful(response)) {
+                        this._reservedGift = response.data!;
+                    } else {
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
+                    }
+                }
             )
         }
     }

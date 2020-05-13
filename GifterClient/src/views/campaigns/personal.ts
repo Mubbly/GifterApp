@@ -9,7 +9,7 @@ import { AppState } from "state/appState";
 
 @autoinject
 export class CampaignsPersonal {
-    private readonly ERROR_NOT_CAMPAIGN_MANAGER = "You have to be a campaign manager to create new campaigns";
+    private readonly ERROR_NOT_CAMPAIGN_MANAGER = "You need to be a campaign manager to create new campaigns";
 
     private _campaigns: ICampaign[] = [];
     private _errorMessage: Optional<string> = null;
@@ -36,7 +36,7 @@ export class CampaignsPersonal {
      */
     private getAllPersonalCampaigns(): void {
         this.campaignService
-        .getPersonalCampaigns()
+        .getAllPersonal()
         .then((response) => {
             if (!Utils.isSuccessful(response)) {
                 this.handleErrors(response);

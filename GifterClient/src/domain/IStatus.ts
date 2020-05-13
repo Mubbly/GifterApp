@@ -1,12 +1,17 @@
 import { Optional } from 'types/generalTypes';
+import { IBaseEntity } from './base/IBaseEntity';
 
-export interface IStatus {
-  id: string;
-  statusValue: string;
-  comment: Optional<string>;
+export interface IStatusCreate {
+    statusValue: string;
+    comment: Optional<string>;
+}
 
-  giftsCount: number;
-  reservedGiftsCount: number;
-  archivedGiftsCount: number;
-  donateesCount: number;
+export interface IStatusEdit extends IBaseEntity, IStatusCreate {
+}
+
+export interface IStatus extends IStatusEdit {
+    giftsCount: number;
+    reservedGiftsCount: number;
+    archivedGiftsCount: number;
+    donateesCount: number;
 }

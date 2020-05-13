@@ -1,6 +1,6 @@
 import { autoinject } from 'aurelia-framework';
 import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
-import { IInvitedUserEdit } from 'domain/IInvitedUserEdit';
+import { IInvitedUserEdit } from 'domain/IInvitedUser';
 import * as Utils from 'utils/utilFunctions';
 import { Optional, GifterInterface, HTML5DateString } from 'types/generalTypes';
 import { InvitedUserService } from 'service/invitedUserService';
@@ -57,9 +57,9 @@ export class InvitedUsersEdit {
 
     private updateInvitedUser(): void {
         this.invitedUserService
-            .updateInvitedUser(this._invitedUser!)
+            .update(this._invitedUser!)
             .then(
-                response => {
+                (response: IFetchResponse<IInvitedUserEdit>) => {
                     if (!Utils.isSuccessful(response)) {
                         this._errorMessage = Utils.getErrorMessage(response);
                     } else {
@@ -72,8 +72,8 @@ export class InvitedUsersEdit {
     private getInvitedUser(id: string): void {
         if (Utils.existsAndIsString(id)) {
             this.invitedUserService
-                .getInvitedUser(id)
-                .then((response) => {
+                .get(id)
+                .then(response => {
                     if (!Utils.isSuccessful(response)) {
                         this.handleErrors(response);
                     } else {

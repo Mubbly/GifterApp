@@ -32,7 +32,7 @@ export class StatusDetails {
 
     private getStatus(id: string): void {
         if (Utils.existsAndIsString(id)) {
-            this.statusService.getStatus(id).then((response) => {
+            this.statusService.get(id).then((response) => {
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {

@@ -20,7 +20,7 @@ export class GiftDetails {
 
     private getGift(id: string): void {
         if(UtilFunctions.existsAndIsString(id)) {
-            this.giftService.getGift(id).then(
+            this.giftService.get(id).then(
                 response => {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._gift = response.data!;

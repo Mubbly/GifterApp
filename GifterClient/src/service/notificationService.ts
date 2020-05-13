@@ -1,37 +1,13 @@
 import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
-import { Optional } from 'types/generalTypes';
-import { INotification } from 'domain/INotification';
+import { BaseService } from './base/baseService';
+import { INotification, INotificationCreate, INotificationEdit } from 'domain/INotification';
+import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
+import { AppState } from 'state/appState';
 
 @autoinject
-export class NotificationService {
-    private readonly _baseUrl = 'https://localhost:5001/api/Notifications';
-
-    constructor(private httpClient: HttpClient) {
-
+export class NotificationService extends BaseService<INotification, INotificationCreate, INotificationEdit> {
+    constructor(protected httpClient: HttpClient, appState: AppState) {
+        super(ApiEndpointUrls.NOTIFICATIONS, httpClient, appState);
     }
-
-    getNotifications(): Promise<INotification[]> {
-        return this.httpClient
-            .fetch(this._baseUrl)
-            .then(response => response.json())
-            .then((data: INotification[]) => data)
-            .catch(reason => { 
-                console.log(reason); 
-                return [];
-            });
-    }
-
-    getNotification(id: string): Promise<Optional<INotification>> {
-        return this.httpClient
-            .fetch(this._baseUrl + '/' + id)
-            .then(response => response.json())
-            .then((data: INotification) => data)
-            .catch(reason => { 
-                console.log(reason);
-                return null;
-            });
-    }
-
-    // TODO: .. update, delete etc
 }

@@ -1,14 +1,20 @@
 import { Optional } from "types/generalTypes";
 import { IAppUser } from "./IAppUser";
+import { IBaseEntity } from "./base/IBaseEntity";
 
-export interface IInvitedUser {
-    id: string;
+export interface IInvitedUserCreate {
     email: string;
     phoneNumber: Optional<string>;
     message: Optional<string>;
     dateInvited: string;
-    hasJoined: boolean;
+}
 
+export interface IInvitedUserEdit extends IBaseEntity, IInvitedUserCreate {
+}
+
+export interface IInvitedUser extends IInvitedUserEdit {
+    hasJoined: boolean;
+    
     invitorUserId: string;
     invitorUser: IAppUser;
 }

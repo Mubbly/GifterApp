@@ -12,11 +12,11 @@ export class DonateesIndex {
     constructor(private donateeService: DonateeService) {}
 
     attached() {
-        this.getAllDonatees();
+        this.getDonatees();
     }
 
-    private getAllDonatees(): void {
-        this.donateeService.getDonatees().then((response) => {
+    private getDonatees(): void {
+        this.donateeService.getAll().then((response) => {
             if (UtilFunctions.isSuccessful(response)) {
                 this._donatees = response.data!;
             } else {

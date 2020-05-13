@@ -1,18 +1,28 @@
-import { autoinject } from 'aurelia-framework';
-import { IArchivedGift } from 'domain/IArchivedGift';
-import { ArchivedGiftService } from 'service/archivedGiftService';
+import { autoinject } from "aurelia-framework";
+import { IArchivedGift } from "domain/IArchivedGift";
+import { ArchivedGiftService } from "service/archivedGiftService";
+import * as UtilFunctions from "utils/utilFunctions";
+import { Optional } from "types/generalTypes";
 
 @autoinject
 export class ArchivedGiftsIndex {
-    private _archivedGifts: IArchivedGift[] = [];
+    private _reservedArchivedGifts: IArchivedGift[] = [];
+    private _errorMessage: Optional<string> = null;
 
-    constructor(private archivedGiftService: ArchivedGiftService) {
-
-    }
+    constructor(private reservedArchivedGiftService: ArchivedGiftService) {}
 
     attached() {
-        this.archivedGiftService.getArchivedGifts().then(
-            data => this._archivedGifts = data
-        );
+        this.getArchivedGifts();
+    }
+
+    private getArchivedGifts(): void {
+        this.reservedArchivedGiftService.getAll().then((response) => {
+            if (UtilFunctions.isSuccessful(response)) {
+                this._reservedArchivedGifts = response.data!;
+            } else {
+                this._errorMessage = UtilFunctions.getErrorMessage(response);
+
+            }
+        });
     }
 }

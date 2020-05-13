@@ -3,24 +3,32 @@ import { RouteConfig, NavigationInstruction } from 'aurelia-router';
 import { Optional } from 'types/generalTypes';
 import { INotificationType } from 'domain/INotificationType';
 import { NotificationTypeService } from 'service/notificationTypeService';
+import * as UtilFunctions from 'utils/utilFunctions';
 
 @autoinject
 export class NotificationTypeDetails {
-    private _notificationTypes: INotificationType[] = [];
     private _notificationType: Optional<INotificationType> = null;
+    private _errorMessage: Optional<string> = null;
 
-    constructor(private notificationTypeService: NotificationTypeService) {
+    constructor(private notificationTypeService: NotificationTypeService) {}
 
-    }
-
-    attached() {
-
-    }
+    attached() {}
 
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-        if(params.id && typeof(params.id) === 'string') {
-            this.notificationTypeService.getNotificationType(params.id).then(
-                data => this._notificationType = data
+        this.getNotificationType(params.id);
+    }
+
+    private getNotificationType(id: string): void {
+        if(UtilFunctions.existsAndIsString(id)) {
+            this.notificationTypeService.get(id).then(
+                response => {
+                    if(UtilFunctions.isSuccessful(response)) {
+                        this._notificationType = response.data!;
+                    } else {
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
+                    }
+                }
             )
         }
     }

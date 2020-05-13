@@ -1,6 +1,6 @@
 import { autoinject } from 'aurelia-framework';
 import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
-import { IWishlistEdit } from 'domain/IWishlistEdit';
+import { IWishlistEdit } from 'domain/IWishlist';
 import * as Utils from 'utils/utilFunctions';
 import { Optional, GifterInterface, HTML5DateString } from 'types/generalTypes';
 import { WishlistService } from 'service/wishlistService';
@@ -37,18 +37,18 @@ export class WishlistsEdit {
 
     /** Reassigns _wishlist props */
     private getNewValuesFromInputs() {
-        let comment = <Optional<string>>this._wishlist!.comment;
-        if(Utils.isEmpty(comment)) {
+        let commentInput = <Optional<string>>this._wishlist!.comment;
+        if(Utils.isEmpty(commentInput)) {
             return;
         }
-        this._wishlist!.comment = comment;
+        this._wishlist!.comment = commentInput;
     }
 
     private updateWishlist(): void {
         this.wishlistService
-            .updateWishlist(this._wishlist!)
+            .update(this._wishlist!)
             .then(
-                response => {
+                (response: IFetchResponse<IWishlistEdit>) => {
                     if (Utils.isSuccessful(response)) {
                         this.router.navigateToRoute(this.WISHLIST_ROUTE, {});
                     } else {
@@ -60,7 +60,7 @@ export class WishlistsEdit {
 
     private getWishlist(id: string): void {
         if (Utils.existsAndIsString(id)) {
-            this.wishlistService.getWishlist(id).then((response) => {
+            this.wishlistService.get(id).then((response) => {
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {

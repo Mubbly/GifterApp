@@ -1,37 +1,13 @@
 import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
-import { Optional } from 'types/generalTypes';
-import { INotificationType } from 'domain/INotificationType';
+import { BaseService } from './base/baseService';
+import { INotificationType, INotificationTypeCreate, INotificationTypeEdit } from 'domain/INotificationType';
+import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
+import { AppState } from 'state/appState';
 
 @autoinject
-export class NotificationTypeService {
-    private readonly _baseUrl = 'https://localhost:5001/api/NotificationTypes';
-
-    constructor(private httpClient: HttpClient) {
-
+export class NotificationTypeService extends BaseService<INotificationType, INotificationTypeCreate, INotificationTypeEdit> {
+    constructor(protected httpClient: HttpClient, appState: AppState) {
+        super(ApiEndpointUrls.NOTIFICATION_TYPES, httpClient, appState);
     }
-
-    getNotificationTypes(): Promise<INotificationType[]> {
-        return this.httpClient
-            .fetch(this._baseUrl)
-            .then(response => response.json())
-            .then((data: INotificationType[]) => data)
-            .catch(reason => { 
-                console.log(reason); 
-                return [];
-            });
-    }
-
-    getNotificationType(id: string): Promise<Optional<INotificationType>> {
-        return this.httpClient
-            .fetch(this._baseUrl + '/' + id)
-            .then(response => response.json())
-            .then((data: INotificationType) => data)
-            .catch(reason => { 
-                console.log(reason);
-                return null;
-            });
-    }
-
-    // TODO: .. update, delete etc
 }

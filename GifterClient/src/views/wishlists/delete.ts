@@ -36,7 +36,7 @@ export class WishlistsDelete {
 
     private getWishlist(id: string): void {
         if (Utils.existsAndIsString(id)) {
-            this.wishlistService.getWishlist(id).then((response) => {
+            this.wishlistService.get(id).then((response) => {
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {
@@ -48,7 +48,7 @@ export class WishlistsDelete {
 
     private deleteWishlist(id: string) {
         this.wishlistService
-        .deleteWishlist(id)
+        .delete(id)
         .then(
             response => {
                 if (!Utils.isSuccessful(response)) {

@@ -31,7 +31,7 @@ export class StatusesIndex {
     
     private getStatuses(): void {
         this.statusService
-        .getStatuses()
+        .getAll()
         .then((response) => {
             if (!Utils.isSuccessful(response)) {
                 this.handleErrors(response);

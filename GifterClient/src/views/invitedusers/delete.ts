@@ -37,7 +37,7 @@ export class InvitedUsersDelete {
     private getInvitedUser(id: string): void {
         if (Utils.existsAndIsString(id)) {
             this.invitedUserService
-                .getInvitedUser(id)
+                .get(id)
                 .then((response) => {
                     if (!Utils.isSuccessful(response)) {
                         this.handleErrors(response);
@@ -50,7 +50,7 @@ export class InvitedUsersDelete {
 
     private deleteInvitedUser(id: string) {
         this.invitedUserService
-        .deleteInvitedUser(id)
+        .delete(id)
         .then(
             response => {
                 if (!Utils.isSuccessful(response)) {

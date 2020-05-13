@@ -2,9 +2,10 @@ import { autoinject } from "aurelia-framework";
 import { RouteConfig, NavigationInstruction, Router } from "aurelia-router";
 import { InvitedUserService } from "service/invitedUserService";
 import * as Utils from "utils/utilFunctions";
-import { IInvitedUserCreate } from "domain/IInvitedUserCreate";
+import { IInvitedUserCreate } from "domain/IInvitedUser";
 import { Optional } from "types/generalTypes";
 import { AppState } from "state/appState";
+import { IFetchResponse } from "types/IFetchResponse";
 
 @autoinject
 export class InvitedUsersCreate {
@@ -45,15 +46,16 @@ export class InvitedUsersCreate {
         let newInvitedUser: IInvitedUserCreate = {
             email: this._email,
             phoneNumber: this._phoneNumber,
-            message: this._message
+            message: this._message,
+            dateInvited: new Date().toUTCString()
         };
         this.createInvitedUser(newInvitedUser);
     }
 
     private createInvitedUser(newInvitedUser: IInvitedUserCreate) {
         this.invitedUserService
-        .createInvitedUser(newInvitedUser)
-        .then((response) => {
+        .create(newInvitedUser)
+        .then((response: IFetchResponse<IInvitedUserCreate>) => {
             if (!Utils.isSuccessful(response)) {
                 this._errorMessage = Utils.getErrorMessage(response);
             } else {

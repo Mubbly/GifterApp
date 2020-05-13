@@ -1,37 +1,12 @@
-import { autoinject } from 'aurelia-framework';
-import { HttpClient } from 'aurelia-fetch-client';
-import { Optional } from 'types/generalTypes';
-import { ICampaignDonatee } from 'domain/ICampaignDonatee';
+// import { autoinject } from 'aurelia-framework';
+// import { HttpClient } from 'aurelia-fetch-client';
+// import { BaseService } from './base/baseService';
+// import { ICampaignDonatee } from 'domain/ICampaignDonatee';
+// import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
 
-@autoinject
-export class CampaignDonateeService {
-    private readonly _baseUrl = 'https://localhost:5001/api/CampaignDonatees';
-
-    constructor(private httpClient: HttpClient) {
-
-    }
-
-    getCampaignDonatees(): Promise<ICampaignDonatee[]> {
-        return this.httpClient
-            .fetch(this._baseUrl)
-            .then(response => response.json())
-            .then((data: ICampaignDonatee[]) => data)
-            .catch(reason => { 
-                console.log(reason); 
-                return [];
-            });
-    }
-
-    getCampaignDonatee(id: string): Promise<Optional<ICampaignDonatee>> {
-        return this.httpClient
-            .fetch(this._baseUrl + '/' + id)
-            .then(response => response.json())
-            .then((data: ICampaignDonatee) => data)
-            .catch(reason => { 
-                console.log(reason);
-                return null;
-            });
-    }
-
-    // TODO: .. update, delete etc
-}
+// @autoinject
+// export class CampaignDonateeService extends BaseService<ICampaignDonatee> {
+//     constructor(protected httpClient: HttpClient) {
+//         super(ApiEndpointUrls.CAMPAIGN_DONATEES, httpClient);
+//     }
+// }

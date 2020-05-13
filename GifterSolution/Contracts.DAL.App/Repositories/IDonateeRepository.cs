@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Contracts.DAL.Base.Repositories;
-using Domain;
-using PublicApi.DTO.v1;
+﻿using Contracts.DAL.Base.Repositories;
+using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IDonateeRepository : IBaseRepository<Donatee>
+    public interface IDonateeRepository : IBaseRepository<DALAppDTO.Donatee>, IDonateeRepositoryCustom
     {
-        Task<IEnumerable<Donatee>> AllAsync(Guid? userId = null);
-        Task<Donatee> FirstOrDefaultAsync(Guid id, Guid? userId = null);
-
-        Task<bool> ExistsAsync(Guid id, Guid? userId = null);
-        Task DeleteAsync(Guid id, Guid? userId = null);
-
-        // DTO methods
-        Task<IEnumerable<DonateeDTO>> DTOAllAsync(Guid? userId = null);
-        Task<DonateeDTO> DTOFirstOrDefaultAsync(Guid id, Guid? userId = null);      }
+    }
 }

@@ -1,18 +1,28 @@
-import { autoinject } from 'aurelia-framework';
-import { INotification } from 'domain/INotification';
-import { NotificationService } from 'service/notificationService';
+import { autoinject } from "aurelia-framework";
+import { INotification } from "domain/INotification";
+import { NotificationService } from "service/notificationService";
+import * as UtilFunctions from "utils/utilFunctions";
+import { Optional } from "types/generalTypes";
 
 @autoinject
 export class NotificationsIndex {
-    private _notifications: INotification[] = [];
+    private _reservedNotifications: INotification[] = [];
+    private _errorMessage: Optional<string> = null;
 
-    constructor(private notificationService: NotificationService) {
-
-    }
+    constructor(private reservedNotificationService: NotificationService) {}
 
     attached() {
-        this.notificationService.getNotifications().then(
-            data => this._notifications = data
-        );
+        this.getNotifications();
+    }
+
+    private getNotifications(): void {
+        this.reservedNotificationService.getAll().then((response) => {
+            if (UtilFunctions.isSuccessful(response)) {
+                this._reservedNotifications = response.data!;
+            } else {
+                this._errorMessage = UtilFunctions.getErrorMessage(response);
+
+            }
+        });
     }
 }

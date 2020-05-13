@@ -31,7 +31,7 @@ export class ActionTypesIndex {
     
     private getActionTypes(): void {
         this.actionTypeService
-        .getActionTypes()
+        .getAll()
         .then((response) => {
             if (!Utils.isSuccessful(response)) {
                 this.handleErrors(response);

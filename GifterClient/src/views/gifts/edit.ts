@@ -1,9 +1,10 @@
 import { autoinject } from 'aurelia-framework';
 import { RouteConfig, NavigationInstruction, Router } from 'aurelia-router';
 import { GiftService } from 'service/giftService';
-import { IGiftEdit } from 'domain/IGiftEdit';
+import { IGiftEdit } from 'domain/IGift';
 import * as UtilFunctions from 'utils/utilFunctions';
 import { Optional } from 'types/generalTypes';
+import { IFetchResponse } from 'types/IFetchResponse';
 
 @autoinject
 export class GiftsEdit {
@@ -19,7 +20,7 @@ export class GiftsEdit {
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
         const giftId = params.id;
         if(UtilFunctions.existsAndIsString(giftId)) {
-            this.giftService.getGift(giftId).then(
+            this.giftService.get(giftId).then(
                 response => {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._gift = response.data!;
@@ -51,9 +52,9 @@ export class GiftsEdit {
         console.log(this._gift);
 
         this.giftService
-            .updateGift(this._gift!)
+            .update(this._gift!)
             .then(
-                response => {
+                (response: IFetchResponse<IGiftEdit>) => {
                     if (UtilFunctions.isSuccessful(response)) {
                         this.router.navigateToRoute('giftsIndex', {});
                     } else {

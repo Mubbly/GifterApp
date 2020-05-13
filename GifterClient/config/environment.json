@@ -1,4 +1,10 @@
 {
-  "debug": true,
-  "testing": true
+    "debug": true,
+    "testing": true,
+    "logLevel": "debug",
+
+
+    "backendUrl": "https://mubbly.gifterapp.com/api/v1.0/",
+    "backendUrlLocal": "https://localhost:5001/api/v1.0/",
+    "swaggerUrl": "https://mubbly.gifterapp.com/swagger/index.html"
 }

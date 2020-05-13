@@ -1,9 +1,9 @@
 import { Optional } from "types/generalTypes";
 import { IAppUser } from "./IAppUser";
 import { IWishlist } from './IWishlist';
+import { IBaseEntity } from "./base/IBaseEntity";
 
-export interface IProfile {
-    id: string;
+export interface IProfileCreate {
     profilePicture: Optional<string>;
     gender: Optional<string>;
     bio: Optional<string>;
@@ -11,9 +11,14 @@ export interface IProfile {
     isPrivate: boolean;
 
     appUserId: string;
-    appUser: IAppUser;
+    wishlistId: string; // TODO
+}
 
-    wishlistId: string;
+export interface IProfileEdit extends IBaseEntity, IProfileCreate {
+}
+
+export interface IProfile extends IProfileEdit {
+    appUser: IAppUser;
     wishlist: IWishlist;
 
     userProfilesCount: number;

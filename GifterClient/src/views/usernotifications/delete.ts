@@ -1,7 +1,7 @@
-export class Delete {
-  message: string;
+// export class Delete {
+//   message: string;
 
-  constructor() {
-    this.message = ' works!';
-  }
-}
+//   constructor() {
+//     this.message = ' works!';
+//   }
+// }

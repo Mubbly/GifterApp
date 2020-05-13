@@ -2,6 +2,10 @@
   "compileOnSave": false,
   "compilerOptions": {
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "downlevelIteration": true,
+    "allowSyntheticDefaultImports": true,
     "module": "esnext",
     "skipLibCheck": true,
     "typeRoots": [

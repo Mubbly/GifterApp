@@ -3,24 +3,32 @@ import { RouteConfig, NavigationInstruction } from 'aurelia-router';
 import { Optional } from 'types/generalTypes';
 import { IArchivedGift } from 'domain/IArchivedGift';
 import { ArchivedGiftService } from 'service/archivedGiftService';
+import * as UtilFunctions from 'utils/utilFunctions';
 
 @autoinject
 export class ArchivedGiftDetails {
-    private _archivedGifts: IArchivedGift[] = [];
     private _archivedGift: Optional<IArchivedGift> = null;
+    private _errorMessage: Optional<string> = null;
 
-    constructor(private archivedGiftService: ArchivedGiftService) {
+    constructor(private archivedGiftService: ArchivedGiftService) {}
 
-    }
-
-    attached() {
-
-    }
+    attached() {}
 
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-        if(params.id && typeof(params.id) === 'string') {
-            this.archivedGiftService.getArchivedGift(params.id).then(
-                data => this._archivedGift = data
+        this.getArchivedGift(params.id);
+    }
+
+    private getArchivedGift(id: string): void {
+        if(UtilFunctions.existsAndIsString(id)) {
+            this.archivedGiftService.get(id).then(
+                response => {
+                    if(UtilFunctions.isSuccessful(response)) {
+                        this._archivedGift = response.data!;
+                    } else {
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
+                    }
+                }
             )
         }
     }

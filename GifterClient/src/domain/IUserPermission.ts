@@ -1,15 +1,15 @@
-import { IPermission } from './IPermission';
-import { Optional } from 'types/generalTypes';
-import { IAppUser } from './IAppUser';
-export interface IUserPermission {
-    id: string;
-    from: string;
-    to: string;
-    comment: Optional<string>;
+// import { IPermission } from './IPermission';
+// import { Optional } from 'types/generalTypes';
+// import { IAppUser } from './IAppUser';
+// import { IBaseEntity } from './base/IBaseEntity';
 
-    appUserId: string;
-    appUser: IAppUser;
+// export interface IUserPermission extends IBaseEntity {
+//     from: string;
+//     to: string;
+//     comment: Optional<string>;
 
-    permissionId: string;
-    permission: IPermission;
-}
+//     appUserId: string;
+//     appUser: IAppUser;
+//     permissionId: string;
+//     permission: IPermission;
+// }

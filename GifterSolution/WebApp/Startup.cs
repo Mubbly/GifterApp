@@ -1,18 +1,27 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using BLL.App;
+using Contracts.BLL.App;
 using Contracts.DAL.App;
+using Contracts.DAL.Base;
 using DAL.App.EF;
-using Domain.Identity;
+using DAL.App.EF.Helpers;
+using Domain.App.Identity;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using WebApp.Helpers;
 
 namespace WebApp
 {
@@ -32,13 +41,16 @@ namespace WebApp
                 options.UseMySql(
                     Configuration.GetConnectionString("MySqlConnection"))); // CUSTOM DB CONNECTION STRING
 
+            services.AddScoped<IUserNameProvider, UserNameProvider>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
+            services.AddScoped<IAppBLL, AppBLL>();
 
-            services.AddIdentity<AppUser, AppRole>()
+            services.AddIdentity<AppUser, AppRole>(options =>
+                    options.SignIn.RequireConfirmedAccount = false)
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-            
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
@@ -52,7 +64,7 @@ namespace WebApp
                         builder.AllowAnyMethod();
                     });
             });
-            
+
             // =============== JWT support ===============
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
             services
@@ -66,27 +78,29 @@ namespace WebApp
                     {
                         ValidIssuer = Configuration["JWT:Issuer"],
                         ValidAudience = Configuration["JWT:Issuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:SigningKey"])),
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:SigningKey"])),
                         ClockSkew = TimeSpan.Zero // remove delay of token when expire
                     };
                 });
 
-            // TODO: Enable later and update ApiControllers with versions
-            // services.AddApiVersioning(options =>
-            // {
-            //     options.ReportApiVersions = true;
-            //     // bad idea?:
-            //     //options.DefaultApiVersion = new ApiVersion(1,0);
-            //     //options.AssumeDefaultVersionWhenUnspecified = false;
-            // });
+            services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+            });
+
+            services.AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV");
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             UpdateDatabase(app, env, Configuration);
 
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.IsStaging())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
@@ -98,9 +112,9 @@ namespace WebApp
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
-            
+
             app.UseCors("CorsAllowAll");
 
             app.UseRouting();
@@ -108,54 +122,72 @@ namespace WebApp
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseSwagger();
+            app.UseSwaggerUI(
+                options =>
+                {
+                    foreach (var description in provider.ApiVersionDescriptions)
+                        options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+                            description.GroupName.ToUpperInvariant());
+                });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    "area",
+                    "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapRazorPages();
             });
         }
-        
+
         // CUSTOM CODE START
-        private static void UpdateDatabase(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration Configuration)
+        private static void UpdateDatabase(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration conf)
         {
             // Give me the scoped services (everything created by it will be closed at the end of the service scope life)
-            using var serviceScope = app.ApplicationServices
-                .GetRequiredService<IServiceScopeFactory>()
-                .CreateScope();
-
+            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
             // Use one context for the db in this whole function
-            using var ctx = serviceScope.ServiceProvider.GetService<AppDbContext>();
-
+            using var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
             // Set up user and role managers for Identity
             using var userManager = serviceScope.ServiceProvider.GetService<UserManager<AppUser>>();
             using var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<AppRole>>();
-            
+            // Log actions
+            var logger = serviceScope.ServiceProvider.GetService<ILogger<Startup>>();
+
             // Here you can do whatever you need .. for example migrate each time so don't have to update db manually
-            // ctx.Database.EnsureDeleted(); // Drop current db if you want to start from the scratch every time
-            // ctx.Database.Migrate(); // Add the new migration. Will automatically create db if not there. If only this is needed don't do the dropping step.
+            // context.Database.EnsureDeleted(); // Drop current db if you want to start from the scratch every time
+            // context.Database.Migrate(); // Add the new migration. Will automatically create db if not there. If only this is needed don't do the dropping step.
             // These could also be done in configurations instead - ifs regarding it here
 
-            if (Configuration.GetValue<bool>("AppDataInitialization:DeleteDatabase"))
+            if (conf.GetValue<bool>("DataInitialization:DropDatabase"))
             {
-                DAL.App.EF.Helpers.DataInitializers.DeleteDatabase(ctx);
+                logger.LogInformation("DropDatabase");
+                DataInitializers.DeleteDatabase(context);
             }
-            if (Configuration.GetValue<bool>("AppDataInitialization:MigrateDatabase"))
+
+            if (conf.GetValue<bool>("DataInitialization:MigrateDatabase"))
             {
-                DAL.App.EF.Helpers.DataInitializers.MigrateDatabase(ctx);
+                logger.LogInformation("MigrateDatabase");
+                DataInitializers.MigrateDatabase(context);
             }
-            if (Configuration.GetValue<bool>("AppDataInitialization:SeedIdentity"))
+
+            if (conf.GetValue<bool>("DataInitialization:SeedIdentity"))
             {
-                DAL.App.EF.Helpers.DataInitializers.SeedIdentity(userManager, roleManager);
+                logger.LogInformation("SeedIdentity");
+                DataInitializers.SeedIdentity(userManager, roleManager);
             }
-            if (Configuration.GetValue<bool>("AppDataInitialization:SeedData"))
+
+            if (conf.GetValue<bool>("DataInitialization:SeedData"))
             {
-                DAL.App.EF.Helpers.DataInitializers.SeedData(ctx);
+                logger.LogInformation("SeedData");
+                DataInitializers.SeedData(context);
             }
-            //ctx.Database.EnsureDeleted();
-            //ctx.Database.Migrate();
         }
+
         // CUSTOM CODE END
     }
 }

@@ -1,14 +1,19 @@
 import { IAppUser } from "./IAppUser";
+import { IBaseEntity } from "./base/IBaseEntity";
 
-export interface IPrivateMessage {
-    id: string;
+export interface IPrivateMessageCreate {
     message: string;
     sentAt: string;
     isSeen: boolean;
-
     userSenderId: string;
-    userSender: IAppUser;
-
     userReceiverId: string;
+}
+
+export interface IPrivateMessageEdit extends IBaseEntity {
+    message: string;
+}
+
+export interface IPrivateMessage extends IBaseEntity, IPrivateMessageCreate {
+    userSender: IAppUser;
     userReceiver: IAppUser;
 }

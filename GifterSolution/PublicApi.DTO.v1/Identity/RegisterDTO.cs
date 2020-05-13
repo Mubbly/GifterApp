@@ -1,11 +1,17 @@
-﻿namespace PublicApi.DTO.v1.Identity
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PublicApi.DTO.v1.Identity
 {
-    public class RegisterDTO
+    public class RegisterDTO : LoginDTO
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-            
+        [MaxLength(256)]
+        [MinLength(1)]
+        [Required]
+        public string FirstName { get; set; } = default!;
+
+        [MaxLength(256)]
+        [MinLength(1)]
+        [Required]
+        public string LastName { get; set; } = default!;
     }
 }

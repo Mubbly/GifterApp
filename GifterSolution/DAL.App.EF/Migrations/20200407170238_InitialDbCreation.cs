@@ -9,8 +9,8 @@ namespace DAL.App.EF.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ActionTypes",
-                columns: table => new
+                "ActionTypes",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -20,28 +20,22 @@ namespace DAL.App.EF.Migrations
                     ActionTypeValue = table.Column<string>(maxLength: 64, nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ActionTypes", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_ActionTypes", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "AspNetRoles",
-                columns: table => new
+                "AspNetRoles",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_AspNetRoles", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
+                "AspNetUsers",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
@@ -65,14 +59,11 @@ namespace DAL.App.EF.Migrations
                     LastActive = table.Column<DateTime>(nullable: true),
                     DateJoined = table.Column<DateTime>(nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_AspNetUsers", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "Campaigns",
-                columns: table => new
+                "Campaigns",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -87,14 +78,11 @@ namespace DAL.App.EF.Migrations
                     ActiveToDate = table.Column<DateTime>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Campaigns", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Campaigns", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "NotificationTypes",
-                columns: table => new
+                "NotificationTypes",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -104,14 +92,11 @@ namespace DAL.App.EF.Migrations
                     NotificationTypeValue = table.Column<string>(maxLength: 64, nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NotificationTypes", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_NotificationTypes", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "Permissions",
-                columns: table => new
+                "Permissions",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -121,14 +106,11 @@ namespace DAL.App.EF.Migrations
                     PermissionValue = table.Column<string>(maxLength: 1024, nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Permissions", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Permissions", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "Statuses",
-                columns: table => new
+                "Statuses",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -138,14 +120,11 @@ namespace DAL.App.EF.Migrations
                     StatusValue = table.Column<string>(maxLength: 64, nullable: false),
                     Comment = table.Column<string>(maxLength: 2048, nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Statuses", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Statuses", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
-                columns: table => new
+                "AspNetRoleClaims",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
@@ -157,16 +136,16 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
+                        "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        x => x.RoleId,
+                        "AspNetRoles",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
-                columns: table => new
+                "AspNetUserClaims",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
@@ -178,16 +157,16 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                columns: table => new
+                "AspNetUserLogins",
+                table => new
                 {
                     LoginProvider = table.Column<string>(nullable: false),
                     ProviderKey = table.Column<string>(nullable: false),
@@ -196,42 +175,42 @@ namespace DAL.App.EF.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new {x.LoginProvider, x.ProviderKey});
                     table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
+                "AspNetUserRoles",
+                table => new
                 {
                     UserId = table.Column<Guid>(nullable: false),
                     RoleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new {x.UserId, x.RoleId});
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
+                        "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        x => x.RoleId,
+                        "AspNetRoles",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                columns: table => new
+                "AspNetUserTokens",
+                table => new
                 {
                     UserId = table.Column<Guid>(nullable: false),
                     LoginProvider = table.Column<string>(nullable: false),
@@ -240,18 +219,18 @@ namespace DAL.App.EF.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new {x.UserId, x.LoginProvider, x.Name});
                     table.ForeignKey(
-                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        x => x.UserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Friendships",
-                columns: table => new
+                "Friendships",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -267,22 +246,22 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_Friendships", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Friendships_AspNetUsers_AppUser1Id",
-                        column: x => x.AppUser1Id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_Friendships_AspNetUsers_AppUser1Id",
+                        x => x.AppUser1Id,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Friendships_AspNetUsers_AppUser2Id",
-                        column: x => x.AppUser2Id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_Friendships_AspNetUsers_AppUser2Id",
+                        x => x.AppUser2Id,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "InvitedUsers",
-                columns: table => new
+                "InvitedUsers",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -300,16 +279,16 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_InvitedUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_InvitedUsers_AspNetUsers_InvitorUserId",
-                        column: x => x.InvitorUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_InvitedUsers_AspNetUsers_InvitorUserId",
+                        x => x.InvitorUserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PrivateMessages",
-                columns: table => new
+                "PrivateMessages",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -326,22 +305,22 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_PrivateMessages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PrivateMessages_AspNetUsers_UserReceiverId",
-                        column: x => x.UserReceiverId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_PrivateMessages_AspNetUsers_UserReceiverId",
+                        x => x.UserReceiverId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PrivateMessages_AspNetUsers_UserSenderId",
-                        column: x => x.UserSenderId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_PrivateMessages_AspNetUsers_UserSenderId",
+                        x => x.UserSenderId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserCampaigns",
-                columns: table => new
+                "UserCampaigns",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -356,22 +335,22 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_UserCampaigns", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserCampaigns_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_UserCampaigns_AspNetUsers_AppUserId",
+                        x => x.AppUserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserCampaigns_Campaigns_CampaignId",
-                        column: x => x.CampaignId,
-                        principalTable: "Campaigns",
-                        principalColumn: "Id",
+                        "FK_UserCampaigns_Campaigns_CampaignId",
+                        x => x.CampaignId,
+                        "Campaigns",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notifications",
-                columns: table => new
+                "Notifications",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -386,16 +365,16 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_Notifications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Notifications_NotificationTypes_NotificationTypeId",
-                        column: x => x.NotificationTypeId,
-                        principalTable: "NotificationTypes",
-                        principalColumn: "Id",
+                        "FK_Notifications_NotificationTypes_NotificationTypeId",
+                        x => x.NotificationTypeId,
+                        "NotificationTypes",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserPermissions",
-                columns: table => new
+                "UserPermissions",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -412,22 +391,22 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_UserPermissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserPermissions_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_UserPermissions_AspNetUsers_AppUserId",
+                        x => x.AppUserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserPermissions_Permissions_PermissionId",
-                        column: x => x.PermissionId,
-                        principalTable: "Permissions",
-                        principalColumn: "Id",
+                        "FK_UserPermissions_Permissions_PermissionId",
+                        x => x.PermissionId,
+                        "Permissions",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Donatees",
-                columns: table => new
+                "Donatees",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -454,22 +433,22 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_Donatees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Donatees_ActionTypes_ActionTypeId",
-                        column: x => x.ActionTypeId,
-                        principalTable: "ActionTypes",
-                        principalColumn: "Id",
+                        "FK_Donatees_ActionTypes_ActionTypeId",
+                        x => x.ActionTypeId,
+                        "ActionTypes",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Donatees_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
-                        principalColumn: "Id",
+                        "FK_Donatees_Statuses_StatusId",
+                        x => x.StatusId,
+                        "Statuses",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Gifts",
-                columns: table => new
+                "Gifts",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -491,28 +470,28 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_Gifts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Gifts_ActionTypes_ActionTypeId",
-                        column: x => x.ActionTypeId,
-                        principalTable: "ActionTypes",
-                        principalColumn: "Id",
+                        "FK_Gifts_ActionTypes_ActionTypeId",
+                        x => x.ActionTypeId,
+                        "ActionTypes",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Gifts_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_Gifts_AspNetUsers_AppUserId",
+                        x => x.AppUserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Gifts_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
-                        principalColumn: "Id",
+                        "FK_Gifts_Statuses_StatusId",
+                        x => x.StatusId,
+                        "Statuses",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserNotifications",
-                columns: table => new
+                "UserNotifications",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -531,22 +510,22 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_UserNotifications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserNotifications_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_UserNotifications_AspNetUsers_AppUserId",
+                        x => x.AppUserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserNotifications_Notifications_NotificationId",
-                        column: x => x.NotificationId,
-                        principalTable: "Notifications",
-                        principalColumn: "Id",
+                        "FK_UserNotifications_Notifications_NotificationId",
+                        x => x.NotificationId,
+                        "Notifications",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CampaignDonatees",
-                columns: table => new
+                "CampaignDonatees",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -562,22 +541,22 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_CampaignDonatees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CampaignDonatees_Campaigns_CampaignId",
-                        column: x => x.CampaignId,
-                        principalTable: "Campaigns",
-                        principalColumn: "Id",
+                        "FK_CampaignDonatees_Campaigns_CampaignId",
+                        x => x.CampaignId,
+                        "Campaigns",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CampaignDonatees_Donatees_DonateeId",
-                        column: x => x.DonateeId,
-                        principalTable: "Donatees",
-                        principalColumn: "Id",
+                        "FK_CampaignDonatees_Donatees_DonateeId",
+                        x => x.DonateeId,
+                        "Donatees",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ArchivedGifts",
-                columns: table => new
+                "ArchivedGifts",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -597,40 +576,40 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_ArchivedGifts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ArchivedGifts_ActionTypes_ActionTypeId",
-                        column: x => x.ActionTypeId,
-                        principalTable: "ActionTypes",
-                        principalColumn: "Id",
+                        "FK_ArchivedGifts_ActionTypes_ActionTypeId",
+                        x => x.ActionTypeId,
+                        "ActionTypes",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ArchivedGifts_Gifts_GiftId",
-                        column: x => x.GiftId,
-                        principalTable: "Gifts",
-                        principalColumn: "Id",
+                        "FK_ArchivedGifts_Gifts_GiftId",
+                        x => x.GiftId,
+                        "Gifts",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ArchivedGifts_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
-                        principalColumn: "Id",
+                        "FK_ArchivedGifts_Statuses_StatusId",
+                        x => x.StatusId,
+                        "Statuses",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ArchivedGifts_AspNetUsers_UserGiverId",
-                        column: x => x.UserGiverId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_ArchivedGifts_AspNetUsers_UserGiverId",
+                        x => x.UserGiverId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ArchivedGifts_AspNetUsers_UserReceiverId",
-                        column: x => x.UserReceiverId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_ArchivedGifts_AspNetUsers_UserReceiverId",
+                        x => x.UserReceiverId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReservedGifts",
-                columns: table => new
+                "ReservedGifts",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -649,40 +628,40 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_ReservedGifts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReservedGifts_ActionTypes_ActionTypeId",
-                        column: x => x.ActionTypeId,
-                        principalTable: "ActionTypes",
-                        principalColumn: "Id",
+                        "FK_ReservedGifts_ActionTypes_ActionTypeId",
+                        x => x.ActionTypeId,
+                        "ActionTypes",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ReservedGifts_Gifts_GiftId",
-                        column: x => x.GiftId,
-                        principalTable: "Gifts",
-                        principalColumn: "Id",
+                        "FK_ReservedGifts_Gifts_GiftId",
+                        x => x.GiftId,
+                        "Gifts",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ReservedGifts_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
-                        principalColumn: "Id",
+                        "FK_ReservedGifts_Statuses_StatusId",
+                        x => x.StatusId,
+                        "Statuses",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ReservedGifts_AspNetUsers_UserGiverId",
-                        column: x => x.UserGiverId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_ReservedGifts_AspNetUsers_UserGiverId",
+                        x => x.UserGiverId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ReservedGifts_AspNetUsers_UserReceiverId",
-                        column: x => x.UserReceiverId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_ReservedGifts_AspNetUsers_UserReceiverId",
+                        x => x.UserReceiverId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Wishlists",
-                columns: table => new
+                "Wishlists",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -696,16 +675,16 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_Wishlists", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Wishlists_Gifts_GiftId",
-                        column: x => x.GiftId,
-                        principalTable: "Gifts",
-                        principalColumn: "Id",
+                        "FK_Wishlists_Gifts_GiftId",
+                        x => x.GiftId,
+                        "Gifts",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Profiles",
-                columns: table => new
+                "Profiles",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -724,22 +703,22 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_Profiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Profiles_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_Profiles_AspNetUsers_AppUserId",
+                        x => x.AppUserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Profiles_Wishlists_WishlistId",
-                        column: x => x.WishlistId,
-                        principalTable: "Wishlists",
-                        principalColumn: "Id",
+                        "FK_Profiles_Wishlists_WishlistId",
+                        x => x.WishlistId,
+                        "Wishlists",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserProfiles",
-                columns: table => new
+                "UserProfiles",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
@@ -754,309 +733,309 @@ namespace DAL.App.EF.Migrations
                 {
                     table.PrimaryKey("PK_UserProfiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserProfiles_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_UserProfiles_AspNetUsers_AppUserId",
+                        x => x.AppUserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserProfiles_Profiles_ProfileId",
-                        column: x => x.ProfileId,
-                        principalTable: "Profiles",
-                        principalColumn: "Id",
+                        "FK_UserProfiles_Profiles_ProfileId",
+                        x => x.ProfileId,
+                        "Profiles",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ArchivedGifts_ActionTypeId",
-                table: "ArchivedGifts",
-                column: "ActionTypeId");
+                "IX_ArchivedGifts_ActionTypeId",
+                "ArchivedGifts",
+                "ActionTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ArchivedGifts_GiftId",
-                table: "ArchivedGifts",
-                column: "GiftId");
+                "IX_ArchivedGifts_GiftId",
+                "ArchivedGifts",
+                "GiftId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ArchivedGifts_StatusId",
-                table: "ArchivedGifts",
-                column: "StatusId");
+                "IX_ArchivedGifts_StatusId",
+                "ArchivedGifts",
+                "StatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ArchivedGifts_UserGiverId",
-                table: "ArchivedGifts",
-                column: "UserGiverId");
+                "IX_ArchivedGifts_UserGiverId",
+                "ArchivedGifts",
+                "UserGiverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ArchivedGifts_UserReceiverId",
-                table: "ArchivedGifts",
-                column: "UserReceiverId");
+                "IX_ArchivedGifts_UserReceiverId",
+                "ArchivedGifts",
+                "UserReceiverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_RoleId",
-                table: "AspNetRoleClaims",
-                column: "RoleId");
+                "IX_AspNetRoleClaims_RoleId",
+                "AspNetRoleClaims",
+                "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
-                column: "NormalizedName",
+                "RoleNameIndex",
+                "AspNetRoles",
+                "NormalizedName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserClaims_UserId",
-                table: "AspNetUserClaims",
-                column: "UserId");
+                "IX_AspNetUserClaims_UserId",
+                "AspNetUserClaims",
+                "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserLogins_UserId",
-                table: "AspNetUserLogins",
-                column: "UserId");
+                "IX_AspNetUserLogins_UserId",
+                "AspNetUserLogins",
+                "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId",
-                table: "AspNetUserRoles",
-                column: "RoleId");
+                "IX_AspNetUserRoles_RoleId",
+                "AspNetUserRoles",
+                "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "EmailIndex",
-                table: "AspNetUsers",
-                column: "NormalizedEmail");
+                "EmailIndex",
+                "AspNetUsers",
+                "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
-                table: "AspNetUsers",
-                column: "NormalizedUserName",
+                "UserNameIndex",
+                "AspNetUsers",
+                "NormalizedUserName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_CampaignDonatees_CampaignId",
-                table: "CampaignDonatees",
-                column: "CampaignId");
+                "IX_CampaignDonatees_CampaignId",
+                "CampaignDonatees",
+                "CampaignId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CampaignDonatees_DonateeId",
-                table: "CampaignDonatees",
-                column: "DonateeId");
+                "IX_CampaignDonatees_DonateeId",
+                "CampaignDonatees",
+                "DonateeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Donatees_ActionTypeId",
-                table: "Donatees",
-                column: "ActionTypeId");
+                "IX_Donatees_ActionTypeId",
+                "Donatees",
+                "ActionTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Donatees_StatusId",
-                table: "Donatees",
-                column: "StatusId");
+                "IX_Donatees_StatusId",
+                "Donatees",
+                "StatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friendships_AppUser1Id",
-                table: "Friendships",
-                column: "AppUser1Id");
+                "IX_Friendships_AppUser1Id",
+                "Friendships",
+                "AppUser1Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friendships_AppUser2Id",
-                table: "Friendships",
-                column: "AppUser2Id");
+                "IX_Friendships_AppUser2Id",
+                "Friendships",
+                "AppUser2Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gifts_ActionTypeId",
-                table: "Gifts",
-                column: "ActionTypeId");
+                "IX_Gifts_ActionTypeId",
+                "Gifts",
+                "ActionTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gifts_AppUserId",
-                table: "Gifts",
-                column: "AppUserId");
+                "IX_Gifts_AppUserId",
+                "Gifts",
+                "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gifts_StatusId",
-                table: "Gifts",
-                column: "StatusId");
+                "IX_Gifts_StatusId",
+                "Gifts",
+                "StatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_InvitedUsers_InvitorUserId",
-                table: "InvitedUsers",
-                column: "InvitorUserId");
+                "IX_InvitedUsers_InvitorUserId",
+                "InvitedUsers",
+                "InvitorUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notifications_NotificationTypeId",
-                table: "Notifications",
-                column: "NotificationTypeId");
+                "IX_Notifications_NotificationTypeId",
+                "Notifications",
+                "NotificationTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PrivateMessages_UserReceiverId",
-                table: "PrivateMessages",
-                column: "UserReceiverId");
+                "IX_PrivateMessages_UserReceiverId",
+                "PrivateMessages",
+                "UserReceiverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PrivateMessages_UserSenderId",
-                table: "PrivateMessages",
-                column: "UserSenderId");
+                "IX_PrivateMessages_UserSenderId",
+                "PrivateMessages",
+                "UserSenderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Profiles_AppUserId",
-                table: "Profiles",
-                column: "AppUserId");
+                "IX_Profiles_AppUserId",
+                "Profiles",
+                "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Profiles_WishlistId",
-                table: "Profiles",
-                column: "WishlistId");
+                "IX_Profiles_WishlistId",
+                "Profiles",
+                "WishlistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReservedGifts_ActionTypeId",
-                table: "ReservedGifts",
-                column: "ActionTypeId");
+                "IX_ReservedGifts_ActionTypeId",
+                "ReservedGifts",
+                "ActionTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReservedGifts_GiftId",
-                table: "ReservedGifts",
-                column: "GiftId");
+                "IX_ReservedGifts_GiftId",
+                "ReservedGifts",
+                "GiftId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReservedGifts_StatusId",
-                table: "ReservedGifts",
-                column: "StatusId");
+                "IX_ReservedGifts_StatusId",
+                "ReservedGifts",
+                "StatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReservedGifts_UserGiverId",
-                table: "ReservedGifts",
-                column: "UserGiverId");
+                "IX_ReservedGifts_UserGiverId",
+                "ReservedGifts",
+                "UserGiverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReservedGifts_UserReceiverId",
-                table: "ReservedGifts",
-                column: "UserReceiverId");
+                "IX_ReservedGifts_UserReceiverId",
+                "ReservedGifts",
+                "UserReceiverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserCampaigns_AppUserId",
-                table: "UserCampaigns",
-                column: "AppUserId");
+                "IX_UserCampaigns_AppUserId",
+                "UserCampaigns",
+                "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserCampaigns_CampaignId",
-                table: "UserCampaigns",
-                column: "CampaignId");
+                "IX_UserCampaigns_CampaignId",
+                "UserCampaigns",
+                "CampaignId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserNotifications_AppUserId",
-                table: "UserNotifications",
-                column: "AppUserId");
+                "IX_UserNotifications_AppUserId",
+                "UserNotifications",
+                "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserNotifications_NotificationId",
-                table: "UserNotifications",
-                column: "NotificationId");
+                "IX_UserNotifications_NotificationId",
+                "UserNotifications",
+                "NotificationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserPermissions_AppUserId",
-                table: "UserPermissions",
-                column: "AppUserId");
+                "IX_UserPermissions_AppUserId",
+                "UserPermissions",
+                "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserPermissions_PermissionId",
-                table: "UserPermissions",
-                column: "PermissionId");
+                "IX_UserPermissions_PermissionId",
+                "UserPermissions",
+                "PermissionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserProfiles_AppUserId",
-                table: "UserProfiles",
-                column: "AppUserId");
+                "IX_UserProfiles_AppUserId",
+                "UserProfiles",
+                "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserProfiles_ProfileId",
-                table: "UserProfiles",
-                column: "ProfileId");
+                "IX_UserProfiles_ProfileId",
+                "UserProfiles",
+                "ProfileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Wishlists_GiftId",
-                table: "Wishlists",
-                column: "GiftId");
+                "IX_Wishlists_GiftId",
+                "Wishlists",
+                "GiftId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ArchivedGifts");
+                "ArchivedGifts");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
+                "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserClaims");
+                "AspNetUserClaims");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserLogins");
+                "AspNetUserLogins");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
+                "AspNetUserRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserTokens");
+                "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CampaignDonatees");
+                "CampaignDonatees");
 
             migrationBuilder.DropTable(
-                name: "Friendships");
+                "Friendships");
 
             migrationBuilder.DropTable(
-                name: "InvitedUsers");
+                "InvitedUsers");
 
             migrationBuilder.DropTable(
-                name: "PrivateMessages");
+                "PrivateMessages");
 
             migrationBuilder.DropTable(
-                name: "ReservedGifts");
+                "ReservedGifts");
 
             migrationBuilder.DropTable(
-                name: "UserCampaigns");
+                "UserCampaigns");
 
             migrationBuilder.DropTable(
-                name: "UserNotifications");
+                "UserNotifications");
 
             migrationBuilder.DropTable(
-                name: "UserPermissions");
+                "UserPermissions");
 
             migrationBuilder.DropTable(
-                name: "UserProfiles");
+                "UserProfiles");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Donatees");
+                "Donatees");
 
             migrationBuilder.DropTable(
-                name: "Campaigns");
+                "Campaigns");
 
             migrationBuilder.DropTable(
-                name: "Notifications");
+                "Notifications");
 
             migrationBuilder.DropTable(
-                name: "Permissions");
+                "Permissions");
 
             migrationBuilder.DropTable(
-                name: "Profiles");
+                "Profiles");
 
             migrationBuilder.DropTable(
-                name: "NotificationTypes");
+                "NotificationTypes");
 
             migrationBuilder.DropTable(
-                name: "Wishlists");
+                "Wishlists");
 
             migrationBuilder.DropTable(
-                name: "Gifts");
+                "Gifts");
 
             migrationBuilder.DropTable(
-                name: "ActionTypes");
+                "ActionTypes");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Statuses");
+                "Statuses");
         }
     }
 }

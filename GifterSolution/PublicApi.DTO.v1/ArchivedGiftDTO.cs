@@ -1,20 +1,24 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using PublicApi.DTO.v1.Identity;
 
 namespace PublicApi.DTO.v1
 {
     public class ArchivedGiftDTO
     {
         public Guid Id { get; set; }
-        
+
         public DateTime DateArchived { get; set; }
+
         // "Receiver" of the gift has confirmed they have got it
         public bool IsConfirmed { get; set; }
-        [MaxLength(2048)] [MinLength(3)] 
-        public string? Comment { get; set; }
 
+        [MaxLength(2048)] [MinLength(3)] public string? Comment { get; set; }
+
+        // TODO : remove unnecessary stuff from public dtos
+        
         public Guid ActionTypeId { get; set; }
-        public ActionTypeDTO ActionType { get; set; } = default!;
+        public ActionTypeDTO ActionTypeDTO { get; set; } = default!;
         public Guid GiftId { get; set; }
         public GiftDTO Gift { get; set; } = default!;
         public Guid StatusId { get; set; }

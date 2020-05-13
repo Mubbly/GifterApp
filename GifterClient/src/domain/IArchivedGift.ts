@@ -3,25 +3,27 @@ import { IActionType } from "./IActionType";
 import { IStatus } from "./IStatus";
 import { IGift } from "./IGift";
 import { IAppUser } from "./IAppUser";
+import { IBaseEntity } from "./base/IBaseEntity";
 
-export interface IArchivedGift {
-    id: string;
+export interface IArchivedGiftCreate {
     dateArchived: string;
     isConfirmed: boolean;
     comment: Optional<string>;
 
     actionTypeId: string;
-    actionType: IActionType;
-  
     statusId: string;
-    status: IStatus;
-
     giftId: string;
-    gift: IGift;
-
     userGiverId: string;
-    userGiver: IAppUser;
-
     userReceiverId: string;
+}
+
+export interface IArchivedGiftEdit extends IBaseEntity, IArchivedGiftCreate {
+}
+
+export interface IArchivedGift extends IArchivedGiftEdit {
+    actionType: IActionType;
+    status: IStatus;
+    gift: IGift;
+    userGiver: IAppUser;
     userReceiver: IAppUser;
 }

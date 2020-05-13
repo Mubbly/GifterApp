@@ -1,37 +1,12 @@
-import { autoinject } from 'aurelia-framework';
-import { HttpClient } from 'aurelia-fetch-client';
-import { Optional } from 'types/generalTypes';
-import { IUserProfile } from 'domain/IUserProfile';
+// import { autoinject } from 'aurelia-framework';
+// import { HttpClient } from 'aurelia-fetch-client';
+// import { BaseService } from './base/baseService';
+// import { IUserProfile } from 'domain/IUserProfile';
+// import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
 
-@autoinject
-export class UserProfileService {
-    private readonly _baseUrl = 'https://localhost:5001/api/UserProfiles';
-
-    constructor(private httpClient: HttpClient) {
-
-    }
-
-    getUserProfiles(): Promise<IUserProfile[]> {
-        return this.httpClient
-            .fetch(this._baseUrl)
-            .then(response => response.json())
-            .then((data: IUserProfile[]) => data)
-            .catch(reason => { 
-                console.log(reason); 
-                return [];
-            });
-    }
-
-    getUserProfile(id: string): Promise<Optional<IUserProfile>> {
-        return this.httpClient
-            .fetch(this._baseUrl + '/' + id)
-            .then(response => response.json())
-            .then((data: IUserProfile) => data)
-            .catch(reason => { 
-                console.log(reason);
-                return null;
-            });
-    }
-
-    // TODO: .. update, delete etc
-}
+// @autoinject
+// export class UserProfileService extends BaseService<IUserProfile> {
+//     constructor(protected httpClient: HttpClient) {
+//         super(ApiEndpointUrls.USER_PROFILES, httpClient);
+//     }
+// }

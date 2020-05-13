@@ -3,9 +3,9 @@ import { IActionType } from "./IActionType";
 import { IStatus } from "./IStatus";
 import { IAppUser } from "./IAppUser";
 import { IWishlist } from './IWishlist';
+import { IBaseEntity } from "./base/IBaseEntity";
 
-export interface IGift {
-    id: string;
+export interface IGiftCreate {
     name: string;
     description: Optional<string>;
     image: Optional<string>;
@@ -15,15 +15,18 @@ export interface IGift {
     isPinned: boolean;
 
     actionTypeId: string;
-    actionType: IActionType;
-
     statusId: string;
-    status: IStatus;
-
     appUserId: string;
-    appUser: IAppUser;
-
     wishlistId: string;
+}
+
+export interface IGiftEdit extends IBaseEntity, IGiftCreate {
+}
+
+export interface IGift extends IGiftEdit {
+    actionType: IActionType;
+    status: IStatus;
+    appUser: IAppUser;
     wishlist: IWishlist;
 
     reservedGiftsCount: number;

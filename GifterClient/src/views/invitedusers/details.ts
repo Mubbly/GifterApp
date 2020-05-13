@@ -31,7 +31,7 @@ export class InvitedUserDetails {
 
     private getInvitedUser(id: string): void {
         if (Utils.existsAndIsString(id)) {
-            this.invitedUserService.getInvitedUser(id).then((response) => {
+            this.invitedUserService.get(id).then((response) => {
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {

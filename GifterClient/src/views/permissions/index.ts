@@ -1,18 +1,28 @@
-import { autoinject } from 'aurelia-framework';
-import { IPermission } from 'domain/IPermission';
-import { PermissionService } from 'service/permissionService';
+import { autoinject } from "aurelia-framework";
+import { IPermission } from "domain/IPermission";
+import { PermissionService } from "service/permissionService";
+import * as UtilFunctions from "utils/utilFunctions";
+import { Optional } from "types/generalTypes";
 
 @autoinject
 export class PermissionsIndex {
-    private _permissions: IPermission[] = [];
+    private _reservedPermissions: IPermission[] = [];
+    private _errorMessage: Optional<string> = null;
 
-    constructor(private permissionService: PermissionService) {
-
-    }
+    constructor(private reservedPermissionService: PermissionService) {}
 
     attached() {
-        this.permissionService.getPermissions().then(
-            data => this._permissions = data
-        );
+        this.getPermissions();
+    }
+
+    private getPermissions(): void {
+        this.reservedPermissionService.getAll().then((response) => {
+            if (UtilFunctions.isSuccessful(response)) {
+                this._reservedPermissions = response.data!;
+            } else {
+                this._errorMessage = UtilFunctions.getErrorMessage(response);
+
+            }
+        });
     }
 }

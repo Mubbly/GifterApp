@@ -30,7 +30,7 @@ export class InvitedUsersIndex {
     
     private getInvitedUsers(): void {
         this.invitedUserService
-        .getInvitedUsers()
+        .getAll()
         .then((response) => {
             if (!Utils.isSuccessful(response)) {
                 this.handleErrors(response);

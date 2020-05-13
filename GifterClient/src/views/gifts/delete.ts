@@ -19,7 +19,7 @@ export class GiftsDelete {
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
         const giftId = params.id;
         if(UtilFunctions.existsAndIsString(giftId)) {
-            this.giftService.getGift(giftId).then(
+            this.giftService.get(giftId).then(
                 response => {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._gift = response.data!;
@@ -34,7 +34,7 @@ export class GiftsDelete {
 
     onSubmit(event: Event) {
         this.giftService
-        .deleteGift(this._gift!.id)
+        .delete(this._gift!.id)
         .then(
             response => {
                 if (UtilFunctions.isSuccessful(response)) {

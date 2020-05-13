@@ -38,7 +38,7 @@ export class StatusesDelete {
     private getStatus(id: string): void {
         if (Utils.existsAndIsString(id)) {
             this.statusService
-                .getStatus(id)
+                .get(id)
                 .then((response) => {
                     if (!Utils.isSuccessful(response)) {
                         this.handleErrors(response);
@@ -52,7 +52,7 @@ export class StatusesDelete {
 
     private deleteStatus(id: string) {
         this.statusService
-        .deleteStatus(id)
+        .delete(id)
         .then(
             response => {
                 if (!Utils.isSuccessful(response)) {
