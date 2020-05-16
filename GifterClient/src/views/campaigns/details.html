@@ -47,6 +47,10 @@
             <dd class = "col-sm-10">
                 <input class="check-box" disabled="disabled" type="checkbox" checked.bind="_campaign.isActive" />
             </dd>
+            <dt>Donatees</dt>
+            <dd>
+                <a route-href="route: donateesIndex; params.bind: { campaignId: campaign.id }">${_campaign.campaignDonateesCount}</a>
+            </dd>
         </dl>
     </div>
     <div>

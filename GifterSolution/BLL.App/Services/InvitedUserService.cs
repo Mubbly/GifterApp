@@ -10,7 +10,7 @@ using BLLAppDTO = BLL.App.DTO;
 namespace BLL.App.Services
 {
     public class InvitedUserService : BaseEntityService<IAppUnitOfWork,
-            IInvitedUserRepository, IInvitedUserServiceMapper, DALAppDTO.InvitedUser, BLLAppDTO.InvitedUser>,
+            IInvitedUserRepository, IInvitedUserServiceMapper, DALAppDTO.InvitedUserDAL, BLLAppDTO.InvitedUserBLL>,
         IInvitedUserService
     {
         public InvitedUserService(IAppUnitOfWork uow) : base(uow, uow.InvitedUsers, new InvitedUserServiceMapper())

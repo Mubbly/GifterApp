@@ -64,7 +64,7 @@ namespace BLL.Base.Services
             return result;
         }
 
-        public TBLLEntity Add(TBLLEntity entity)
+        public TBLLEntity Add(TBLLEntity entity, object? userId = null)
         {
             var dalEntity = Mapper.Map(entity);
             var trackedDALEntity = Repository.Add(dalEntity);

@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class CampaignMapper : BaseMapper<BLLAppDTO.Campaign, CampaignDTO>
+    public class CampaignMapper : BaseMapper<BLLAppDTO.CampaignBLL, CampaignDTO>
     {
     }
 }

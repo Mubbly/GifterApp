@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class StatusMapper : BaseMapper<BLLAppDTO.Status, StatusDTO>
+    public class StatusMapper : BaseMapper<BLLAppDTO.StatusBLL, StatusDTO>
     {
     }
 }

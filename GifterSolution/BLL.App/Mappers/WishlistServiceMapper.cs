@@ -5,7 +5,7 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class WishlistServiceMapper : BaseMapper<DALAppDTO.Wishlist, BLLAppDTO.Wishlist>, IWishlistServiceMapper
+    public class WishlistServiceMapper : BLLMapper<DALAppDTO.WishlistDAL, BLLAppDTO.WishlistBLL>, IWishlistServiceMapper
     {
     }
 }

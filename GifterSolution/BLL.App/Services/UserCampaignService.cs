@@ -10,7 +10,7 @@ using BLLAppDTO = BLL.App.DTO;
 namespace BLL.App.Services
 {
     public class UserCampaignService : BaseEntityService<IAppUnitOfWork,
-            IUserCampaignRepository, IUserCampaignServiceMapper, DALAppDTO.UserCampaign, BLLAppDTO.UserCampaign>,
+            IUserCampaignRepository, IUserCampaignServiceMapper, DALAppDTO.UserCampaignDAL, BLLAppDTO.UserCampaignBLL>,
         IUserCampaignService
     {
         public UserCampaignService(IAppUnitOfWork uow) : base(uow, uow.UserCampaigns, new UserCampaignServiceMapper())

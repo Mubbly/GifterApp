@@ -10,7 +10,7 @@ using BLLAppDTO = BLL.App.DTO;
 namespace BLL.App.Services
 {
     public class ActionTypeService : BaseEntityService<IAppUnitOfWork,
-            IActionTypeRepository, IActionTypeServiceMapper, DALAppDTO.ActionType, BLLAppDTO.ActionType>,
+            IActionTypeRepository, IActionTypeServiceMapper, DALAppDTO.ActionTypeDAL, BLLAppDTO.ActionTypeBLL>,
         IActionTypeService
     {
         public ActionTypeService(IAppUnitOfWork uow) : base(uow, uow.ActionTypes, new ActionTypeServiceMapper())

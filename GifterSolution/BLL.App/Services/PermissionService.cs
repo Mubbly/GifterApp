@@ -10,7 +10,7 @@ using BLLAppDTO = BLL.App.DTO;
 namespace BLL.App.Services
 {
     public class PermissionService : BaseEntityService<IAppUnitOfWork,
-            IPermissionRepository, IPermissionServiceMapper, DALAppDTO.Permission, BLLAppDTO.Permission>,
+            IPermissionRepository, IPermissionServiceMapper, DALAppDTO.PermissionDAL, BLLAppDTO.PermissionBLL>,
         IPermissionService
     {
         public PermissionService(IAppUnitOfWork uow) : base(uow, uow.Permissions, new PermissionServiceMapper())

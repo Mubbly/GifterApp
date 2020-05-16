@@ -10,7 +10,7 @@ using BLLAppDTO = BLL.App.DTO;
 namespace BLL.App.Services
 {
     public class ProfileService : BaseEntityService<IAppUnitOfWork,
-            IProfileRepository, IProfileServiceMapper, DALAppDTO.Profile, BLLAppDTO.Profile>,
+            IProfileRepository, IProfileServiceMapper, DALAppDTO.ProfileDAL, BLLAppDTO.ProfileBLL>,
         IProfileService
     {
         public ProfileService(IAppUnitOfWork uow) : base(uow, uow.Profiles, new ProfileServiceMapper())

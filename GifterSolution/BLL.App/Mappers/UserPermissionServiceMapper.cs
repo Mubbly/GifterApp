@@ -5,7 +5,7 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class UserPermissionServiceMapper : BaseMapper<DALAppDTO.UserPermission, BLLAppDTO.UserPermission>,
+    public class UserPermissionServiceMapper : BLLMapper<DALAppDTO.UserPermissionDAL, BLLAppDTO.UserPermissionBLL>,
         IUserPermissionServiceMapper
     {
     }

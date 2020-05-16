@@ -5,7 +5,7 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class InvitedUserServiceMapper : BaseMapper<DALAppDTO.InvitedUser, BLLAppDTO.InvitedUser>,
+    public class InvitedUserServiceMapper : BLLMapper<DALAppDTO.InvitedUserDAL, BLLAppDTO.InvitedUserBLL>,
         IInvitedUserServiceMapper
     {
     }

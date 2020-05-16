@@ -22,6 +22,66 @@ h1 {
     font-size: 2rem;
 }
 
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1rem;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+.icon,
+.button {
+    margin: 10px;
+    padding: 5px;
+    /* Remove later */
+    border: 1px solid black;
+}
+
+a.button:hover,
+a.icon:hover {
+    text-decoration: none;
+}
+
+.profile-pic {
+    /* Remove later */
+    border: 1px solid black;
+    width: 100px;
+    height: 100px;
+    margin-right: 15px;
+    padding: 5px;
+}
+
+
+/* a.change-info-link {
+    text-decoration: none;
+    color: #000;
+} */
+
+.one-line {
+    display: inline-block;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.separator {
+    margin: 0 5px;
+}
+
 
 /* From backend interface */
 

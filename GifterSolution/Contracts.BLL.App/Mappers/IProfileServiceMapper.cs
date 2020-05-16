@@ -4,7 +4,7 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.BLL.App.Mappers
 {
-    public interface IProfileServiceMapper : IBaseMapper<DALAppDTO.Profile, BLLAppDTO.Profile>
+    public interface IProfileServiceMapper : IBaseMapper<DALAppDTO.ProfileDAL, BLLAppDTO.ProfileBLL>
     {
     }
 }

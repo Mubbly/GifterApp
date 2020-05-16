@@ -7,7 +7,6 @@ import { AppState } from 'state/appState';
 
 @autoinject
 export class CampaignService extends BaseService<ICampaign, ICampaignCreate, ICampaignEdit> {
-
     constructor(protected httpClient: HttpClient, appState: AppState) {
         super(ApiEndpointUrls.CAMPAIGNS, httpClient, appState);
     }

@@ -4,7 +4,7 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.BLL.App.Mappers
 {
-    public interface IWishlistServiceMapper : IBaseMapper<DALAppDTO.Wishlist, BLLAppDTO.Wishlist>
+    public interface IWishlistServiceMapper : IBaseMapper<DALAppDTO.WishlistDAL, BLLAppDTO.WishlistBLL>
     {
     }
 }

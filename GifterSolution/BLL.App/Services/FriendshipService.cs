@@ -10,7 +10,7 @@ using BLLAppDTO = BLL.App.DTO;
 namespace BLL.App.Services
 {
     public class FriendshipService : BaseEntityService<IAppUnitOfWork,
-            IFriendshipRepository, IFriendshipServiceMapper, DALAppDTO.Friendship, BLLAppDTO.Friendship>,
+            IFriendshipRepository, IFriendshipServiceMapper, DALAppDTO.FriendshipDAL, BLLAppDTO.FriendshipBLL>,
         IFriendshipService
     {
         public FriendshipService(IAppUnitOfWork uow) : base(uow, uow.Friendships, new FriendshipServiceMapper())

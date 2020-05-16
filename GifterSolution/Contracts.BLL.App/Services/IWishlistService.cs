@@ -4,8 +4,8 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace Contracts.BLL.App.Services
 {
-    public interface IWishlistService : IBaseEntityService<BLLAppDTO.Wishlist>,
-        IWishlistRepositoryCustom<BLLAppDTO.Wishlist>
+    public interface IWishlistService : IBaseEntityService<BLLAppDTO.WishlistBLL>,
+        IWishlistRepositoryCustom<BLLAppDTO.WishlistBLL>
     {
     }
 }

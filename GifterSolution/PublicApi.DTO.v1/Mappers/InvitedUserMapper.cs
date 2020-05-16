@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class InvitedUserMapper : BaseMapper<BLLAppDTO.InvitedUser, InvitedUserDTO>
+    public class InvitedUserMapper : BaseMapper<BLLAppDTO.InvitedUserBLL, InvitedUserDTO>
     {
     }
 }

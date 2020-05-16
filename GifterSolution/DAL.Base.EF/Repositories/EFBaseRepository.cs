@@ -65,7 +65,7 @@ namespace DAL.Base.EF.Repositories
             return result;
         }
 
-        public virtual TDALEntity Add(TDALEntity entity)
+        public virtual TDALEntity Add(TDALEntity entity, object? userId = null)
         {
             var domainEntity = Mapper.Map(entity);
             var trackedDomainEntity = RepoDbSet.Add(domainEntity).Entity;

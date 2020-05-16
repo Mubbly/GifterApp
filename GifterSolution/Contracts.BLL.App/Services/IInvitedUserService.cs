@@ -4,8 +4,8 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace Contracts.BLL.App.Services
 {
-    public interface IInvitedUserService : IBaseEntityService<BLLAppDTO.InvitedUser>,
-        IInvitedUserRepositoryCustom<BLLAppDTO.InvitedUser>
+    public interface IInvitedUserService : IBaseEntityService<BLLAppDTO.InvitedUserBLL>,
+        IInvitedUserRepositoryCustom<BLLAppDTO.InvitedUserBLL>
     {
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface ICampaignRepositoryCustom : ICampaignRepositoryCustom<DALAppDTO.Campaign>
+    public interface ICampaignRepositoryCustom : ICampaignRepositoryCustom<DALAppDTO.CampaignDAL>
     {
     }
 

@@ -17,6 +17,7 @@
                             <a class="nav-link text-dark" route-href="route: accountLogin; params.bind: {}">Login</a>
                         </li>
                     </ul>
+
                     <ul if.bind="appState.jwt" class="navbar-nav account">
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="#" click.delegate="logoutOnClick()">Log out</a>

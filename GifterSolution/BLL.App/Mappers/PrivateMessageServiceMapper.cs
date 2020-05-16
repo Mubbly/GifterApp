@@ -5,7 +5,7 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class PrivateMessageServiceMapper : BaseMapper<DALAppDTO.PrivateMessage, BLLAppDTO.PrivateMessage>,
+    public class PrivateMessageServiceMapper : BLLMapper<DALAppDTO.PrivateMessageDAL, BLLAppDTO.PrivateMessageBLL>,
         IPrivateMessageServiceMapper
     {
     }

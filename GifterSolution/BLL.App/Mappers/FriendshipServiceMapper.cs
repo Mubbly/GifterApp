@@ -5,7 +5,7 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class FriendshipServiceMapper : BaseMapper<DALAppDTO.Friendship, BLLAppDTO.Friendship>,
+    public class FriendshipServiceMapper : BLLMapper<DALAppDTO.FriendshipDAL, BLLAppDTO.FriendshipBLL>,
         IFriendshipServiceMapper
     {
     }

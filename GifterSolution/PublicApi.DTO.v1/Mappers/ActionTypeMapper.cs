@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class ActionTypeMapper : BaseMapper<BLLAppDTO.ActionType, ActionTypeDTO>
+    public class ActionTypeMapper : BaseMapper<BLLAppDTO.ActionTypeBLL, ActionTypeDTO>
     {
         
     }

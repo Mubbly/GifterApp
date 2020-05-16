@@ -10,7 +10,7 @@ using BLLAppDTO = BLL.App.DTO;
 namespace BLL.App.Services
 {
     public class StatusService : BaseEntityService<IAppUnitOfWork,
-            IStatusRepository, IStatusServiceMapper, DALAppDTO.Status, BLLAppDTO.Status>,
+            IStatusRepository, IStatusServiceMapper, DALAppDTO.StatusDAL, BLLAppDTO.StatusBLL>,
         IStatusService
     {
         public StatusService(IAppUnitOfWork uow) : base(uow, uow.Statuses, new StatusServiceMapper())

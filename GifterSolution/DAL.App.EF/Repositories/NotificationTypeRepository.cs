@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using DAL.Base.Mappers;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +13,12 @@ using DomainAppIdentity = Domain.App.Identity;
 namespace DAL.App.EF.Repositories
 {
     public class NotificationTypeRepository :
-        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.NotificationType, DALAppDTO.NotificationType
+        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.NotificationType, DALAppDTO.NotificationTypeDAL
         >,
         INotificationTypeRepository
     {
         public NotificationTypeRepository(AppDbContext dbContext) :
-            base(dbContext, new BaseMapper<DomainApp.NotificationType, DALAppDTO.NotificationType>())
+            base(dbContext, new DALMapper<DomainApp.NotificationType, DALAppDTO.NotificationTypeDAL>())
         {
         }
         

@@ -1,4 +1,5 @@
 ﻿using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using DAL.Base.Mappers;
 using DomainApp = Domain.App;
@@ -8,11 +9,11 @@ using DomainAppIdentity = Domain.App.Identity;
 namespace DAL.App.EF.Repositories
 {
     public class ArchivedGiftRepository :
-        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.ArchivedGift, DALAppDTO.ArchivedGift>,
+        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.ArchivedGift, DALAppDTO.ArchivedGiftDAL>,
         IArchivedGiftRepository
     {
         public ArchivedGiftRepository(AppDbContext dbContext) :
-            base(dbContext, new BaseMapper<DomainApp.ArchivedGift, DALAppDTO.ArchivedGift>())
+            base(dbContext, new DALMapper<DomainApp.ArchivedGift, DALAppDTO.ArchivedGiftDAL>())
         {
         }
 

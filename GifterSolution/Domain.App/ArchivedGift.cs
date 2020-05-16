@@ -35,12 +35,12 @@ namespace Domain.App
         public virtual Status? Status { get; set; }
 
         // TODO: Manual connection where two users!
-        [ForeignKey(nameof(UserGiver))] public virtual TKey UserGiverId { get; set; } = default!;
-
+        [ForeignKey(nameof(UserGiver))] 
+        public virtual TKey UserGiverId { get; set; } = default!;
         public virtual AppUser? UserGiver { get; set; }
 
-        [ForeignKey(nameof(UserReceiver))] public virtual TKey UserReceiverId { get; set; } = default!;
-
+        [ForeignKey(nameof(UserReceiver))] 
+        public virtual TKey UserReceiverId { get; set; } = default!;
         public virtual AppUser? UserReceiver { get; set; }
     }
 }

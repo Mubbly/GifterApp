@@ -5,7 +5,7 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class UserProfileServiceMapper : BaseMapper<DALAppDTO.UserProfile, BLLAppDTO.UserProfile>,
+    public class UserProfileServiceMapper : BLLMapper<DALAppDTO.UserProfileDAL, BLLAppDTO.UserProfileBLL>,
         IUserProfileServiceMapper
     {
     }

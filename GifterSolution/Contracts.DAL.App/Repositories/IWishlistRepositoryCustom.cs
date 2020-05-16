@@ -2,7 +2,7 @@
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IWishlistRepositoryCustom : IWishlistRepositoryCustom<DALAppDTO.Wishlist>
+    public interface IWishlistRepositoryCustom : IWishlistRepositoryCustom<DALAppDTO.WishlistDAL>
     {
     }
 

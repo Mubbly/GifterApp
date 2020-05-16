@@ -4,8 +4,8 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace Contracts.BLL.App.Services
 {
-    public interface IReservedGiftService : IBaseEntityService<BLLAppDTO.ReservedGift>,
-        IReservedGiftRepositoryCustom<BLLAppDTO.ReservedGift>
+    public interface IReservedGiftService : IBaseEntityService<BLLAppDTO.ReservedGiftBLL>,
+        IReservedGiftRepositoryCustom<BLLAppDTO.ReservedGiftBLL>
     {
     }
 }

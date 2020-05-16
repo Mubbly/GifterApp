@@ -36,12 +36,12 @@ namespace Domain.App
         public virtual TKey StatusId { get; set; } = default!;
         public virtual Status? Status { get; set; }
 
-        [ForeignKey(nameof(UserGiver))] public virtual TKey UserGiverId { get; set; } = default!;
-
+        [ForeignKey(nameof(UserGiver))] 
+        public virtual TKey UserGiverId { get; set; } = default!;
         public virtual AppUser? UserGiver { get; set; }
 
-        [ForeignKey(nameof(UserReceiver))] public virtual TKey UserReceiverId { get; set; } = default!;
-
+        [ForeignKey(nameof(UserReceiver))] 
+        public virtual TKey UserReceiverId { get; set; } = default!;
         public virtual AppUser? UserReceiver { get; set; }
     }
 }

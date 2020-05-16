@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class ProfileMapper : BaseMapper<BLLAppDTO.Profile, ProfileDTO>
+    public class ProfileMapper : BaseMapper<BLLAppDTO.ProfileBLL, ProfileDTO>
     {
     }
 }

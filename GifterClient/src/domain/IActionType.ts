@@ -15,3 +15,4 @@ export interface IActionType extends IActionTypeEdit {
   archivedGiftsCount: number;
   donateesCount: number;
 }
+

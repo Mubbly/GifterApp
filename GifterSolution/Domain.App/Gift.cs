@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.App.Identity;
 using Domain.Base;
 
@@ -41,9 +42,11 @@ namespace Domain.App
         public virtual Wishlist? Wishlist { get; set; }
         
         // List of all gifts that have reserved status
+        [InverseProperty(nameof(ReservedGift.Gift))]
         public virtual ICollection<ReservedGift>? ReservedGifts { get; set; }
 
         // List of all gifts that have archived status
+        [InverseProperty(nameof(ArchivedGift.Gift))]
         public virtual ICollection<ArchivedGift>? ArchivedGifts { get; set; }
     }
 }

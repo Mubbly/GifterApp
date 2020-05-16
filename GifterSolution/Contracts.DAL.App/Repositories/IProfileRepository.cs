@@ -3,7 +3,7 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IProfileRepository : IBaseRepository<DALAppDTO.Profile>, IProfileRepositoryCustom
+    public interface IProfileRepository : IBaseRepository<DALAppDTO.ProfileDAL>, IProfileRepositoryCustom
     {
     }
 }

@@ -3,7 +3,7 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface ICampaignRepository : IBaseRepository<DALAppDTO.Campaign>, ICampaignRepositoryCustom
+    public interface ICampaignRepository : IBaseRepository<DALAppDTO.CampaignDAL>, ICampaignRepositoryCustom
     {
     }
 }

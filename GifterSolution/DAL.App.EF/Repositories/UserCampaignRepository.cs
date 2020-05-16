@@ -1,4 +1,5 @@
 ﻿using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using DAL.Base.Mappers;
 using DomainApp = Domain.App;
@@ -8,11 +9,11 @@ using DomainAppIdentity = Domain.App.Identity;
 namespace DAL.App.EF.Repositories
 {
     public class UserCampaignRepository :
-        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.UserCampaign, DALAppDTO.UserCampaign>,
+        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.UserCampaign, DALAppDTO.UserCampaignDAL>,
         IUserCampaignRepository
     {
         public UserCampaignRepository(AppDbContext dbContext) :
-            base(dbContext, new BaseMapper<DomainApp.UserCampaign, DALAppDTO.UserCampaign>())
+            base(dbContext, new DALMapper<DomainApp.UserCampaign, DALAppDTO.UserCampaignDAL>())
         {
         }
 

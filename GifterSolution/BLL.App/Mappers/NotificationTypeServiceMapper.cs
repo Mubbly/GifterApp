@@ -5,7 +5,7 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class NotificationTypeServiceMapper : BaseMapper<DALAppDTO.NotificationType, BLLAppDTO.NotificationType>,
+    public class NotificationTypeServiceMapper : BLLMapper<DALAppDTO.NotificationTypeDAL, BLLAppDTO.NotificationTypeBLL>,
         INotificationTypeServiceMapper
     {
     }

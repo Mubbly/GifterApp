@@ -10,7 +10,7 @@ using BLLAppDTO = BLL.App.DTO;
 namespace BLL.App.Services
 {
     public class DonateeService : BaseEntityService<IAppUnitOfWork,
-            IDonateeRepository, IDonateeServiceMapper, DALAppDTO.Donatee, BLLAppDTO.Donatee>,
+            IDonateeRepository, IDonateeServiceMapper, DALAppDTO.DonateeDAL, BLLAppDTO.DonateeBLL>,
         IDonateeService
     {
         public DonateeService(IAppUnitOfWork uow) : base(uow, uow.Donatees, new DonateeServiceMapper())

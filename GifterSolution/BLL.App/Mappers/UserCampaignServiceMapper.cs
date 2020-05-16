@@ -5,7 +5,7 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class UserCampaignServiceMapper : BaseMapper<DALAppDTO.UserCampaign, BLLAppDTO.UserCampaign>,
+    public class UserCampaignServiceMapper : BLLMapper<DALAppDTO.UserCampaignDAL, BLLAppDTO.UserCampaignBLL>,
         IUserCampaignServiceMapper
     {
     }

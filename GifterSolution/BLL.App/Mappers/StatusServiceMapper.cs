@@ -5,7 +5,7 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class StatusServiceMapper : BaseMapper<DALAppDTO.Status, BLLAppDTO.Status>, IStatusServiceMapper
+    public class StatusServiceMapper : BLLMapper<DALAppDTO.StatusDAL, BLLAppDTO.StatusBLL>, IStatusServiceMapper
     {
     }
 }

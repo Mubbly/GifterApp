@@ -1,3 +1,42 @@
 <template>
-  <h1>Index ${message}</h1>
+    <h1>My friends</h1>
+    <p>
+        <a route-href="route: privatemessagesIndex; params.bind: {}">Private messages</a> 
+        | <a route-href="route: invitedusersIndex; params.bind: {}">Invited friends</a> 
+        | <a route-href="route: appusersIndex; params.bind: {}">Search for new friends</a>
+    </p>
+    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Profile
+                </th>
+                <th>
+                    Last active
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    Example Name
+                </td>
+                <td>
+                    <a href="#">Example profile link</a>
+                </td>
+                <td>
+                    11.11.2011
+                </td>
+                <td>
+                    <a href="#">Message</a> |
+                    <a href="#">Unfriend</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </template>

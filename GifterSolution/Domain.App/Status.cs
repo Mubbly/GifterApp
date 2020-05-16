@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.App.Identity;
 using Domain.Base;
 
@@ -26,15 +27,19 @@ namespace Domain.App
         [MaxLength(2048)] [MinLength(3)] public virtual string? Comment { get; set; }
 
         // List of all gifts that correspond to this status
+        [InverseProperty(nameof(Gift.Status))]
         public virtual ICollection<Gift>? Gifts { get; set; }
 
         // List of all the reserved gifts that correspond to this status
+        [InverseProperty(nameof(ReservedGift.Status))]
         public virtual ICollection<ReservedGift>? ReservedGifts { get; set; }
 
         // List of all the archived gifts that correspond to this status
+        [InverseProperty(nameof(ArchivedGift.Status))]
         public virtual ICollection<ArchivedGift>? ArchivedGifts { get; set; }
 
         // List of all the donatees that correspond to this status
+        [InverseProperty(nameof(Donatee.Status))]
         public virtual ICollection<Donatee>? Donatees { get; set; }
     }
 }

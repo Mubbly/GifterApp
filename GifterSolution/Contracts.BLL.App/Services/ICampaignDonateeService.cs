@@ -4,8 +4,8 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace Contracts.BLL.App.Services
 {
-    public interface ICampaignDonateeService : IBaseEntityService<BLLAppDTO.CampaignDonatee>,
-        ICampaignDonateeRepositoryCustom<BLLAppDTO.CampaignDonatee>
+    public interface ICampaignDonateeService : IBaseEntityService<BLLAppDTO.CampaignDonateeBLL>,
+        ICampaignDonateeRepositoryCustom<BLLAppDTO.CampaignDonateeBLL>
     {
     }
 }

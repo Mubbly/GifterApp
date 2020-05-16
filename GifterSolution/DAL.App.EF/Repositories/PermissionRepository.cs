@@ -1,4 +1,5 @@
 ﻿using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using DAL.Base.Mappers;
 using DomainApp = Domain.App;
@@ -8,11 +9,11 @@ using DomainAppIdentity = Domain.App.Identity;
 namespace DAL.App.EF.Repositories
 {
     public class PermissionRepository :
-        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.Permission, DALAppDTO.Permission>,
+        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.Permission, DALAppDTO.PermissionDAL>,
         IPermissionRepository
     {
         public PermissionRepository(AppDbContext dbContext) :
-            base(dbContext, new BaseMapper<DomainApp.Permission, DALAppDTO.Permission>())
+            base(dbContext, new DALMapper<DomainApp.Permission, DALAppDTO.PermissionDAL>())
         {
         }
 

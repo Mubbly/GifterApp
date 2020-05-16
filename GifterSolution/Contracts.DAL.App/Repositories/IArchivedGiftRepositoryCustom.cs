@@ -2,7 +2,7 @@
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IArchivedGiftRepositoryCustom : IArchivedGiftRepositoryCustom<DALAppDTO.ArchivedGift>
+    public interface IArchivedGiftRepositoryCustom : IArchivedGiftRepositoryCustom<DALAppDTO.ArchivedGiftDAL>
     {
     }
 

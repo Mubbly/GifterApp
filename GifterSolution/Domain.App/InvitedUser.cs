@@ -27,8 +27,8 @@ namespace Domain.App
         public virtual DateTime DateInvited { get; set; }
         public virtual bool HasJoined { get; set; }
 
-        [ForeignKey(nameof(InvitorUser))] public virtual TKey InvitorUserId { get; set; } = default!;
-
+        [ForeignKey(nameof(InvitorUser))] 
+        public virtual TKey InvitorUserId { get; set; } = default!;
         public virtual AppUser? InvitorUser { get; set; }
     }
 }

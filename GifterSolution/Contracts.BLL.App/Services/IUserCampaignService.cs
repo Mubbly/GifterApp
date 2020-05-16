@@ -4,8 +4,8 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace Contracts.BLL.App.Services
 {
-    public interface IUserCampaignService : IBaseEntityService<BLLAppDTO.UserCampaign>,
-        IUserCampaignRepositoryCustom<BLLAppDTO.UserCampaign>
+    public interface IUserCampaignService : IBaseEntityService<BLLAppDTO.UserCampaignBLL>,
+        IUserCampaignRepositoryCustom<BLLAppDTO.UserCampaignBLL>
     {
     }
 }

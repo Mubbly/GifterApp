@@ -1,0 +1,87 @@
+@model Domain.App.ArchivedGift
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ArchivedGift</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="DateArchived" class="control-label"></label>
+                <input asp-for="DateArchived" class="form-control" />
+                <span asp-validation-for="DateArchived" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsConfirmed" /> @Html.DisplayNameFor(model => model.IsConfirmed)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comment" class="control-label"></label>
+                <input asp-for="Comment" class="form-control" />
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActionTypeId" class="control-label"></label>
+                <select asp-for="ActionTypeId" class ="form-control" asp-items="ViewBag.ActionTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="GiftId" class="control-label"></label>
+                <select asp-for="GiftId" class ="form-control" asp-items="ViewBag.GiftId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StatusId" class="control-label"></label>
+                <select asp-for="StatusId" class ="form-control" asp-items="ViewBag.StatusId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserGiverId" class="control-label"></label>
+                <select asp-for="UserGiverId" class ="form-control" asp-items="ViewBag.UserGiverId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserReceiverId" class="control-label"></label>
+                <select asp-for="UserReceiverId" class ="form-control" asp-items="ViewBag.UserReceiverId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="AppUserId" class="control-label"></label>
+                <select asp-for="AppUserId" class ="form-control" asp-items="ViewBag.AppUserId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedBy" class="control-label"></label>
+                <input asp-for="CreatedBy" class="form-control" />
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedAt" class="control-label"></label>
+                <input asp-for="CreatedAt" class="form-control" />
+                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EditedBy" class="control-label"></label>
+                <input asp-for="EditedBy" class="form-control" />
+                <span asp-validation-for="EditedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EditedAt" class="control-label"></label>
+                <input asp-for="EditedAt" class="form-control" />
+                <span asp-validation-for="EditedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

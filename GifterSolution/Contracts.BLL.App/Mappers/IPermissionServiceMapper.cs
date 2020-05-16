@@ -4,7 +4,7 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.BLL.App.Mappers
 {
-    public interface IPermissionServiceMapper : IBaseMapper<DALAppDTO.Permission, BLLAppDTO.Permission>
+    public interface IPermissionServiceMapper : IBaseMapper<DALAppDTO.PermissionDAL, BLLAppDTO.PermissionBLL>
     {
     }
 }

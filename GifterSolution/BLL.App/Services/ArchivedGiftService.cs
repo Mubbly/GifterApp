@@ -10,7 +10,7 @@ using BLLAppDTO = BLL.App.DTO;
 namespace BLL.App.Services
 {
     public class ArchivedGiftService : BaseEntityService<IAppUnitOfWork,
-            IArchivedGiftRepository, IArchivedGiftServiceMapper, DALAppDTO.ArchivedGift, BLLAppDTO.ArchivedGift>,
+            IArchivedGiftRepository, IArchivedGiftServiceMapper, DALAppDTO.ArchivedGiftDAL, BLLAppDTO.ArchivedGiftBLL>,
         IArchivedGiftService
     {
         public ArchivedGiftService(IAppUnitOfWork uow) : base(uow, uow.ArchivedGifts, new ArchivedGiftServiceMapper())

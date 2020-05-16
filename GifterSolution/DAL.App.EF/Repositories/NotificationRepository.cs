@@ -1,4 +1,5 @@
 ﻿using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using DAL.Base.Mappers;
 using DomainApp = Domain.App;
@@ -8,11 +9,11 @@ using DomainAppIdentity = Domain.App.Identity;
 namespace DAL.App.EF.Repositories
 {
     public class NotificationRepository :
-        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.Notification, DALAppDTO.Notification>,
+        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.Notification, DALAppDTO.NotificationDAL>,
         INotificationRepository
     {
         public NotificationRepository(AppDbContext dbContext) :
-            base(dbContext, new BaseMapper<DomainApp.Notification, DALAppDTO.Notification>())
+            base(dbContext, new DALMapper<DomainApp.Notification, DALAppDTO.NotificationDAL>())
         {
         }
 

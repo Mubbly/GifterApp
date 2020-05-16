@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class DonateeMapper : BaseMapper<BLLAppDTO.Donatee, DonateeDTO>
+    public class DonateeMapper : BaseMapper<BLLAppDTO.DonateeBLL, DonateeDTO>
     {
     }
 }

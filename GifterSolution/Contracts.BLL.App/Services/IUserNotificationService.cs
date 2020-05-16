@@ -4,8 +4,8 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace Contracts.BLL.App.Services
 {
-    public interface IUserNotificationService : IBaseEntityService<BLLAppDTO.UserNotification>,
-        IUserNotificationRepositoryCustom<BLLAppDTO.UserNotification>
+    public interface IUserNotificationService : IBaseEntityService<BLLAppDTO.UserNotificationBLL>,
+        IUserNotificationRepositoryCustom<BLLAppDTO.UserNotificationBLL>
     {
     }
 }

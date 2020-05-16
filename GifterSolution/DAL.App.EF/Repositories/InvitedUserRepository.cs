@@ -1,4 +1,5 @@
 ﻿using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using DAL.Base.Mappers;
 using DomainApp = Domain.App;
@@ -8,11 +9,11 @@ using DomainAppIdentity = Domain.App.Identity;
 namespace DAL.App.EF.Repositories
 {
     public class InvitedUserRepository :
-        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.InvitedUser, DALAppDTO.InvitedUser>,
+        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.InvitedUser, DALAppDTO.InvitedUserDAL>,
         IInvitedUserRepository
     {
         public InvitedUserRepository(AppDbContext dbContext) :
-            base(dbContext, new BaseMapper<DomainApp.InvitedUser, DALAppDTO.InvitedUser>())
+            base(dbContext, new DALMapper<DomainApp.InvitedUser, DALAppDTO.InvitedUserDAL>())
         {
         }
 

@@ -10,8 +10,9 @@ import { Optional } from 'types/generalTypes';
 @autoinject
 export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBaseCreateEntity, TEntityEdit extends IBaseEditEntity> {
     private AUTH_HEADERS = {'Authorization': 'Bearer '};
+    // private _jwt: Optional<string> = null;
 
-    constructor(protected apiEndpointUrl: string, protected httpClient: HttpClient, appState: AppState) {
+    constructor(protected apiEndpointUrl: string, protected httpClient: HttpClient, protected appState: AppState) {
         this.httpClient.configure(config => { // TODO: change environment to backendUrl
             config
                 .withBaseUrl(Environment.backendUrlLocal)
@@ -34,15 +35,15 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
                     }
                 });
         });
-        this.AUTH_HEADERS.Authorization += appState.jwt ? appState.jwt : '';
     }
 
     async getAll(): Promise<IFetchResponse<TEntity[]>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
                 .fetch(this.apiEndpointUrl, {
                     cache: "no-store",
-                    headers: this.AUTH_HEADERS
+                    headers: AUTH_HEADERS
                 });
             // happy case
             if (response.ok) {
@@ -68,11 +69,12 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
     }
 
     async getAllPersonal(): Promise<IFetchResponse<TEntity[]>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
                 .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.PERSONAL}`, {
                     cache: "no-store",
-                    headers: this.AUTH_HEADERS
+                    headers: AUTH_HEADERS
                 });
             // happy case
             if (response.ok) {
@@ -98,11 +100,12 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
     }
 
     async get(id: string): Promise<IFetchResponse<TEntity>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
                 .fetch(`${this.apiEndpointUrl}/${id}`, {
                     cache: "no-store",
-                    headers: this.AUTH_HEADERS
+                    headers: AUTH_HEADERS
                 });
             // happy case
             if (response.ok) {
@@ -128,11 +131,12 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
     }
 
     async getPersonal(id: string): Promise<IFetchResponse<TEntity>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
                 .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.PERSONAL}/${id}`, {
                     cache: "no-store",
-                    headers: this.AUTH_HEADERS
+                    headers: AUTH_HEADERS
                 });
             // happy case
             if (response.ok) {
@@ -158,11 +162,12 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
     }
 
     async create(entity: TEntityCreate): Promise<IFetchResponse<TEntityCreate>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient.post(this.apiEndpointUrl, JSON.stringify(entity),
                 { 
                     cache: "no-store",
-                    headers: this.AUTH_HEADERS
+                    headers: AUTH_HEADERS
                 }
             );
 
@@ -186,11 +191,12 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
     }
 
     async update(entity: TEntityEdit): Promise<IFetchResponse<TEntityEdit>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient.put(`${this.apiEndpointUrl}/${entity.id}`, JSON.stringify(entity),
                 { 
                     cache: "no-store",
-                    headers: this.AUTH_HEADERS
+                    headers: AUTH_HEADERS
                 }
             );
         
@@ -213,11 +219,12 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
     }
 
     async delete(id: string): Promise<IFetchResponse<string>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient.delete(`${this.apiEndpointUrl}/${id}`, null, 
                 { 
                     cache: "no-store",
-                    headers: this.AUTH_HEADERS
+                    headers: AUTH_HEADERS
                 }
             );
 

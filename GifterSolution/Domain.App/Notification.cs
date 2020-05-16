@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.App.Identity;
 using Domain.Base;
 
@@ -30,6 +31,7 @@ namespace Domain.App
         public virtual NotificationType? NotificationType { get; set; }
 
         // List of all users that correspond to this notification
+        [InverseProperty(nameof(UserNotification.Notification))]
         public virtual ICollection<UserNotification>? UserNotifications { get; set; }
     }
 }

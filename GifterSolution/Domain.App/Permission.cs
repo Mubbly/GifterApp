@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.App.Identity;
 using Domain.Base;
 
@@ -21,6 +22,7 @@ namespace Domain.App
         [MaxLength(2048)] [MinLength(3)] public virtual string? Comment { get; set; }
 
         // List of all users that correspond to this permission
+        [InverseProperty(nameof(UserPermission.Permission))]
         public virtual ICollection<UserPermission>? UserPermissions { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IUserPermissionRepository : IBaseRepository<DALAppDTO.UserPermission>,
+    public interface IUserPermissionRepository : IBaseRepository<DALAppDTO.UserPermissionDAL>,
         IUserPermissionRepositoryCustom
     {
     }

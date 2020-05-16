@@ -3,7 +3,7 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IFriendshipRepository : IBaseRepository<DALAppDTO.Friendship>, IFriendshipRepositoryCustom
+    public interface IFriendshipRepository : IBaseRepository<DALAppDTO.FriendshipDAL>, IFriendshipRepositoryCustom
     {
     }
 }

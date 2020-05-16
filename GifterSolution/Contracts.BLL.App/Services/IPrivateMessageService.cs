@@ -4,8 +4,8 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace Contracts.BLL.App.Services
 {
-    public interface IPrivateMessageService : IBaseEntityService<BLLAppDTO.PrivateMessage>,
-        IPrivateMessageRepositoryCustom<BLLAppDTO.PrivateMessage>
+    public interface IPrivateMessageService : IBaseEntityService<BLLAppDTO.PrivateMessageBLL>,
+        IPrivateMessageRepositoryCustom<BLLAppDTO.PrivateMessageBLL>
     {
     }
 }

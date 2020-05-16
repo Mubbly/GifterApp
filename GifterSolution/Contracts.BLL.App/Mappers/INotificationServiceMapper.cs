@@ -4,7 +4,7 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.BLL.App.Mappers
 {
-    public interface INotificationServiceMapper : IBaseMapper<DALAppDTO.Notification, BLLAppDTO.Notification>
+    public interface INotificationServiceMapper : IBaseMapper<DALAppDTO.NotificationDAL, BLLAppDTO.NotificationBLL>
     {
     }
 }

@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class PermissionMapper : BaseMapper<BLLAppDTO.Permission, PermissionDTO>
+    public class PermissionMapper : BaseMapper<BLLAppDTO.PermissionBLL, PermissionDTO>
     {
     }
 }

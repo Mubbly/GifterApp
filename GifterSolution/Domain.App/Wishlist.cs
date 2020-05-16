@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.App.Identity;
 using Domain.Base;
 
@@ -23,9 +24,11 @@ namespace Domain.App
         // AppUser
 
         // List of all gifts that are in this wishlist
+        [InverseProperty(nameof(Gift.Wishlist))]
         public virtual ICollection<Gift>? Gifts { get; set; }
 
         // List of all profiles that correspond to this wishlist
+        [InverseProperty(nameof(Profile.Wishlist))]
         public virtual ICollection<Profile>? Profiles { get; set; }
     }
 }

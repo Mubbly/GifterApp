@@ -2,7 +2,7 @@
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IFriendshipRepositoryCustom : IFriendshipRepositoryCustom<DALAppDTO.Friendship>
+    public interface IFriendshipRepositoryCustom : IFriendshipRepositoryCustom<DALAppDTO.FriendshipDAL>
     {
     }
 

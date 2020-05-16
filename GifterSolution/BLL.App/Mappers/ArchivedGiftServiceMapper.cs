@@ -5,7 +5,7 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class ArchivedGiftServiceMapper : BaseMapper<DALAppDTO.ArchivedGift, BLLAppDTO.ArchivedGift>,
+    public class ArchivedGiftServiceMapper : BLLMapper<DALAppDTO.ArchivedGiftDAL, BLLAppDTO.ArchivedGiftBLL>,
         IArchivedGiftServiceMapper
     {
     }

@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class WishlistMapper : BaseMapper<BLLAppDTO.Wishlist, WishlistDTO>
+    public class WishlistMapper : BaseMapper<BLLAppDTO.WishlistBLL, WishlistDTO>
     {
     }
 }

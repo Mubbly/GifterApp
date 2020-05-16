@@ -24,7 +24,7 @@ namespace Contracts.DAL.Base.Repositories
         Task<IEnumerable<TEntity>> GetAllAsync(object? userId = null, bool noTracking = true);
 
         Task<TEntity> FirstOrDefaultAsync(TKey id, object? userId = null, bool noTracking = true);
-        TEntity Add(TEntity entity);
+        TEntity Add(TEntity entity, object? userId = null);
         Task<TEntity> UpdateAsync(TEntity entity, object? userId = null);
         Task<TEntity> RemoveAsync(TEntity entity, object? userId = null);
         Task<TEntity> RemoveAsync(TKey id, object? userId = null);

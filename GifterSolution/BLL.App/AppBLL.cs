@@ -12,7 +12,7 @@ namespace BLL.App
         public AppBLL(IAppUnitOfWork uow) : base(uow)
         {
         }
-
+        
         public IActionTypeService ActionTypes =>
             GetService<IActionTypeService>(() => new ActionTypeService(UOW));
 

@@ -2,7 +2,7 @@
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IUserNotificationRepositoryCustom : IUserNotificationRepositoryCustom<DALAppDTO.UserNotification>
+    public interface IUserNotificationRepositoryCustom : IUserNotificationRepositoryCustom<DALAppDTO.UserNotificationDAL>
     {
     }
 

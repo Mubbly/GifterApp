@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class ArchivedGiftMapper : BaseMapper<BLLAppDTO.ArchivedGift, ArchivedGiftDTO>
+    public class ArchivedGiftMapper : BaseMapper<BLLAppDTO.ArchivedGiftBLL, ArchivedGiftDTO>
     {
         
     }

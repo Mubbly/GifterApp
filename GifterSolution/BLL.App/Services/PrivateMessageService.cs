@@ -10,7 +10,7 @@ using BLLAppDTO = BLL.App.DTO;
 namespace BLL.App.Services
 {
     public class PrivateMessageService : BaseEntityService<IAppUnitOfWork,
-            IPrivateMessageRepository, IPrivateMessageServiceMapper, DALAppDTO.PrivateMessage, BLLAppDTO.PrivateMessage
+            IPrivateMessageRepository, IPrivateMessageServiceMapper, DALAppDTO.PrivateMessageDAL, BLLAppDTO.PrivateMessageBLL
         >,
         IPrivateMessageService
     {

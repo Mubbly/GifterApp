@@ -2,7 +2,7 @@
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IPermissionRepositoryCustom : IPermissionRepositoryCustom<DALAppDTO.Permission>
+    public interface IPermissionRepositoryCustom : IPermissionRepositoryCustom<DALAppDTO.PermissionDAL>
     {
     }
 

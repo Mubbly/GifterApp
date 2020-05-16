@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.App.Identity;
 using Domain.Base;
 
@@ -50,7 +51,7 @@ namespace Domain.App
         public virtual TKey StatusId { get; set; } = default!;
         public virtual Status? Status { get; set; }
 
-        // List of mapped campaigns and donatees
-        public virtual ICollection<CampaignDonatee>? CampaignDonatees { get; set; }
+        [InverseProperty(nameof(CampaignDonatee.Donatee))]
+        public virtual ICollection<CampaignDonatee>? DonateeCampaigns { get; set; }
     }
 }

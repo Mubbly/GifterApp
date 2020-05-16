@@ -28,6 +28,13 @@ export function getErrorMessage(response: IFetchResponse<any>, comment?: string)
     return `${response.status.toString()} ${response.errorMessage} ${comment ? ' - ' + comment : ''}`;
 }
 
+export function actionNotAllowed(): IFetchResponse<any> {
+    return {
+        status: 405,
+        errorMessage: 'Action not allowed'
+    }
+}
+
 /**
 * Returns date as YYYY-MM-DD (or the same unedited date if parsing fails)
 * so that html5 date input value could be filled in

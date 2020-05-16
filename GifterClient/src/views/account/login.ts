@@ -5,11 +5,13 @@ import { Optional } from "types/generalTypes";
 import { AppState } from "state/appState";
 import { isSuccessful } from "utils/utilFunctions";
 import { App } from "app";
+import * as UtilFunctions from 'utils/utilFunctions';
 
 @autoinject
 export class AccountLogin {
     private readonly ERROR_MSG_CANT_FIND_USER = "Cannot find such user. Please overview your credentials and try again.";
-    
+    private readonly ERROR_SERVER = "Server error. Please try again later.";
+
     private _email = "";
     private _password = "";
     private _errorMessage: Optional<string> = null;
@@ -33,10 +35,15 @@ export class AccountLogin {
             console.log(response);
             if (isSuccessful(response)) {
                 this.appState.jwt = response.data!.token;
+                console.log(this.appState.jwt);
                 this.router!.navigateToRoute(this.app.HOME_ROUTE);
             } else {
-                //let statusCode = response.status.toString();
-                this._errorMessage = this.ERROR_MSG_CANT_FIND_USER;
+                this.appState.jwt = null;
+                if(!response.status || response.status === UtilFunctions.STATUS_CODE_SERVER_ERROR) {
+                    this._errorMessage = this.ERROR_SERVER;
+                } else {
+                    this._errorMessage = this.ERROR_MSG_CANT_FIND_USER;
+                }
             }
         });
     }

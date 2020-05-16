@@ -1,4 +1,5 @@
 ﻿using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using DAL.Base.Mappers;
 using DomainApp = Domain.App;
@@ -8,11 +9,11 @@ using DomainAppIdentity = Domain.App.Identity;
 namespace DAL.App.EF.Repositories
 {
     public class ProfileRepository :
-        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.Profile, DALAppDTO.Profile>,
+        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.Profile, DALAppDTO.ProfileDAL>,
         IProfileRepository
     {
         public ProfileRepository(AppDbContext dbContext) :
-            base(dbContext, new BaseMapper<DomainApp.Profile, DALAppDTO.Profile>())
+            base(dbContext, new DALMapper<DomainApp.Profile, DALAppDTO.ProfileDAL>())
         {
         }
 

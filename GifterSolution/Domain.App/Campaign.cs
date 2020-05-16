@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.App.Identity;
 using Domain.Base;
 
@@ -34,9 +35,11 @@ namespace Domain.App
         public virtual bool IsActive { get; set; }
 
         // List of mapped campaigns and (campaign manager) users
+        [InverseProperty(nameof(UserCampaign.Campaign))]
         public virtual ICollection<UserCampaign>? UserCampaigns { get; set; }
 
         // List of mapped campaigns and donatees
+        [InverseProperty(nameof(CampaignDonatee.Campaign))]
         public virtual ICollection<CampaignDonatee>? CampaignDonatees { get; set; }
     }
 }

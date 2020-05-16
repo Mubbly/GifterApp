@@ -1,4 +1,5 @@
 ﻿using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using DAL.Base.Mappers;
 using DomainApp = Domain.App;
@@ -8,11 +9,11 @@ using DomainAppIdentity = Domain.App.Identity;
 namespace DAL.App.EF.Repositories
 {
     public class PrivateMessageRepository :
-        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.PrivateMessage, DALAppDTO.PrivateMessage>,
+        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.PrivateMessage, DALAppDTO.PrivateMessageDAL>,
         IPrivateMessageRepository
     {
         public PrivateMessageRepository(AppDbContext dbContext) :
-            base(dbContext, new BaseMapper<DomainApp.PrivateMessage, DALAppDTO.PrivateMessage>())
+            base(dbContext, new DALMapper<DomainApp.PrivateMessage, DALAppDTO.PrivateMessageDAL>())
         {
         }
 

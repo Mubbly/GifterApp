@@ -4,8 +4,8 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace Contracts.BLL.App.Services
 {
-    public interface IFriendshipService : IBaseEntityService<BLLAppDTO.Friendship>,
-        IFriendshipRepositoryCustom<BLLAppDTO.Friendship>
+    public interface IFriendshipService : IBaseEntityService<BLLAppDTO.FriendshipBLL>,
+        IFriendshipRepositoryCustom<BLLAppDTO.FriendshipBLL>
     {
     }
 }

@@ -1,3 +1,72 @@
 <template>
-  <h1>Details ${message}</h1>
+    <section>
+        <div class="flex">
+            <h1 class="flex-column">Name (username)</h1> 
+            <a route-href="route: friendshipsEdit; params.bind: {}" class="flex-column icon">Add/remove friend icon</a>
+            <a route-href="route: privatemessagesEdit; params.bind: {}" class="flex-column icon">Message icon</a>
+        </div>
+        <p>Last active</p>
+        <div class="flex">
+            <div class="flex flex-column profile-pic"><img src="#" title="Profile picture"/></div>
+            <div class="flex flex-column">    
+                <div class="flex">
+                    <div class="flex-column">Full name</div><div class="separator">|</div> 
+                    <div class="flex-column">Age</div> <div class="separator">|</div> 
+                    <div class="flex-column">Gender</div>
+                </div>
+                <div>
+                    Bio / description
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Wishlist</h2>
+        <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Image
+                    </th>
+                    <th>
+                        Link to shop
+                    </th>
+                    <th>
+                        Link to partner
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Example name
+                    </td>
+                    <td>
+                        Example description
+                    </td>
+                    <td>
+                        Example image url
+                    </td>
+                    <td>
+                        Example shop url
+                    </td>
+                    <td>
+                        Example partner url
+                    </td>
+                    <td>
+                        <a route-href="route: reservedgiftsIndex; params.bind: {}" class="button">Reserve / Unreserve</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 </template>

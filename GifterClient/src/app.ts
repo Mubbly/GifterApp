@@ -9,10 +9,10 @@ export class App {
     
     public readonly HOME_ROUTE = 'homeIndex';
     public readonly LOGIN_ROUTE = 'accountLogin';
+    private readonly _username = '';
     router?: Router;
 
     constructor(private appState: AppState) {
-
     }
 
     configureRouter(config: RouterConfiguration, router: Router): void {

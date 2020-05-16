@@ -4,8 +4,8 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace Contracts.BLL.App.Services
 {
-    public interface IPermissionService : IBaseEntityService<BLLAppDTO.Permission>,
-        IPermissionRepositoryCustom<BLLAppDTO.Permission>
+    public interface IPermissionService : IBaseEntityService<BLLAppDTO.PermissionBLL>,
+        IPermissionRepositoryCustom<BLLAppDTO.PermissionBLL>
     {
     }
 }

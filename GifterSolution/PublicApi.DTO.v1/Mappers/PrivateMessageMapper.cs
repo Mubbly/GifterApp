@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class PrivateMessageMapper : BaseMapper<BLLAppDTO.PrivateMessage, PrivateMessageDTO>
+    public class PrivateMessageMapper : BaseMapper<BLLAppDTO.PrivateMessageBLL, PrivateMessageDTO>
     {
     }
 }

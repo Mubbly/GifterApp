@@ -1,5 +1,8 @@
 <template>
-    <h1>All campaigns</h1>
+    <h1>Campaigns</h1>
+    <p>
+        List of all the currently active donation campaigns. 
+    </p>
     <p>
         <a route-href="route: campaignsPersonal; params.bind: {}">My campaigns</a> 
     </p>
@@ -20,19 +23,13 @@
                     Institution
                 </th>
                 <th>
-                    ActiveFromDate
+                    From
                 </th>
                 <th>
-                    ActiveToDate
+                    To
                 </th>
                 <th>
-                    IsActive
-                </th>
-                <th>
-                    UserCampaignsCount
-                </th>
-                <th>
-                    CampaignDonateesCount
+                    Donatees
                 </th>
                 <th></th>
             </tr>
@@ -58,13 +55,7 @@
                     ${campaign.activeToDate}
                 </td>
                 <td>
-                    <input class="check-box" disabled="disabled" type="checkbox" checked.bind="campaign.isActive"/>
-                </td>
-                <td>
-                    ${campaign.userCampaignsCount}
-                </td>
-                <td>
-                    ${campaign.campaignDonateesCount}
+                    <a route-href="route: donateesIndex; params.bind: { campaignId: campaign.id }">${campaign.campaignDonateesCount}</a>
                 </td>
             </tr>
         </tbody>

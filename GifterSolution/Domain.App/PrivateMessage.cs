@@ -24,12 +24,12 @@ namespace Domain.App
         public virtual bool IsSeen { get; set; }
 
         // TODO: Manual connection
-        [ForeignKey(nameof(UserSender))] public virtual TKey UserSenderId { get; set; } = default!;
-
+        [ForeignKey(nameof(UserSender))] 
+        public virtual TKey UserSenderId { get; set; } = default!;
         public virtual AppUser? UserSender { get; set; }
 
-        [ForeignKey(nameof(UserReceiver))] public virtual TKey UserReceiverId { get; set; } = default!;
-
+        [ForeignKey(nameof(UserReceiver))] 
+        public virtual TKey UserReceiverId { get; set; } = default!;
         public virtual AppUser? UserReceiver { get; set; }
     }
 }

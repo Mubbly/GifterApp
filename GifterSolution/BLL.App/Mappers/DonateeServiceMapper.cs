@@ -5,7 +5,7 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class DonateeServiceMapper : BaseMapper<DALAppDTO.Donatee, BLLAppDTO.Donatee>, IDonateeServiceMapper
+    public class DonateeServiceMapper : BLLMapper<DALAppDTO.DonateeDAL, BLLAppDTO.DonateeBLL>, IDonateeServiceMapper
     {
     }
 }

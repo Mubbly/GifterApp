@@ -4,7 +4,7 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.BLL.App.Mappers
 {
-    public interface IFriendshipServiceMapper : IBaseMapper<DALAppDTO.Friendship, BLLAppDTO.Friendship>
+    public interface IFriendshipServiceMapper : IBaseMapper<DALAppDTO.FriendshipDAL, BLLAppDTO.FriendshipBLL>
     {
     }
 }

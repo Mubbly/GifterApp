@@ -10,7 +10,7 @@ using BLLAppDTO = BLL.App.DTO;
 namespace BLL.App.Services
 {
     public class WishlistService : BaseEntityService<IAppUnitOfWork,
-            IWishlistRepository, IWishlistServiceMapper, DALAppDTO.Wishlist, BLLAppDTO.Wishlist>,
+            IWishlistRepository, IWishlistServiceMapper, DALAppDTO.WishlistDAL, BLLAppDTO.WishlistBLL>,
         IWishlistService
     {
         public WishlistService(IAppUnitOfWork uow) : base(uow, uow.Wishlists, new WishlistServiceMapper())

@@ -5,7 +5,7 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class ActionTypeServiceMapper : BaseMapper<DALAppDTO.ActionType, BLLAppDTO.ActionType>,
+    public class ActionTypeServiceMapper : BLLMapper<DALAppDTO.ActionTypeDAL, BLLAppDTO.ActionTypeBLL>,
         IActionTypeServiceMapper
     {
     }

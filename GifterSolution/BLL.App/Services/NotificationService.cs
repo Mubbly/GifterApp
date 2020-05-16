@@ -10,7 +10,7 @@ using BLLAppDTO = BLL.App.DTO;
 namespace BLL.App.Services
 {
     public class NotificationService : BaseEntityService<IAppUnitOfWork,
-            INotificationRepository, INotificationServiceMapper, DALAppDTO.Notification, BLLAppDTO.Notification>,
+            INotificationRepository, INotificationServiceMapper, DALAppDTO.NotificationDAL, BLLAppDTO.NotificationBLL>,
         INotificationService
     {
         public NotificationService(IAppUnitOfWork uow) : base(uow, uow.Notifications, new NotificationServiceMapper())

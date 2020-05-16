@@ -1,4 +1,5 @@
 ﻿using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using DAL.Base.Mappers;
 using DomainApp = Domain.App;
@@ -8,11 +9,11 @@ using DomainAppIdentity = Domain.App.Identity;
 namespace DAL.App.EF.Repositories
 {
     public class WishlistRepository :
-        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.Wishlist, DALAppDTO.Wishlist>,
+        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.Wishlist, DALAppDTO.WishlistDAL>,
         IWishlistRepository
     {
         public WishlistRepository(AppDbContext dbContext) :
-            base(dbContext, new BaseMapper<DomainApp.Wishlist, DALAppDTO.Wishlist>())
+            base(dbContext, new DALMapper<DomainApp.Wishlist, DALAppDTO.WishlistDAL>())
         {
         }
 

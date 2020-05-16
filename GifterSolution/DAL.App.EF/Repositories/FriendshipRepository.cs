@@ -1,4 +1,5 @@
 ﻿using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using DAL.Base.Mappers;
 using DomainApp = Domain.App;
@@ -8,11 +9,11 @@ using DomainAppIdentity = Domain.App.Identity;
 namespace DAL.App.EF.Repositories
 {
     public class FriendshipRepository :
-        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.Friendship, DALAppDTO.Friendship>,
+        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.Friendship, DALAppDTO.FriendshipDAL>,
         IFriendshipRepository
     {
         public FriendshipRepository(AppDbContext dbContext) :
-            base(dbContext, new BaseMapper<DomainApp.Friendship, DALAppDTO.Friendship>())
+            base(dbContext, new DALMapper<DomainApp.Friendship, DALAppDTO.FriendshipDAL>())
         {
         }
 

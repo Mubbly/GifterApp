@@ -58,7 +58,7 @@ export class CampaignsCreate {
                 if (!Utils.isSuccessful(response)) {
                     this._errorMessage = Utils.getErrorMessage(response);
                 } else {
-                    this.router.navigateToRoute("campaignsIndex", {});
+                    this.router.navigateToRoute("campaignsPersonal", {});
                 }
             });
     }

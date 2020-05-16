@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class UserNotificationMapper : BaseMapper<BLLAppDTO.UserNotification, UserNotificationDTO>
+    public class UserNotificationMapper : BaseMapper<BLLAppDTO.UserNotificationBLL, UserNotificationDTO>
     {
     }
 }

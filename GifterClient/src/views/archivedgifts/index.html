@@ -1,72 +1,132 @@
 <template>
-    <h1>Index</h1>
+    <section>
+        <h1>Archived gifts</h1>
+        <div>
+            <p>Gifts that are no longer active. Either someone already gifted it to you or you gifted it to someone else.</p>
+            <p><strong>Note:</strong> If you wish to receive the same gift again - you could re-activate it.</p>
+        </div>
+    </section>
 
-    <p>
-        <a href="/ArchivedGifts/Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    DateArchived
-                </th>
-                <th>
-                    IsConfirmed
-                </th>
-                <th>
-                    Comment
-                </th>
-                <th>
-                    ActionType
-                </th>
-                <th>
-                    Gift
-                </th>
-                <th>
-                    Status
-                </th>
-                <th>
-                    UserGiver
-                </th>
-                <th>
-                    UserReceiver
-                </th>
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr repeat.for="archivedGift of _archivedGifts">
-                <td>
-                    ${archivedGift.dateArchived}  
-                </td>
-                <td>
-                    <input checked="checked" class="check-box" disabled="disabled" type="checkbox" checked.bind="archivedGift.isConfirmed"/>
-                </td>
-                <td>
-                    ${archivedGift.comment}  
-                </td>
-                <td>
-                    ${archivedGift.actionType.actionTypeValue}  
-                </td>
-                <td>
-                    ${archivedGift.gift.name}  
-                </td>
-                <td>
-                    ${archivedGift.status.statusValue}  
-                </td>
-                <td>
-                    ${archivedGift.userGiver.id}  
-                </td>
-                <td>
-                    ${archivedGift.userReceiver.id}  
-                </td>
-                <td>
-                    <a href="/ArchivedGifts/Edit/08d7d89f-26db-4bda-8012-ad32ced02428">Edit</a> |
-                    <a route-href="route: archivedgiftsDetails; params.bind: { id: archivedGift.id }">Details</a> |
-                    <a href="/ArchivedGifts/Delete/08d7d89f-26db-4bda-8012-ad32ced02428">Delete</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <section>
+        <h2>To me</h2>
+        <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        From
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Gift
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Image
+                    </th>
+                    <th>
+                        Url
+                    </th>
+                    <th>
+                        PartnerUrl
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="#" title="Go to profile">Full Name (username)</a>
+                    </td>
+                    <td>
+                        11.11.2011
+                    </td>
+                    <td>
+                        Gift name
+                    </td>
+                    <td>
+                        Gift desc
+                    </td>
+                    <td>
+                        Image url
+                    </td>
+                    <td>
+                        Link to shop
+                    </td>
+                    <td>
+                        Link to partner
+                    </td>
+                    <td>
+                        <a route-href="route: archivedgiftsCreate; params.bind: {}" class="button">Re-activate</a>
+                        <a route-href="route: archivedgiftsDelete; params.bind: {}" class="button">Delete</a>       
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>From me</h2>
+        <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        To
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Gift
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Image
+                    </th>
+                    <th>
+                        Url
+                    </th>
+                    <th>
+                        PartnerUrl
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="#" title="Go to profile">Full Name (username)</a>
+                    </td>
+                    <td>
+                        11.11.2011
+                    </td>
+                    <td>
+                        Gift name
+                    </td>
+                    <td>
+                        Gift desc
+                    </td>
+                    <td>
+                        Image url
+                    </td>
+                    <td>
+                        Link to shop
+                    </td>
+                    <td>
+                        Link to partner
+                    </td>
+                    <td>
+                        <a route-href="route: archivedgiftsDelete; params.bind: {}" class="button">Delete</a>   
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 </template>

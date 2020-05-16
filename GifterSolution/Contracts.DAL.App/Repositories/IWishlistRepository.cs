@@ -3,7 +3,7 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IWishlistRepository : IBaseRepository<DALAppDTO.Wishlist>, IWishlistRepositoryCustom
+    public interface IWishlistRepository : IBaseRepository<DALAppDTO.WishlistDAL>, IWishlistRepositoryCustom
     {
     }
 }

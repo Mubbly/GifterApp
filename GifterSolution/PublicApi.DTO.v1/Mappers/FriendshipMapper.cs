@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class FriendshipMapper : BaseMapper<BLLAppDTO.Friendship, FriendshipDTO>
+    public class FriendshipMapper : BaseMapper<BLLAppDTO.FriendshipBLL, FriendshipDTO>
     {
     }
 }

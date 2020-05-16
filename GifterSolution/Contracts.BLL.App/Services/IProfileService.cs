@@ -4,8 +4,8 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace Contracts.BLL.App.Services
 {
-    public interface IProfileService : IBaseEntityService<BLLAppDTO.Profile>,
-        IProfileRepositoryCustom<BLLAppDTO.Profile>
+    public interface IProfileService : IBaseEntityService<BLLAppDTO.ProfileBLL>,
+        IProfileRepositoryCustom<BLLAppDTO.ProfileBLL>
     {
     }
 }

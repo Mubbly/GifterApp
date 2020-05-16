@@ -19,7 +19,8 @@ export class CampaignsPersonal {
         private campaignService: CampaignService,
         private router: Router,
         private appState: AppState
-    ) {}
+    ) {
+    }
 
     attached() {}
 

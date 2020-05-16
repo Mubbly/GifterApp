@@ -2,7 +2,7 @@
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IStatusRepositoryCustom : IStatusRepositoryCustom<DALAppDTO.Status>
+    public interface IStatusRepositoryCustom : IStatusRepositoryCustom<DALAppDTO.StatusDAL>
     {
     }
 

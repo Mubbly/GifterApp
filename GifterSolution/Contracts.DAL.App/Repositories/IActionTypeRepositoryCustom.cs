@@ -2,7 +2,7 @@
 
 namespace Contracts.DAL.App.Repositories
 {
-    public interface IActionTypeRepositoryCustom : IActionTypeRepositoryCustom<DALAppDTO.ActionType>
+    public interface IActionTypeRepositoryCustom : IActionTypeRepositoryCustom<DALAppDTO.ActionTypeDAL>
     {
     }
 

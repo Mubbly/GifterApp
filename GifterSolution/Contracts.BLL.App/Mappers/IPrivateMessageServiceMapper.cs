@@ -4,7 +4,7 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.BLL.App.Mappers
 {
-    public interface IPrivateMessageServiceMapper : IBaseMapper<DALAppDTO.PrivateMessage, BLLAppDTO.PrivateMessage>
+    public interface IPrivateMessageServiceMapper : IBaseMapper<DALAppDTO.PrivateMessageDAL, BLLAppDTO.PrivateMessageBLL>
     {
     }
 }

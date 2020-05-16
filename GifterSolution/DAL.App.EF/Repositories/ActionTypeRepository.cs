@@ -1,4 +1,5 @@
 ﻿using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using DAL.Base.Mappers;
 using DomainApp = Domain.App;
@@ -8,11 +9,11 @@ using DomainAppIdentity = Domain.App.Identity;
 namespace DAL.App.EF.Repositories
 {
     public class ActionTypeRepository :
-        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.ActionType, DALAppDTO.ActionType>,
+        EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.ActionType, DALAppDTO.ActionTypeDAL>,
         IActionTypeRepository
     {
         public ActionTypeRepository(AppDbContext dbContext) :
-            base(dbContext, new BaseMapper<DomainApp.ActionType, DALAppDTO.ActionType>())
+            base(dbContext, new DALMapper<DomainApp.ActionType, DALAppDTO.ActionTypeDAL>())
         {
         }
 

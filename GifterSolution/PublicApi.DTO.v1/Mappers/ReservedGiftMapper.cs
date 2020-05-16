@@ -2,7 +2,7 @@
 
 namespace PublicApi.DTO.v1.Mappers
 {
-    public class ReservedGiftMapper : BaseMapper<BLLAppDTO.ReservedGift, ReservedGiftDTO>
+    public class ReservedGiftMapper : BaseMapper<BLLAppDTO.ReservedGiftBLL, ReservedGiftDTO>
     {
     }
 }

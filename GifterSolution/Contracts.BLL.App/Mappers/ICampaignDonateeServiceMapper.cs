@@ -4,7 +4,7 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.BLL.App.Mappers
 {
-    public interface ICampaignDonateeServiceMapper : IBaseMapper<DALAppDTO.CampaignDonatee, BLLAppDTO.CampaignDonatee>
+    public interface ICampaignDonateeServiceMapper : IBaseMapper<DALAppDTO.CampaignDonateeDAL, BLLAppDTO.CampaignDonateeBLL>
     {
     }
 }

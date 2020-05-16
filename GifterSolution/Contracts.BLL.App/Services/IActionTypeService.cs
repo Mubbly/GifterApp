@@ -4,8 +4,8 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace Contracts.BLL.App.Services
 {
-    public interface IActionTypeService : IBaseEntityService<BLLAppDTO.ActionType>,
-        IActionTypeRepositoryCustom<BLLAppDTO.ActionType>
+    public interface IActionTypeService : IBaseEntityService<BLLAppDTO.ActionTypeBLL>,
+        IActionTypeRepositoryCustom<BLLAppDTO.ActionTypeBLL>
     {
     }
 }

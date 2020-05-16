@@ -1,37 +1,29 @@
 import { autoinject } from 'aurelia-framework';
 import { HttpClient } from 'aurelia-fetch-client';
-import { Optional } from 'types/generalTypes';
+import { BaseService } from './baseService';
 import { IAppUser } from 'domain/IAppUser';
+import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
+import * as Utils from 'utils/utilFunctions';
+import { AppState } from 'state/appState';
+import { IFetchResponse } from 'types/IFetchResponse';
 
 @autoinject
-export class AppUserService {
-    private readonly _baseUrl = 'https://localhost:5001/api/AppUsers';
-
-    constructor(private httpClient: HttpClient) {
-
+export class AppUserService extends BaseService<IAppUser, IAppUser, IAppUser> {
+    constructor(protected httpClient: HttpClient, appState: AppState) {
+        super(ApiEndpointUrls.APP_USERS, httpClient, appState);
     }
 
-    getAppUsers(): Promise<IAppUser[]> {
-        return this.httpClient
-            .fetch(this._baseUrl)
-            .then(response => response.json())
-            .then((data: IAppUser[]) => data)
-            .catch(reason => { 
-                console.log(reason); 
-                return [];
-            });
+    async create(entity: IAppUser): Promise<IFetchResponse<IAppUser>> {
+        return Utils.actionNotAllowed();
     }
 
-    getAppUser(id: string): Promise<Optional<IAppUser>> {
-        return this.httpClient
-            .fetch(this._baseUrl + '/' + id)
-            .then(response => response.json())
-            .then((data: IAppUser) => data)
-            .catch(reason => { 
-                console.log(reason);
-                return null;
-            });
+    async update(entity: IAppUser): Promise<IFetchResponse<IAppUser>> {
+        return Utils.actionNotAllowed();
     }
 
-    // TODO: .. update, delete etc
+    async delete(id: string): Promise<IFetchResponse<string>> {
+        return Utils.actionNotAllowed();
+    }
+
+
 }

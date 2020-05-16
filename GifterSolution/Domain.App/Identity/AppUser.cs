@@ -28,22 +28,23 @@ namespace Domain.App.Identity
         public DateTime DateJoined { get; set; } = DateTime.Now;
 
         public string FullName => FirstName + " " + LastName;
-
+        
+        // // List of all gifts that correspond to this user
+        // public ICollection<Gift>? Gifts { get; set; }
+        
         // List of all permissions that correspond to this user
+        [InverseProperty(nameof(UserPermission.AppUser))]
         public ICollection<UserPermission>? UserPermissions { get; set; }
-        
         // List of mapped users and their profiles
+        [InverseProperty(nameof(UserProfile.AppUser))]
         public ICollection<UserProfile>? UserProfiles { get; set; }
-        
         // List of all notifications that correspond to this user
+        [InverseProperty(nameof(UserNotification.AppUser))]
         public ICollection<UserNotification>? UserNotifications { get; set; }
-
         // List of mapped (campaign manager) users and campaigns
+        [InverseProperty(nameof(UserCampaign.AppUser))]
         public ICollection<UserCampaign>? UserCampaigns { get; set; }
-        
-        // List of all gifts that correspond to this user
-        public ICollection<Gift>? Gifts { get; set; }
-        
+
         // List of all reserved gifts that correspond to this user
         [InverseProperty(nameof(ReservedGift.UserGiver))]
         public ICollection<ReservedGift>? ReservedGiftsByUser { get; set; }
