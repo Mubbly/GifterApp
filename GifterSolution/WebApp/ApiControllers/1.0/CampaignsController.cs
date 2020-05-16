@@ -93,14 +93,14 @@ namespace WebApp.ApiControllers._1._0
         /// </summary>
         /// <param name="id"></param>
         /// <returns>personal Campaign object</returns>
-        [HttpGet("{id}")]
+        [HttpGet("personal/{id}")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
         public async Task<ActionResult<V1DTO.CampaignDTO>> GetPersonalCampaign(Guid id)
         {
-            var campaign = await _bll.Campaigns.FirstOrDefaultAsync(id); // TODO: Get personal campaign
+            var campaign = await _bll.Campaigns.GetPersonalAsync(id, User.UserGuidId());
             if (campaign == null)
             {
                 return NotFound(new V1DTO.MessageDTO($"Campaign with id {id} not found"));

@@ -62,13 +62,29 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
         public async Task<ActionResult<V1DTO.DonateeDTO>> GetDonatee(Guid id)
         {
-            var actionType = await _bll.Donatees.FirstOrDefaultAsync(id);
-            if (actionType == null)
+            var donatee = await _bll.Donatees.FirstOrDefaultAsync(id);
+            if (donatee == null)
             {
                 return NotFound(new V1DTO.MessageDTO($"Donatee with id {id} not found"));
             }
 
-            return Ok(_mapper.Map(actionType));
+            return Ok(_mapper.Map(donatee));
+        }
+        
+        // GET: api/Donatees/Campaign/5
+        /// <summary>
+        ///     Get all Donatees related to a Campaign
+        /// </summary>
+        /// <returns>List of Donatees for certain Campaign</returns>
+        [HttpGet("campaign/{campaignId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTO.DonateeDTO>>> GetDonateesForCampaign(Guid campaignId)
+        {
+            var campaignDonatees = await _bll.Donatees.GetAllForCampaignAsync(campaignId, User.UserGuidId());
+            return Ok(campaignDonatees.Select(e => _mapper.Map(e)));
         }
 
         // PUT: api/Donatees/5
@@ -78,7 +94,7 @@ namespace WebApp.ApiControllers._1._0
         ///     Update Donatee
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="actionTypeDTO"></param>
+        /// <param name="donateeDTO"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
@@ -87,23 +103,23 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> PutDonatee(Guid id, V1DTO.DonateeDTO actionTypeDTO)
+        public async Task<IActionResult> PutDonatee(Guid id, V1DTO.DonateeDTO donateeDTO)
         {
             // Don't allow wrong data
-            if (id != actionTypeDTO.Id)
+            if (id != donateeDTO.Id)
             {
-                return BadRequest(new V1DTO.MessageDTO("id and actionType.id do not match"));
+                return BadRequest(new V1DTO.MessageDTO("id and donatee.id do not match"));
             }
-            var actionType = await _bll.Donatees.FirstOrDefaultAsync(actionTypeDTO.Id, User.UserGuidId());
-            if (actionType == null)
+            var donatee = await _bll.Donatees.FirstOrDefaultAsync(donateeDTO.Id, User.UserGuidId());
+            if (donatee == null)
             {
-                _logger.LogError($"EDIT. No such actionType: {actionTypeDTO.Id}, user: {User.UserGuidId()}");
+                _logger.LogError($"EDIT. No such donatee: {donateeDTO.Id}, user: {User.UserGuidId()}");
                 return NotFound(new V1DTO.MessageDTO($"No Donatee found for id {id}"));
             }
-            // Update existing actionType
-            // actionType.DonateeValue = actionTypeEditDTO.DonateeValue;
-            // actionType.Comment = actionTypeEditDTO.Comment;
-            await _bll.Donatees.UpdateAsync(_mapper.Map(actionTypeDTO), User.UserId());
+            // Update existing donatee
+            // donatee.DonateeValue = donateeEditDTO.DonateeValue;
+            // donatee.Comment = donateeEditDTO.Comment;
+            await _bll.Donatees.UpdateAsync(_mapper.Map(donateeDTO), User.UserId());
 
             // Save to db
             try
@@ -124,38 +140,33 @@ namespace WebApp.ApiControllers._1._0
             return NoContent();
         }
 
-        // POST: api/Donatees
+        // POST: api/Donatees/Campaign/6
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         /// <summary>
         ///     Add new Donatee
         /// </summary>
-        /// <param name="actionTypeDTO"></param>
+        /// <param name="donateeDTO"></param>
+        /// <param name="campaignId"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("Campaign/{campaignId}")]
         [Produces("application/json")]
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.DonateeDTO))]
-        public async Task<ActionResult<V1DTO.DonateeDTO>> PostDonatee(V1DTO.DonateeDTO actionTypeDTO)
+        public async Task<ActionResult<V1DTO.DonateeDTO>> PostDonatee(Guid campaignId, V1DTO.DonateeDTO donateeDTO)
         {
-            // Create actionType
-            var bllEntity = _mapper.Map(actionTypeDTO);
-            _bll.Donatees.Add(bllEntity);
-            
-            // var actionType = new Donatee
-            // {
-            //     DonateeValue = actionTypeCreateDTO.DonateeValue,
-            //     Comment = actionTypeCreateDTO.Comment
-            // };
+            // Create donatee
+            var bllEntity = _mapper.Map(donateeDTO);
+            _bll.Donatees.Add(bllEntity, campaignId, User.UserGuidId());
 
             await _bll.SaveChangesAsync();
 
-            actionTypeDTO.Id = bllEntity.Id;
+            donateeDTO.Id = bllEntity.Id;
             return CreatedAtAction(
                 "GetDonatee",
-                new {id = actionTypeDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
-                actionTypeDTO
+                new {id = donateeDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
+                donateeDTO
                 );
         }
 
@@ -172,16 +183,16 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
         public async Task<ActionResult<V1DTO.DonateeDTO>> DeleteDonatee(Guid id)
         {
-            var actionType = await _bll.Donatees.FirstOrDefaultAsync(id, User.UserGuidId());
-            if (actionType == null)
+            var donatee = await _bll.Donatees.FirstOrDefaultAsync(id, User.UserGuidId());
+            if (donatee == null)
             {
-                _logger.LogError($"DELETE. No such actionType: {id}, user: {User.UserGuidId()}");
+                _logger.LogError($"DELETE. No such donatee: {id}, user: {User.UserGuidId()}");
                 return NotFound(new V1DTO.MessageDTO($"Donatee with id {id} not found"));
             }
             await _bll.Donatees.RemoveAsync(id);
 
             await _bll.SaveChangesAsync();
-            return Ok(actionType);
+            return Ok(donatee);
         }
 
         // // GET: api/Donatees

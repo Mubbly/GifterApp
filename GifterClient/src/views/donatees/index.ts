@@ -12,10 +12,11 @@ import { IFetchResponse } from 'types/IFetchResponse';
 @autoinject
 export class DonateesIndex {
     private readonly ERROR_NOT_VALID_CAMPAIGN_ID = "Selected campaign is not valid";
-    private readonly ERROR_NO_DONATEES_FOR_THIS_CAMPAIGN = "There are no donatees for this campaign";
 
     private _donatees: IDonatee[] = [];
-    private _campaign: Optional<ICampaign> = null;
+    private _campaignName: string = '';
+    private _campaignId: string = '';
+    public _ownsCurrentCampaign = false;
     private _errorMessage: Optional<string> = null;
 
     constructor(
@@ -30,42 +31,62 @@ export class DonateesIndex {
         if(!this.appState.jwt) {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         } else {
-            this.getCampaignDonatees(params.campaignId);
+            this._campaignId = params.campaignId;
+            this._campaignName = params.campaignName;
+
+            console.log(this._campaignId);
+            console.log(this._campaignName);
+
+            this.getCampaignDonatees(this._campaignId);
         }
     }
 
     private getCampaignDonatees(campaignId: string): void {
-        if(!campaignId) {
+        // Cannot get donatees for a certain Campaign without its ID
+        if(!campaignId || campaignId == '') {
             this._errorMessage = this.ERROR_NOT_VALID_CAMPAIGN_ID;
+            return;
         }
-        this.donateeService
-        .getAll()
-        .then((response) => {
-            if (!Utils.isSuccessful(response)) {
-                this.handleErrors(response);
+        // Check if current user owns this campaign
+        this.campaignService
+            .getPersonal(campaignId)
+            .then((response) => {
+            if(Utils.isSuccessful(response)) {
+                this._ownsCurrentCampaign = true;
             } else {
-                this._donatees = response.data!;
+                this._ownsCurrentCampaign = false;
             }
-        })
-        .catch((error) => {
-            console.log(error);
         });
+
+        // Get donatees for this campaign
+        this.donateeService
+            .getAllForCampaign(campaignId)
+            .then((response) => {
+                if (!Utils.isSuccessful(response)) {
+                    this.handleErrors(response);
+                } else {
+                    this._donatees = response.data!;
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
-    private getDonatees(): void {
-        this.donateeService
-        .getAll()
-        .then((response) => {
-            if (!Utils.isSuccessful(response)) {
-                this.handleErrors(response);
-            } else {
-                this._donatees = response.data!;
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-    }
+    // private getDonatees(): void {
+    //     this.donateeService
+    //         .getAll()
+    //         .then((response) => {
+    //             if (!Utils.isSuccessful(response)) {
+    //                 this.handleErrors(response);
+    //             } else {
+    //                 this._donatees = response.data!;
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
     
     /**
      * Set error message or route to login/home page
@@ -74,9 +95,6 @@ export class DonateesIndex {
         switch(response.status) {
             case Utils.STATUS_CODE_UNAUTHORIZED:
                 this.router.navigateToRoute(Utils.LOGIN_ROUTE);
-                break;
-            case Utils.STATUS_CODE_NOT_FOUND:
-                this._errorMessage = this.ERROR_NO_DONATEES_FOR_THIS_CAMPAIGN;
                 break;
             default:
                 this._errorMessage = Utils.getErrorMessage(response);

@@ -36,10 +36,14 @@ section {
 
 .icon,
 .button {
-    margin: 10px;
+    margin: 10px 10px 10px 0;
     padding: 5px;
     /* Remove later */
     border: 1px solid black;
+}
+
+.button+.button {
+    margin: 10px;
 }
 
 a.button:hover,

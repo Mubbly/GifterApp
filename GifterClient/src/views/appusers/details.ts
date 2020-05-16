@@ -18,10 +18,10 @@ export class AppUserDetails {
     }
 
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-        if(params.id && typeof(params.id) === 'string') {
-            this.appUserService.getAppUser(params.id).then(
-                data => this._appUser = data
-            )
-        }
+        // if(params.id && typeof(params.id) === 'string') {
+        //     this.appUserService.get(params.id).then(
+        //         data => this._appUser = data
+        //     )
+        // }
     }
 }

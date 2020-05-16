@@ -55,7 +55,7 @@
                     ${campaign.activeToDate}
                 </td>
                 <td>
-                    <a route-href="route: donateesIndex; params.bind: { campaignId: campaign.id }">${campaign.campaignDonateesCount}</a>
+                    <a route-href="route: donateesIndex; params.bind: { campaignId: campaign.id, campaignName: campaign.name }">${campaign.campaignDonateesCount}</a>
                 </td>
             </tr>
         </tbody>

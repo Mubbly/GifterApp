@@ -26,6 +26,10 @@ namespace DAL.App.EF.Mappers
             MapperConfigurationExpression.CreateMap<UserCampaignDAL, UserCampaign>();
             MapperConfigurationExpression.CreateMap<UserCampaign, UserCampaignDAL>();
 
+            MapperConfigurationExpression.CreateMap<DonateeDAL, Donatee>();
+            MapperConfigurationExpression.CreateMap<Donatee, DonateeDAL>();
+            MapperConfigurationExpression.CreateMap<CampaignDonateeDAL, CampaignDonatee>();
+            MapperConfigurationExpression.CreateMap<CampaignDonatee, CampaignDonateeDAL>();
             
             Mapper = new Mapper(new MapperConfiguration(MapperConfigurationExpression));
         }

@@ -164,7 +164,8 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
     async create(entity: TEntityCreate): Promise<IFetchResponse<TEntityCreate>> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
-            const response = await this.httpClient.post(this.apiEndpointUrl, JSON.stringify(entity),
+            const response = await this.httpClient.post(this.apiEndpointUrl, 
+                JSON.stringify(entity),
                 { 
                     cache: "no-store",
                     headers: AUTH_HEADERS

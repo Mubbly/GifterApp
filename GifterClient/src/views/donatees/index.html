@@ -1,121 +1,108 @@
 <template>
-    <h1>Donatees</h1>
-    <h2>For <a route-href="route: campaignDetails; params.bind { _campaign.id }">${_campaign.name}</a> campaign</h2>
-
-    <p>
-        <a route-href="route: donateesCreate; params.bind: {}">Create new</a>      
-    </p>
-    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    FirstName
-                </th>
-                <th>
-                    LastName
-                </th>
-                <th>
-                    Gender
-                </th>
-                <th>
-                    Age
-                </th>
-                <th>
-                    Bio
-                </th>
-                <th>
-                    GiftName
-                </th>
-                <th>
-                    GiftDescription
-                </th>
-                <th>
-                    GiftImage
-                </th>
-                <th>
-                    GiftUrl
-                </th>
-                <th>
-                    GiftReservedFrom
-                </th>
-                <th>
-                    ActiveFrom
-                </th>
-                <th>
-                    ActiveTo
-                </th>
-                <th>
-                    IsActive
-                </th>
-                <th>
-                    ActionType
-                </th>
-                <th>
-                    Status
-                </th>
-                <th>
-                    CampaignDonateesCount
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr repeat.for="donatee of _donatees">
-                <td>
-                    ${donatee.firstName}
-                </td>
-                <td>
-                    ${donatee.lastName}
-                </td>
-                <td>
-                    ${donatee.gender}
-                </td>
-                <td>
-                    ${donatee.age}
-                </td>
-                <td>
-                    ${donatee.bio}
-                </td>
-                <td>
-                    ${donatee.giftName}
-                </td>
-                <td>
-                    ${donatee.giftDescription}
-                </td>
-                <td>
-                    ${donatee.giftImage}
-                </td>
-                <td>
-                    ${donatee.giftUrl}
-                </td>
-                <td>
-                    ${donatee.giftReservedFrom}
-                </td>
-                <td>
-                    ${donatee.activeFrom}
-                </td>
-                <td>
-                    ${donatee.activeTo}
-                </td>
-                <td>
-                    <input class="check-box" disabled="disabled" type="checkbox" checked.bind="donatee.isActive"/>
-                </td>
-                <td>
-                    ${donatee.actionType.actionTypeValue}
-                </td>
-                <td>
-                    ${donatee.status.statusValue}
-                </td>
-                <td>
-                    ${donatee.donateeDonateesCount}
-                </td>
-                <td>
-                    <a route-href="route: donateesEdit; params.bind: { id: donatee.id }">Edit</a> |        
-                    <a route-href="route: donateesDetails; params.bind: { id: donatee.id }">Details</a> |
-                    <a route-href="route: donateesDelete; params.bind: { id: donatee.id }">Delete</a> |  
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <section>
+        <h1>Donatees</h1>
+        <p>
+            For <a route-href="route: campaignsDetails; params.bind: { id: _campaignId }">${_campaignName}</a> campaign
+        </p>
+        <p if.bind="_ownsCurrentCampaign">
+            <a route-href="route: donateesCreate; params.bind: { campaignId: _campaignId, campaignName: _campaignName }" class="button">Add new</a>      
+        </p>
+    </section>
+    <section>
+        <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        FirstName
+                    </th>
+                    <th>
+                        LastName
+                    </th>
+                    <th>
+                        Gender
+                    </th>
+                    <th>
+                        Age
+                    </th>
+                    <th>
+                        Bio
+                    </th>
+                    <th>
+                        GiftName
+                    </th>
+                    <th>
+                        GiftDescription
+                    </th>
+                    <th>
+                        GiftImage
+                    </th>
+                    <th>
+                        GiftUrl
+                    </th>
+                    <th>
+                        GiftReservedFrom
+                    </th>
+                    <th>
+                        ActiveFrom
+                    </th>
+                    <th>
+                        ActiveTo
+                    </th>
+                    <th>
+                        IsActive
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr repeat.for="donatee of _donatees">
+                    <td>
+                        ${donatee.firstName}
+                    </td>
+                    <td>
+                        ${donatee.lastName}
+                    </td>
+                    <td>
+                        ${donatee.gender}
+                    </td>
+                    <td>
+                        ${donatee.age}
+                    </td>
+                    <td>
+                        ${donatee.bio}
+                    </td>
+                    <td>
+                        ${donatee.giftName}
+                    </td>
+                    <td>
+                        ${donatee.giftDescription}
+                    </td>
+                    <td>
+                        ${donatee.giftImage}
+                    </td>
+                    <td>
+                        ${donatee.giftUrl}
+                    </td>
+                    <td>
+                        ${donatee.giftReservedFrom}
+                    </td>
+                    <td>
+                        ${donatee.activeFrom}
+                    </td>
+                    <td>
+                        ${donatee.activeTo}
+                    </td>
+                    <td>
+                        <input class="check-box" disabled="disabled" type="checkbox" checked.bind="donatee.isActive"/>
+                    </td>
+                    <td if.bind="_ownsCurrentCampaign">
+                        <a route-href="route: donateesEdit; params.bind: { id: donatee.id }" class="button">Edit</a>        
+                        <a route-href="route: donateesDetails; params.bind: { id: donatee.id }" class="button">Details</a>
+                        <a route-href="route: donateesDelete; params.bind: { id: donatee.id }" class="button">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 </template>

@@ -1,7 +1,13 @@
-﻿using Contracts.DAL.App.Repositories;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Mappers;
 using DAL.Base.EF.Repositories;
 using DAL.Base.Mappers;
+using Microsoft.EntityFrameworkCore;
 using DomainApp = Domain.App;
 using DALAppDTO = DAL.App.DTO;
 using DomainAppIdentity = Domain.App.Identity;
@@ -16,6 +22,33 @@ namespace DAL.App.EF.Repositories
             base(dbContext, new DALMapper<DomainApp.Donatee, DALAppDTO.DonateeDAL>())
         {
         }
+        
+        // public async Task<IEnumerable<DALAppDTO.DonateeDAL>> GetAllForCampaignAsync(Guid campaignId, Guid? userId, bool noTracking = true)
+        // {
+        //     var allCampaignDonatees = await UOW.CampaignDonatees.GetAllAsync();
+        //     var donatees = await UOW.Donatees.GetAllAsync();
+        //
+        //     return 
+        //         from campaignDonatee in allCampaignDonatees
+        //         join donatee in donatees
+        //             on campaignDonatee.DonateeId equals donatee.Id
+        //         where campaignId == campaignDonatee.CampaignId
+        //         select donatee;
+        // }
+        
+        // public override async Task<IEnumerable<DALAppDTO.DonateeDAL>> GetAllAsync(object? userId = null, bool noTracking = true)
+        // {
+        //     var query = PrepareQuery(userId, noTracking);
+        //     query = query
+        //         .Include(g => g.AppUser)
+        //         .Include(g => g.GpsSessionType)
+        //         .ThenInclude(g => g!.Name)
+        //         .ThenInclude(t => t!.Translations)
+        //         .OrderByDescending(a => a.RecordedAt);
+        //     var domainItems = await query.ToListAsync();
+        //     var result = domainItems.Select(e => Mapper.Map(e));
+        //     return result;
+        // }
 
         // // TODO: User stuff 
         //

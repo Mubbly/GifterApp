@@ -11,8 +11,8 @@ export class AppUsersIndex {
     }
 
     attached() {
-        this.appUserService.getAppUsers().then(
-            data => this._appUsers = data
-        );
+        // this.appUserService.getAll().then(
+        //     data => this._appUsers = data
+        // );
     }
 }

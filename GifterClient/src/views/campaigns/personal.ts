@@ -12,6 +12,7 @@ export class CampaignsPersonal {
     private readonly ERROR_NOT_CAMPAIGN_MANAGER = "You need to be a campaign manager to create new campaigns";
 
     private _campaigns: ICampaign[] = [];
+    private _campaign: Optional<ICampaign> = null;
     private _errorMessage: Optional<string> = null;
     public _isCampaignManager = false;
 
@@ -44,6 +45,25 @@ export class CampaignsPersonal {
             } else {
                 this.setCampaignManager(true);
                 this._campaigns = response.data!;
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+    /**
+     * Get a campaign that the user has created
+     */
+    private getPersonalCampaign(id: string): void {
+        this.campaignService
+        .getPersonal(id)
+        .then((response) => {
+            if (!Utils.isSuccessful(response)) {
+                this.handleErrors(response);
+            } else {
+                this.setCampaignManager(true);
+                this._campaign = response.data!;
             }
         })
         .catch((error) => {

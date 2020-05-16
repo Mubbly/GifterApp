@@ -13,6 +13,9 @@ namespace Contracts.BLL.App.Services
         Task<IEnumerable<BLLAppDTO.CampaignBLL>> GetAllPersonalAsync(Guid userId,
             bool noTracking = true);
 
+        Task<BLLAppDTO.CampaignBLL> GetPersonalAsync(Guid campaignId,
+            Guid userId, bool noTracking = true);
+
         new BLLAppDTO.CampaignBLL Add(BLLAppDTO.CampaignBLL bllCampaign, object? userId = null);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Contracts.Domain;
 
 namespace BLL.App.DTO
@@ -36,9 +37,11 @@ namespace BLL.App.DTO
         public string? FullName => FirstName + " " + LastName;
 
         public Guid ActionTypeId { get; set; }
-        public ActionTypeBLL ActionType { get; set; } = default!;
+        public ActionTypeBLL? ActionType { get; set; } = default!;
+        
+        
         public Guid StatusId { get; set; }
-        public StatusBLL Status { get; set; } = default!;
+        public StatusBLL? Status { get; set; } = default!;
 
         [InverseProperty(nameof(CampaignDonateeBLL.Donatee))]
         public ICollection<CampaignDonateeBLL>? DonateeCampaigns { get; set; }

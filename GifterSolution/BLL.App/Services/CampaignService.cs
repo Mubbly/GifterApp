@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BLL.App.Mappers;
 using BLL.Base.Services;
@@ -7,6 +8,7 @@ using Contracts.BLL.App.Mappers;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
+using Microsoft.Extensions.Logging;
 using DALAppDTO = DAL.App.DTO;
 using BLLAppDTO = BLL.App.DTO;
 
@@ -20,7 +22,7 @@ namespace BLL.App.Services
         {
         }
 
-        public virtual async Task<IEnumerable<BLLAppDTO.CampaignBLL>> GetAllPersonalAsync(Guid userId, bool noTracking = true)
+        public async Task<IEnumerable<BLLAppDTO.CampaignBLL>> GetAllPersonalAsync(Guid userId, bool noTracking = true)
         {
             var personalCampaigns = new List<BLLAppDTO.CampaignBLL>();
             
@@ -39,6 +41,14 @@ namespace BLL.App.Services
                 }
             }
             return personalCampaigns;
+        }
+        
+        public virtual async Task<BLLAppDTO.CampaignBLL> GetPersonalAsync(Guid campaignId, Guid userId, bool noTracking = true)
+        {
+            var allPersonalCampaigns = await GetAllPersonalAsync(userId);
+            var personalCampaign = allPersonalCampaigns.Where(e => e.Id == campaignId);
+
+            return personalCampaign.FirstOrDefault();
         }
 
         public new BLLAppDTO.CampaignBLL Add(BLLAppDTO.CampaignBLL bllCampaign, object? userId = null)

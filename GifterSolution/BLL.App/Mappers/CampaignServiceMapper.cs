@@ -11,15 +11,6 @@ namespace BLL.App.Mappers
     {
         public CampaignServiceMapper() :base()
         {
-            // MapperConfigurationExpression.CreateMap<DALAppDTO.CampaignDAL, BLLAppDTO.CampaignBLL>();
-            // MapperConfigurationExpression.CreateMap<BLLAppDTO.CampaignBLL, DALAppDTO.CampaignDAL>();
-            // MapperConfigurationExpression.CreateMap<Campaign, DALAppDTO.CampaignDAL>();
-
-            // MapperConfigurationExpression.CreateMap<DALAppDTO.UserCampaignDAL, BLLAppDTO.UserCampaignBLL>();
-            // MapperConfigurationExpression.CreateMap<BLLAppDTO.UserCampaignBLL, DALAppDTO.UserCampaignDAL>();
-            //MapperConfigurationExpression.CreateMap<DALAppDTO.Identity.AppUserDAL, BLLAppDTO.Identity.AppUserBLL>();
-            
-            // Mapper = new Mapper(new MapperConfiguration(MapperConfigurationExpression));
         }
 
         public BLLAppDTO.UserCampaignBLL MapUserCampaignToBLL(DALAppDTO.UserCampaignDAL inObject)

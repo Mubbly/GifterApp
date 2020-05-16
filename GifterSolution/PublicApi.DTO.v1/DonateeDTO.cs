@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PublicApi.DTO.v1
 {
@@ -33,9 +34,10 @@ namespace PublicApi.DTO.v1
         public string? FullName => FirstName + " " + LastName;
 
         public Guid ActionTypeId { get; set; }
-        public ActionTypeDTO ActionTypeDTO { get; set; } = default!;
+        public ActionTypeDTO? ActionTypeDTO { get; set; } = default!;
+        
         public Guid StatusId { get; set; }
-        public StatusDTO Status { get; set; } = default!;
+        public StatusDTO? Status { get; set; } = default!;
 
         public int CampaignDonateesCount { get; set; }
     }

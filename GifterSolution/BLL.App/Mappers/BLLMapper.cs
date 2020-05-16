@@ -19,6 +19,11 @@ namespace BLL.App.Mappers
             MapperConfigurationExpression.CreateMap<CampaignDAL, CampaignBLL>();
             MapperConfigurationExpression.CreateMap<UserCampaignDAL, UserCampaignBLL>();
             MapperConfigurationExpression.CreateMap<UserCampaignBLL, UserCampaignDAL>();
+            
+            MapperConfigurationExpression.CreateMap<DonateeBLL, DonateeDAL>();
+            MapperConfigurationExpression.CreateMap<DonateeDAL, DonateeBLL>();
+            MapperConfigurationExpression.CreateMap<CampaignDonateeDAL, CampaignDonateeBLL>();
+            MapperConfigurationExpression.CreateMap<CampaignDonateeBLL, CampaignDonateeDAL>();
 
             Mapper = new Mapper(new MapperConfiguration(MapperConfigurationExpression));
         }

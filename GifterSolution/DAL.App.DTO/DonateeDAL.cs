@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Contracts.Domain;
 
 namespace DAL.App.DTO
@@ -36,9 +37,10 @@ namespace DAL.App.DTO
         public string? FullName => FirstName + " " + LastName;
 
         public Guid ActionTypeId { get; set; }
-        public ActionTypeDAL ActionType { get; set; } = default!;
+        public ActionTypeDAL? ActionType { get; set; } = default!;
+        
         public Guid StatusId { get; set; }
-        public StatusDAL Status { get; set; } = default!;
+        public StatusDAL? Status { get; set; } = default!;
 
         [InverseProperty(nameof(CampaignDonateeDAL.Donatee))]
         public ICollection<CampaignDonateeDAL>? DonateeCampaigns { get; set; }
