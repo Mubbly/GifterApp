@@ -83,8 +83,8 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
         public async Task<ActionResult<IEnumerable<V1DTO.DonateeDTO>>> GetDonateesForCampaign(Guid campaignId)
         {
-            var campaignDonatees = await _bll.Donatees.GetAllForCampaignAsync(campaignId, User.UserGuidId());
-            return Ok(campaignDonatees.Select(e => _mapper.Map(e)));
+            var donatees = await _bll.Donatees.GetAllForCampaignAsync(campaignId, User.UserGuidId());
+            return Ok(donatees.Select(e => _mapper.Map(e)));
         }
 
         // PUT: api/Donatees/5

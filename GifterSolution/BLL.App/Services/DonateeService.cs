@@ -21,18 +21,10 @@ namespace BLL.App.Services
         {
         }
 
-        // TODO: Move to repo
         public async Task<IEnumerable<BLLAppDTO.DonateeBLL>> GetAllForCampaignAsync(Guid campaignId, Guid? userId, bool noTracking = true)
         {
-            var allCampaignDonatees = await UOW.CampaignDonatees.GetAllAsync();
-            var donatees = await UOW.Donatees.GetAllAsync();
-
-            return 
-                from campaignDonatee in allCampaignDonatees
-                join donatee in donatees
-                    on campaignDonatee.DonateeId equals donatee.Id
-                where campaignId == campaignDonatee.CampaignId
-                select Mapper.Map(donatee);
+            var campaignDonatees = await Repository.GetAllForCampaignAsync(campaignId, userId);
+            return campaignDonatees.Select(e => Mapper.Map(e));
         }
 
         public BLLAppDTO.DonateeBLL Add(BLLAppDTO.DonateeBLL bllDonatee, Guid campaignId, Guid userId)

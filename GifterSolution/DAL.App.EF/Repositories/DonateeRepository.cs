@@ -23,6 +23,31 @@ namespace DAL.App.EF.Repositories
         {
         }
         
+        public async Task<IEnumerable<DALAppDTO.DonateeDAL>> GetAllForCampaignAsync(Guid campaignId, Guid? userId, bool noTracking = true)
+        {
+            var donatees = 
+                await RepoDbContext
+                .CampaignDonatees
+                .Include(a => a.Donatee)
+                .Where(cd => cd.CampaignId == campaignId)
+                .Select(e => Mapper.Map(e.Donatee!))
+                .ToListAsync();
+
+            return donatees;
+            
+            // var campaignDonatees = await RepoDbContext.CampaignDonatees.ToListAsync();
+            // var donatees = await RepoDbSet.ToListAsync();
+            
+            // return 
+            //     from campaignDonatee in campaignDonatees
+            //     join donatee in donatees
+            //         on campaignDonatee.DonateeId equals donatee.Id
+            //     where campaignId == campaignDonatee.CampaignId
+            //     select Mapper.Map(donatee);
+        }
+        
+        
+        
         // public async Task<IEnumerable<DALAppDTO.DonateeDAL>> GetAllForCampaignAsync(Guid campaignId, Guid? userId, bool noTracking = true)
         // {
         //     var allCampaignDonatees = await UOW.CampaignDonatees.GetAllAsync();
