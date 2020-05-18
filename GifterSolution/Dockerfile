@@ -8,7 +8,7 @@ EXPOSE 80
 
 # Copy everything else and build
 COPY . ./
-RUN dotnet publish WebApp -c Release -o out
+RUN dotnet publish WebApp -c Release -o WebApp/out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:latest AS runtime
