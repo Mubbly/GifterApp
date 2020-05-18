@@ -1,7 +1,12 @@
-﻿using Contracts.DAL.App.Repositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Mappers;
-using DAL.Base.EF.Repositories;
-using DAL.Base.Mappers;
+using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
+using com.mubbly.gifterapp.DAL.Base.Mappers;
+using Microsoft.EntityFrameworkCore;
 using DomainApp = Domain.App;
 using DALAppDTO = DAL.App.DTO;
 using DomainAppIdentity = Domain.App.Identity;
@@ -15,6 +20,28 @@ namespace DAL.App.EF.Repositories
         public GiftRepository(AppDbContext dbContext) :
             base(dbContext, new DALMapper<DomainApp.Gift, DALAppDTO.GiftDAL>())
         {
+        }
+        
+        public async Task<IEnumerable<DALAppDTO.GiftDAL>> GetAllForUserAsync(Guid userId, bool noTracking = true)
+        {
+            // User's wishlist
+            var wishlistId =
+                await RepoDbContext
+                    .Wishlists
+                    .Where(wishlist => wishlist.AppUserId == userId)
+                    .Select(wishlist => wishlist.Id)
+                    .FirstOrDefaultAsync();
+            
+            // User's gifts
+            var gifts = PrepareQuery(userId, noTracking);
+            var personalGifts = 
+                await gifts
+                    .Where(e => e.WishlistId == wishlistId)
+                    .OrderBy(e => e.CreatedAt)
+                    .Select(e => Mapper.Map(e))
+                    .ToListAsync();
+            
+            return personalGifts;
         }
 
         // public async Task<IEnumerable<Gift>> AllAsync(Guid? userId = null)

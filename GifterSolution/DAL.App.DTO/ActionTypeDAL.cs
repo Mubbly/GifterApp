@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Contracts.Domain;
+using com.mubbly.gifterapp.Contracts.Domain;
 using Domain.App;
 
 namespace DAL.App.DTO

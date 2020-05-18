@@ -1,5 +1,5 @@
-﻿using Contracts.BLL.App.Services;
-using Contracts.BLL.Base;
+﻿using com.mubbly.gifterapp.Contracts.BLL.Base;
+using Contracts.BLL.App.Services;
 
 namespace Contracts.BLL.App
 {

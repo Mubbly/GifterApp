@@ -67,10 +67,10 @@
                 @Html.DisplayFor(modelItem => item.IsPrivate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Wishlist.Id)
+                @Html.DisplayFor(modelItem => item.Wishlist!.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AppUser.FirstName)
+                @Html.DisplayFor(modelItem => item.AppUser!.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedBy)

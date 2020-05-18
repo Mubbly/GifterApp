@@ -12,6 +12,7 @@ import { IGiftCreate } from '../../domain/IGift';
 import { Optional } from "types/generalTypes";
 import { WishlistService } from '../../service/wishlistService';
 import { IFetchResponse } from "types/IFetchResponse";
+import { ActionTypes, Statuses } from "domain/PredefinedData";
 
 @autoinject
 export class GiftsCreate {
@@ -27,27 +28,34 @@ export class GiftsCreate {
     private _isPinned = false;
     private _actionTypeId = "";
     private _statusId = "";
-    private _appUserId = "";
     private _wishlistId = "";
     // related tables
-    private _appUsers: IAppUser[] = [];
     private _statuses: IStatus[] = [];
     private _actionTypes: IActionType[] = [];
 
     constructor(
         private giftService: GiftService,
-        private appUserService: AppUserService,
-        private statusService: StatusService,
-        private actionTypeService: ActionTypeService,
-        private WishlistService: WishlistService,
         private router: Router
     ) {}
 
     attached() {
-        this.getRelatedData();
     }
 
+    activate(params: any) {
+        this.getRelatedData(params);
+    }
+
+    // From other tables that are connected to this one via foreign keys
+    private getRelatedData(params: any): void {
+        this._wishlistId = params.wishlistId;
+        this._statusId = Statuses.ACTIVE;
+        this._actionTypeId = ActionTypes.RESERVE;
+    }
+
+    // On submit create new gift
     onSubmit(event: Event) {
+        event.preventDefault();
+
         let newGift: IGiftCreate = {
             name: this._name,
             description: this._description,
@@ -58,18 +66,9 @@ export class GiftsCreate {
             isPinned: this._isPinned,
             actionTypeId: this._actionTypeId,
             statusId: this._statusId,
-            appUserId: this._appUserId,
             wishlistId: this._wishlistId
         };
-        console.log(newGift);
         this.createGift(newGift);
-
-        event.preventDefault();
-    }
-
-    // From other tables that are connected to this one via foreign keys
-    private getRelatedData(): void {
-
     }
 
     private createGift(newGift: IGiftCreate): void {
@@ -77,10 +76,9 @@ export class GiftsCreate {
             .create(newGift)
             .then((response: IFetchResponse<IGiftCreate>) => {
                 if (UtilFunctions.isSuccessful(response)) {
-                    this.router.navigateToRoute("giftsIndex", {});
+                    this.router.navigateToRoute("profilesPersonal", {});
                 } else {
                     this._errorMessage = UtilFunctions.getErrorMessage(response);
-
                 }
             });
     }

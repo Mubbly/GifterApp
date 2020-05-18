@@ -1,5 +1,0 @@
-export class ActionTypes {
-    public static ACTIVATE = "00000000-0000-0000-0000-000000000001";
-    public static ARCHIVE = "00000000-0000-0000-0000-000000000002";
-    public static RESERVE = "00000000-0000-0000-0000-000000000003";
-}

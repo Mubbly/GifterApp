@@ -46,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.Comment)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NotificationType.NotificationTypeValue)
+                @Html.DisplayFor(modelItem => item.NotificationType!.NotificationTypeValue)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedBy)

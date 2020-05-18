@@ -26,13 +26,13 @@
             @Html.DisplayNameFor(model => model.Campaign)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Campaign.Name)
+            @Html.DisplayFor(model => model.Campaign!.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Donatee)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Donatee.FirstName)
+            @Html.DisplayFor(model => model.Donatee!.FirstName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedBy)

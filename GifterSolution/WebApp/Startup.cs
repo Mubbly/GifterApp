@@ -1,10 +1,11 @@
+#pragma warning disable 1591
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using BLL.App;
 using Contracts.BLL.App;
 using Contracts.DAL.App;
-using Contracts.DAL.Base;
+using com.mubbly.gifterapp.Contracts.DAL.Base;
 using DAL.App.EF;
 using DAL.App.EF.Helpers;
 using Domain.App.Identity;

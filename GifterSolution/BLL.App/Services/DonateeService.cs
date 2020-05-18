@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BLL.App.Mappers;
-using BLL.Base.Services;
+using com.mubbly.gifterapp.BLL.Base.Services;
 using Contracts.BLL.App.Mappers;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
@@ -23,7 +23,7 @@ namespace BLL.App.Services
 
         public async Task<IEnumerable<BLLAppDTO.DonateeBLL>> GetAllForCampaignAsync(Guid campaignId, Guid? userId, bool noTracking = true)
         {
-            var campaignDonatees = await Repository.GetAllForCampaignAsync(campaignId, userId);
+            var campaignDonatees = await Repository.GetAllForCampaignAsync(campaignId, userId, noTracking);
             return campaignDonatees.Select(e => Mapper.Map(e));
         }
 
@@ -43,7 +43,7 @@ namespace BLL.App.Services
             // Add new Donatee
             if (isUserCurrentCampaignOwner.Result != null)
             {
-                throw new InvalidOperationException(userId + " user not allowed to add new Donatee to this Campaign: " + campaignId);
+                throw new InvalidOperationException($"User {userId} not allowed to add this donatee");
             }
             
             var dalDonatee = Mapper.Map(bllDonatee);

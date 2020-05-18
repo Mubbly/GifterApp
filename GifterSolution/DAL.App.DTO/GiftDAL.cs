@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Contracts.Domain;
+using com.mubbly.gifterapp.Contracts.Domain;
 using DAL.App.DTO.Identity;
 
 namespace DAL.App.DTO
@@ -26,10 +26,13 @@ namespace DAL.App.DTO
 
         public Guid ActionTypeId { get; set; }
         public ActionTypeDAL ActionType { get; set; } = default!;
-        public Guid AppUserId { get; set; }
-        public AppUserDAL AppUser { get; set; } = default!;
+        
+        // public Guid AppUserId { get; set; }
+        // public AppUserDAL AppUser { get; set; } = default!;
+        
         public Guid StatusId { get; set; }
         public StatusDAL Status { get; set; } = default!;
+        
         public Guid WishlistId { get; set; }
         public WishlistDAL Wishlist { get; set; } = default!;
 

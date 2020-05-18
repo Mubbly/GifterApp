@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ee.itcollege.meeenm.Contracts.Domain
+namespace com.mubbly.gifterapp.Contracts.Domain
 {
     public interface IDomainEntityMetadata
     {
@@ -9,9 +9,5 @@ namespace ee.itcollege.meeenm.Contracts.Domain
 
         public string? EditedBy { get; set; }
         public DateTime? EditedAt { get; set; }
-
-        // No soft update/delete initially
-        // public string? DeletedBy { get; set; }
-        // public DateTime? DeletedAt { get; set; }
     }
 }

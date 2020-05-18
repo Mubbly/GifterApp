@@ -75,36 +75,6 @@
                     </label>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="ActionTypeId">ActionTypeId</label>
-                    <select class="form-control" data-val="true" data-val-required="The ActionTypeId field is required."
-                        id="ActionTypeId" name="ActionTypeId" value.bind="_actionTypeId">
-                        <option repeat.for="actionType of _actionTypes" value="${actionType.id}">
-                            ${actionType.actionTypeValue}</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="AppUserId">AppUserId</label>
-                    <select class="form-control" data-val="true" data-val-required="The AppUserId field is required."
-                        id="AppUserId" name="AppUserId" value.bind="_appUserId">
-                        <option repeat.for="appUser of _appUsers" value="${appUser.id}">${appUser.id}</option>
-                    </select>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="StatusId">StatusId</label>
-                    <select class="form-control" data-val="true" data-val-required="The StatusId field is required."
-                        id="StatusId" name="StatusId" value.bind="_statusId">
-                        <option repeat.for="status of _statuses" value="${status.id}">${status.statusValue}</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="WishlistId">WishlistId</label>
-                    <select class="form-control" data-val="true" data-val-required="The WishlistId field is required."
-                        id="WishlistId" name="WishlistId" value.bind="_wishlistId">
-                        <option repeat.for="wishlist of _wishlists" value="${wishlist.id}">${wishlist.id}</option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-primary" />
                 </div>
             </form>

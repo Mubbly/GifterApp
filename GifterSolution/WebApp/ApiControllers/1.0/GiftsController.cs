@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts.BLL.App;
+using DAL.App.EF.Repositories;
 using Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,9 @@ using V1DTO=PublicApi.DTO.v1;
 
 namespace WebApp.ApiControllers._1._0
 {
+    /// <summary>
+    ///     Gifts controller
+    /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -26,20 +30,56 @@ namespace WebApp.ApiControllers._1._0
         private readonly ILogger<GiftsController> _logger;
         private readonly GiftMapper _mapper = new GiftMapper();
 
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="appBLL"></param>
+        /// <param name="logger"></param>
         public GiftsController(IAppBLL appBLL, ILogger<GiftsController> logger)
         {
             _bll = appBLL;
             _logger = logger;
         }
 
-        // GET: api/Gifts
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<V1DTO.GiftDTO>>> GetGifts()
+        // GET: api/Gifts/User/5
+        /// <summary>
+        ///     Get all gifts for certain user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<V1DTO.GiftDTO>>> GetGifts(Guid userId)
         {
-            return Ok((await _bll.Gifts.GetAllAsync()).Select(e => _mapper.Map(e)));
+            var personalGifts = await _bll.Gifts.GetAllForUser(userId);
+            if (personalGifts == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Gifts not found"));
+            }
+            return Ok(personalGifts.Select(e => _mapper.Map(e)));
+        }
+        
+        // GET: api/Gifts/Personal
+        /// <summary>
+        ///     Get all personal gifts
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("personal")]
+        public async Task<ActionResult<IEnumerable<V1DTO.GiftDTO>>> GetPersonalGifts()
+        {
+            var personalGifts = await _bll.Gifts.GetAllPersonalAsync(User.UserGuidId());
+            if (personalGifts == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Gifts not found"));
+            }
+            return Ok(personalGifts.Select(e => _mapper.Map(e)));
         }
 
         // GET: api/Gifts/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<V1DTO.GiftDTO>> GetGift(Guid id)
         {
@@ -51,10 +91,34 @@ namespace WebApp.ApiControllers._1._0
 
             return Ok(_mapper.Map(gift));
         }
+        
+        // GET: api/Gifts/Personal/5
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("personal/{id}")]
+        public async Task<ActionResult<V1DTO.GiftDTO>> GetPersonalGift(Guid id)
+        {
+            var gift = await _bll.Gifts.GetPersonalAsync(id, User.UserGuidId());
+            if (gift == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Gift with id {id} not found"));
+            }
+
+            return Ok(_mapper.Map(gift));
+        }
 
         // PUT: api/Gifts/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        /// <summary>
+        ///     Edit existing gift
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="giftDTO"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutGift(Guid id, V1DTO.GiftDTO giftDTO)
         {
@@ -94,12 +158,17 @@ namespace WebApp.ApiControllers._1._0
         // POST: api/Gifts
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        /// <summary>
+        ///     Add new gift
+        /// </summary>
+        /// <param name="giftDTO"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<V1DTO.GiftDTO>> PostGift(V1DTO.GiftDTO giftDTO)
         {
             // Create gift
             var bllEntity = _mapper.Map(giftDTO);
-            _bll.Gifts.Add(bllEntity);
+            _bll.Gifts.Add(bllEntity, User.UserGuidId());
             // Save to db
             await _bll.SaveChangesAsync();
 

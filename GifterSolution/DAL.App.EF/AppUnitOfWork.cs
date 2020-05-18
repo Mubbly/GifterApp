@@ -2,7 +2,7 @@
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Repositories;
-using DAL.Base.EF;
+using com.mubbly.gifterapp.DAL.Base.EF;
 
 namespace DAL.App.EF
 {

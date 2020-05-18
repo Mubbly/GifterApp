@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity;
 
-namespace ee.itcollege.meeenm.Contracts.Domain
+namespace com.mubbly.gifterapp.Contracts.Domain
 {
     public interface IDomainEntityUser<TUser> : IDomainEntityUser<Guid, TUser>
         where TUser : IdentityUser<Guid>

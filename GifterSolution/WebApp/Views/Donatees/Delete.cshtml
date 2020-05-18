@@ -93,13 +93,13 @@
             @Html.DisplayNameFor(model => model.ActionType)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ActionType.ActionTypeValue)
+            @Html.DisplayFor(model => model.ActionType!.ActionTypeValue)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Status)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status.StatusValue)
+            @Html.DisplayFor(model => model.Status!.StatusValue)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedBy)

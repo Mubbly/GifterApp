@@ -1,7 +1,12 @@
-﻿using Contracts.DAL.App.Repositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Mappers;
-using DAL.Base.EF.Repositories;
-using DAL.Base.Mappers;
+using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
+using com.mubbly.gifterapp.DAL.Base.Mappers;
+using Microsoft.EntityFrameworkCore;
 using DomainApp = Domain.App;
 using DALAppDTO = DAL.App.DTO;
 using DomainAppIdentity = Domain.App.Identity;
@@ -16,9 +21,20 @@ namespace DAL.App.EF.Repositories
             base(dbContext, new DALMapper<DomainApp.Campaign, DALAppDTO.CampaignDAL>())
         {
         }
+        
+        public async Task<IEnumerable<DALAppDTO.CampaignDAL>> GetAllPersonalAsync(Guid userId, bool noTracking = true)
+        {
+            var personalCampaigns = 
+                await RepoDbContext
+                    .UserCampaigns
+                    .Include(a => a.Campaign)
+                    .Where(cd => cd.AppUserId == userId)
+                    .Select(e => Mapper.Map(e.Campaign!))
+                    .ToListAsync();
 
-        // // TODO: User stuff 
-        //
+            return personalCampaigns;
+        }
+
         // public async Task<IEnumerable<Campaign>> AllAsync(Guid? userId = null)
         // {
         //     return await base.AllAsync();

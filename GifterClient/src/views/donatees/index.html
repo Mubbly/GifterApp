@@ -1,7 +1,7 @@
 <template>
     <section>
         <h1>Donatees</h1>
-        <p>
+        <p if.bind="_campaignId">
             For <a route-href="route: campaignsDetails; params.bind: { id: _campaignId }">${_campaignName}</a> campaign
         </p>
         <p if.bind="_ownsCurrentCampaign">
@@ -97,7 +97,7 @@
                         <input class="check-box" disabled="disabled" type="checkbox" checked.bind="donatee.isActive"/>
                     </td>
                     <td if.bind="_ownsCurrentCampaign">
-                        <a route-href="route: donateesEdit; params.bind: { id: donatee.id }" class="button">Edit</a>        
+                        <a route-href="route: donateesEdit; params.bind: { id: donatee.id, campaignId: _campaignId, campaignName: _campaignName }" class="button">Edit</a>        
                         <a route-href="route: donateesDetails; params.bind: { id: donatee.id }" class="button">Details</a>
                         <a route-href="route: donateesDelete; params.bind: { id: donatee.id }" class="button">Delete</a>
                     </td>

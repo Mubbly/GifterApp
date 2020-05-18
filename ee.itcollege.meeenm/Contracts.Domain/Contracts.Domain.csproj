@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <AssemblyName>ee.itcollege.meeenm.Contracts.Domain</AssemblyName>
-        <RootNamespace>ee.itcollege.meeenm.Contracts.Domain</RootNamespace>
+        <AssemblyName>com.mubbly.gifterapp.Contracts.Domain</AssemblyName>
+        <RootNamespace>com.mubbly.gifterapp.Contracts.Domain</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

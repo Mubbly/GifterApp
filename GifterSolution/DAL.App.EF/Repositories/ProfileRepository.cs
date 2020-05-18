@@ -1,7 +1,11 @@
-﻿using Contracts.DAL.App.Repositories;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Mappers;
-using DAL.Base.EF.Repositories;
-using DAL.Base.Mappers;
+using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
+using com.mubbly.gifterapp.DAL.Base.Mappers;
+using Microsoft.EntityFrameworkCore;
 using DomainApp = Domain.App;
 using DALAppDTO = DAL.App.DTO;
 using DomainAppIdentity = Domain.App.Identity;
@@ -15,6 +19,21 @@ namespace DAL.App.EF.Repositories
         public ProfileRepository(AppDbContext dbContext) :
             base(dbContext, new DALMapper<DomainApp.Profile, DALAppDTO.ProfileDAL>())
         {
+        }
+        
+        public async Task<DALAppDTO.ProfileDAL> GetPersonalAsync(Guid userId, Guid? profileId, bool noTracking = true)
+        {
+            var personalProfiles = 
+                await RepoDbContext
+                    .Profiles
+                    .Where(a => a.AppUserId == userId)
+                    .Include(a => a.AppUser)
+                    .Include(a => a.Wishlist)
+                    .Select(e => Mapper.Map(e))
+                    .ToListAsync();
+            
+            // If specific profileId is not provided get the first profile as default
+            return profileId == null ? personalProfiles.FirstOrDefault() : personalProfiles.Find(a => a.Id == profileId);
         }
 
         // public async Task<IEnumerable<Profile>> AllAsync(Guid? userId = null)

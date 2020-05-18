@@ -68,37 +68,6 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
         }
     }
 
-    async getAllPersonal(): Promise<IFetchResponse<TEntity[]>> {
-        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
-        try {
-            const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.PERSONAL}`, {
-                    cache: "no-store",
-                    headers: AUTH_HEADERS
-                });
-            // happy case
-            if (response.ok) {
-                const data = (await response.json()) as TEntity[];
-                console.log(data);
-                return {
-                    status: response.status,
-                    data: data
-                }
-            }
-            // something went wrong
-            return {
-                status: response.status,
-                errorMessage: response.statusText
-            }
-
-        } catch (reason) {
-            return {
-                status: 0,
-                errorMessage: JSON.stringify(reason)
-            }
-        }
-    }
-
     async get(id: string): Promise<IFetchResponse<TEntity>> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
@@ -130,11 +99,43 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
         }
     }
 
-    async getPersonal(id: string): Promise<IFetchResponse<TEntity>> {
+    async getAllPersonal(): Promise<IFetchResponse<TEntity[]>> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.PERSONAL}/${id}`, {
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.PERSONAL}`, {
+                    cache: "no-store",
+                    headers: AUTH_HEADERS
+                });
+            // happy case
+            if (response.ok) {
+                const data = (await response.json()) as TEntity[];
+                console.log(data);
+                return {
+                    status: response.status,
+                    data: data
+                }
+            }
+            // something went wrong
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+
+        } catch (reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
+    }
+
+    async getPersonal(id?: string): Promise<IFetchResponse<TEntity>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
+        let personalId = id ? id : '';
+        try {
+            const response = await this.httpClient
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.PERSONAL}/${personalId}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });

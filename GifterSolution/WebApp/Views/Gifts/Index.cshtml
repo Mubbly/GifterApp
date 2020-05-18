@@ -82,13 +82,13 @@
                 @Html.DisplayFor(modelItem => item.IsPinned)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ActionType.ActionTypeValue)
+                @Html.DisplayFor(modelItem => item.ActionType!.ActionTypeValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status.StatusValue)
+                @Html.DisplayFor(modelItem => item.Status!.StatusValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Wishlist.Id)
+                @Html.DisplayFor(modelItem => item.Wishlist!.Id)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedBy)

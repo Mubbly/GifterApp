@@ -16,7 +16,6 @@ export interface IGiftCreate {
 
     actionTypeId: string;
     statusId: string;
-    appUserId: string;
     wishlistId: string;
 }
 
@@ -26,7 +25,6 @@ export interface IGiftEdit extends IBaseEntity, IGiftCreate {
 export interface IGift extends IGiftEdit {
     actionType: IActionType;
     status: IStatus;
-    appUser: IAppUser;
     wishlist: IWishlist;
 
     reservedGiftsCount: number;

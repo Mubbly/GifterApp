@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Contracts.BLL.Base.Services;
+using com.mubbly.gifterapp.Contracts.BLL.Base.Services;
 using Contracts.DAL.App.Repositories;
 using BLLAppDTO = BLL.App.DTO;
 
@@ -12,7 +12,7 @@ namespace Contracts.BLL.App.Services
     { 
         Task<IEnumerable<BLLAppDTO.CampaignBLL>> GetAllPersonalAsync(Guid userId,
             bool noTracking = true);
-
+        
         Task<BLLAppDTO.CampaignBLL> GetPersonalAsync(Guid campaignId,
             Guid userId, bool noTracking = true);
 

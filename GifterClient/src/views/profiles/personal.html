@@ -1,76 +1,91 @@
 <template>
-    <section>
-        <div class="flex">
-            <h1 class="flex-column">Name (username)</h1> 
-            <a route-href="route: profilesEdit; params.bind: {}" class="flex-column icon">Edit profile info</a>
-        </div>
-        <p>Last active date</p>
-        <div class="flex">
-            <div class="flex-column profile-pic"><a href="#" title="Change profile picture"><img src="#"/></a></div>
-            <div class="flex flex-column">    
-                <div class="flex">
-                    <div class="flex-column">Full name</div><div class="separator">|</div> 
-                    <div class="flex-column">Age</div> <div class="separator">|</div> 
-                    <div class="flex-column">Gender</div>
+    <section if.bind="_profile" class="profile">
+        
+        <section class="profile-info">
+            <div class="flex">
+                <h1 if.bind="_profile.appUser.firstName || _profile.appUser.userName"class="flex-column">
+                    ${_profile.appUser.firstName ? _profile.appUser.firstName : ''} 
+                    (${_profile.appUser.userName ? _profile.appUser.userName : ''})
+                </h1> 
+                <a route-href="route: profilesEdit; params.bind: { id: _profile.id }" class="flex-column icon">Edit profile</a>
+            </div>
+            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+            <p if.bind="_lastActiveDate" class="date">Last active: ${_lastActiveDate}</p>
+            <div class="flex">
+                <div class="flex-column profile-pic">
+                    <a href="#" title="Change profile picture">
+                        <img class="img-profile" src="#"/>
+                    </a>
                 </div>
-                <div>
-                    Bio / description
+                <div class="flex flex-column">    
+                    <div class="flex">
+                        <div if.bind="_profile.appUser.fullName" class="flex-column">${_profile.appUser.fullName}</div>
+                        <div if.bind="_profile.age"class="separator">|</div> 
+                        <div if.bind="_profile.age" class="flex-column">${_profile.age}</div> 
+                        <div if.bind="_profile.gender" class="separator">|</div> 
+                        <div if.bind="_profile.gender" class="flex-column">${_profile.gender}</div>
+                    </div>
+                    <p>
+                        ${_profile.bio}
+                    </p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section>
-        <h2>Wishlist</h2>
-        <p>
-            <a route-href="route: giftsIndex; params.bind: {}" class="button">Add new gift</a> 
-        </p>
-        <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                    <th>
-                        Image
-                    </th>
-                    <th>
-                        Link to shop
-                    </th>
-                    <th>
-                        Link to partner
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        Example name
-                    </td>
-                    <td>
-                        Example description
-                    </td>
-                    <td>
-                        Example image url
-                    </td>
-                    <td>
-                        Example shop url
-                    </td>
-                    <td>
-                        Example partner url
-                    </td>
-                    <td>
-                        <a route-href="route: giftsEdit; params.bind: {}" class="button">Edit</a>
-                        <a href="#" class="button">Pin</a>
-                        <a route-href="route: archivedgiftsIndex; params.bind: {}" class="button">Archive</a> 
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <section class="profile-wishlist" if.bind="_profile.wishlist">
+            <h2>Wishlist</h2>
+            <p>               
+                ${_profile.wishlist.comment}
+            </p>
+            <p>
+                <a route-href="route: giftsCreate; params.bind: { wishlistId: _profile.wishlistId }" class="button">Add new gift</a> 
+            </p>
+            <table class="table wishlist-gifts" if.bind="_gifts.length > 0">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Image
+                        </th>
+                        <th>
+                            Link to shop
+                        </th>
+                        <th>
+                            Link to partner
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody if.bind="_gifts">
+                    <tr repeat.for="gift of _gifts">
+                        <td>
+                            ${gift.name || '-'}
+                        </td>
+                        <td>
+                            ${gift.description || '-'}
+                        </td>
+                        <td>
+                            ${gift.imageUrl || '-'}
+                        </td>
+                        <td>
+                            ${gift.url || '-'}
+                        </td>
+                        <td>
+                            ${gift.partnerUrl || '-'}
+                        </td>
+                        <td>
+                            <a route-href="route: giftsEdit; params.bind: { id: gift.id }" class="button">Edit</a>
+                            <a href="#" class="button">Pin</a>
+                            <a class="button">Archive</a> 
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
     </section>
 </template>

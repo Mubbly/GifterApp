@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.UserSender)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserReceiver)
+                @Html.DisplayNameFor(model => model.UserReceiver!)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AppUser)
@@ -58,13 +58,13 @@
                 @Html.DisplayFor(modelItem => item.IsSeen)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserSender.FirstName)
+                @Html.DisplayFor(modelItem => item.UserSender!.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserReceiver.FirstName)
+                @Html.DisplayFor(modelItem => item.UserReceiver!.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AppUser.FirstName)
+                @Html.DisplayFor(modelItem => item.AppUser!.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedBy)

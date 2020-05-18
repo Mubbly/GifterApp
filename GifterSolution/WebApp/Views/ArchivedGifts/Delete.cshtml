@@ -33,37 +33,37 @@
             @Html.DisplayNameFor(model => model.ActionType)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ActionType.ActionTypeValue)
+            @Html.DisplayFor(model => model.ActionType!.ActionTypeValue)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Gift)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gift.Name)
+            @Html.DisplayFor(model => model.Gift!.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Status)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status.StatusValue)
+            @Html.DisplayFor(model => model.Status!.StatusValue)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.UserGiver)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserGiver.FirstName)
+            @Html.DisplayFor(model => model.UserGiver!.FirstName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserReceiver)
+            @Html.DisplayNameFor(model => model.UserReceiver!)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserReceiver.FirstName)
+            @Html.DisplayFor(model => model.UserReceiver!.FirstName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.AppUser)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AppUser.FirstName)
+            @Html.DisplayFor(model => model.AppUser!.FirstName)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedBy)

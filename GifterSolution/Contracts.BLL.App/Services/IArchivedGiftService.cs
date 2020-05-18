@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
-using Contracts.BLL.Base.Services;
+﻿using com.mubbly.gifterapp.Contracts.BLL.Base.Services;
 using Contracts.DAL.App.Repositories;
 using BLLAppDTO = BLL.App.DTO;
 

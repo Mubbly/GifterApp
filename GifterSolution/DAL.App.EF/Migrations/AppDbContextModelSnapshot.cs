@@ -349,9 +349,6 @@ namespace DAL.App.EF.Migrations
                     b.Property<Guid>("ActionTypeId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("AppUserId")
-                        .HasColumnType("char(36)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -403,8 +400,6 @@ namespace DAL.App.EF.Migrations
 
                     b.HasIndex("ActionTypeId");
 
-                    b.HasIndex("AppUserId");
-
                     b.HasIndex("StatusId");
 
                     b.HasIndex("WishlistId");
@@ -421,11 +416,6 @@ namespace DAL.App.EF.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
-                        .HasMaxLength(256);
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
@@ -988,7 +978,7 @@ namespace DAL.App.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("AppUserId")
+                    b.Property<Guid>("AppUserId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Comment")
@@ -1247,7 +1237,7 @@ namespace DAL.App.EF.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.App.Donatee", "Donatee")
-                        .WithMany("CampaignDonatees")
+                        .WithMany("DonateeCampaigns")
                         .HasForeignKey("DonateeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1296,11 +1286,6 @@ namespace DAL.App.EF.Migrations
                         .HasForeignKey("ActionTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("Domain.App.Identity.AppUser", null)
-                        .WithMany("Gifts")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Domain.App.Status", "Status")
                         .WithMany("Gifts")
@@ -1446,10 +1431,11 @@ namespace DAL.App.EF.Migrations
 
             modelBuilder.Entity("Domain.App.UserPermission", b =>
                 {
-                    b.HasOne("Domain.App.Identity.AppUser", null)
+                    b.HasOne("Domain.App.Identity.AppUser", "AppUser")
                         .WithMany("UserPermissions")
                         .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Domain.App.Permission", "Permission")
                         .WithMany("UserPermissions")

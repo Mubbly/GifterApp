@@ -5,16 +5,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\BLL.App.DTO\BLL.App.DTO.csproj" />
+        <ProjectReference Include="..\DAL.App.DTO\DAL.App.DTO.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
       <PackageReference Include="AutoMapper" Version="9.0.0" />
+      <PackageReference Include="com.mubbly.gifterapp.DAL.Base" Version="1.0.0" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
       <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\BLL.App.DTO\BLL.App.DTO.csproj" />
-      <ProjectReference Include="..\Contracts.Domain\Contracts.Domain.csproj" />
-      <ProjectReference Include="..\DAL.App.DTO\DAL.App.DTO.csproj" />
-      <ProjectReference Include="..\DAL.Base\DAL.Base.csproj" />
     </ItemGroup>
 
 </Project>

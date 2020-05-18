@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿#pragma warning disable 1591
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApp.Models;

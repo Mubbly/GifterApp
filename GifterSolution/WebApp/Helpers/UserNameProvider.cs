@@ -1,4 +1,5 @@
-﻿using Contracts.DAL.Base;
+﻿#pragma warning disable 1591
+using com.mubbly.gifterapp.Contracts.DAL.Base;
 using Microsoft.AspNetCore.Http;
 
 namespace WebApp.Helpers

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BLL.App.DTO.Identity;
-using Contracts.Domain;
+using com.mubbly.gifterapp.Contracts.Domain;
 
 namespace BLL.App.DTO
 {
@@ -21,10 +21,10 @@ namespace BLL.App.DTO
         public bool IsPrivate { get; set; }
 
         public Guid AppUserId { get; set; }
-        public AppUserBLL AppUser { get; set; } = default!;
+        public AppUserBLL? AppUser { get; set; } = default!;
         
         public Guid WishlistId { get; set; }
-        public WishlistBLL Wishlist { get; set; } = default!;
+        public WishlistBLL? Wishlist { get; set; } = default!;
 
         // List of mapped users and their profiles
         [InverseProperty(nameof(UserProfileBLL.Profile))]

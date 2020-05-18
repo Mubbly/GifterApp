@@ -67,10 +67,10 @@
                 @Html.DisplayFor(modelItem => item.HasJoined)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.InvitorUser.FirstName)
+                @Html.DisplayFor(modelItem => item.InvitorUser!.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AppUser.FirstName)
+                @Html.DisplayFor(modelItem => item.AppUser!.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedBy)

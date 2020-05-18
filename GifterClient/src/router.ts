@@ -46,10 +46,7 @@ export default [
 
         { route: ['profiles', 'profiles/index'], name: 'profilesIndex', moduleId: PLATFORM.moduleName('views/profiles/index'), nav: false, title: 'Profiles' },
         { route: ['profiles/personal'], name: 'profilesPersonal', moduleId: PLATFORM.moduleName('views/profiles/personal'), nav: true, title: 'My profile' },
-        { route: ['profiles/details/:id'], name: 'profilesDetails', moduleId: PLATFORM.moduleName('views/profiles/details'), nav: false, title: 'ProfilesDetails' },
         { route: ['profiles/edit/:id?'], name: 'profilesEdit', moduleId: PLATFORM.moduleName('views/profiles/edit'), nav: false, title: 'ProfilesEdit' },
-        { route: ['profiles/delete/:id?'], name: 'profilesDelete', moduleId: PLATFORM.moduleName('views/profiles/delete'), nav: false, title: 'ProfilesDelete' },
-        { route: ['profiles/create'], name: 'profilesCreate', moduleId: PLATFORM.moduleName('views/profiles/create'), nav: false, title: 'ProfilesCreate' },
 
         { route: ['friendships', 'friendships/index'], name: 'friendshipsIndex', moduleId: PLATFORM.moduleName('views/friendships/index'), nav: true, title: 'Friends' },
         { route: ['friendships/details/:id'], name: 'friendshipsDetails', moduleId: PLATFORM.moduleName('views/friendships/details'), nav: false, title: 'FriendshipsDetails' },

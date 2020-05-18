@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BLL.App.DTO.Identity;
-using Contracts.Domain;
+using com.mubbly.gifterapp.Contracts.Domain;
 
 namespace BLL.App.DTO
 {

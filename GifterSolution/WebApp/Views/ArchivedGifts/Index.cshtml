@@ -34,7 +34,7 @@
                 @Html.DisplayNameFor(model => model.UserGiver)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserReceiver)
+                @Html.DisplayNameFor(model => model.UserReceiver!)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AppUser)
@@ -67,22 +67,22 @@
                 @Html.DisplayFor(modelItem => item.Comment)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ActionType.ActionTypeValue)
+                @Html.DisplayFor(modelItem => item.ActionType!.ActionTypeValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Gift.Name)
+                @Html.DisplayFor(modelItem => item.Gift!.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status.StatusValue)
+                @Html.DisplayFor(modelItem => item.Status!.StatusValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserGiver.FirstName)
+                @Html.DisplayFor(modelItem => item.UserGiver!.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserReceiver.FirstName)
+                @Html.DisplayFor(modelItem => item.UserReceiver!.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AppUser.FirstName)
+                @Html.DisplayFor(modelItem => item.AppUser!.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedBy)

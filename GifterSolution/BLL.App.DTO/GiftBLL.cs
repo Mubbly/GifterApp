@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BLL.App.DTO.Identity;
-using Contracts.Domain;
+using com.mubbly.gifterapp.Contracts.Domain;
 
 namespace BLL.App.DTO
 {
@@ -26,10 +26,13 @@ namespace BLL.App.DTO
 
         public Guid ActionTypeId { get; set; }
         public ActionTypeBLL ActionType { get; set; } = default!;
-        public Guid AppUserId { get; set; }
-        public AppUserBLL AppUser { get; set; } = default!;
+        
+        // public Guid AppUserId { get; set; }
+        // public AppUserBLL AppUser { get; set; } = default!;
+        
         public Guid StatusId { get; set; }
         public StatusBLL Status { get; set; } = default!;
+        
         public Guid WishlistId { get; set; }
         public WishlistBLL Wishlist { get; set; } = default!;
 

@@ -1,7 +1,7 @@
 ﻿using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Mappers;
-using DAL.Base.EF.Repositories;
-using DAL.Base.Mappers;
+using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
+using com.mubbly.gifterapp.DAL.Base.Mappers;
 using DomainApp = Domain.App;
 using DALAppDTO = DAL.App.DTO;
 using DomainAppIdentity = Domain.App.Identity;

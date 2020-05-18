@@ -1,3 +1,4 @@
+#pragma warning disable 1591
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 

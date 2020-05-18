@@ -1,9 +1,8 @@
 ﻿using BLL.App.Services;
-using BLL.Base;
+using com.mubbly.gifterapp.BLL.Base;
 using Contracts.BLL.App;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
-using DAL.App.EF;
 
 namespace BLL.App
 {

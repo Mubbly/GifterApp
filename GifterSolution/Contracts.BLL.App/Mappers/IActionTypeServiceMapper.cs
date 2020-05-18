@@ -1,4 +1,4 @@
-﻿using Contracts.BLL.Base.Mappers;
+﻿using com.mubbly.gifterapp.Contracts.BLL.Base.Mappers;
 using BLLAppDTO = BLL.App.DTO;
 using DALAppDTO = DAL.App.DTO;
 

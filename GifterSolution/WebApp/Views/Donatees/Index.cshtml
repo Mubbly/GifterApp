@@ -115,10 +115,10 @@
                 @Html.DisplayFor(modelItem => item.IsActive)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ActionType.ActionTypeValue)
+                @Html.DisplayFor(modelItem => item.ActionType!.ActionTypeValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Status.StatusValue)
+                @Html.DisplayFor(modelItem => item.Status!.StatusValue)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedBy)

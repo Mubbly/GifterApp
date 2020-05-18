@@ -5,13 +5,24 @@ import { IDonateeEdit } from 'domain/IDonatee';
 import * as UtilFunctions from 'utils/utilFunctions';
 import { Optional } from 'types/generalTypes';
 import { IFetchResponse } from 'types/IFetchResponse';
+import { ActionTypeService } from 'service/actionTypeService';
+import { StatusService } from 'service/statusService';
+import { IActionType } from 'domain/IActionType';
+import { IStatus } from 'domain/IStatus';
 
 @autoinject
 export class DonateesEdit {
     private _donatee?: IDonateeEdit;
+    private _actionTypes: IActionType[] = [];
+    private _statuses: IStatus[] = [];
+    private _campaignId: string = '';
+    private _campaignName: string = '';
     private _errorMessage: Optional<string> = null;
 
-    constructor(private donateeService: DonateeService, private router: Router) {
+    constructor(private donateeService: DonateeService,
+        private actionTypeService: ActionTypeService,
+        private statusService: StatusService, 
+        private router: Router) {
     }
 
     attached() {
@@ -19,7 +30,12 @@ export class DonateesEdit {
 
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
         const donateeId = params.id;
+        this._campaignId = params.campaignId;
+        this._campaignName = params.campaignName;
+
         if(UtilFunctions.existsAndIsString(donateeId)) {
+            this.getRelatedData();
+
             this.donateeService.get(donateeId).then(
                 response => {
                     if(UtilFunctions.isSuccessful(response)) {
@@ -31,6 +47,16 @@ export class DonateesEdit {
                 }
             )
         }
+    }
+
+    // From other tables that are connected to this one via foreign keys
+    private getRelatedData() {
+        this.actionTypeService.getAll().then(
+            result => this._actionTypes = result.data!
+        );
+        this.statusService.getAll().then(
+            result => this._statuses = result.data!
+        );
     }
 
     onSubmit(event: Event) {
@@ -69,7 +95,10 @@ export class DonateesEdit {
             .then(
                 (response: IFetchResponse<IDonateeEdit>) => {
                     if (UtilFunctions.isSuccessful(response)) {
-                        this.router.navigateToRoute('donateesIndex', {});
+                        let isCampaignSpecified = this._campaignId !== '' && this._campaignName !== '';
+                        let route = isCampaignSpecified ? 'donateesIndex' : 'campaignsIndex';
+                        let params = isCampaignSpecified ? { campaignId: this._campaignId, campaignName: this._campaignName } : {};
+                        this.router.navigateToRoute(route, params);
                     } else {
                         this._errorMessage = UtilFunctions.getErrorMessage(response);
 

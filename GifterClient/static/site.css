@@ -40,10 +40,29 @@ section {
     padding: 5px;
     /* Remove later */
     border: 1px solid black;
+    cursor: pointer;
 }
 
 .button+.button {
     margin: 10px;
+}
+
+.date {
+    color: grey;
+}
+
+.img-profile {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.icon+.icon,
+.flex-column+.icon {
+    margin: 10px
+}
+
+.small-text {
+    font-size: 8px;
 }
 
 a.button:hover,

@@ -6,12 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Contracts.Domain\Contracts.Domain.csproj" />
-      <ProjectReference Include="..\DAL.Base\DAL.Base.csproj" />
-      <ProjectReference Include="..\Domain.Base\Domain.Base.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <PackageReference Include="com.mubbly.gifterapp.Domain.Base" Version="1.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
       <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="3.1.2" />

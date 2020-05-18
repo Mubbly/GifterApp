@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Contracts.Domain;
+using com.mubbly.gifterapp.Contracts.Domain;
 using DAL.App.DTO.Identity;
 
 namespace DAL.App.DTO

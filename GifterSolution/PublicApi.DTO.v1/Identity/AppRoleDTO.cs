@@ -1,6 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using Contracts.Domain;
+using com.mubbly.gifterapp.Contracts.Domain;
 
 namespace PublicApi.DTO.v1.Identity
 {

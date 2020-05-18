@@ -22,13 +22,13 @@ namespace PublicApi.DTO.v1
         public bool IsPinned { get; set; }
 
         public Guid ActionTypeId { get; set; }
-        public ActionTypeDTO ActionTypeDTO { get; set; } = default!;
-        public Guid AppUserId { get; set; }
-        public AppUserDTO AppUser { get; set; } = default!;
+        public ActionTypeDTO? ActionTypeDTO { get; set; } = default!;
+        // public Guid AppUserId { get; set; }
+        // public AppUserDTO AppUser { get; set; } = default!;
         public Guid StatusId { get; set; }
-        public StatusDTO Status { get; set; } = default!;
+        public StatusDTO? Status { get; set; } = default!;
         public Guid WishlistId { get; set; }
-        public WishlistDTO Wishlist { get; set; } = default!;
+        public WishlistDTO? Wishlist { get; set; } = default!;
 
         public int ReservedGiftsCount { get; set; }
         public int ArchivedGiftsCount { get; set; }

@@ -25,7 +25,7 @@ namespace WebApp.Areas.Identity.Pages.Account
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; } = default!;
 
         public string? ReturnUrl { get; set; }
 
@@ -35,7 +35,7 @@ namespace WebApp.Areas.Identity.Pages.Account
             [Required]
             [DataType(DataType.Text)]
             [Display(Name = "Recovery Code")]
-            public string RecoveryCode { get; set; }
+            public string RecoveryCode { get; set; } = default!;
         }
 
         public async Task<IActionResult> OnGetAsync(string? returnUrl = null)

@@ -16,6 +16,9 @@ using V1DTO = PublicApi.DTO.v1;
 
 namespace WebApp.ApiControllers._1._0
 {
+    /// <summary>
+    ///     Profiles controller
+    /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -27,13 +30,18 @@ namespace WebApp.ApiControllers._1._0
         private readonly ILogger<ProfilesController> _logger;
         private readonly ProfileMapper _mapper = new ProfileMapper();
 
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="appBLL"></param>
+        /// <param name="logger"></param>
         public ProfilesController(IAppBLL appBLL, ILogger<ProfilesController> logger)
         {
             _bll = appBLL;
             _logger = logger;
         }
         
-                // GET: api/Profiles
+        // GET: api/Profiles
         /// <summary>
         ///     Get all Profiles
         /// </summary>
@@ -60,13 +68,40 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
         public async Task<ActionResult<V1DTO.ProfileDTO>> GetProfile(Guid id)
         {
-            var actionType = await _bll.Profiles.FirstOrDefaultAsync(id);
-            if (actionType == null)
+            var profile = await _bll.Profiles.FirstOrDefaultAsync(id);
+            if (profile == null)
             {
                 return NotFound(new V1DTO.MessageDTO($"Profile with id {id} not found"));
             }
 
-            return Ok(_mapper.Map(actionType));
+            return Ok(_mapper.Map(profile));
+        }
+        
+        // GET: api/Profiles/Personal/ or api/Profiles/Personal/5
+        /// <summary>
+        ///     Get a single personal Profile
+        /// </summary>
+        /// <param name="profileId"></param>
+        /// <returns>Personal profile object</returns>
+        [HttpGet("personal/{id?}")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        public async Task<ActionResult<V1DTO.ProfileDTO>> GetPersonalProfile(Guid? profileId)
+        {
+            var personalProfile = await _bll.Profiles.GetPersonalAsync(User.UserGuidId(), profileId);
+            if (personalProfile == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Profile not found"));
+            }
+            if (personalProfile.AppUserId != User.UserGuidId())
+            {
+                return BadRequest(new V1DTO.MessageDTO($"Profile not found"));
+            }
+            
+            return Ok(_mapper.Map(personalProfile));
         }
 
         // PUT: api/Profiles/5
@@ -76,7 +111,7 @@ namespace WebApp.ApiControllers._1._0
         ///     Update Profile
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="actionTypeDTO"></param>
+        /// <param name="profileDTO"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
@@ -85,23 +120,23 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> PutProfile(Guid id, V1DTO.ProfileDTO actionTypeDTO)
+        public async Task<IActionResult> PutProfile(Guid id, V1DTO.ProfileDTO profileDTO)
         {
             // Don't allow wrong data
-            if (id != actionTypeDTO.Id)
+            if (id != profileDTO.Id)
             {
-                return BadRequest(new V1DTO.MessageDTO("id and actionType.id do not match"));
+                return BadRequest(new V1DTO.MessageDTO("Cannot update this profile"));
             }
-            var actionType = await _bll.Profiles.FirstOrDefaultAsync(actionTypeDTO.Id, User.UserGuidId());
-            if (actionType == null)
+            var profile = await _bll.Profiles.FirstOrDefaultAsync(profileDTO.Id, User.UserGuidId());
+            if (profile == null)
             {
-                _logger.LogError($"EDIT. No such actionType: {actionTypeDTO.Id}, user: {User.UserGuidId()}");
-                return NotFound(new V1DTO.MessageDTO($"No Profile found for id {id}"));
+                _logger.LogError($"EDIT. No such profile: {profileDTO.Id}, user: {User.UserGuidId()}");
+                return NotFound(new V1DTO.MessageDTO($"No profile found for id {id}"));
             }
-            // Update existing actionType
-            // actionType.ProfileValue = actionTypeEditDTO.ProfileValue;
-            // actionType.Comment = actionTypeEditDTO.Comment;
-            await _bll.Profiles.UpdateAsync(_mapper.Map(actionTypeDTO), User.UserId());
+            // Update existing profile
+            // profile.ProfileValue = profileEditDTO.ProfileValue;
+            // profile.Comment = profileEditDTO.Comment;
+            await _bll.Profiles.UpdateAsync(_mapper.Map(profileDTO), User.UserId());
 
             // Save to db
             try
@@ -122,65 +157,65 @@ namespace WebApp.ApiControllers._1._0
             return NoContent();
         }
 
-        // POST: api/Profiles
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        /// <summary>
-        ///     Add new Profile
-        /// </summary>
-        /// <param name="actionTypeDTO"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.ProfileDTO))]
-        public async Task<ActionResult<V1DTO.ProfileDTO>> PostProfile(V1DTO.ProfileDTO actionTypeDTO)
-        {
-            // Create actionType
-            var bllEntity = _mapper.Map(actionTypeDTO);
-            _bll.Profiles.Add(bllEntity);
-            
-            // var actionType = new Profile
-            // {
-            //     ProfileValue = actionTypeCreateDTO.ProfileValue,
-            //     Comment = actionTypeCreateDTO.Comment
-            // };
+        // // POST: api/Profiles
+        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // // more details see https://aka.ms/RazorPagesCRUD.
+        // /// <summary>
+        // ///     Add new Profile
+        // /// </summary>
+        // /// <param name="profileDTO"></param>
+        // /// <returns></returns>
+        // [HttpPost]
+        // [Produces("application/json")]
+        // [Consumes("application/json")]
+        // [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
+        // [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.ProfileDTO))]
+        // public async Task<ActionResult<V1DTO.ProfileDTO>> PostProfile(V1DTO.ProfileDTO profileDTO)
+        // {
+        //     // Create profile
+        //     var bllEntity = _mapper.Map(profileDTO);
+        //     _bll.Profiles.Add(bllEntity);
+        //     
+        //     // var profile = new Profile
+        //     // {
+        //     //     ProfileValue = profileCreateDTO.ProfileValue,
+        //     //     Comment = profileCreateDTO.Comment
+        //     // };
+        //
+        //     await _bll.SaveChangesAsync();
+        //
+        //     profileDTO.Id = bllEntity.Id;
+        //     return CreatedAtAction(
+        //         "GetProfile",
+        //         new {id = profileDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
+        //         profileDTO
+        //         );
+        // }
 
-            await _bll.SaveChangesAsync();
-
-            actionTypeDTO.Id = bllEntity.Id;
-            return CreatedAtAction(
-                "GetProfile",
-                new {id = actionTypeDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
-                actionTypeDTO
-                );
-        }
-
-        // DELETE: api/Profiles/5
-        /// <summary>
-        ///     Delete Profile
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpDelete("{id}")]
-        [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
-        public async Task<ActionResult<V1DTO.ProfileDTO>> DeleteProfile(Guid id)
-        {
-            var actionType = await _bll.Profiles.FirstOrDefaultAsync(id, User.UserGuidId());
-            if (actionType == null)
-            {
-                _logger.LogError($"DELETE. No such actionType: {id}, user: {User.UserGuidId()}");
-                return NotFound(new V1DTO.MessageDTO($"Profile with id {id} not found"));
-            }
-            await _bll.Profiles.RemoveAsync(id);
-
-            await _bll.SaveChangesAsync();
-            return Ok(actionType);
-        }
+        // // DELETE: api/Profiles/5
+        // /// <summary>
+        // ///     Delete Profile
+        // /// </summary>
+        // /// <param name="id"></param>
+        // /// <returns></returns>
+        // [HttpDelete("{id}")]
+        // [Produces("application/json")]
+        // [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
+        // [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        // [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        // public async Task<ActionResult<V1DTO.ProfileDTO>> DeleteProfile(Guid id)
+        // {
+        //     var profile = await _bll.Profiles.FirstOrDefaultAsync(id, User.UserGuidId());
+        //     if (profile == null)
+        //     {
+        //         _logger.LogError($"DELETE. No such profile: {id}, user: {User.UserGuidId()}");
+        //         return NotFound(new V1DTO.MessageDTO($"Profile with id {id} not found"));
+        //     }
+        //     await _bll.Profiles.RemoveAsync(id);
+        //
+        //     await _bll.SaveChangesAsync();
+        //     return Ok(profile);
+        // }
 
         // // GET: api/Profiles
         // [HttpGet]
