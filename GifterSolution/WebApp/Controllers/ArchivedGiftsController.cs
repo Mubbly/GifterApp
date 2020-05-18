@@ -3,11 +3,11 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.App.EF;
+using Domain.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL.App.EF;
-using Domain.App;
 
 namespace WebApp.Controllers
 {
@@ -23,7 +23,7 @@ namespace WebApp.Controllers
         // GET: ArchivedGifts
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.ArchivedGifts.Include(a => a.ActionType).Include(a => a.AppUser).Include(a => a.Gift).Include(a => a.Status).Include(a => a.UserGiver).Include(a => a.UserReceiver);
+            var appDbContext = _context.ArchivedGifts.Include(a => a.ActionType).Include(a => a.Gift).Include(a => a.Status).Include(a => a.UserGiver).Include(a => a.UserReceiver);
             return View(await appDbContext.ToListAsync());
         }
 
@@ -37,7 +37,6 @@ namespace WebApp.Controllers
 
             var archivedGift = await _context.ArchivedGifts
                 .Include(a => a.ActionType)
-                .Include(a => a.AppUser)
                 .Include(a => a.Gift)
                 .Include(a => a.Status)
                 .Include(a => a.UserGiver)
@@ -78,7 +77,6 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", archivedGift.ActionTypeId);
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", archivedGift.AppUserId);
             ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name", archivedGift.GiftId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", archivedGift.StatusId);
             ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "FirstName", archivedGift.UserGiverId);
@@ -100,7 +98,6 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", archivedGift.ActionTypeId);
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", archivedGift.AppUserId);
             ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name", archivedGift.GiftId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", archivedGift.StatusId);
             ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "FirstName", archivedGift.UserGiverId);
@@ -141,7 +138,6 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "ActionTypeValue", archivedGift.ActionTypeId);
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", archivedGift.AppUserId);
             ViewData["GiftId"] = new SelectList(_context.Gifts, "Id", "Name", archivedGift.GiftId);
             ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "StatusValue", archivedGift.StatusId);
             ViewData["UserGiverId"] = new SelectList(_context.Users, "Id", "FirstName", archivedGift.UserGiverId);
@@ -159,7 +155,6 @@ namespace WebApp.Controllers
 
             var archivedGift = await _context.ArchivedGifts
                 .Include(a => a.ActionType)
-                .Include(a => a.AppUser)
                 .Include(a => a.Gift)
                 .Include(a => a.Status)
                 .Include(a => a.UserGiver)

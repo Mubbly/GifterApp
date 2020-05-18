@@ -1,13 +1,12 @@
 #pragma warning disable 1591
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.App.EF;
+using Domain.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL.App.EF;
-using Domain.App;
 
 namespace WebApp.Controllers
 {
@@ -23,7 +22,7 @@ namespace WebApp.Controllers
         // GET: InvitedUsers
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.InvitedUsers.Include(i => i.AppUser).Include(i => i.InvitorUser);
+            var appDbContext = _context.InvitedUsers.Include(i => i.InvitorUser);
             return View(await appDbContext.ToListAsync());
         }
 
@@ -36,7 +35,6 @@ namespace WebApp.Controllers
             }
 
             var invitedUser = await _context.InvitedUsers
-                .Include(i => i.AppUser)
                 .Include(i => i.InvitorUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (invitedUser == null)
@@ -69,7 +67,6 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", invitedUser.AppUserId);
             ViewData["InvitorUserId"] = new SelectList(_context.Users, "Id", "FirstName", invitedUser.InvitorUserId);
             return View(invitedUser);
         }
@@ -87,7 +84,6 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", invitedUser.AppUserId);
             ViewData["InvitorUserId"] = new SelectList(_context.Users, "Id", "FirstName", invitedUser.InvitorUserId);
             return View(invitedUser);
         }
@@ -124,7 +120,6 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", invitedUser.AppUserId);
             ViewData["InvitorUserId"] = new SelectList(_context.Users, "Id", "FirstName", invitedUser.InvitorUserId);
             return View(invitedUser);
         }
@@ -138,7 +133,6 @@ namespace WebApp.Controllers
             }
 
             var invitedUser = await _context.InvitedUsers
-                .Include(i => i.AppUser)
                 .Include(i => i.InvitorUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (invitedUser == null)

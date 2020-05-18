@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Domain.App.Identity;
 using com.mubbly.gifterapp.Domain.Base;
+using Domain.App.Identity;
 
 namespace Domain.App
 {
@@ -15,7 +15,7 @@ namespace Domain.App
      * Users can add other users to their friendlist
      * Friends have more permissions (ex. view profile when it's private, send private messages) 
      */
-    public class Friendship<TKey> : DomainEntityIdMetadataUser<AppUser>
+    public class Friendship<TKey> : DomainEntityIdMetadata
         where TKey : struct, IEquatable<TKey>
     {
         public virtual bool IsConfirmed { get; set; }

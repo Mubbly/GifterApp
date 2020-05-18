@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts.BLL.App;
-using DAL.App.EF.Repositories;
 using Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -48,6 +47,10 @@ namespace WebApp.ApiControllers._1._0
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("user/{userId}")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(V1DTO.ActionTypeDTO))]
         public async Task<ActionResult<IEnumerable<V1DTO.GiftDTO>>> GetGifts(Guid userId)
         {
             var personalGifts = await _bll.Gifts.GetAllForUser(userId);
@@ -64,6 +67,10 @@ namespace WebApp.ApiControllers._1._0
         /// </summary>
         /// <returns></returns>
         [HttpGet("personal")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(V1DTO.ActionTypeDTO))]
         public async Task<ActionResult<IEnumerable<V1DTO.GiftDTO>>> GetPersonalGifts()
         {
             var personalGifts = await _bll.Gifts.GetAllPersonalAsync(User.UserGuidId());
@@ -76,11 +83,15 @@ namespace WebApp.ApiControllers._1._0
 
         // GET: api/Gifts/5
         /// <summary>
-        /// 
+        ///     Get a single gift
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(V1DTO.ActionTypeDTO))]
         public async Task<ActionResult<V1DTO.GiftDTO>> GetGift(Guid id)
         {
             var gift = await _bll.Gifts.FirstOrDefaultAsync(id);
@@ -99,6 +110,10 @@ namespace WebApp.ApiControllers._1._0
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("personal/{id}")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(V1DTO.ActionTypeDTO))]
         public async Task<ActionResult<V1DTO.GiftDTO>> GetPersonalGift(Guid id)
         {
             var gift = await _bll.Gifts.GetPersonalAsync(id, User.UserGuidId());
@@ -120,18 +135,31 @@ namespace WebApp.ApiControllers._1._0
         /// <param name="giftDTO"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(V1DTO.ActionTypeDTO))]
         public async Task<IActionResult> PutGift(Guid id, V1DTO.GiftDTO giftDTO)
         {
             // Don't allow wrong data
             if (id != giftDTO.Id)
             {
-                return BadRequest(new V1DTO.MessageDTO("id and gift.id do not match"));
+                _logger.LogError($"EDIT. Gift IDs do not match: giftId {giftDTO.Id}, id {id}");
+                return BadRequest(new V1DTO.MessageDTO($"Could not change gift with this id: {id}"));
             }
             var gift = await _bll.Gifts.FirstOrDefaultAsync(giftDTO.Id, User.UserGuidId());
             if (gift == null)
             {
                 _logger.LogError($"EDIT. No such gift: {giftDTO.Id}, user: {User.UserGuidId()}");
-                return NotFound(new V1DTO.MessageDTO($"No Gift found for id {id}"));
+                return NotFound(new V1DTO.MessageDTO($"No gift found for id {id}"));
+            }
+            // Allow changing own gifts only
+            var personalGift = await _bll.Gifts.GetPersonalAsync(id, User.UserGuidId());
+            if (personalGift == null)
+            {
+                _logger.LogError($"EDIT. Gift {giftDTO.Id} is not owned by user {User.UserGuidId()}");
+                return NotFound(new V1DTO.MessageDTO($"No gift found for id {id}"));
             }
             // Update existing gift
             await _bll.Gifts.UpdateAsync(_mapper.Map(giftDTO), User.UserId());
@@ -164,6 +192,10 @@ namespace WebApp.ApiControllers._1._0
         /// <param name="giftDTO"></param>
         /// <returns></returns>
         [HttpPost]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.ActionTypeDTO))]
         public async Task<ActionResult<V1DTO.GiftDTO>> PostGift(V1DTO.GiftDTO giftDTO)
         {
             // Create gift
@@ -181,7 +213,16 @@ namespace WebApp.ApiControllers._1._0
         }
 
         // DELETE: api/Gifts/5
+        /// <summary>
+        ///     Delete gift
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(V1DTO.ActionTypeDTO))]
         public async Task<ActionResult<V1DTO.GiftDTO>> DeleteGift(Guid id)
         {
             var gift = await _bll.Gifts.FirstOrDefaultAsync(id, User.UserGuidId());

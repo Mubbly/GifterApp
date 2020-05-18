@@ -1,13 +1,12 @@
 #pragma warning disable 1591
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.App.EF;
+using Domain.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL.App.EF;
-using Domain.App;
 
 namespace WebApp.Controllers
 {
@@ -23,7 +22,7 @@ namespace WebApp.Controllers
         // GET: PrivateMessages
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.PrivateMessages.Include(p => p.AppUser).Include(p => p.UserReceiver).Include(p => p.UserSender);
+            var appDbContext = _context.PrivateMessages.Include(p => p.UserReceiver).Include(p => p.UserSender);
             return View(await appDbContext.ToListAsync());
         }
 
@@ -36,7 +35,6 @@ namespace WebApp.Controllers
             }
 
             var privateMessage = await _context.PrivateMessages
-                .Include(p => p.AppUser)
                 .Include(p => p.UserReceiver)
                 .Include(p => p.UserSender)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -71,7 +69,6 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.AppUserId);
             ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.UserReceiverId);
             ViewData["UserSenderId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.UserSenderId);
             return View(privateMessage);
@@ -90,7 +87,6 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.AppUserId);
             ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.UserReceiverId);
             ViewData["UserSenderId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.UserSenderId);
             return View(privateMessage);
@@ -128,7 +124,6 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.AppUserId);
             ViewData["UserReceiverId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.UserReceiverId);
             ViewData["UserSenderId"] = new SelectList(_context.Users, "Id", "FirstName", privateMessage.UserSenderId);
             return View(privateMessage);
@@ -143,7 +138,6 @@ namespace WebApp.Controllers
             }
 
             var privateMessage = await _context.PrivateMessages
-                .Include(p => p.AppUser)
                 .Include(p => p.UserReceiver)
                 .Include(p => p.UserSender)
                 .FirstOrDefaultAsync(m => m.Id == id);

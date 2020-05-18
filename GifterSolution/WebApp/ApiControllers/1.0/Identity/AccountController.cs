@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using DomainIdentity=Domain.App.Identity;
 using Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PublicApi.DTO.v1;
 using PublicApi.DTO.v1.Identity;
+using DomainIdentity=Domain.App.Identity;
 
 namespace WebApp.ApiControllers._1._0.Identity
 {

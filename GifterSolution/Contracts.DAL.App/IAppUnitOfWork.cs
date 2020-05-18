@@ -1,5 +1,5 @@
-﻿using Contracts.DAL.App.Repositories;
-using com.mubbly.gifterapp.Contracts.DAL.Base;
+﻿using com.mubbly.gifterapp.Contracts.DAL.Base;
+using Contracts.DAL.App.Repositories;
 
 namespace Contracts.DAL.App
 {

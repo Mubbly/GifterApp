@@ -1,7 +1,7 @@
 using AutoMapper;
+using com.mubbly.gifterapp.DAL.Base.Mappers;
 using DAL.App.DTO;
 using DAL.App.DTO.Identity;
-using com.mubbly.gifterapp.DAL.Base.Mappers;
 using Domain.App;
 using Domain.App.Identity;
 using Profile = Domain.App.Profile;

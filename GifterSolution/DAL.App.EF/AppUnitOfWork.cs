@@ -1,8 +1,8 @@
 ﻿using System;
+using com.mubbly.gifterapp.DAL.Base.EF;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Repositories;
-using com.mubbly.gifterapp.DAL.Base.EF;
 
 namespace DAL.App.EF
 {

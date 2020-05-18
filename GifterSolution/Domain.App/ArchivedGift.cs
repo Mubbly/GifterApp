@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Domain.App.Identity;
 using com.mubbly.gifterapp.Domain.Base;
+using Domain.App.Identity;
 
 namespace Domain.App
 {
@@ -15,7 +15,7 @@ namespace Domain.App
      * It should be possible to identify who asked for it and who gifted it
      * Has special actions that can be taken (more info in ActionType.cs)
      */
-    public class ArchivedGift<TKey> : DomainEntityIdMetadataUser<AppUser>
+    public class ArchivedGift<TKey> : DomainEntityIdMetadata
         where TKey : IEquatable<TKey>
     {
         public virtual DateTime DateArchived { get; set; }

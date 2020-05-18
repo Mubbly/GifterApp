@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using BLL.App.DTO.Identity;
 using com.mubbly.gifterapp.Contracts.Domain;
-using Domain.App.Identity;
 
 namespace BLL.App.DTO
 {

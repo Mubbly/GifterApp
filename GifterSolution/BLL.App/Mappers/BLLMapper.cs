@@ -4,7 +4,6 @@ using BLL.App.DTO.Identity;
 using com.mubbly.gifterapp.BLL.Base.Mappers;
 using DAL.App.DTO;
 using DAL.App.DTO.Identity;
-using Domain.App;
 
 namespace BLL.App.Mappers
 {

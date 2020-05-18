@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Domain.App.Identity;
 using com.mubbly.gifterapp.Domain.Base;
+using Domain.App.Identity;
 
 namespace Domain.App
 {
@@ -15,7 +15,7 @@ namespace Domain.App
      * Private message is a message sent from one user to another that only they can see
      * For example to ask for them to specify about something in their Wishlist
      */
-    public class PrivateMessage<TKey> : DomainEntityIdMetadataUser<AppUser>
+    public class PrivateMessage<TKey> : DomainEntityIdMetadata
         where TKey : struct, IEquatable<TKey>
     {
         [MaxLength(4096)] [MinLength(1)] public virtual string Message { get; set; } = default!;

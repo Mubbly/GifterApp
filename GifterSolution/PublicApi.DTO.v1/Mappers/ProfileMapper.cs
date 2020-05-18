@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BLL.App.DTO.Identity;
 using PublicApi.DTO.v1.Identity;
 using BLLAppDTO = BLL.App.DTO;
 
@@ -8,7 +9,7 @@ namespace PublicApi.DTO.v1.Mappers
     {
         public ProfileMapper() : base()
         {
-            MapperConfigurationExpression.CreateMap<BLLAppDTO.Identity.AppUserBLL, AppUserDTO>();
+            MapperConfigurationExpression.CreateMap<AppUserBLL, AppUserDTO>();
             MapperConfigurationExpression.CreateMap<BLLAppDTO.WishlistBLL, WishlistDTO>();
 
             // MapperConfigurationExpression.CreateMap<BLLAppDTO.ProfileBLL, ProfileDTO>()

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Domain.App.Identity;
 using com.mubbly.gifterapp.Domain.Base;
+using Domain.App.Identity;
 
 namespace Domain.App
 {

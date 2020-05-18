@@ -1,13 +1,12 @@
 #pragma warning disable 1591
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.App.EF;
+using Domain.App;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DAL.App.EF;
-using Domain.App;
 
 namespace WebApp.Controllers
 {
@@ -23,7 +22,7 @@ namespace WebApp.Controllers
         // GET: Friendships
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Friendships.Include(f => f.AppUser).Include(f => f.AppUser1).Include(f => f.AppUser2);
+            var appDbContext = _context.Friendships.Include(f => f.AppUser1).Include(f => f.AppUser2);
             return View(await appDbContext.ToListAsync());
         }
 
@@ -36,7 +35,6 @@ namespace WebApp.Controllers
             }
 
             var friendship = await _context.Friendships
-                .Include(f => f.AppUser)
                 .Include(f => f.AppUser1)
                 .Include(f => f.AppUser2)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -71,7 +69,6 @@ namespace WebApp.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUserId);
             ViewData["AppUser1Id"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUser1Id);
             ViewData["AppUser2Id"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUser2Id);
             return View(friendship);
@@ -90,7 +87,6 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUserId);
             ViewData["AppUser1Id"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUser1Id);
             ViewData["AppUser2Id"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUser2Id);
             return View(friendship);
@@ -128,7 +124,6 @@ namespace WebApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUserId);
             ViewData["AppUser1Id"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUser1Id);
             ViewData["AppUser2Id"] = new SelectList(_context.Users, "Id", "FirstName", friendship.AppUser2Id);
             return View(friendship);
@@ -143,7 +138,6 @@ namespace WebApp.Controllers
             }
 
             var friendship = await _context.Friendships
-                .Include(f => f.AppUser)
                 .Include(f => f.AppUser1)
                 .Include(f => f.AppUser2)
                 .FirstOrDefaultAsync(m => m.Id == id);

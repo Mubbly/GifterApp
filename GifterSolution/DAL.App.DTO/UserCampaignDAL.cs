@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using com.mubbly.gifterapp.Contracts.Domain;
 using DAL.App.DTO.Identity;
-using Domain.App.Identity;
 
 namespace DAL.App.DTO
 {

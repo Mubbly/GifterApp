@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Domain.App.Identity;
 using com.mubbly.gifterapp.Domain.Base;
 
 namespace Domain.App
