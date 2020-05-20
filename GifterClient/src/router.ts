@@ -7,6 +7,10 @@ export default [
         { route: ['account/login'], name: 'accountLogin', moduleId: PLATFORM.moduleName('views/account/login'), nav: false, title: 'Login' },
         { route: ['account/register'], name: 'accountRegister', moduleId: PLATFORM.moduleName('views/account/register'), nav: false, title: 'Register' },
 
+        { route: ['about', 'about/index'], name: 'aboutIndex', moduleId: PLATFORM.moduleName('views/about/index'), nav: false, title: 'About' },
+        { route: ['about/contacts'], name: 'aboutContacts', moduleId: PLATFORM.moduleName('views/about/contacts'), nav: false, title: 'Contacts' },
+        { route: ['about/help'], name: 'aboutHelp', moduleId: PLATFORM.moduleName('views/about/help'), nav: false, title: 'Help' },
+        { route: ['search/index', 'search', 'about/search', 'about/search/index'], name: 'search', moduleId: PLATFORM.moduleName('views/about/search'), nav: false, title: 'Search' },
 
 
         { route: ['admin', 'admin/index'], name: 'adminIndex', moduleId: PLATFORM.moduleName('views/admin/index'), nav: false, title: 'Admin' },
@@ -55,7 +59,6 @@ export default [
         { route: ['friendships/create'], name: 'friendshipsCreate', moduleId: PLATFORM.moduleName('views/friendships/create'), nav: false, title: 'FriendshipsCreate' },
 
         { route: ['invitedusers', 'invitedusers/index'], name: 'invitedusersIndex', moduleId: PLATFORM.moduleName('views/invitedusers/index'), nav: false, title: 'InvitedUsers' },
-        { route: ['invitedusers/details/:id'], name: 'invitedusersDetails', moduleId: PLATFORM.moduleName('views/invitedusers/details'), nav: false, title: 'InvitedUsersDetails' },
         { route: ['invitedusers/edit/:id?'], name: 'invitedusersEdit', moduleId: PLATFORM.moduleName('views/invitedusers/edit'), nav: false, title: 'InvitedUsersEdit' },
         { route: ['invitedusers/delete/:id?'], name: 'invitedusersDelete', moduleId: PLATFORM.moduleName('views/invitedusers/delete'), nav: false, title: 'InvitedUsersDelete' },
         { route: ['invitedusers/create'], name: 'invitedusersCreate', moduleId: PLATFORM.moduleName('views/invitedusers/create'), nav: false, title: 'InvitedUsersCreate' },
@@ -79,7 +82,7 @@ export default [
         { route: ['gifts/delete/:id?'], name: 'giftsDelete', moduleId: PLATFORM.moduleName('views/gifts/delete'), nav: false, title: 'GiftsDelete' },
         { route: ['gifts/create'], name: 'giftsCreate', moduleId: PLATFORM.moduleName('views/gifts/create'), nav: false, title: 'GiftsCreate' },
 
-        { route: ['reservedgifts', 'reservedgifts/index'], name: 'reservedgiftsIndex', moduleId: PLATFORM.moduleName('views/reservedgifts/index'), nav: true, title: 'ToGift' },
+        { route: ['reservedgifts', 'reservedgifts/index'], name: 'reservedgiftsIndex', moduleId: PLATFORM.moduleName('views/reservedgifts/index'), nav: true, title: 'To Do' },
         { route: ['reservedgifts/details/:id'], name: 'reservedgiftsDetails', moduleId: PLATFORM.moduleName('views/reservedgifts/details'), nav: false, title: 'ReservedGiftsDetails' },
         { route: ['reservedgifts/edit/:id?'], name: 'reservedgiftsEdit', moduleId: PLATFORM.moduleName('views/reservedgifts/edit'), nav: false, title: 'ReservedGiftsEdit' },
         { route: ['reservedgifts/delete/:id?'], name: 'reservedgiftsDelete', moduleId: PLATFORM.moduleName('views/reservedgifts/delete'), nav: false, title: 'ReservedGiftsDelete' },

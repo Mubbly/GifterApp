@@ -36,6 +36,9 @@ export class CampaignDetails {
                     this.handleErrors(response);
                 } else {
                     this._campaign = response.data!;
+
+                    this._campaign.activeFromDate = Utils.formatAsHtml5Date(this._campaign.activeFromDate);
+                    this._campaign.activeToDate = Utils.formatAsHtml5Date(this._campaign.activeToDate);
                 }
             });
         }

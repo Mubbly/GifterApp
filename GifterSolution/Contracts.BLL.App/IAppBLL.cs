@@ -5,6 +5,7 @@ namespace Contracts.BLL.App
 {
     public interface IAppBLL : IBaseBLL
     {
+        // public IAppUserService AppUser { get; }
         public IActionTypeService ActionTypes { get; }
         public IArchivedGiftService ArchivedGifts { get; }
         public ICampaignDonateeService CampaignDonatees { get; }

@@ -15,9 +15,10 @@ namespace PublicApi.DTO.v1
         [MaxLength(1024)] [MinLength(3)] public string? Message { get; set; }
 
         public DateTime DateInvited { get; set; }
+        
         public bool HasJoined { get; set; }
 
         public Guid InvitorUserId { get; set; }
-        public AppUserDTO InvitorUser { get; set; } = default!;
+        public AppUserDTO? InvitorUser { get; set; } = default!;
     }
 }

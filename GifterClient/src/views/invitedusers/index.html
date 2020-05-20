@@ -1,11 +1,12 @@
 <template>
-    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
     <section>
-        <h1>InvitedUsers</h1>
-
+        <h1>My invited users</h1>
         <p>
-            <a route-href="route: invitedusersCreate; params.bind: {}">Create new</a>
+            <a route-href="route: invitedusersCreate; params.bind: {}" class="button">Invite a friend</a>
         </p>
+        <p if.bind="_errorMessage" class="text-muted">${_errorMessage}</p>
+    </section>
+    <section if.bind="_invitedUsers.length">
         <table class="table">
             <thead>
                 <tr>
@@ -13,13 +14,13 @@
                         Email
                     </th>
                     <th>
-                        PhoneNumber
+                        Phonenumber
                     </th>
                     <th>
-                        DateInvited
+                        Date invited
                     </th>
                     <th>
-                        HasJoined
+                        Has joined
                     </th>
                     <th>
                         Message 
@@ -38,16 +39,15 @@
                     <td>
                         ${invitedUser.dateInvited}
                     </td>
-                    <td>
-                        ${invitedUser.hasJoined}
+                    <td class="${invitedUser.hasJoined ? 'successmessage' : 'errormessage'}">
+                        ${invitedUser.hasJoined ? '✓' : '✗'}
                     </td>
                     <td>
                         ${invitedUser.message}
                     </td>
-                    <td>
-                        <a route-href="route: invitedusersEdit; params.bind: { id: invitedUser.id }">Edit</a> |
-                        <a route-href="route: invitedusersDetails; params.bind: { id: invitedUser.id }">Details</a> |
-                        <a route-href="route: invitedusersDelete; params.bind: { id: invitedUser.id }">Delete</a>
+                    <td class="flex">
+                        <a route-href="route: invitedusersEdit; params.bind: { id: invitedUser.id }" class="button">Edit</a>
+                        <a route-href="route: invitedusersDelete; params.bind: { id: invitedUser.id }" class="button">Delete</a>
                     </td>
                 </tr>
             </tbody>

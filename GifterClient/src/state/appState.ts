@@ -1,10 +1,9 @@
 import { Optional } from "types/generalTypes";
+import { ICurrentUser } from "domain/IAppUser";
 
 export class AppState {
     constructor(){
     }
-
-    //public readonly baseUrl = 'https://localhost:5001/api/';
 
     // JavaScript Object Notation Web Token 
     // to keep track of logged in status
@@ -18,6 +17,30 @@ export class AppState {
             localStorage.setItem('jwt', value);
         } else {
             localStorage.removeItem('jwt');
+        }
+    }
+
+    get userId(): Optional<string> {
+        return localStorage.getItem('userId');
+    }
+
+    set userId(value: Optional<string>){
+        if (value){
+            localStorage.setItem('userId', value);
+        } else {
+            localStorage.removeItem('userId');
+        }
+    }
+
+    get userFullName(): Optional<string> {
+        return localStorage.getItem('userFullName');
+    }
+
+    set userFullName(value: Optional<string>){
+        if (value){
+            localStorage.setItem('userFullName', value);
+        } else {
+            localStorage.removeItem('userFullName');
         }
     }
 }

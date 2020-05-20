@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PublicApi.DTO.v1.Identity
 {
@@ -7,6 +8,8 @@ namespace PublicApi.DTO.v1.Identity
         [Required] public string Token { get; set; } = default!;
 
         [Required] public string Status { get; set; } = default!;
+        
+        [Required] public Guid Id { get; set; } = default;
 
         [Required] public string FirstName { get; set; } = default!;
 

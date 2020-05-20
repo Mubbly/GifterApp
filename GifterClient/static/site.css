@@ -1,14 +1,29 @@
 .errormessage {
-    color: red;
+    color: #f44336;
 }
 
 .successmessage {
-    color: green;
+    color: #4CAF50;
 }
 
 a.navbar-brand {
     word-break: normal !important;
 }
+
+
+/* Show labels in one line, no wrapping */
+
+th {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.button {
+    white-space: nowrap;
+}
+
+
+/* */
 
 ul.navbar-nav {
     flex-wrap: wrap;
@@ -18,33 +33,138 @@ ul.navbar-nav.account {
     flex-wrap: nowrap;
 }
 
+.panel-title a {
+    color: white !important;
+}
+
+.panel-title {
+    font-size: 1.2rem;
+    padding: 10px;
+}
+
+.panel-title a:hover {
+    text-decoration: none;
+}
+
+.panel-heading {
+    background-color: #9FA8DA;
+    height: 3rem;
+    border-bottom: 2px solid white;
+}
+
+.panel-body {
+    padding: 10px 20px 20px 20px;
+}
+
+.container.body {
+    padding-bottom: 5%;
+}
+
+a {
+    color: #5C6BC0 !important;
+}
+
 h1 {
     font-size: 2rem;
+    padding-bottom: 5px;
 }
 
 h2 {
     font-size: 1.5rem;
+    padding-bottom: 5px;
 }
 
 h3 {
     font-size: 1rem;
+    padding-bottom: 5px;
 }
 
 section {
-    margin-bottom: 20px;
+    padding-bottom: 10px;
 }
 
-.icon,
-.button {
-    margin: 10px 10px 10px 0;
+.icon {
+    margin: 10px 10px 10px 10px;
+    max-width: 35px;
     padding: 5px;
-    /* Remove later */
-    border: 1px solid black;
     cursor: pointer;
 }
 
-.button+.button {
+.search-input {
+    border: 1px solid #C5CAE9;
+    margin: 10px 10px 10px 0;
+    padding: 8px 16px;
+    line-height: 15px;
+    width: 30%;
+}
+
+.profile-info {
+    padding-bottom: 3%;
+}
+
+.profile-wishlist {
+    padding-left: 5%;
+}
+
+.button {
+    display: inline-block;
+    background: #9FA8DA;
+    color: white !important;
+    border: 1px solid #C5CAE9;
+    margin: 0 10px 10px 0;
+    padding: 0.5rem 2rem;
+    text-align: center;
+    line-height: 15px;
+    cursor: pointer;
+}
+
+button.button,
+input.button {
+    padding: 11px 28px;
+}
+
+.form-group.form-check {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.form-group.form-check label {
+    padding-left: 0.6rem;
+}
+
+input[type='checkbox'] {
+    -webkit-appearance: none;
+    width: 1.6rem;
+    height: 1.6rem;
+    background: white;
+    border-radius: 1px;
+    border: 1px solid #ced4da;
+    position: relative;
+}
+
+input[type='checkbox']:checked {
+    border: 2px solid #C5CAE9;
+}
+
+input[type='checkbox']:checked:before {
+    content: '✓';
+    font-weight: bold;
+    display: flex;
+    align-self: center;
+    justify-self: center;
+    text-align: center;
+    padding-left: 0.4em;
+    color: #7986CB;
+}
+
+
+/* .button+.button {
     margin: 10px;
+} */
+
+.flex.middle {
+    align-items: flex-start;
 }
 
 .date {

@@ -6,13 +6,13 @@ export interface IInvitedUserCreate {
     email: string;
     phoneNumber: Optional<string>;
     message: Optional<string>;
-    dateInvited: string;
 }
 
 export interface IInvitedUserEdit extends IBaseEntity, IInvitedUserCreate {
 }
 
 export interface IInvitedUser extends IInvitedUserEdit {
+    dateInvited: string;
     hasJoined: boolean;
     
     invitorUserId: string;

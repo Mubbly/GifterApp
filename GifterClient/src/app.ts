@@ -1,6 +1,7 @@
 import { autoinject } from 'aurelia-framework';
 import { RouterConfiguration, Router } from 'aurelia-router';
 import routes from 'router';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import { AppState } from 'state/appState';
 
 @autoinject

@@ -26,19 +26,19 @@ namespace PublicApi.DTO.v1.Identity
         
         public string? FullName => FirstName + " " + LastName;
 
-        public int UserPermissionsCount { get; set; }
-        public int UserProfilesCount { get; set; }
-        public int UserNotificationsCount { get; set; }
-        public int UserCampaignsCount { get; set; }
-        public int GiftsCount { get; set; }
-        public int ReservedGiftsByUserCount { get; set; }
-        public int ReservedGiftsForUserCount { get; set; }
-        public int ArchivedGiftsByUserCount { get; set; }
-        public int ArchivedGiftsForUserCount { get; set; }
-        public int ConfirmedFriendshipsCount { get; set; }
-        public int PendingFriendshipsCount { get; set; }
-        public int SentPrivateMessagesCount { get; set; }
-        public int ReceivedPrivateMessagesCount { get; set; }
-        public int InvitedUsersCount { get; set; }
+        // public int UserPermissionsCount { get; set; }
+        // public int UserProfilesCount { get; set; }
+        // public int UserNotificationsCount { get; set; }
+        // public int UserCampaignsCount { get; set; }
+        // public int GiftsCount { get; set; }
+        // public int ReservedGiftsByUserCount { get; set; }
+        // public int ReservedGiftsForUserCount { get; set; }
+        // public int ArchivedGiftsByUserCount { get; set; }
+        // public int ArchivedGiftsForUserCount { get; set; }
+        // public int ConfirmedFriendshipsCount { get; set; }
+        // public int PendingFriendshipsCount { get; set; }
+        // public int SentPrivateMessagesCount { get; set; }
+        // public int ReceivedPrivateMessagesCount { get; set; }
+        // public int InvitedUsersCount { get; set; }
     }
 }

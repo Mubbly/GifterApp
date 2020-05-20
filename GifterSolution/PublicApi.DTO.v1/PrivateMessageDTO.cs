@@ -14,7 +14,8 @@ namespace PublicApi.DTO.v1
         public bool IsSeen { get; set; }
 
         public Guid UserSenderId { get; set; }
-        public AppUserDTO UserSender { get; set; } = default!;
+        public AppUserDTO? UserSender { get; set; } = default!;
+        
         public Guid UserReceiverId { get; set; }
         public AppUserDTO UserReceiver { get; set; } = default!;
     }

@@ -9,14 +9,14 @@ export class FriendshipsIndex {
     private _reservedFriendships: IFriendship[] = [];
     private _errorMessage: Optional<string> = null;
 
-    constructor(private reservedFriendshipService: FriendshipService) {}
+    constructor(private friendshipService: FriendshipService) {}
 
     attached() {
         this.getFriendships();
     }
 
     private getFriendships(): void {
-        this.reservedFriendshipService.getAll().then((response) => {
+        this.friendshipService.getAll().then((response) => {
             if (UtilFunctions.isSuccessful(response)) {
                 this._reservedFriendships = response.data!;
             } else {

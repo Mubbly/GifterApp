@@ -6,19 +6,25 @@ import * as Utils from "utils/utilFunctions";
 import { Optional, GifterInterface } from "types/generalTypes";
 import { IFetchResponse } from '../../types/IFetchResponse';
 import { AppState } from "state/appState";
+import { CampaignsPersonal } from './personal';
 
 @autoinject
 export class CampaignsIndex {
     private _campaigns: ICampaign[] = [];
+    private _isCampaignManager: boolean = false;
     private _errorMessage: Optional<string> = null;
 
     constructor(
         private campaignService: CampaignService,
+        private campaignsPersonal: CampaignsPersonal,
         private router: Router,
         private appState: AppState
     ) {}
 
     attached() {
+    }
+
+    activate() {
         if(!this.appState.jwt) {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         } else {
@@ -34,6 +40,11 @@ export class CampaignsIndex {
                 this.handleErrors(response);
             } else {
                 this._campaigns = response.data!;
+
+                this._campaigns.forEach(campaign => {
+                    campaign.activeFromDate = Utils.formatAsHtml5Date(campaign.activeFromDate);
+                    campaign.activeToDate = Utils.formatAsHtml5Date(campaign.activeFromDate);
+                });
             }
         })
         .catch((error) => {

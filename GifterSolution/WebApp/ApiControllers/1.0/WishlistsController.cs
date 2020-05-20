@@ -32,7 +32,7 @@ namespace WebApp.ApiControllers._1._0
             _logger = logger;
         }
         
-                // GET: api/Wishlists
+        // GET: api/Wishlists
         /// <summary>
         ///     Get all Wishlists
         /// </summary>
@@ -121,65 +121,65 @@ namespace WebApp.ApiControllers._1._0
             return NoContent();
         }
 
-        // POST: api/Wishlists
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        /// <summary>
-        ///     Add new Wishlist
-        /// </summary>
-        /// <param name="wishlistDTO"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Produces("application/json")]
-        [Consumes("application/json")]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.WishlistDTO))]
-        public async Task<ActionResult<V1DTO.WishlistDTO>> PostWishlist(V1DTO.WishlistDTO wishlistDTO)
-        {
-            // Create wishlist
-            var bllEntity = _mapper.Map(wishlistDTO);
-            _bll.Wishlists.Add(bllEntity);
-            
-            // var wishlist = new Wishlist
-            // {
-            //     WishlistValue = wishlistCreateDTO.WishlistValue,
-            //     Comment = wishlistCreateDTO.Comment
-            // };
-
-            await _bll.SaveChangesAsync();
-
-            wishlistDTO.Id = bllEntity.Id;
-            return CreatedAtAction(
-                "GetWishlist",
-                new {id = wishlistDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
-                wishlistDTO
-                );
-        }
-
-        // DELETE: api/Wishlists/5
-        /// <summary>
-        ///     Delete Wishlist
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpDelete("{id}")]
-        [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
-        public async Task<ActionResult<V1DTO.WishlistDTO>> DeleteWishlist(Guid id)
-        {
-            var wishlist = await _bll.Wishlists.FirstOrDefaultAsync(id, User.UserGuidId());
-            if (wishlist == null)
-            {
-                _logger.LogError($"DELETE. No such wishlist: {id}, user: {User.UserGuidId()}");
-                return NotFound(new V1DTO.MessageDTO($"Wishlist with id {id} not found"));
-            }
-            await _bll.Wishlists.RemoveAsync(id);
-
-            await _bll.SaveChangesAsync();
-            return Ok(wishlist);
-        }
+        // // POST: api/Wishlists
+        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // // more details see https://aka.ms/RazorPagesCRUD.
+        // /// <summary>
+        // ///     Add new Wishlist
+        // /// </summary>
+        // /// <param name="wishlistDTO"></param>
+        // /// <returns></returns>
+        // [HttpPost]
+        // [Produces("application/json")]
+        // [Consumes("application/json")]
+        // [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
+        // [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.WishlistDTO))]
+        // public async Task<ActionResult<V1DTO.WishlistDTO>> PostWishlist(V1DTO.WishlistDTO wishlistDTO)
+        // {
+        //     // Create wishlist
+        //     var bllEntity = _mapper.Map(wishlistDTO);
+        //     _bll.Wishlists.Add(bllEntity);
+        //     
+        //     // var wishlist = new Wishlist
+        //     // {
+        //     //     WishlistValue = wishlistCreateDTO.WishlistValue,
+        //     //     Comment = wishlistCreateDTO.Comment
+        //     // };
+        //
+        //     await _bll.SaveChangesAsync();
+        //
+        //     wishlistDTO.Id = bllEntity.Id;
+        //     return CreatedAtAction(
+        //         "GetWishlist",
+        //         new {id = wishlistDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
+        //         wishlistDTO
+        //         );
+        // }
+        //
+        // // DELETE: api/Wishlists/5
+        // /// <summary>
+        // ///     Delete Wishlist
+        // /// </summary>
+        // /// <param name="id"></param>
+        // /// <returns></returns>
+        // [HttpDelete("{id}")]
+        // [Produces("application/json")]
+        // [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
+        // [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        // [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        // public async Task<ActionResult<V1DTO.WishlistDTO>> DeleteWishlist(Guid id)
+        // {
+        //     var wishlist = await _bll.Wishlists.FirstOrDefaultAsync(id, User.UserGuidId());
+        //     if (wishlist == null)
+        //     {
+        //         _logger.LogError($"DELETE. No such wishlist: {id}, user: {User.UserGuidId()}");
+        //         return NotFound(new V1DTO.MessageDTO($"Wishlist with id {id} not found"));
+        //     }
+        //     await _bll.Wishlists.RemoveAsync(id);
+        //
+        //     await _bll.SaveChangesAsync();
+        //     return Ok(wishlist);
+        // }
 
         // // GET: api/Wishlists
         // [HttpGet]

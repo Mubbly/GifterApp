@@ -1,5 +1,5 @@
 import { autoinject } from 'aurelia-framework';
-import { HttpClient, json } from 'aurelia-fetch-client';
+import { HttpClient } from 'aurelia-fetch-client';
 import { IFetchResponse } from 'types/IFetchResponse';
 import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
 import * as Environment from '../../../config/environment.json';
@@ -68,7 +68,7 @@ export class AccountService {
             }
             return {
                 status: response.status,
-                errorMessage: response.statusText
+                errorMessage: response.statusText            
             }
         } catch (reason) {
             return {

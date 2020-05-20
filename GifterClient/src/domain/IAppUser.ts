@@ -1,5 +1,10 @@
 import { IBaseEntity } from "./base/IBaseEntity";
 
+export interface ICurrentUser extends IBaseEntity {
+    firstName: string,
+    lastName: string
+}
+
 export interface IAppUser extends IBaseEntity {
     email: string;
     userName: string;

@@ -11,7 +11,10 @@ namespace BLL.App
         public AppBLL(IAppUnitOfWork uow) : base(uow)
         {
         }
-        
+
+        // public IAppUserService AppUser =>
+        //     GetService<IAppUserService>(() => new AppUserService(UOW));
+
         public IActionTypeService ActionTypes =>
             GetService<IActionTypeService>(() => new ActionTypeService(UOW));
 

@@ -29,13 +29,12 @@ export class InvitedUsersCreate {
     attached() {}
 
     activate() {
-        const isLoggedIn = this.appState.jwt;
-        if(!isLoggedIn) {
+        if(!this.appState.jwt) {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         }
     }
 
-    // TODO: Email and phonenumber validations!
+    // TODO: Email and phonenumber validations
     onSubmit(event: Event) {
         event.preventDefault();
         // Required fields
@@ -46,8 +45,7 @@ export class InvitedUsersCreate {
         let newInvitedUser: IInvitedUserCreate = {
             email: this._email,
             phoneNumber: this._phoneNumber,
-            message: this._message,
-            dateInvited: new Date().toUTCString()
+            message: this._message
         };
         this.createInvitedUser(newInvitedUser);
     }

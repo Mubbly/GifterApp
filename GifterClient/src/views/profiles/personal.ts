@@ -50,6 +50,7 @@ export class ProfilesPersonal {
                 } else {                    
                     this._profile = response.data!;
                     this._lastActiveDate = Utils.formatAsHtml5Date(this._profile.appUser.lastActive);
+                    console.log(this._profile.id);
                 }
             })
             .catch((error) => {

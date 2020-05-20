@@ -36,6 +36,10 @@ export class InvitedUsersIndex {
                 this.handleErrors(response);
             } else {
                 this._invitedUsers = response.data!;
+                
+                this._invitedUsers.forEach(user => {
+                    user.dateInvited = Utils.formatAsHtml5Date(user.dateInvited);
+                });
             }
         })
         .catch((error) => {
@@ -50,6 +54,9 @@ export class InvitedUsersIndex {
         switch(response.status) {
             case Utils.STATUS_CODE_UNAUTHORIZED:
                 this.router.navigateToRoute(Utils.LOGIN_ROUTE);
+                break;
+            case Utils.STATUS_CODE_NOT_FOUND:
+                this._errorMessage = "You have not invited anyone";
                 break;
             default:
                 this._errorMessage = Utils.getErrorMessage(response);

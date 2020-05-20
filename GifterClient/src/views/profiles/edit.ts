@@ -1,12 +1,13 @@
+import { autoinject } from 'aurelia-framework';
 import { Router, RouteConfig, NavigationInstruction } from 'aurelia-router';
 import { IProfileEdit, IProfile } from "domain/IProfile";
 import { IAppUser } from "domain/IAppUser";
 import { Optional } from "types/generalTypes";
 import { ProfileService } from "service/profileService";
 import { AppUserService } from "service/base/appUserService";
-import { isSuccessful } from '../../../.history/src/utils/utilFunctions_20200516122521';
 import * as Utils from 'utils/utilFunctions';
 
+@autoinject
 export class ProfilesEdit {
     private _profile?: IProfileEdit;
     private _appUsers: IAppUser[] = [];
@@ -22,7 +23,8 @@ export class ProfilesEdit {
     }
 
     activate(params: any) {
-        this.profileService.getPersonal().then(
+        console.log(this.profileService);
+        this.profileService.getPersonal(params.id).then(
             response => {
                 if(Utils.isSuccessful(response)) {
                     this._profile = response.data!

@@ -4,6 +4,7 @@
         <h1>Delete</h1>
 
         <h3 class="errormessage">Are you sure you want to delete this?</h3>
+        <p><i><strong>Note:</strong> This will not unsend the invitation, just remove the info from your Invited Users list. You will not get a notification when this person joins the site.</i></p>
         <div>
             <h4>InvitedUser</h4>
             <hr />
@@ -15,10 +16,10 @@
                     ${_invitedUser.email}
                 </dd>
                 <dt class = "col-sm-2">
-                    PhoneNumber
+                    Phonenumber
                 </dt>
                 <dd class = "col-sm-10">
-                    ${_invitedUser.phoneNumber}
+                    ${_invitedUser.phoneNumber ? _invitedUser.phoneNumber : ''}
                 </dd>
                 <dt class = "col-sm-2">
                     Message
@@ -27,22 +28,16 @@
                     ${_invitedUser.message}
                 </dd>
                 <dt class = "col-sm-2">
-                    DateInvited
+                    Date invited
                 </dt>
                 <dd class = "col-sm-10">
                     ${_invitedUser.dateInvited}
                 </dd>
                 <dt class = "col-sm-2">
-                    HasJoined
+                    Has joined
                 </dt>
-                <dd class = "col-sm-10">
-                    ${_invitedUser.hasJoined}
-                </dd>
-                <dt class = "col-sm-2">
-                    InvitorUser
-                </dt>
-                <dd class = "col-sm-10">
-                    ${_invitedUser.invitorUser.fullName} (${_invitedUser.invitorUser.id})
+                <dd class = "col-sm-10 ${_invitedUser.hasJoined ? 'successmessage' : 'errormessage'}">
+                    ${_invitedUser.hasJoined ? '✓' : '✗'}
                 </dd>
             </dl>
             <form submit.trigger="onSubmit($event)">

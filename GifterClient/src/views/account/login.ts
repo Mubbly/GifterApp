@@ -6,6 +6,8 @@ import { AppState } from "state/appState";
 import { isSuccessful } from "utils/utilFunctions";
 import { App } from "app";
 import * as UtilFunctions from 'utils/utilFunctions';
+import { ILoginResponse } from "types/ILoginResponse";
+import { ICurrentUser } from "domain/IAppUser";
 
 @autoinject
 export class AccountLogin {
@@ -34,11 +36,14 @@ export class AccountLogin {
         .then((response) => {
             console.log(response);
             if (isSuccessful(response)) {
-                this.appState.jwt = response.data!.token;
-                console.log(this.appState.jwt);
+                let responseData: ILoginResponse = response.data!;
+                this.appState.jwt = responseData.token;
+                this.appState.userId = responseData.id;
+                this.appState.userFullName = `${responseData.firstName} ${responseData.lastName}`;
+
                 this.router!.navigateToRoute(this.app.HOME_ROUTE);
             } else {
-                this.appState.jwt = null;
+                localStorage.clear();
                 if(!response.status || response.status === UtilFunctions.STATUS_CODE_SERVER_ERROR) {
                     this._errorMessage = this.ERROR_SERVER;
                 } else {

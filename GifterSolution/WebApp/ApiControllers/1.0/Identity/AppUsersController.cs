@@ -2,110 +2,149 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DAL.App.EF;
-using Domain.App.Identity;
+using Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PublicApi.DTO.v1.Mappers;
+using V1DTO = PublicApi.DTO.v1;
+using V1DTOIdentity = PublicApi.DTO.v1.Identity;
+using DomainIdentity = Domain.App.Identity;
 
 namespace WebApp.ApiControllers._1._0.Identity
 {
-    [Route("api/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class AppUsersController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly UserManager<DomainIdentity.AppUser> _userManager;
+        private readonly AppUserMapperToDomain _toDomainMapper = new AppUserMapperToDomain();
+        private readonly AppUserMapperToPublic _toPublicMapper = new AppUserMapperToPublic();
 
-        public AppUsersController(AppDbContext context)
+        public AppUsersController(UserManager<DomainIdentity.AppUser> userManager)
         {
-            _context = context;
+            _userManager = userManager;
         }
+        
+        // TODO:fix, https://stackoverflow.com/questions/38751616/asp-net-core-identity-get-current-user
 
         // GET: api/AppUsers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTOIdentity.AppUserDTO>>> GetAppUsers()
         {
-            return await _context.Users.ToListAsync();
+            var allDomainUsers = await _userManager.Users.ToListAsync();
+            var allUsers = allDomainUsers.Select(u => _toPublicMapper.Map(u));
+            return Ok(allUsers);
+        }
+        
+        // GET: api/AppUsers/Alexandra
+        [HttpGet("{name}")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTOIdentity.AppUserDTO>>> GetAppUsersByName(string name)
+        {
+            // TODO: Move to BLL
+            var lowercaseName = name.ToLower();
+            var allDomainUsers = await _userManager.Users.ToListAsync();
+            var domainUsersByName = allDomainUsers
+                .Where(u => u.FirstName.ToLower().Contains(lowercaseName) 
+                            || u.LastName.ToLower().Contains(lowercaseName) 
+                            || u.FullName.ToLower().Contains(lowercaseName))
+                .ToList();
+            if (!domainUsersByName.Any())
+            { 
+                return NotFound(new V1DTO.MessageDTO($"Could not find users with name {name}"));
+            }
+            var usersByName = domainUsersByName.Select(u => _toPublicMapper.Map(u));
+            return Ok(usersByName);
         }
 
         // GET: api/AppUsers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AppUser>> GetAppUser(Guid id)
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        public async Task<ActionResult<V1DTOIdentity.AppUserDTO>> GetAppUser(Guid id)
         {
-            var appUser = await _context.Users.FindAsync(id);
-
-            if (appUser == null)
+            var domainUser = await _userManager.FindByIdAsync(id.ToString());
+            if (domainUser == null)
             {
-                return NotFound();
+                return NotFound(new V1DTO.MessageDTO($"User with id {id} not found"));
             }
-
-            return appUser;
+            var user = _toPublicMapper.Map(domainUser);
+            return Ok(user);
+        }
+        
+        // GET: api/AppUsers/Personal
+        [HttpGet("personal")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        public async Task<ActionResult<V1DTOIdentity.AppUserDTO>> GetCurrentAppUser()
+        {
+            var domainUser = await _userManager.FindByIdAsync(User.UserGuidId().ToString());
+            if (domainUser == null)
+            {
+                return NotFound(new V1DTO.MessageDTO("User not found"));
+            }
+            var user = _toPublicMapper.Map(domainUser);
+            return Ok(user);        
         }
 
         // PUT: api/AppUsers/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAppUser(Guid id, AppUser appUser)
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        public async Task<IActionResult> PutAppUser(Guid id, V1DTOIdentity.AppUserDTO appUser)
         {
+            // Don't allow wrong data
             if (id != appUser.Id)
             {
-                return BadRequest();
+                return BadRequest(new V1DTO.MessageDTO($"Cannot update the user with id {id}"));
             }
-
-            _context.Entry(appUser).State = EntityState.Modified;
-
-            try
+            var domainUser = await _userManager.FindByIdAsync(id.ToString());
+            if (domainUser == null)
             {
-                await _context.SaveChangesAsync();
+                return NotFound(new V1DTO.MessageDTO($"User with id {id} not found"));
             }
-            catch (DbUpdateConcurrencyException)
+            if (domainUser.Id != User.UserGuidId())
             {
-                if (!AppUserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(new V1DTO.MessageDTO($"Cannot update the user with id {id}"));
             }
-
+            // Update existing user
+            await _userManager.UpdateAsync(_toDomainMapper.Map(appUser));
             return NoContent();
         }
 
-        // POST: api/AppUsers
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<AppUser>> PostAppUser(AppUser appUser)
-        {
-            _context.Users.Add(appUser);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetAppUser", new { id = appUser.Id }, appUser);
-        }
-
-        // DELETE: api/AppUsers/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<AppUser>> DeleteAppUser(Guid id)
-        {
-            var appUser = await _context.Users.FindAsync(id);
-            if (appUser == null)
-            {
-                return NotFound();
-            }
-
-            _context.Users.Remove(appUser);
-            await _context.SaveChangesAsync();
-
-            return appUser;
-        }
-
-        private bool AppUserExists(Guid id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
+        // // DELETE: api/AppUsers/5
+        // [HttpDelete("{id}")]
+        // public async Task<ActionResult<DomainIdentity.AppUser>> DeleteAppUser(Guid id)
+        // {
+        //     var appUser = await _context.Users.FindAsync(id);
+        //     if (appUser == null)
+        //     {
+        //         return NotFound();
+        //     }
+        //
+        //     _context.Users.Remove(appUser);
+        //     await _context.SaveChangesAsync();
+        //
+        //     return appUser;
+        // }
     }
 }
 

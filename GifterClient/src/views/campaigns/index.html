@@ -4,7 +4,7 @@
         List of all the currently active donation campaigns. 
     </p>
     <p>
-        <a route-href="route: campaignsPersonal; params.bind: {}">My campaigns</a> 
+        <a route-href="route: campaignsPersonal; params.bind: {}" class="button">My campaigns</a> 
     </p>
     <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
     <table class="table">
@@ -12,12 +12,6 @@
             <tr>
                 <th>
                     Name
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    AdImage
                 </th>
                 <th>
                     Institution
@@ -37,13 +31,7 @@
         <tbody>
             <tr repeat.for="campaign of _campaigns">
                 <td>
-                    ${campaign.name}
-                </td>
-                <td>
-                    ${campaign.description}
-                </td>
-                <td>
-                    ${campaign.adImage}
+                    <a route-href="route: campaignsDetails; params.bind: { id: campaign.id }">${campaign.name}</a>
                 </td>
                 <td>
                     ${campaign.institution}
@@ -55,7 +43,7 @@
                     ${campaign.activeToDate}
                 </td>
                 <td>
-                    <a route-href="route: donateesIndex; params.bind: { campaignId: campaign.id, campaignName: campaign.name }">${campaign.campaignDonateesCount}</a>
+                    <a route-href="route: donateesIndex; params.bind: { campaignId: campaign.id, campaignName: campaign.name }" class="button">${campaign.campaignDonateesCount}</a>
                 </td>
             </tr>
         </tbody>

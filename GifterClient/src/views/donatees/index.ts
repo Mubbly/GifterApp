@@ -66,6 +66,11 @@ export class DonateesIndex {
                     this.handleErrors(response);
                 } else {
                     this._donatees = response.data!;
+
+                    this._donatees.forEach(donatee => {
+                        donatee.activeFrom = Utils.formatAsHtml5Date(donatee.activeFrom);
+                        donatee.activeTo = Utils.formatAsHtml5Date(donatee.activeTo);
+                    });
                 }
             })
             .catch((error) => {

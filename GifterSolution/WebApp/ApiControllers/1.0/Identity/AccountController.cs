@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +25,7 @@ namespace WebApp.ApiControllers._1._0.Identity
         private readonly IConfiguration _configuration;
         private readonly SignInManager<DomainIdentity.AppUser> _signInManager;
         private readonly UserManager<DomainIdentity.AppUser> _userManager;
+        private readonly IAppBLL _bll;
         private readonly ILogger<AccountController> _logger;
 
         /// <summary>
@@ -34,12 +36,13 @@ namespace WebApp.ApiControllers._1._0.Identity
         /// <param name="logger"></param>
         /// <param name="signInManager"></param>
         public AccountController(IConfiguration configuration, UserManager<DomainIdentity.AppUser> userManager,
-            SignInManager<DomainIdentity.AppUser> signInManager, ILogger<AccountController> logger)
+            SignInManager<DomainIdentity.AppUser> signInManager, ILogger<AccountController> logger, IAppBLL bll)
         {
             _configuration = configuration;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _bll = bll;
         }
 
         /// <summary>
@@ -82,7 +85,8 @@ namespace WebApp.ApiControllers._1._0.Identity
             return Ok(new JwtResponseDTO()
             {
                 Token = jwt, 
-                Status = $"User {appUser.Email} logged in.", 
+                Status = $"User {appUser.Email} logged in.",
+                Id = appUser.Id,
                 FirstName = appUser.FirstName,
                 LastName = appUser.LastName
             });
@@ -135,7 +139,12 @@ namespace WebApp.ApiControllers._1._0.Identity
                 _logger.LogInformation($"User {newUser.Email} not found after creation!");
                 return NotFound(new MessageDTO("User not found after creation!"));
             }
-            
+
+            // TODO: Check if this person was invited by an existing user, then update the InvitedUsers table by changing hasJoined to true.
+            // TODO: After that send a Notification to the InvitorUser that they have joined.
+            // var invitedUsers = await _bll.InvitedUsers.GetAllAsync(); // TODO: Create a method for getting by email
+            // var bla = invitedUsers.Where(u => u.Email == newRegisteredUser.Email).ToList();
+
             // Log new user in
             var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(newRegisteredUser);
             var jwt = IdentityExtensions.GenerateJWT(

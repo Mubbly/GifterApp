@@ -45,6 +45,11 @@ export class CampaignsPersonal {
             } else {
                 this.setCampaignManager(true);
                 this._campaigns = response.data!;
+
+                this._campaigns.forEach(campaign => {
+                    campaign.activeFromDate = Utils.formatAsHtml5Date(campaign.activeFromDate);
+                    campaign.activeToDate = Utils.formatAsHtml5Date(campaign.activeFromDate);
+                });
             }
         })
         .catch((error) => {
@@ -64,6 +69,11 @@ export class CampaignsPersonal {
             } else {
                 this.setCampaignManager(true);
                 this._campaign = response.data!;
+
+                this._campaigns.forEach(campaign => {
+                    campaign.activeFromDate = Utils.formatAsHtml5Date(campaign.activeFromDate);
+                    campaign.activeToDate = Utils.formatAsHtml5Date(campaign.activeFromDate);
+                });
             }
         })
         .catch((error) => {

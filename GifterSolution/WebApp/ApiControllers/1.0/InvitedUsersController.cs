@@ -43,7 +43,17 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
         public async Task<ActionResult<IEnumerable<V1DTO.InvitedUserDTO>>> GetInvitedUsers()
         {
-            return Ok((await _bll.InvitedUsers.GetAllAsync()).Select(e => _mapper.Map(e)));
+            // TODO: Move to BLL
+            var invitedUsers = await _bll.InvitedUsers.GetAllAsync();
+            var personalUsersBll = invitedUsers
+                .Where(u => u.InvitorUserId == User.UserGuidId())
+                .ToList();
+            if (!personalUsersBll.Any())
+            {
+                return NotFound(new V1DTO.MessageDTO($"No invited users found for user {User.UserGuidId()}"));
+            }
+            var personalInvitedUsers = personalUsersBll.Select(e => _mapper.Map(e));
+            return Ok(personalInvitedUsers);
         }
 
         // GET: api/InvitedUsers/5
@@ -59,13 +69,17 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
         public async Task<ActionResult<V1DTO.InvitedUserDTO>> GetInvitedUser(Guid id)
         {
-            var actionType = await _bll.InvitedUsers.FirstOrDefaultAsync(id);
-            if (actionType == null)
+            var invitedUser = await _bll.InvitedUsers.FirstOrDefaultAsync(id);
+            if (invitedUser == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"InvitedUser with id {id} not found"));
+            }
+            if (invitedUser.InvitorUserId != User.UserGuidId())
             {
                 return NotFound(new V1DTO.MessageDTO($"InvitedUser with id {id} not found"));
             }
 
-            return Ok(_mapper.Map(actionType));
+            return Ok(_mapper.Map(invitedUser));
         }
 
         // PUT: api/InvitedUsers/5
@@ -75,7 +89,7 @@ namespace WebApp.ApiControllers._1._0
         ///     Update InvitedUser
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="actionTypeDTO"></param>
+        /// <param name="invitedUserDTO"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
@@ -84,23 +98,23 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> PutInvitedUser(Guid id, V1DTO.InvitedUserDTO actionTypeDTO)
+        public async Task<IActionResult> PutInvitedUser(Guid id, V1DTO.InvitedUserDTO invitedUserDTO)
         {
             // Don't allow wrong data
-            if (id != actionTypeDTO.Id)
+            if (id != invitedUserDTO.Id)
             {
-                return BadRequest(new V1DTO.MessageDTO("id and actionType.id do not match"));
+                return BadRequest(new V1DTO.MessageDTO("id and invitedUser.id do not match"));
             }
-            var actionType = await _bll.InvitedUsers.FirstOrDefaultAsync(actionTypeDTO.Id, User.UserGuidId());
-            if (actionType == null)
+            var invitedUser = await _bll.InvitedUsers.FirstOrDefaultAsync(invitedUserDTO.Id, User.UserGuidId());
+            if (invitedUser == null)
             {
-                _logger.LogError($"EDIT. No such actionType: {actionTypeDTO.Id}, user: {User.UserGuidId()}");
+                _logger.LogError($"EDIT. No such invitedUser: {invitedUserDTO.Id}, user: {User.UserGuidId()}");
                 return NotFound(new V1DTO.MessageDTO($"No InvitedUser found for id {id}"));
             }
-            // Update existing actionType
-            // actionType.InvitedUserValue = actionTypeEditDTO.InvitedUserValue;
-            // actionType.Comment = actionTypeEditDTO.Comment;
-            await _bll.InvitedUsers.UpdateAsync(_mapper.Map(actionTypeDTO), User.UserId());
+            // Update existing invitedUser
+            // invitedUser.InvitedUserValue = invitedUserEditDTO.InvitedUserValue;
+            // invitedUser.Comment = invitedUserEditDTO.Comment;
+            await _bll.InvitedUsers.UpdateAsync(_mapper.Map(invitedUserDTO), User.UserId());
 
             // Save to db
             try
@@ -127,32 +141,36 @@ namespace WebApp.ApiControllers._1._0
         /// <summary>
         ///     Add new InvitedUser
         /// </summary>
-        /// <param name="actionTypeDTO"></param>
+        /// <param name="invitedUserDTO"></param>
         /// <returns></returns>
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.InvitedUserDTO))]
-        public async Task<ActionResult<V1DTO.InvitedUserDTO>> PostInvitedUser(V1DTO.InvitedUserDTO actionTypeDTO)
+        public async Task<ActionResult<V1DTO.InvitedUserDTO>> PostInvitedUser(V1DTO.InvitedUserDTO invitedUserDTO)
         {
-            // Create actionType
-            var bllEntity = _mapper.Map(actionTypeDTO);
+            // Create invitedUser
+            var bllEntity = _mapper.Map(invitedUserDTO);
+            bllEntity.DateInvited = DateTime.Now;
+            bllEntity.HasJoined = false;
+            bllEntity.InvitorUserId = User.UserGuidId();
+            
             _bll.InvitedUsers.Add(bllEntity);
             
-            // var actionType = new InvitedUser
+            // var invitedUser = new InvitedUser
             // {
-            //     InvitedUserValue = actionTypeCreateDTO.InvitedUserValue,
-            //     Comment = actionTypeCreateDTO.Comment
+            //     InvitedUserValue = invitedUserCreateDTO.InvitedUserValue,
+            //     Comment = invitedUserCreateDTO.Comment
             // };
 
             await _bll.SaveChangesAsync();
 
-            actionTypeDTO.Id = bllEntity.Id;
+            invitedUserDTO.Id = bllEntity.Id;
             return CreatedAtAction(
                 "GetInvitedUser",
-                new {id = actionTypeDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
-                actionTypeDTO
+                new {id = invitedUserDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
+                invitedUserDTO
                 );
         }
 
@@ -169,16 +187,16 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
         public async Task<ActionResult<V1DTO.InvitedUserDTO>> DeleteInvitedUser(Guid id)
         {
-            var actionType = await _bll.InvitedUsers.FirstOrDefaultAsync(id, User.UserGuidId());
-            if (actionType == null)
+            var invitedUser = await _bll.InvitedUsers.FirstOrDefaultAsync(id, User.UserGuidId());
+            if (invitedUser == null)
             {
-                _logger.LogError($"DELETE. No such actionType: {id}, user: {User.UserGuidId()}");
+                _logger.LogError($"DELETE. No such invitedUser: {id}, user: {User.UserGuidId()}");
                 return NotFound(new V1DTO.MessageDTO($"InvitedUser with id {id} not found"));
             }
             await _bll.InvitedUsers.RemoveAsync(id);
 
             await _bll.SaveChangesAsync();
-            return Ok(actionType);
+            return Ok(invitedUser);
         }
 
         // // GET: api/InvitedUsers

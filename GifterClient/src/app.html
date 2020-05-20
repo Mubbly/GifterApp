@@ -1,4 +1,5 @@
 <template>
+    <!-- <require from="bootstrap/dist/css/bootstrap.min.css"></require> -->
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -20,6 +21,9 @@
 
                     <ul if.bind="appState.jwt" class="navbar-nav account">
                         <li class="nav-item">
+                            <a class="nav-link text-dark" route-href="route: aboutIndex; params.bind: {}">Help &nbsp;|</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" href="#" click.delegate="logoutOnClick()">Log out</a>
                         </li>
                     </ul>
@@ -34,7 +38,7 @@
         </nav>
     </header>
     
-    <div class="container">
+    <div class="container body">
         <main role="main">
             <router-view></router-view>
         </main>
@@ -42,7 +46,8 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - GifterApp - Melissa Eenmaa
+            &copy; 2020 – GifterApp by Melissa Eenmaa –
+            Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
         </div>
     </footer>
 </template>

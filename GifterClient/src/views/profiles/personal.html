@@ -1,13 +1,12 @@
 <template>
-    <section if.bind="_profile" class="profile">
-        
-        <section class="profile-info">
-            <div class="flex">
+    <section if.bind="_profile" class="profile flex">
+        <section class="profile-info flex-column">
+            <div class="flex middle profile-heading">
                 <h1 if.bind="_profile.appUser.firstName || _profile.appUser.userName"class="flex-column">
                     ${_profile.appUser.firstName ? _profile.appUser.firstName : ''} 
                     (${_profile.appUser.userName ? _profile.appUser.userName : ''})
                 </h1> 
-                <a route-href="route: profilesEdit; params.bind: { id: _profile.id }" class="flex-column icon">Edit profile</a>
+                <a route-href="route: profilesEdit; params.bind: { id: _profile.id }" class="flex-column" title="Edit profile"><img src="/icon-settings.png" class="icon"/></a>
             </div>
             <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
             <p if.bind="_lastActiveDate" class="date">Last active: ${_lastActiveDate}</p>
@@ -32,7 +31,7 @@
             </div>
         </section>
 
-        <section class="profile-wishlist" if.bind="_profile.wishlist">
+        <section class="profile-wishlist flex-column" if.bind="_profile.wishlist">
             <h2>Wishlist</h2>
             <p>               
                 ${_profile.wishlist.comment}
@@ -78,10 +77,10 @@
                         <td>
                             ${gift.partnerUrl || '-'}
                         </td>
-                        <td>
-                            <a route-href="route: giftsEdit; params.bind: { id: gift.id }" class="button">Edit</a>
-                            <a href="#" class="button">Pin</a>
-                            <a class="button">Archive</a> 
+                        <td class="flex">
+                            <a route-href="route: giftsEdit; params.bind: { id: gift.id }" class="button flex-column">Edit</a>
+                            <a href="#" class="button flex-column">Pin</a>
+                            <a class="button flex-column">Archive</a> 
                         </td>
                     </tr>
                 </tbody>

@@ -8,7 +8,7 @@
             <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
             <form submit.trigger="onSubmit($event)">
                 <div class="form-group">
-                    <label class="control-label" for="Name">Name</label>
+                    <label class="control-label" for="Name">Name *</label>
                     <input class="form-control" type="text" data-val="true"
                         data-val-maxlength="The field Name must be a string or array type with a maximum length of &#x27;256&#x27;."
                         data-val-maxlength-max="256"
@@ -50,7 +50,7 @@
                         data-valmsg-replace="true"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label" for="PartnerUrl">PartnerUrl</label>
+                    <label class="control-label" for="PartnerUrl">Partner url</label>
                     <input class="form-control" type="text" data-val="true"
                         data-val-maxlength="The field PartnerUrl must be a string or array type with a maximum length of &#x27;2048&#x27;."
                         data-val-maxlength-max="2048"
@@ -61,25 +61,25 @@
                         data-valmsg-replace="true"></span>
                 </div>
                 <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" data-val="true"
-                            data-val-required="The IsPartnered field is required." id="IsPartnered" name="IsPartnered"
-                            checked.bind="_isPartnered" /> IsPartnered
+                    <input id="IsPartnered" class="form-check-input" type="checkbox" data-val="true"
+                    data-val-required="The IsPartnered field is required." name="IsPartnered"
+                    checked.bind="_isPartnered" />
+                    <label for="IsPartnered" class="form-check-label">
+                        Is partnered
                     </label>
                 </div>
                 <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" data-val="true"
-                            data-val-required="The IsPinned field is required." id="IsPinned" name="IsPinned"
-                            checked.bind="_isPinned" /> IsPinned
-                    </label>
+                    <input id="IsPinned" class="form-check-input" type="checkbox" data-val="true"
+                    data-val-required="The IsPinned field is required." name="IsPinned"
+                    checked.bind="_isPinned" />
+                    <label for="IsPinned" class="form-check-label">Pin</label>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <input type="submit" value="Create" class="button" />
                 </div>
         </div>
     </div>
 
     <div>
-        <a route-href="route: giftsIndex; params.bind: {}">Back to List</a> </div>
+        <a route-href="route: profilesPersonal; params.bind: {}">Back to List</a> </div>
 </template>
