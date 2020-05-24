@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BLL.App.DTO;
 using Contracts.BLL.App;
 using Extensions;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PublicApi.DTO.v1;
 using PublicApi.DTO.v1.Identity;
+using PublicApi.DTO.v1.Mappers;
 using DomainIdentity=Domain.App.Identity;
 
 namespace WebApp.ApiControllers._1._0.Identity
@@ -26,6 +29,7 @@ namespace WebApp.ApiControllers._1._0.Identity
         private readonly SignInManager<DomainIdentity.AppUser> _signInManager;
         private readonly UserManager<DomainIdentity.AppUser> _userManager;
         private readonly IAppBLL _bll;
+        private readonly AppUserMapper _mapper = new AppUserMapper();
         private readonly ILogger<AccountController> _logger;
 
         /// <summary>
@@ -35,6 +39,7 @@ namespace WebApp.ApiControllers._1._0.Identity
         /// <param name="userManager"></param>
         /// <param name="logger"></param>
         /// <param name="signInManager"></param>
+        /// <param name="bll"></param>
         public AccountController(IConfiguration configuration, UserManager<DomainIdentity.AppUser> userManager,
             SignInManager<DomainIdentity.AppUser> signInManager, ILogger<AccountController> logger, IAppBLL bll)
         {
@@ -62,7 +67,7 @@ namespace WebApp.ApiControllers._1._0.Identity
             if (appUser == null)
             {
                 _logger.LogInformation($"Web-Api login. User {loginDTO.Email} not found!");
-                return NotFound( new MessageDTO("User not found!"));
+                return NotFound(new MessageDTO("User not found!"));
             }
             // No such password found
             var result = await _signInManager.CheckPasswordSignInAsync(appUser, loginDTO.Password, false);
@@ -71,25 +76,15 @@ namespace WebApp.ApiControllers._1._0.Identity
                 _logger.LogInformation($"Web-Api login. User {loginDTO.Email} not found!");
                 return NotFound(new MessageDTO("User not found!"));
             }
-            // Log user in
-            var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(appUser); // get the User analog
-            var jwt = IdentityExtensions.GenerateJWT(
-                claimsPrincipal.Claims
-                    .Append(new Claim(ClaimTypes.GivenName, appUser.FirstName))
-                    .Append(new Claim(ClaimTypes.Surname, appUser.LastName)),                
-                _configuration["JWT:SigningKey"],
-                _configuration["JWT:Issuer"],
-                _configuration.GetValue<int>("JWT:ExpirationInDays"));
+            
+            // Save user activity
+            appUser.LastActive = DateTime.Now;
+            // appUser.IsActive = true;
+            await _userManager.UpdateAsync(appUser);
+            await _bll.SaveChangesAsync();
 
-            _logger.LogInformation($"Web-Api login. Token generated for user {loginDTO.Email}");
-            return Ok(new JwtResponseDTO()
-            {
-                Token = jwt, 
-                Status = $"User {appUser.Email} logged in.",
-                Id = appUser.Id,
-                FirstName = appUser.FirstName,
-                LastName = appUser.LastName
-            });
+            // Log user in
+            return await LogIn(appUser);
         }
 
         /// <summary>
@@ -117,12 +112,11 @@ namespace WebApp.ApiControllers._1._0.Identity
             var newUser = new DomainIdentity.AppUser
             {
                 Email = registerDTO.Email,
-                UserName = registerDTO.Email,
+                UserName = registerDTO.Email.ToLower().Split('@')[0],
                 FirstName = registerDTO.FirstName,
                 LastName = registerDTO.LastName
             };
             var result = await _userManager.CreateAsync(newUser, registerDTO.Password);
-            
             // Check creation 
             if (!result.Succeeded)
             {
@@ -130,6 +124,7 @@ namespace WebApp.ApiControllers._1._0.Identity
                 var errors = result.Errors.Select(error => error.Description).ToList();
                 return BadRequest(new MessageDTO() {Messages = errors});
             }
+
             _logger.LogInformation($"Web-Api register. User {registerDTO.Email} registered!");
             
             // Find newly created user
@@ -139,28 +134,89 @@ namespace WebApp.ApiControllers._1._0.Identity
                 _logger.LogInformation($"User {newUser.Email} not found after creation!");
                 return NotFound(new MessageDTO("User not found after creation!"));
             }
+            
+            // Create default profile with an empty wishlist
+            _bll.Profiles.CreateDefaultProfile(newRegisteredUser.Id);
 
-            // TODO: Check if this person was invited by an existing user, then update the InvitedUsers table by changing hasJoined to true.
-            // TODO: After that send a Notification to the InvitorUser that they have joined.
-            // var invitedUsers = await _bll.InvitedUsers.GetAllAsync(); // TODO: Create a method for getting by email
-            // var bla = invitedUsers.Where(u => u.Email == newRegisteredUser.Email).ToList();
+            // Save to db
+            await _bll.SaveChangesAsync();
 
             // Log new user in
-            var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(newRegisteredUser);
+            return await LogIn(newRegisteredUser);
+        }
+
+        private async Task<IActionResult> LogIn(DomainIdentity.AppUser appUser)
+        {
+            var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(appUser); // get the User analog
             var jwt = IdentityExtensions.GenerateJWT(
                 claimsPrincipal.Claims
-                    .Append(new Claim(ClaimTypes.GivenName, newUser.FirstName))
-                    .Append(new Claim(ClaimTypes.Surname, newUser.LastName)),
+                    .Append(new Claim(ClaimTypes.GivenName, appUser.FirstName))
+                    .Append(new Claim(ClaimTypes.Surname, appUser.LastName)),
                 _configuration["JWT:SigningKey"],
                 _configuration["JWT:Issuer"],
-                _configuration.GetValue<int>("JWT:ExpirationInDays")
-            );
-            _logger.LogInformation($"WebApi register. User {newRegisteredUser.Email} logged in.");
+                _configuration.GetValue<int>("JWT:ExpirationInDays"));
+
+            _logger.LogInformation($"Web-Api login. Token generated for user {appUser.Email}");
             return Ok(new JwtResponseDTO()
             {
-                Token = jwt, Status = $"User {newRegisteredUser.Email} created and logged in.",
-                FirstName = newUser.FirstName, LastName = newUser.LastName
+                Token = jwt,
+                Status = $"User {appUser.Email} logged in.",
+                Id = appUser.Id,
+                FirstName = appUser.FirstName,
+                LastName = appUser.LastName
             });
         }
+        
+        // // Check if user was invited by existing user
+        // var invitedUsers = (await _bll.InvitedUsers.GetAllAsync())
+        //     .Where(i => i.Email == newRegisteredUser.Email)
+        //     .ToList();
+        // if (invitedUsers != null && invitedUsers.Any())
+        // {
+        //     foreach (var invitedUser in invitedUsers)
+        //     {
+        //         // Update invitedUser to mark they have joined
+        //         invitedUser.HasJoined = true;
+        //         await _bll.InvitedUsers.UpdateAsync(invitedUser);
+        //         
+        //         // Send notification to the invitor about their friend joining
+        //         var invitor = await _userManager.FindByIdAsync(invitedUser.InvitorUserId.ToString());
+        //         // TODO 
+        //     }
+        // }
+        
+        // /// <summary>
+        // ///     Endpoint for user log-out (update activity related data)
+        // /// </summary>
+        // /// <param name="userId">Id of logged out user</param>
+        // /// <returns></returns>
+        // [HttpPost]
+        // [Produces("application/json")]
+        // [Consumes("application/json")]
+        // [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(MessageDTO))]
+        // [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(JwtResponseDTO))]
+        // public async Task<ActionResult<AppUserDTO>> Logout([FromBody] Guid userId)
+        // {
+        //     // No user with such ID found
+        //     var appUser = await _userManager.FindByIdAsync(userId.ToString());
+        //     if (appUser == null)
+        //     {
+        //         _logger.LogInformation($"Web-Api login. User not found!");
+        //         return NotFound(new MessageDTO("User not found!"));
+        //     }
+        //     // Save user activity
+        //     appUser.LastActive = DateTime.Now;
+        //     appUser.IsActive = false;
+        //     await _userManager.UpdateAsync(appUser);
+        //     await _bll.SaveChangesAsync();
+        //
+        //     var updatedData = new AppUserDTO()
+        //     {
+        //         LastActive = appUser.LastActive,
+        //         IsActive = appUser.IsActive
+        //     };
+        //     // Send updated data back
+        //     return Ok(updatedData);
+        // }
     }
 }

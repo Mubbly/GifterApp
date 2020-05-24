@@ -159,4 +159,32 @@ export class AppUserService {
             }
         }
     }
+
+    async update(entity: IAppUser): Promise<IFetchResponse<IAppUser>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
+        try {
+            const response = await this.httpClient
+                .put(`${this.appUserApiEndpointUrl}/${entity.id}`, JSON.stringify(entity), { 
+                    cache: "no-store",
+                    headers: AUTH_HEADERS
+                }
+            );
+        
+            if(response.ok) {
+                return {
+                    status: response.status
+                    // no data
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+        } catch (reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
+    }
 }

@@ -193,6 +193,7 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
     }
 
     async update(entity: TEntityEdit): Promise<IFetchResponse<TEntityEdit>> {
+        console.log(entity);
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient.put(`${this.apiEndpointUrl}/${entity.id}`, JSON.stringify(entity),

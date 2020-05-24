@@ -35,11 +35,11 @@ export class ActionTypesCreate {
     }
 
     onSubmit(event: Event) {
-        if(Utils.isEmpty(this._actionTypeValue)) {
+        if(Utils.isNullOrEmpty(this._actionTypeValue)) {
             this._errorMessage = this.ERROR_REQUIRED_FIELDS;
             return;
         }
-        if(Utils.isEmpty(this._comment)) {
+        if(Utils.isNullOrEmpty(this._comment)) {
             this._comment = null;
         }
 

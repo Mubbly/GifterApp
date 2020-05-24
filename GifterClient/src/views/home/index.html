@@ -3,22 +3,32 @@
         <h1>Welcome to Gifter app!</h1>
         <p>Make wishlists and enjoy stress-free gift exhange</p>
         <p class="text-muted"><i>Please <a route-href="route: accountLogin; params.bind: {}">log in</a> to continue.</i></p>
-        <img src="/gift.png"/>
+        <img src="/images/gift.png"/>
     </section>
 
     <section if.bind="appState.jwt" class="home-authorized">
         <h1>Welcome back${appState.userFullName ? ', ' + appState.userFullName : ''}!</h1>
-        <hr/>
-        <section class="notifications">
-            [ Notifications ]
+        <!-- <hr/> -->
+        <section class="notifications home">
+            <div class="card">[ Notifications ]</div>
         </section>
-        <hr/>
-        <section class="campaign-ad">
-            [ Ad for latest active campaign(s) ]
+        <!-- <hr/> -->
+        <section class="ads home">
+            <div class="ad wrapper flex crop-banner-ad card">
+                <img class="home campaign-ad flex" src="/images/gift.png" title="Ad for latest active campaign(s)"/>
+            </div>
+            <!-- <div class="ad wrapper flex crop-banner-ad">
+                <img class="home campaign-ad flex" src="/gift.png" title="Ad for latest active campaign(s)"/>
+            </div> -->
         </section>
-        <hr/>
-        <section class="faq">
-            <div class="panel-group" id="accordion">
+        <!-- <hr/> -->
+        <section class="feed home">
+            <div class="card">[ Feed - friends updates ]</div>
+        </section>
+        <section class="faq home">
+            <!-- <hr/> -->
+            <h2>Need help?</h2>
+            <div class="panel-group card" id="accordion">
                 <div class="panel panel-default">
                   <div class="panel-heading">
                     <h4 class="panel-title">
@@ -49,7 +59,7 @@
                   <div class="panel-heading">
                     <h4 class="panel-title">
                       <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-                        ★ How to add my gift requests?</a>
+                        ★ How do I add my gift requests?</a>
                     </h4>
                   </div>
                   <div id="collapse2" class="panel-collapse collapse">
@@ -59,9 +69,9 @@
                             <li>Click "Edit profile" icon next to your name and add info to let others know who you are and what you like!</li>
                             <li>Click "Add new gift" button to insert a new specific gift into your Wishlist</li>
                             &nbsp;
-                            <li>Optional: Click "Archive" button near the gift to remove it from the Wishlist</li>
-                            <li>Optional: Click "Archive" in the page navigation menu to see the gifts you have archived</li>
-                            <li>Optional: Click "Re-activate" button near the archived gift to add it back to Wishlist</li>
+                            <li><i>Optional: Click "Archive" button near the gift to remove it from the Wishlist</i></li>
+                            <li><i>Optional: Click "Archive" in the page navigation menu to see the gifts you have archived</i></li>
+                            <li><i>Optional: Click "Re-activate" button near the archived gift to add it back to Wishlist</i></li>
                         </ul>
                     </div>
                   </div>
@@ -70,7 +80,7 @@
                   <div class="panel-heading">
                     <h4 class="panel-title">
                       <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-                        ★ How can I find friends?</a>
+                        ★ How do I find friends?</a>
                     </h4>
                   </div>
                   <div id="collapse3" class="panel-collapse collapse">
@@ -81,15 +91,54 @@
                             <li>Click "Invite friends" button if you didn't find the person you were searching for</li>
                             <li>Click on a person's name to see their profile and Wishlist</li>
                             &nbsp;
-                            <li>Optional: Click "Reserve" button near the gift you want to gift to someone</li>
-                            <li>Optional: Click "Cancel" button near the gift if you no more wish to gift something you reserved</li>
-                            <li>Optional: Click "Mark gifted" button near the gift after the person has received the gift from you</li>
-                            <li>Optional: Click "Add friend" to send a friend request to a person</li>
-                            <li>Optional: Click "Unfriend" to remove a person from your friendlist</li>
+                            <li><i>Optional: Click "Add friend" to send a friend request to a person</i></li>
+                            <li><i>Optional: Click "Unfriend" to remove a person from your friendlist</i></li>
                         </ul>
                     </div>
                   </div>
                 </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+                          ★ How do I make gifts for others?</a>
+                      </h4>
+                    </div>
+                    <div id="collapse4" class="panel-collapse collapse">
+                      <div class="panel-body">
+                          <ul>
+                            <li>Click "Friends" in the page navigation menu to go to your friendslist</li>
+                            <li>Click on a person's name to see their profile and Wishlist</li>
+                            &nbsp;
+                            <li>Click "Reserve" button near the gift you want to gift to them</li>
+                            <li>Go and buy/make their gift and give/send it to them in person!</li>
+                            <li>Click "Mark gifted" button near the gift after the person has received the gift from you</li>
+                            &nbsp;
+                            <li><i>Optional: Click "Cancel" button near the gift if you no more wish to gift something you reserved</i></li>
+                            <li><i>Optional: Click "Archive" button in the navigation menu to see already gifted gifts</i></li>
+                          </ul>
+                      </div>
+                    </div>
+                  </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">
+                          ★ How do I become a Campaign Manager?</a>
+                      </h4>
+                    </div>
+                    <div id="collapse5" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        <p>Contact the site owner to request the Campaign Manager role.</p>
+                        <p>Please provide the following information with your e-mail:</p>
+                        <ul>
+                            <li>Your contact information to verify identity</li>
+                            <li>What institution you are representing or collaborating with, if any</li>
+                            <li>Description(s) of the planned campaign(s)</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
               </div> 
         </section>
     </section>

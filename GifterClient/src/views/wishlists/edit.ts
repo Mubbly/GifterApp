@@ -38,7 +38,7 @@ export class WishlistsEdit {
     /** Reassigns _wishlist props */
     private getNewValuesFromInputs() {
         let commentInput = <Optional<string>>this._wishlist!.comment;
-        if(Utils.isEmpty(commentInput)) {
+        if(Utils.isNullOrEmpty(commentInput)) {
             return;
         }
         this._wishlist!.comment = commentInput;

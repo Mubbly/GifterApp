@@ -3,6 +3,8 @@ import { RouterConfiguration, Router } from 'aurelia-router';
 import routes from 'router';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import { AppState } from 'state/appState';
+import { AppUserService } from './service/base/appUserService';
+import { IAppUserEdit } from 'domain/IAppUser';
 
 @autoinject
 export class App {
@@ -26,6 +28,7 @@ export class App {
     }
 
     logoutOnClick() {
+        // this.updateUserActivity();
         this.appState.jwt = null;
         this.router!.navigateToRoute(this.HOME_ROUTE);
     }

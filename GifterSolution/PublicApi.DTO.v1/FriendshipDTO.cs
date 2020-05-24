@@ -19,6 +19,6 @@ namespace PublicApi.DTO.v1
 
         // Addressee
         public Guid AppUser2Id { get; set; }
-        public AppUserDTO AppUser2 { get; set; } = default!;
+        public AppUserDTO? AppUser2 { get; set; } = default!;
     }
 }

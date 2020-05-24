@@ -32,7 +32,7 @@ namespace WebApp.ApiControllers._1._0
             _logger = logger;
         }
         
-                // GET: api/PrivateMessages
+        // GET: api/PrivateMessages
         /// <summary>
         ///     Get all PrivateMessages
         /// </summary>
@@ -64,7 +64,6 @@ namespace WebApp.ApiControllers._1._0
             {
                 return NotFound(new V1DTO.MessageDTO($"PrivateMessage with id {id} not found"));
             }
-
             return Ok(_mapper.Map(actionType));
         }
 
@@ -98,26 +97,9 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"No PrivateMessage found for id {id}"));
             }
             // Update existing actionType
-            // actionType.PrivateMessageValue = actionTypeEditDTO.PrivateMessageValue;
-            // actionType.Comment = actionTypeEditDTO.Comment;
             await _bll.PrivateMessages.UpdateAsync(_mapper.Map(actionTypeDTO), User.UserId());
+            await _bll.SaveChangesAsync();
 
-            // Save to db
-            try
-            {
-                await _bll.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _bll.PrivateMessages.ExistsAsync(id, User.UserGuidId()))
-                {
-                    _logger.LogError(
-                        $"EDIT. PrivateMessage does not exist - cannot save to db: {id}, user: {User.UserGuidId()}");
-                    return NotFound();
-                }
-
-                throw;
-            }
             return NoContent();
         }
 
@@ -139,13 +121,6 @@ namespace WebApp.ApiControllers._1._0
             // Create actionType
             var bllEntity = _mapper.Map(actionTypeDTO);
             _bll.PrivateMessages.Add(bllEntity);
-            
-            // var actionType = new PrivateMessage
-            // {
-            //     PrivateMessageValue = actionTypeCreateDTO.PrivateMessageValue,
-            //     Comment = actionTypeCreateDTO.Comment
-            // };
-
             await _bll.SaveChangesAsync();
 
             actionTypeDTO.Id = bllEntity.Id;
@@ -176,113 +151,8 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"PrivateMessage with id {id} not found"));
             }
             await _bll.PrivateMessages.RemoveAsync(id);
-
             await _bll.SaveChangesAsync();
             return Ok(actionType);
         }
-
-        // // GET: api/PrivateMessages
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<V1DTO.PrivateMessageDTO>>> GetPrivateMessages()
-        // {
-        //     return await _context.PrivateMessages
-        //         .Select(pm => new V1DTO.PrivateMessageDTO() 
-        //         {
-        //             Id = pm.Id,
-        //             Message = pm.Message,
-        //             IsSeen = pm.IsSeen,
-        //             SentAt = pm.SentAt,
-        //             UserReceiverId = pm.UserReceiverId,
-        //             UserSenderId = pm.UserSenderId
-        //         }).ToListAsync();
-        // }
-        //
-        // // GET: api/PrivateMessages/5
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<V1DTO.PrivateMessageDTO>> GetPrivateMessage(Guid id)
-        // {
-        //     var privateMessage = await _context.PrivateMessages
-        //         .Select(pm => new V1DTO.PrivateMessageDTO() 
-        //         {
-        //             Id = pm.Id,
-        //             Message = pm.Message,
-        //             IsSeen = pm.IsSeen,
-        //             SentAt = pm.SentAt,
-        //             UserReceiverId = pm.UserReceiverId,
-        //             UserSenderId = pm.UserSenderId
-        //         }).SingleOrDefaultAsync();
-        //
-        //     if (privateMessage == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return privateMessage;
-        // }
-        //
-        // // PUT: api/PrivateMessages/5
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutPrivateMessage(Guid id, PrivateMessage privateMessage)
-        // {
-        //     if (id != privateMessage.Id)
-        //     {
-        //         return BadRequest();
-        //     }
-        //
-        //     _context.Entry(privateMessage).State = EntityState.Modified;
-        //
-        //     try
-        //     {
-        //         await _context.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         if (!PrivateMessageExists(id))
-        //         {
-        //             return NotFound();
-        //         }
-        //         else
-        //         {
-        //             throw;
-        //         }
-        //     }
-        //
-        //     return NoContent();
-        // }
-        //
-        // // POST: api/PrivateMessages
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPost]
-        // public async Task<ActionResult<PrivateMessage>> PostPrivateMessage(PrivateMessage privateMessage)
-        // {
-        //     _context.PrivateMessages.Add(privateMessage);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return CreatedAtAction("GetPrivateMessage", new { id = privateMessage.Id }, privateMessage);
-        // }
-        //
-        // // DELETE: api/PrivateMessages/5
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult<PrivateMessage>> DeletePrivateMessage(Guid id)
-        // {
-        //     var privateMessage = await _context.PrivateMessages.FindAsync(id);
-        //     if (privateMessage == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     _context.PrivateMessages.Remove(privateMessage);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return privateMessage;
-        // }
-        //
-        // private bool PrivateMessageExists(Guid id)
-        // {
-        //     return _context.PrivateMessages.Any(e => e.Id == id);
-        // }
     }
 }

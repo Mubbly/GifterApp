@@ -43,12 +43,12 @@ export class ActionTypesEdit {
     private getNewValuesFromInputs() {
         let actionTypeValueInput = <string>this._actionType!.actionTypeValue;
 
-        if(Utils.isEmpty(actionTypeValueInput)) {
+        if(Utils.isNullOrEmpty(actionTypeValueInput)) {
             this._errorMessage = this.ERROR_REQUIRED_FIELDS;
             return;
         }
         let commentInput = <Optional<string>>this._actionType!.comment;
-        this._actionType!.comment = Utils.isEmpty(commentInput) ? null : commentInput;
+        this._actionType!.comment = Utils.isNullOrEmpty(commentInput) ? null : commentInput;
     }
 
     private updateActionType(): void {

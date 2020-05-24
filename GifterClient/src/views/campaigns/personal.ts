@@ -9,7 +9,7 @@ import { AppState } from "state/appState";
 
 @autoinject
 export class CampaignsPersonal {
-    private readonly ERROR_NOT_CAMPAIGN_MANAGER = "You need to be a campaign manager to create new campaigns";
+    private readonly ERROR_NOT_CAMPAIGN_MANAGER = "You are not a Campaign Manager";
 
     private _campaigns: ICampaign[] = [];
     private _campaign: Optional<ICampaign> = null;

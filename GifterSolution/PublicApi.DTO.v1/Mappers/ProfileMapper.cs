@@ -10,7 +10,10 @@ namespace PublicApi.DTO.v1.Mappers
         public ProfileMapper() : base()
         {
             MapperConfigurationExpression.CreateMap<AppUserBLL, AppUserDTO>();
+            MapperConfigurationExpression.CreateMap<AppUserDTO, AppUserBLL>();
+
             MapperConfigurationExpression.CreateMap<BLLAppDTO.WishlistBLL, WishlistDTO>();
+            MapperConfigurationExpression.CreateMap<WishlistDTO, BLLAppDTO.WishlistBLL>();
 
             // MapperConfigurationExpression.CreateMap<BLLAppDTO.ProfileBLL, ProfileDTO>()
             //     .AfterMap((bll, dto) => Mapper.Map(bll.AppUser, dto.AppUser))
@@ -18,6 +21,5 @@ namespace PublicApi.DTO.v1.Mappers
 
             Mapper = new Mapper(new MapperConfiguration(MapperConfigurationExpression));
         }
-        
     }
 }

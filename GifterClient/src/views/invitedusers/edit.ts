@@ -43,16 +43,16 @@ export class InvitedUsersEdit {
         console.log(this._invitedUser);
         // Required fields
         let emailInput = <string>this._invitedUser!.email;
-        if(Utils.isEmpty(emailInput)) {
+        if(Utils.isNullOrEmpty(emailInput)) {
             this._errorMessage = this.ERROR_REQUIRED_FIELDS;
             return;
         }
         this._invitedUser!.email = emailInput;
         // Optional fields
         let phoneNumberInput = <Optional<string>>this._invitedUser!.phoneNumber;
-        this._invitedUser!.phoneNumber = Utils.isEmpty(phoneNumberInput) ? null : phoneNumberInput;
+        this._invitedUser!.phoneNumber = Utils.isNullOrEmpty(phoneNumberInput) ? null : phoneNumberInput;
         let messageInput = <Optional<string>>this._invitedUser!.message;
-        this._invitedUser!.message = Utils.isEmpty(messageInput) ? null : messageInput;
+        this._invitedUser!.message = Utils.isNullOrEmpty(messageInput) ? null : messageInput;
     }
 
     private updateInvitedUser(): void {

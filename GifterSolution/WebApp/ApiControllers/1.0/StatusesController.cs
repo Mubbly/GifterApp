@@ -64,7 +64,6 @@ namespace WebApp.ApiControllers._1._0
             {
                 return NotFound(new V1DTO.MessageDTO($"Status with id {id} not found"));
             }
-
             return Ok(_mapper.Map(status));
         }
 
@@ -98,26 +97,9 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"No Status found for id {id}"));
             }
             // Update existing status
-            // status.StatusValue = statusEditDTO.StatusValue;
-            // status.Comment = statusEditDTO.Comment;
             await _bll.Statuses.UpdateAsync(_mapper.Map(statusDTO), User.UserId());
+            await _bll.SaveChangesAsync();
 
-            // Save to db
-            try
-            {
-                await _bll.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _bll.Statuses.ExistsAsync(id, User.UserGuidId()))
-                {
-                    _logger.LogError(
-                        $"EDIT. Status does not exist - cannot save to db: {id}, user: {User.UserGuidId()}");
-                    return NotFound();
-                }
-
-                throw;
-            }
             return NoContent();
         }
 
@@ -139,13 +121,6 @@ namespace WebApp.ApiControllers._1._0
             // Create status
             var bllEntity = _mapper.Map(statusDTO);
             _bll.Statuses.Add(bllEntity);
-            
-            // var status = new Status
-            // {
-            //     StatusValue = statusCreateDTO.StatusValue,
-            //     Comment = statusCreateDTO.Comment
-            // };
-
             await _bll.SaveChangesAsync();
 
             statusDTO.Id = bllEntity.Id;
@@ -176,115 +151,8 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"Status with id {id} not found"));
             }
             await _bll.Statuses.RemoveAsync(id);
-
             await _bll.SaveChangesAsync();
             return Ok(status);
         }
-
-        // // GET: api/Statuses
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<V1DTO.StatusDTO>>> GetStatuses()
-        // {
-        //     return await _context.Statuses
-        //         .Select(s => new V1DTO.StatusDTO()
-        //         {
-        //             Id = s.Id,
-        //             StatusValue = s.StatusValue,
-        //             Comment = s.Comment,
-        //             DonateesCount = s.Donatees.Count,
-        //             GiftsCount = s.Gifts.Count,
-        //             ArchivedGiftsCount = s.ArchivedGifts.Count,
-        //             ReservedGiftsCount = s.ReservedGifts.Count
-        //         }).ToListAsync();
-        // }
-        //
-        // // GET: api/Statuses/5
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<V1DTO.StatusDTO>> GetStatus(Guid id)
-        // {
-        //     var status = await _context.Statuses
-        //         .Select(s => new V1DTO.StatusDTO()
-        //         {
-        //             Id = s.Id,
-        //             Comment = s.Comment,
-        //             DonateesCount = s.Donatees.Count,
-        //             GiftsCount = s.Gifts.Count,
-        //             StatusValue = s.StatusValue,
-        //             ArchivedGiftsCount = s.ArchivedGifts.Count,
-        //             ReservedGiftsCount = s.ReservedGifts.Count
-        //         }).SingleOrDefaultAsync();
-        //
-        //     if (status == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return status;
-        // }
-        //
-        // // PUT: api/Statuses/5
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutStatus(Guid id, Status status)
-        // {
-        //     if (id != status.Id)
-        //     {
-        //         return BadRequest();
-        //     }
-        //
-        //     _context.Entry(status).State = EntityState.Modified;
-        //
-        //     try
-        //     {
-        //         await _context.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         if (!StatusExists(id))
-        //         {
-        //             return NotFound();
-        //         }
-        //         else
-        //         {
-        //             throw;
-        //         }
-        //     }
-        //
-        //     return NoContent();
-        // }
-        //
-        // // POST: api/Statuses
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPost]
-        // public async Task<ActionResult<Status>> PostStatus(Status status)
-        // {
-        //     _context.Statuses.Add(status);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return CreatedAtAction("GetStatus", new { id = status.Id }, status);
-        // }
-        //
-        // // DELETE: api/Statuses/5
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult<Status>> DeleteStatus(Guid id)
-        // {
-        //     var status = await _context.Statuses.FindAsync(id);
-        //     if (status == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     _context.Statuses.Remove(status);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return status;
-        // }
-        //
-        // private bool StatusExists(Guid id)
-        // {
-        //     return _context.Statuses.Any(e => e.Id == id);
-        // }
     }
 }

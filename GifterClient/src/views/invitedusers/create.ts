@@ -38,7 +38,7 @@ export class InvitedUsersCreate {
     onSubmit(event: Event) {
         event.preventDefault();
         // Required fields
-        if(Utils.isEmpty(this._email)) {
+        if(Utils.isNullOrEmpty(this._email)) {
             this._errorMessage = this.ERROR_REQUIRED_FIELDS;
             return;
         }

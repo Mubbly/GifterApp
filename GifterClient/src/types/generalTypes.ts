@@ -47,6 +47,10 @@ export type Id = string;
 /** Expected format: YYYY-MM-DD */
 export type HTML5DateString = string;
 
+type ShowProfile = boolean;
+type ProfileBannerUrl = Optional<string>;
+export type ProfileRouteProps = {[key: string]: ShowProfile | ProfileBannerUrl};
+
 export enum GifterEntities {
     ActionType = "ActionType",
     AppUser = "AppUser",

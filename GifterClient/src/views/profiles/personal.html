@@ -2,43 +2,65 @@
     <section if.bind="_profile" class="profile flex">
         <section class="profile-info flex-column">
             <div class="flex middle profile-heading">
-                <h1 if.bind="_profile.appUser.firstName || _profile.appUser.userName"class="flex-column">
-                    ${_profile.appUser.firstName ? _profile.appUser.firstName : ''} 
-                    (${_profile.appUser.userName ? _profile.appUser.userName : ''})
+                <h1 if.bind="_appUser.firstName || _appUser.userName"class="flex-column username">
+                    ${_appUser.userName}
                 </h1> 
-                <a route-href="route: profilesEdit; params.bind: { id: _profile.id }" class="flex-column" title="Edit profile"><img src="/icon-settings.png" class="icon"/></a>
+                <a route-href="route: profilesEdit; params.bind: {}" class="flex-column icon-container" title="Edit profile">
+                    <img src="/icons/icon-settings.png" class="icon profile-settings"/>
+                </a>
             </div>
             <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
             <p if.bind="_lastActiveDate" class="date">Last active: ${_lastActiveDate}</p>
-            <div class="flex">
+            <hr class="profile-hr">
+            <div class="flex profile-summary">
                 <div class="flex-column profile-pic">
-                    <a href="#" title="Change profile picture">
-                        <img class="img-profile" src="#"/>
+                    <a if.bind="!_profile.profilePicture" route-href="route: profilesEdit; params.bind: {}" title="Change profile picture">
+                        <!-- <img class="img-profile" src="/dp.png"/> -->
+                        <img if.bind="!_profile.gender || _profile.gender == '' || _profile.gender == 'Non-binary'" class="img-profile" src="/icons/icon-dp-unisex-colorful.png"/>
+                        <img if.bind="_profile.gender == 'Female'" class="img-profile" src="/icons/icon-dp-female-colorful.png"/>
+                        <img if.bind="_profile.gender == 'Male'" class="img-profile" src="/icons/icon-dp-male-colorful.png"/>
+                    </a>
+                    <a if.bind="_profile.profilePicture" route-href="route: profilesEdit; params.bind: {}" title="Change profile picture">
+                        <img class="img-profile" src="${_profile.profilePicture}"/>
                     </a>
                 </div>
                 <div class="flex flex-column">    
                     <div class="flex">
-                        <div if.bind="_profile.appUser.fullName" class="flex-column">${_profile.appUser.fullName}</div>
+                        <div if.bind="_appUser.fullName" class="flex-column">${_appUser.fullName}</div>
                         <div if.bind="_profile.age"class="separator">|</div> 
                         <div if.bind="_profile.age" class="flex-column">${_profile.age}</div> 
                         <div if.bind="_profile.gender" class="separator">|</div> 
                         <div if.bind="_profile.gender" class="flex-column">${_profile.gender}</div>
                     </div>
-                    <p>
-                        ${_profile.bio}
-                    </p>
+                    <div if.bind="_showEmail">${_appUser.email}</div>
                 </div>
             </div>
+            <hr class="profile-hr">
+            <p class="biography">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
+                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                ${_profile.bio}
+            </p>
         </section>
 
-        <section class="profile-wishlist flex-column" if.bind="_profile.wishlist">
-            <h2>Wishlist</h2>
+        <section class="profile-wishlist flex-column" if.bind="_wishlist">
+            <div class="crop-banner-profile">
+                <!-- <a route-href="route: profilesEdit; params.bind: {}" title="Change banner picture"> -->
+                    <img if.bind="_profileBannerUrl" class="img-profile-banner" src="${_profileBannerUrl}" alt="Profile banner"/>
+                    <img if.bind="!_profileBannerUrl" class="img-profile-banner" src="/images/default-banner.png" alt="Profile banner"/>
+                <!-- </a> -->
+            </div>
+            <h2 class="wishlist-heading">Wishlist</h2>
             <p>               
                 ${_profile.wishlist.comment}
             </p>
             <p>
-                <a route-href="route: giftsCreate; params.bind: { wishlistId: _profile.wishlistId }" class="button">Add new gift</a> 
+                <a route-href="route: giftsCreate; params.bind: { wishlistId: _wishlist.id }" class="button add-gift">Add new gift</a> 
             </p>
+            <p if.bind="_emptyWishlistMessage" class="text-muted"><i>${_emptyWishlistMessage}</i></p>
             <table class="table wishlist-gifts" if.bind="_gifts.length > 0">
                 <thead>
                     <tr>
@@ -52,10 +74,7 @@
                             Image
                         </th>
                         <th>
-                            Link to shop
-                        </th>
-                        <th>
-                            Link to partner
+                            Shop
                         </th>
                         <th></th>
                     </tr>
@@ -63,28 +82,39 @@
                 <tbody if.bind="_gifts">
                     <tr repeat.for="gift of _gifts">
                         <td>
-                            ${gift.name || '-'}
+                            ${gift.name}
                         </td>
                         <td>
-                            ${gift.description || '-'}
+                            ${gift.description}
                         </td>
                         <td>
-                            ${gift.imageUrl || '-'}
+                            <a if.bind="gift.image" href="${gift.image}">Image</a>
                         </td>
-                        <td>
-                            ${gift.url || '-'}
+                        <td if.bind="gift.partnerUrl">
+                            <a href="${gift.partnerUrl}">Go to shop</a> 
                         </td>
-                        <td>
-                            ${gift.partnerUrl || '-'}
+                        <td if.bind="!gift.partnerUrl">
+                            <a if.bind="gift.url" href="${gift.url}">Go to shop</a>
                         </td>
-                        <td class="flex">
-                            <a route-href="route: giftsEdit; params.bind: { id: gift.id }" class="button flex-column">Edit</a>
-                            <a href="#" class="button flex-column">Pin</a>
-                            <a class="button flex-column">Archive</a> 
+                        <td class="flex icon-group">
+                            <a href="#" class="flex-column" title="Pin gift"><img src="/icons/icon-pin.png" class="icon"/></a>
+                            <a route-href="route: giftsEdit; params.bind: { id: gift.id }" class="flex-column" title="Edit gift"><img src="/icons/icon-edit.png" class="icon"/></a>
+                            <a href="#" class="flex-column" title="Archive gift"><img src="/icons/icon-archive.png" class="icon"/></a>
+                            <a route-href="route: giftsDelete; params.bind: { id: gift.id }" class="flex-column" title="Delete gift"><img src="/icons/icon-delete.png" class="icon"/></a>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </section>
     </section>
+    <!-- <section>
+        <div class="crop-banner-profile small">
+            <img class="img-profile-banner small" src="/galaxy2.png" alt="Profile banner"/>
+        </div>
+    </section> -->
+    <!-- <section>
+        <div>
+            <img src="/galaxy2.png" alt="Profile banner" width="100%" height="70"/>
+        </div>
+    </section> -->
 </template>

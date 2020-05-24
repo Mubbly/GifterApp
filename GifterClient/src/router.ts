@@ -11,6 +11,7 @@ export default [
         { route: ['about/contacts'], name: 'aboutContacts', moduleId: PLATFORM.moduleName('views/about/contacts'), nav: false, title: 'Contacts' },
         { route: ['about/help'], name: 'aboutHelp', moduleId: PLATFORM.moduleName('views/about/help'), nav: false, title: 'Help' },
         { route: ['search/index', 'search', 'about/search', 'about/search/index'], name: 'search', moduleId: PLATFORM.moduleName('views/about/search'), nav: false, title: 'Search' },
+        { route: ['friendships/pending'], name: 'friendshipsPending', moduleId: PLATFORM.moduleName('views/friendships/pending'), nav: false, title: 'Pending friendships' },
 
 
         { route: ['admin', 'admin/index'], name: 'adminIndex', moduleId: PLATFORM.moduleName('views/admin/index'), nav: false, title: 'Admin' },

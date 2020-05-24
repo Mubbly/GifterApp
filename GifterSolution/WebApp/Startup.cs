@@ -184,7 +184,7 @@ namespace WebApp
             if (conf.GetValue<bool>("DataInitialization:SeedData"))
             {
                 logger.LogInformation("SeedData");
-                DataInitializers.SeedData(context);
+                DataInitializers.SeedData(context, userManager);
             }
         }
 

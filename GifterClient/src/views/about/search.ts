@@ -34,6 +34,9 @@ export class UsersIndex {
         this.getSearchResults(this._searchInput);
     }
 
+    // addFriend(id: string) {
+    // }
+
     private getSearchResults(inputValue: string): void {
         if(inputValue.length && inputValue !== '*') {
             let validatedInputValue = this.validateUserInput(inputValue);
@@ -45,28 +48,44 @@ export class UsersIndex {
 
     private getAppUsers(): void {
         this.appUserService
-        .getAllUsers()
-        .then((response) => {
-            if(Utils.isSuccessful(response) && response.data) {
-                this._users = response.data;
-                this._errorMessage = null;
-            } else {
-                this.handleErrors(response);
-            }
-        });
+            .getAllUsers()
+            .then((response) => {
+                if(Utils.isSuccessful(response) && response.data) {
+                    this._users = response.data;
+                    this._errorMessage = null;
+
+                    this._users.forEach(user => {
+                        user.lastActive = Utils.formatAsHtml5Date(user.lastActive);
+                    });
+                } else {
+                    this._users = [];
+                    this.handleErrors(response);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     private getAppUser(inputValue: string): void {
         this.appUserService
-        .getUsersByName(inputValue)
-        .then((response) => {
-            if(Utils.isSuccessful(response) && response.data) {
-                this._users = response.data;
-                this._errorMessage = null;
-            } else {
-                this.handleErrors(response);
-            }
-        });
+            .getUsersByName(inputValue)
+            .then((response) => {
+                if(Utils.isSuccessful(response) && response.data) {
+                    this._users = response.data;
+                    this._errorMessage = null;
+
+                    this._users.forEach(user => {
+                        user.lastActive = Utils.formatAsHtml5Date(user.lastActive);
+                    });
+                } else {
+                    this._users = [];
+                    this.handleErrors(response);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     private validateUserInput(inputValue: string) {

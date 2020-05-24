@@ -6,6 +6,7 @@ using Contracts.BLL.App.Mappers;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
+using PublicApi.DTO.v1.Identity;
 using DALAppDTO = DAL.App.DTO;
 using BLLAppDTO = BLL.App.DTO;
 
@@ -20,24 +21,26 @@ namespace BLL.App.Services
             
         }
 
-        public async Task<BLLAppDTO.ProfileBLL> GetPersonalAsync(Guid userId, Guid? profileId, bool noTracking = true)
+        public async Task<BLLAppDTO.ProfileBLL> GetPersonalAsync(Guid userId, Guid? profileId = null, bool noTracking = true)
         {
-            var existingProfile = await UOW.Profiles.GetPersonalAsync(userId, profileId, noTracking);
-            
-            // Trying to get default profile but receiving null
-            if (profileId == null && existingProfile == null)
-            {
-                // Initialize default profile with default wishlist
-                var newDefaultWishlist = AddDefaultWishlist(userId);
-                var newDefaultProfile = AddDefaultProfile(userId, newDefaultWishlist.Id);
-                await UOW.SaveChangesAsync();
-                var newDefaultProfileWithUserData = await UOW.Profiles.GetPersonalAsync(userId, newDefaultProfile.Id);
-                return Mapper.Map(newDefaultProfileWithUserData);
-                // await UOW.SaveChangesAsync();
-                // return newDefaultProfile;
-            }
-            // Existing or with some wrong profileId provided
+            var existingProfile = await Repository.GetPersonalAsync(userId, profileId, noTracking);
             return Mapper.Map(existingProfile);
+        }
+
+        /**
+         *  Create a new basic profile with an empty wishlist
+         *  NB: DOES NOT CHECK WHETHER A PROFILE ALREADY EXISTS! Do not call if not sure!
+         */
+        public BLLAppDTO.ProfileBLL CreateDefaultProfile(Guid userId)
+        {
+            if (userId == null)
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+            // Initialize default profile with default empty wishlist (foreign key dependency)
+            var newDefaultWishlist = AddDefaultWishlist(userId);
+            var newDefaultProfile = AddDefaultProfile(userId, newDefaultWishlist);
+            return newDefaultProfile;
         }
 
         /** Initial wishlist for a new user with no existing profiles */
@@ -52,26 +55,23 @@ namespace BLL.App.Services
             var defaultWishlistDALTracked = UOW.Wishlists.Add(defaultWishlistDAL);
             // Track
             UOW.AddToEntityTracker(defaultWishlistDALTracked, defaultWishlistBLL);
-            return Mapper.MapWishlistToBLL(defaultWishlistDALTracked);
+            return defaultWishlistBLL;
         }
         
         /** Initial profile for a new user with no existing profiles */
-        private BLLAppDTO.ProfileBLL AddDefaultProfile(Guid userId, Guid wishlistId)
+        private BLLAppDTO.ProfileBLL AddDefaultProfile(Guid userId, BLLAppDTO.WishlistBLL wishlist)
         {
             var defaultProfileBLL = new BLLAppDTO.ProfileBLL
             {
                 AppUserId = userId,
-                WishlistId = wishlistId
+                Wishlist = wishlist
             };
             // Add
             var defaultProfileDAL = Mapper.Map(defaultProfileBLL);
             var defaultProfileDALTracked = UOW.Profiles.Add(defaultProfileDAL);
             // Track
             UOW.AddToEntityTracker(defaultProfileDALTracked, defaultProfileBLL);
-            var newDefaultProfileBLL = Mapper.Map(defaultProfileDALTracked);
-            
-            //var newDefaultProfileWithUserData = await UOW.Profiles.GetPersonalAsync(userId, newDefaultProfileBLL.Id);
-            return newDefaultProfileBLL;
+            return defaultProfileBLL;
         }
     }
 }

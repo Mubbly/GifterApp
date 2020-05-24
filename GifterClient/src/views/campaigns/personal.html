@@ -1,87 +1,93 @@
 <template>
-    <h1>My campaigns</h1>
-
-    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-    <section if.bind="_isCampaignManager">
-        <p class="successmessage">✓ Campaign manager</p>
-        <p>
-            <a route-href="route: campaignsCreate; params.bind: {}" class="button">Create new</a>
-        </p>
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Institution
-                    </th>
-                    <th>
-                        From
-                    </th>
-                    <th>
-                        To
-                    </th>
-                    <th>
-                        Donatees
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr repeat.for="campaign of _campaigns">
-                    <td>
-                        <a route-href="route: campaignsDetails; params.bind: { id: campaign.id }">${campaign.name}</a>
-                    </td>
-                    <td>
-                        ${campaign.institution}
-                    </td>
-                    <td>
-                        ${campaign.activeFromDate}
-                    </td>
-                    <td>
-                        ${campaign.activeToDate}
-                    </td>
-                    <td>
-                        <a route-href="route: donateesIndex; params.bind: { campaignId: campaign.id, campaignName: campaign.name }" class="button">${campaign.campaignDonateesCount}</a>
-                    </td>
-                    <td class="flex">
-                        <a route-href="route: donateesCreate; params.bind: { campaignId: campaign.id, campaignName: campaign.name }" class="button">Add donatees</a>
-                        <a route-href="route: campaignsEdit; params.bind: { id: campaign.id }" class="button">Edit</a>
-                        <a route-href="route: campaignsDelete; params.bind: { id: campaign.id }" class="button">Delete</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
-    <!-- <section class="campaigns-list">
-            <div class="panel-group" id="accordion">
-                <div class="panel panel-default" repeat.for="campaign of _campaigns">
-                  <div class="panel-heading">
-                    <h4 class="panel-title">
-                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-                        ${campaign.name}</a>
-                    </h4>
-                  </div>
-                  <div id="collapse1" class="panel-collapse collapse in">
-                    <div class="panel-body">
-                        <p>Campaign description: ${campaign.description}</p>
-                        ${campaign.adImage}
-                        ${campaign.institution}
-                        ${campaign.activeFromDate}
-                        ${campaign.activeToDate}
-                        <a route-href="route: donateesIndex; params.bind: { campaignId: campaign.id, campaignName: campaign.name }" class="button">${campaign.campaignDonateesCount}</a>
-                        <div class="flex">
+    <section class="personal-campaigns">
+        <section class="intro">
+            <h1>My campaigns</h1>        
+            <div if.bind="_isCampaignManager">
+                <p class="successmessage">✓ Campaign manager</p>
+                <p>
+                    <a route-href="route: campaignsCreate; params.bind: {}" class="button">Create new</a>
+                </p>
+            </div>
+            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+        </section>
+        <section if.bind="_isCampaignManager" class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Institution
+                        </th>
+                        <th>
+                            From
+                        </th>
+                        <th>
+                            To
+                        </th>
+                        <th>
+                            Donatees
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr repeat.for="campaign of _campaigns">
+                        <td>
+                            <a route-href="route: campaignsDetails; params.bind: { id: campaign.id }">${campaign.name}</a>
+                        </td>
+                        <td>
+                            ${campaign.institution}
+                        </td>
+                        <td>
+                            ${campaign.activeFromDate}
+                        </td>
+                        <td>
+                            ${campaign.activeToDate}
+                        </td>
+                        <td>
+                            <a route-href="route: donateesIndex; params.bind: { campaignId: campaign.id, campaignName: campaign.name }" class="button">${campaign.campaignDonateesCount}</a>
+                        </td>
+                        <td class="flex">
                             <a route-href="route: donateesCreate; params.bind: { campaignId: campaign.id, campaignName: campaign.name }" class="button">Add donatees</a>
                             <a route-href="route: campaignsEdit; params.bind: { id: campaign.id }" class="button">Edit</a>
-                            <a route-href="route: campaignsDetails; params.bind: { id: campaign.id }" class="button">Details</a>
                             <a route-href="route: campaignsDelete; params.bind: { id: campaign.id }" class="button">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <!-- <section class="campaigns-list">
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default" repeat.for="campaign of _campaigns">
+                      <div class="panel-heading">
+                        <h4 class="panel-title">
+                          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                            ${campaign.name}</a>
+                        </h4>
+                      </div>
+                      <div id="collapse1" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <p>Campaign description: ${campaign.description}</p>
+                            ${campaign.adImage}
+                            ${campaign.institution}
+                            ${campaign.activeFromDate}
+                            ${campaign.activeToDate}
+                            <a route-href="route: donateesIndex; params.bind: { campaignId: campaign.id, campaignName: campaign.name }" class="button">${campaign.campaignDonateesCount}</a>
+                            <div class="flex">
+                                <a route-href="route: donateesCreate; params.bind: { campaignId: campaign.id, campaignName: campaign.name }" class="button">Add donatees</a>
+                                <a route-href="route: campaignsEdit; params.bind: { id: campaign.id }" class="button">Edit</a>
+                                <a route-href="route: campaignsDetails; params.bind: { id: campaign.id }" class="button">Details</a>
+                                <a route-href="route: campaignsDelete; params.bind: { id: campaign.id }" class="button">Delete</a>
+                            </div>
                         </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div> 
-        </section> -->
-    <a route-href="route: campaignsIndex; params.bind: {}">Back to all campaigns</a>
+                  </div> 
+            </section> -->
+            <section class="intro">
+                <a route-href="route: campaignsIndex; params.bind: {}">Back to all campaigns</a>
+            </section>
+    </section>
 </template>

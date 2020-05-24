@@ -76,7 +76,7 @@ namespace WebApp.ApiControllers._1._0
             var personalGifts = await _bll.Gifts.GetAllPersonalAsync(User.UserGuidId());
             if (personalGifts == null)
             {
-                return NotFound(new V1DTO.MessageDTO($"Gifts not found"));
+                return NotFound(new V1DTO.MessageDTO("Gifts not found"));
             }
             return Ok(personalGifts.Select(e => _mapper.Map(e)));
         }
@@ -99,7 +99,6 @@ namespace WebApp.ApiControllers._1._0
             {
                 return NotFound(new V1DTO.MessageDTO($"Gift with id {id} not found"));
             }
-
             return Ok(_mapper.Map(gift));
         }
         
@@ -121,7 +120,6 @@ namespace WebApp.ApiControllers._1._0
             {
                 return NotFound(new V1DTO.MessageDTO($"Gift with id {id} not found"));
             }
-
             return Ok(_mapper.Map(gift));
         }
 
@@ -163,23 +161,8 @@ namespace WebApp.ApiControllers._1._0
             }
             // Update existing gift
             await _bll.Gifts.UpdateAsync(_mapper.Map(giftDTO), User.UserId());
+            await _bll.SaveChangesAsync();
 
-            // Save to db
-            try
-            {
-                await _bll.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _bll.Gifts.ExistsAsync(id, User.UserGuidId()))
-                {
-                    _logger.LogError(
-                        $"EDIT. Gift does not exist - cannot save to db: {id}, user: {User.UserGuidId()}");
-                    return NotFound();
-                }
-
-                throw;
-            }
             return NoContent();
         }
 
@@ -232,7 +215,6 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"Gift with id {id} not found"));
             }
             await _bll.Gifts.RemoveAsync(id);
-
             await _bll.SaveChangesAsync();
             return Ok(gift);
         }

@@ -1,6 +1,11 @@
-﻿using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
 using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Mappers;
+using Microsoft.EntityFrameworkCore;
 using DomainApp = Domain.App;
 using DALAppDTO = DAL.App.DTO;
 using DomainAppIdentity = Domain.App.Identity;
@@ -14,6 +19,19 @@ namespace DAL.App.EF.Repositories
         public InvitedUserRepository(AppDbContext dbContext) :
             base(dbContext, new DALMapper<DomainApp.InvitedUser, DALAppDTO.InvitedUserDAL>())
         {
+        }
+        
+        public async Task<IEnumerable<DALAppDTO.InvitedUserDAL>> GetAllPersonalAsync(Guid userId, bool noTracking = true)
+        {
+            // User's invitedUsers
+            var invitedUsers = PrepareQuery(userId, noTracking);
+            var personalInvitedUsers = 
+                await invitedUsers
+                    .Where(u => u.InvitorUserId == userId)
+                    .OrderBy(e => e.CreatedAt)
+                    .Select(e => Mapper.Map(e))
+                    .ToListAsync();
+            return personalInvitedUsers;
         }
 
         // public async Task<IEnumerable<InvitedUser>> AllAsync(Guid? userId = null)
@@ -99,8 +117,8 @@ namespace DAL.App.EF.Repositories
         //                 ReservedGiftsForUserCount = iu.InvitorUser!.ReservedGiftsForUser.Count,
         //                 ArchivedGiftsByUserCount = iu.InvitorUser!.ArchivedGiftsByUser.Count,
         //                 ArchivedGiftsForUserCount = iu.InvitorUser!.ArchivedGiftsForUser.Count,
-        //                 ConfirmedFriendshipsCount = iu.InvitorUser!.ConfirmedFriendships.Count,
-        //                 PendingFriendshipsCount = iu.InvitorUser!.PendingFriendships.Count,
+        //                 ConfirmedInvitedUsersCount = iu.InvitorUser!.ConfirmedInvitedUsers.Count,
+        //                 PendingInvitedUsersCount = iu.InvitorUser!.PendingInvitedUsers.Count,
         //                 SentPrivateMessagesCount = iu.InvitorUser!.SentPrivateMessages.Count,
         //                 ReceivedPrivateMessagesCount = iu.InvitorUser!.ReceivedPrivateMessages.Count,
         //                 InvitedUsersCount = iu.InvitorUser!.InvitedUsers.Count   
@@ -148,8 +166,8 @@ namespace DAL.App.EF.Repositories
         //                 ReservedGiftsForUserCount = iu.InvitorUser!.ReservedGiftsForUser.Count,
         //                 ArchivedGiftsByUserCount = iu.InvitorUser!.ArchivedGiftsByUser.Count,
         //                 ArchivedGiftsForUserCount = iu.InvitorUser!.ArchivedGiftsForUser.Count,
-        //                 ConfirmedFriendshipsCount = iu.InvitorUser!.ConfirmedFriendships.Count,
-        //                 PendingFriendshipsCount = iu.InvitorUser!.PendingFriendships.Count,
+        //                 ConfirmedInvitedUsersCount = iu.InvitorUser!.ConfirmedInvitedUsers.Count,
+        //                 PendingInvitedUsersCount = iu.InvitorUser!.PendingInvitedUsers.Count,
         //                 SentPrivateMessagesCount = iu.InvitorUser!.SentPrivateMessages.Count,
         //                 ReceivedPrivateMessagesCount = iu.InvitorUser!.ReceivedPrivateMessages.Count,
         //                 InvitedUsersCount = iu.InvitorUser!.InvitedUsers.Count   

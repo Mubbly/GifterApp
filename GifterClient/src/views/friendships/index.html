@@ -1,42 +1,44 @@
 <template>
     <h1>My friends</h1>
     <p>
-        <a route-href="route: privatemessagesIndex; params.bind: {}" class="button">Private messages</a> 
-        <a route-href="route: invitedusersIndex; params.bind: {}" class="button">Invited friends</a> 
-        <a route-href="route: search; params.bind: {}" class="button">Search for users</a>
+        <a route-href="route: search; params.bind: {}" class="button">Search users</a>
+        <a route-href="route: friendshipsPending; params.bind: {}" class="button">Friend requests</a> 
+        <a route-href="route: invitedusersIndex; params.bind: {}" class="button">Sent invitations</a> 
     </p>
-    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Profile
-                </th>
-                <th>
-                    Last active
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    Example Name
-                </td>
-                <td>
-                    <a href="#">Example profile link</a>
-                </td>
-                <td>
-                    11.11.2011
-                </td>
-                <td>
-                    <a href="#">Message</a> |
-                    <a href="#">Unfriend</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <p if.bind="_errorMessage" class="${_confirmedFriendships.length <= 0 ? '' : 'errormessage'}">${_errorMessage}</p>
+    <section if.bind="_confirmedFriendships.length > 0">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Profile
+                    </th>
+                    <th>
+                        Last active
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr repeat.for="friend of _confirmedFriendships">
+                    <td>
+                        ${friend.friendUserId}
+                    </td>
+                    <td>
+                        Profile url
+                    </td>
+                    <td>
+                        11.11.2011
+                    </td>
+                    <td>
+                        <a href="#">Message</a> |
+                        <a href="#">Unfriend</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 </template>

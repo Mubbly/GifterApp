@@ -31,51 +31,64 @@ namespace WebApp.ApiControllers._1._0
             _bll = appBLL;
             _logger = logger;
         }
-        
-                // GET: api/Friendships
+
+        // GET: api/Friendships/Personal
         /// <summary>
-        ///     Get all Friendships
+        ///     Get personal accepted Friendships
         /// </summary>
         /// <returns>List of Friendships</returns>
-        [HttpGet]
+        [HttpGet("personal")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
-        public async Task<ActionResult<IEnumerable<V1DTO.FriendshipDTO>>> GetFriendships()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTO.FriendshipDTO>>> GetPersonalFriendships()
         {
-            return Ok((await _bll.Friendships.GetAllAsync()).Select(e => _mapper.Map(e)));
+            var personalFriendships = await _bll.Friendships.GetAllPersonalAsync(User.UserGuidId(), true);
+            return Ok(personalFriendships.Select(e => _mapper.Map(e)));
+        }
+        
+        // GET: api/Friendships/Personal/Pending
+        /// <summary>
+        ///     Get personal pending Friendships
+        /// </summary>
+        /// <returns>List of Friendships</returns>
+        [HttpGet("personal/pending")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTO.FriendshipDTO>>> GetPersonalPendingFriendships()
+        {
+            var pendingFriendships = await _bll.Friendships.GetAllPersonalAsync(User.UserGuidId(), false);
+            return Ok(pendingFriendships.Select(e => _mapper.Map(e)));
         }
 
         // GET: api/Friendships/5
         /// <summary>
         ///     Get a single Friendship
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="friendUserId"></param>
         /// <returns>Friendship object</returns>
         [HttpGet("{id}")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
-        public async Task<ActionResult<V1DTO.FriendshipDTO>> GetFriendship(Guid id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
+        public async Task<ActionResult<V1DTO.FriendshipDTO>> GetFriendship(Guid friendUserId)
         {
-            var actionType = await _bll.Friendships.FirstOrDefaultAsync(id);
-            if (actionType == null)
+            var friendship = await _bll.Friendships.FirstOrDefaultAsync(friendUserId, User.UserGuidId());
+            if (friendship == null)
             {
-                return NotFound(new V1DTO.MessageDTO($"Friendship with id {id} not found"));
+                return NotFound(new V1DTO.MessageDTO($"Friendship with user {friendUserId} not found"));
             }
-
-            return Ok(_mapper.Map(actionType));
+            return Ok(_mapper.Map(friendship));
         }
 
         // PUT: api/Friendships/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         /// <summary>
-        ///     Update Friendship
+        ///     Change friendship (from one state to another - pending or confirmed)
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="actionTypeDTO"></param>
+        /// <param name="friendshipDTO"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
@@ -84,81 +97,91 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> PutFriendship(Guid id, V1DTO.FriendshipDTO actionTypeDTO)
+        public async Task<IActionResult> PutFriendship(Guid id, V1DTO.FriendshipDTO friendshipDTO)
         {
             // Don't allow wrong data
-            if (id != actionTypeDTO.Id)
+            if (id != friendshipDTO.Id)
             {
-                return BadRequest(new V1DTO.MessageDTO("id and actionType.id do not match"));
+                return BadRequest(new V1DTO.MessageDTO("id and friendship.id do not match"));
             }
-            var actionType = await _bll.Friendships.FirstOrDefaultAsync(actionTypeDTO.Id, User.UserGuidId());
-            if (actionType == null)
+            var friendship = await _bll.Friendships.FirstOrDefaultAsync(friendshipDTO.Id, User.UserGuidId());
+            if (friendship == null)
             {
-                _logger.LogError($"EDIT. No such actionType: {actionTypeDTO.Id}, user: {User.UserGuidId()}");
+                _logger.LogError($"EDIT. No such friendship: {friendshipDTO.Id}, user: {User.UserGuidId()}");
                 return NotFound(new V1DTO.MessageDTO($"No Friendship found for id {id}"));
             }
-            // Update existing actionType
-            // actionType.FriendshipValue = actionTypeEditDTO.FriendshipValue;
-            // actionType.Comment = actionTypeEditDTO.Comment;
-            await _bll.Friendships.UpdateAsync(_mapper.Map(actionTypeDTO), User.UserId());
+            // Update existing friendship
+            await _bll.Friendships.UpdateAsync(_mapper.Map(friendshipDTO), User.UserId());
+            await _bll.SaveChangesAsync();
 
-            // Save to db
-            try
-            {
-                await _bll.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _bll.Friendships.ExistsAsync(id, User.UserGuidId()))
-                {
-                    _logger.LogError(
-                        $"EDIT. Friendship does not exist - cannot save to db: {id}, user: {User.UserGuidId()}");
-                    return NotFound();
-                }
-
-                throw;
-            }
             return NoContent();
         }
-
+        
         // POST: api/Friendships
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         /// <summary>
-        ///     Add new Friendship
+        ///     Add new pending Friendship - when request is sent but not yet accepted
         /// </summary>
-        /// <param name="actionTypeDTO"></param>
+        /// <param name="friendshipDTO"></param>
         /// <returns></returns>
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.FriendshipDTO))]
-        public async Task<ActionResult<V1DTO.FriendshipDTO>> PostFriendship(V1DTO.FriendshipDTO actionTypeDTO)
+        public async Task<ActionResult<V1DTO.FriendshipDTO>> PostPendingFriendship(V1DTO.FriendshipDTO friendshipDTO)
         {
-            // Create actionType
-            var bllEntity = _mapper.Map(actionTypeDTO);
-            _bll.Friendships.Add(bllEntity);
-            
-            // var actionType = new Friendship
+            // if (friendshipDTO.AppUser2Id == User.UserGuidId())
             // {
-            //     FriendshipValue = actionTypeCreateDTO.FriendshipValue,
-            //     Comment = actionTypeCreateDTO.Comment
-            // };
-
+            //     return BadRequest(new V1DTO.MessageDTO($"Could not add friend with id {friendshipDTO.AppUser2Id}"));
+            // }
+            // Create pending friendship
+            var bllEntity = _mapper.Map(friendshipDTO);
+            bllEntity.IsConfirmed = false;
+            _bll.Friendships.Add(bllEntity);
             await _bll.SaveChangesAsync();
 
-            actionTypeDTO.Id = bllEntity.Id;
+            friendshipDTO.Id = bllEntity.Id;
             return CreatedAtAction(
                 "GetFriendship",
-                new {id = actionTypeDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
-                actionTypeDTO
+                new {id = friendshipDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
+                friendshipDTO
+            );
+        }
+
+        // POST: api/Friendships/Accepted
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        /// <summary>
+        ///     Add new Friendship - when friend request is accepted
+        /// </summary>
+        /// <param name="friendshipDTO"></param>
+        /// <returns></returns>
+        [HttpPost("accepted")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.FriendshipDTO))]
+        public async Task<ActionResult<V1DTO.FriendshipDTO>> PostAcceptedFriendship(V1DTO.FriendshipDTO friendshipDTO)
+        {
+            // Create accepted friendship
+            var bllEntity = _mapper.Map(friendshipDTO);
+            bllEntity.IsConfirmed = true;
+            _bll.Friendships.Add(bllEntity);
+            await _bll.SaveChangesAsync();
+
+            friendshipDTO.Id = bllEntity.Id;
+            return CreatedAtAction(
+                "GetFriendship",
+                new {id = friendshipDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
+                friendshipDTO
                 );
         }
 
         // DELETE: api/Friendships/5
         /// <summary>
-        ///     Delete Friendship
+        ///     Delete friendship - remove pending request or unfriend an existing friend
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -166,121 +189,18 @@ namespace WebApp.ApiControllers._1._0
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
         public async Task<ActionResult<V1DTO.FriendshipDTO>> DeleteFriendship(Guid id)
         {
-            var actionType = await _bll.Friendships.FirstOrDefaultAsync(id, User.UserGuidId());
-            if (actionType == null)
+            var friendship = await _bll.Friendships.FirstOrDefaultAsync(id, User.UserGuidId());
+            if (friendship == null)
             {
-                _logger.LogError($"DELETE. No such actionType: {id}, user: {User.UserGuidId()}");
+                _logger.LogError($"DELETE. No such friendship: {id}, user: {User.UserGuidId()}");
                 return NotFound(new V1DTO.MessageDTO($"Friendship with id {id} not found"));
             }
             await _bll.Friendships.RemoveAsync(id);
-
             await _bll.SaveChangesAsync();
-            return Ok(actionType);
+            return Ok(friendship);
         }
-
-        // // GET: api/Friendships
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<V1DTO.FriendshipDTO>>> GetFriendships()
-        // {
-        //     return await _context.Friendships
-        //         .Select(f => new V1DTO.FriendshipDTO()
-        //         {
-        //             Id = f.Id,
-        //             Comment = f.Comment,
-        //             AppUser1Id = f.AppUser1Id,
-        //             AppUser2Id = f.AppUser2Id,
-        //             IsConfirmed = f.IsConfirmed
-        //         }).ToListAsync();
-        // }
-        //
-        // // GET: api/Friendships/5
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<V1DTO.FriendshipDTO>> GetFriendship(Guid id)
-        // {
-        //     var friendship = await _context.Friendships
-        //         .Select(f => new V1DTO.FriendshipDTO()
-        //         {
-        //             Id = f.Id,
-        //             Comment = f.Comment,
-        //             AppUser1Id = f.AppUser1Id,
-        //             AppUser2Id = f.AppUser2Id,
-        //             IsConfirmed = f.IsConfirmed
-        //         }).SingleOrDefaultAsync();
-        //
-        //     if (friendship == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return friendship;
-        // }
-        //
-        // // PUT: api/Friendships/5
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutFriendship(Guid id, Friendship friendship)
-        // {
-        //     if (id != friendship.Id)
-        //     {
-        //         return BadRequest();
-        //     }
-        //
-        //     _context.Entry(friendship).State = EntityState.Modified;
-        //
-        //     try
-        //     {
-        //         await _context.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         if (!FriendshipExists(id))
-        //         {
-        //             return NotFound();
-        //         }
-        //         else
-        //         {
-        //             throw;
-        //         }
-        //     }
-        //
-        //     return NoContent();
-        // }
-        //
-        // // POST: api/Friendships
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPost]
-        // public async Task<ActionResult<Friendship>> PostFriendship(Friendship friendship)
-        // {
-        //     _context.Friendships.Add(friendship);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return CreatedAtAction("GetFriendship", new { id = friendship.Id }, friendship);
-        // }
-        //
-        // // DELETE: api/Friendships/5
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult<Friendship>> DeleteFriendship(Guid id)
-        // {
-        //     var friendship = await _context.Friendships.FindAsync(id);
-        //     if (friendship == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     _context.Friendships.Remove(friendship);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return friendship;
-        // }
-        //
-        // private bool FriendshipExists(Guid id)
-        // {
-        //     return _context.Friendships.Any(e => e.Id == id);
-        // }
     }
 }

@@ -98,26 +98,9 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"No ArchivedGift found for id {id}"));
             }
             // Update existing actionType
-            // actionType.ArchivedGiftValue = actionTypeEditDTO.ArchivedGiftValue;
-            // actionType.Comment = actionTypeEditDTO.Comment;
             await _bll.ArchivedGifts.UpdateAsync(_mapper.Map(actionTypeDTO), User.UserId());
+            await _bll.SaveChangesAsync();
 
-            // Save to db
-            try
-            {
-                await _bll.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _bll.ArchivedGifts.ExistsAsync(id, User.UserGuidId()))
-                {
-                    _logger.LogError(
-                        $"EDIT. ArchivedGift does not exist - cannot save to db: {id}, user: {User.UserGuidId()}");
-                    return NotFound();
-                }
-
-                throw;
-            }
             return NoContent();
         }
 
@@ -139,13 +122,6 @@ namespace WebApp.ApiControllers._1._0
             // Create actionType
             var bllEntity = _mapper.Map(actionTypeDTO);
             _bll.ArchivedGifts.Add(bllEntity);
-            
-            // var actionType = new ArchivedGift
-            // {
-            //     ArchivedGiftValue = actionTypeCreateDTO.ArchivedGiftValue,
-            //     Comment = actionTypeCreateDTO.Comment
-            // };
-
             await _bll.SaveChangesAsync();
 
             actionTypeDTO.Id = bllEntity.Id;

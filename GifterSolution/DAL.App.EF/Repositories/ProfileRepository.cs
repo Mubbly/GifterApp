@@ -22,17 +22,15 @@ namespace DAL.App.EF.Repositories
         
         public async Task<DALAppDTO.ProfileDAL> GetPersonalAsync(Guid userId, Guid? profileId, bool noTracking = true)
         {
+            var query = PrepareQuery(userId, noTracking);
             var personalProfiles = 
-                await RepoDbContext
-                    .Profiles
+                await query
                     .Where(a => a.AppUserId == userId)
-                    .Include(a => a.AppUser)
-                    .Include(a => a.Wishlist)
+                    .OrderBy(e => e.CreatedAt)
                     .Select(e => Mapper.Map(e))
                     .ToListAsync();
-            
-            // If specific profileId is not provided get the first profile as default
-            return profileId == null ? personalProfiles.FirstOrDefault() : personalProfiles.Find(a => a.Id == profileId);
+            // If no specific profile ID provided, get the first one
+            return profileId == null ? personalProfiles.FirstOrDefault() : personalProfiles.Find(p => p.Id == profileId);
         }
 
         // public async Task<IEnumerable<Profile>> AllAsync(Guid? userId = null)

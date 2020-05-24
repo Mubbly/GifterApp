@@ -16,8 +16,12 @@ export function isSuccessful(response: Response | IFetchResponse<any>): boolean 
     return response.status >= STATUS_CODE_OK && response.status < STATUS_CODE_LAST_SUCCESS;
 }
 
-export function isEmpty(inputValue: Optional<string>): boolean {
-    return inputValue === null || inputValue.length === 0;
+export function isNullOrEmpty(inputValue: Optional<string>): boolean {
+    return inputValue === null || inputValue === undefined || inputValue.length === 0 || inputValue === '';
+}
+
+export function setNullIfEmpty(value: Optional<string>) {
+    return value === null || value === undefined || value.length === 0 || value === '' ? null : value;
 }
 
 export function existsAndIsString(value: any): value is string {

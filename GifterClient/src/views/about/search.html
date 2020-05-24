@@ -1,9 +1,9 @@
 <template>
     <section>
-        <h1>Search</h1>
+        <h1>Search users</h1>
         <form submit.trigger="onSubmit($event)">
-            <input class="search-input" title="Search users" value.bind="_searchInput"/>
-            <input type="submit" value="Search" class="search-button button" />
+            <input type="text" class="search-input" title="Search users" value.bind="_searchInput" placeholder="Name"/>
+            <input type="submit" value="Search" class="search-button icon"/>
         </form>
         <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
     </section>
@@ -26,9 +26,10 @@
                         ${user.lastActive}
                     </td>
                     <td class="flex">      
-                        <a route-href="route: profilesIndex; params.bind: { id: user.id }" class="button">Go to profile</a>
-                        <a if.bind="!_isFriend"te-href="route: friendshipsCreate; params.bind: { id: user.id }" class="button">Add friend</a>        
-                        <a if.bind="_isFriend"te-href="route: friendshipsCreate; params.bind: { id: user.id }" class="button">Unfriend</a>  
+                        <a route-href="route: profilesIndex; params.bind: { userId: user.id }" class="button">Go to profile</a>
+                        <a if.bind="!_isFriend" class="button" href="#">Add friend</a> 
+                        <!-- click.delegate="addFriend(user.id)"         -->
+                        <a if.bind="_isFriend" route-href="route: friendshipsDelete; params.bind: { id: user.id }" class="button">Unfriend</a>  
                     </td>
                 </tr>
             </tbody>

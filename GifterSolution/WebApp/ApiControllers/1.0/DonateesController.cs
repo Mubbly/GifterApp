@@ -115,26 +115,9 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"No Donatee found for id {id}"));
             }
             // Update existing donatee
-            // donatee.DonateeValue = donateeEditDTO.DonateeValue;
-            // donatee.Comment = donateeEditDTO.Comment;
             await _bll.Donatees.UpdateAsync(_mapper.Map(donateeDTO), User.UserId());
+            await _bll.SaveChangesAsync();
 
-            // Save to db
-            try
-            {
-                await _bll.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _bll.Donatees.ExistsAsync(id, User.UserGuidId()))
-                {
-                    _logger.LogError(
-                        $"EDIT. Donatee does not exist - cannot save to db: {id}, user: {User.UserGuidId()}");
-                    return NotFound();
-                }
-
-                throw;
-            }
             return NoContent();
         }
 
@@ -158,7 +141,6 @@ namespace WebApp.ApiControllers._1._0
             // Create donatee
             var bllEntity = _mapper.Map(donateeDTO);
             _bll.Donatees.Add(bllEntity, campaignId, User.UserGuidId());
-
             await _bll.SaveChangesAsync();
 
             donateeDTO.Id = bllEntity.Id;
@@ -190,128 +172,8 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"Donatee with id {id} not found"));
             }
             await _bll.Donatees.RemoveAsync(id);
-
             await _bll.SaveChangesAsync();
             return Ok(donatee);
         }
-
-        // // GET: api/Donatees
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<V1DTO.DonateeDTO>>> GetDonatees()
-        // {
-        //     return Ok(await _uow.Donatees.DTOAllAsync());
-        // }
-        //
-        // // GET: api/Donatees/5
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<V1DTO.DonateeDTO>> GetDonatee(Guid id)
-        // {
-        //     var donatee = await _uow.Donatees.DTOFirstOrDefaultAsync(id);
-        //
-        //     if (donatee == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return donatee;
-        // }
-        //
-        // // PUT: api/Donatees/5
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutDonatee(Guid id, DonateeEditDTO donateeEditDTO)
-        // {
-        //     if (id != donateeEditDTO.Id)
-        //     {
-        //         return BadRequest();
-        //     }
-        //
-        //     var donatee = await _uow.Donatees.FirstOrDefaultAsync(donateeEditDTO.Id);
-        //     if (donatee == null)
-        //     {
-        //         return BadRequest();
-        //     }
-        //     donatee.FirstName = donateeEditDTO.FirstName;
-        //     donatee.LastName = donateeEditDTO.LastName;
-        //     donatee.Age = donateeEditDTO.Age;
-        //     donatee.Gender = donateeEditDTO.Gender;
-        //     donatee.Bio = donateeEditDTO.Bio;
-        //     donatee.GiftName = donateeEditDTO.GiftName;
-        //     donatee.GiftDescription = donateeEditDTO.GiftDescription;
-        //     donatee.GiftImage = donateeEditDTO.GiftImage;
-        //     donatee.GiftUrl = donateeEditDTO.GiftUrl;
-        //     donatee.ActiveFrom = donateeEditDTO.ActiveFrom;
-        //     donatee.ActiveTo = donateeEditDTO.ActiveTo;
-        //     donatee.ActionTypeId = donateeEditDTO.ActionTypeId;
-        //     donatee.StatusId = donateeEditDTO.StatusId;
-        //
-        //     _uow.Donatees.Update(donatee);
-        //     
-        //     try
-        //     {
-        //         await _uow.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         if (!await _uow.Donatees.ExistsAsync(id))
-        //         {
-        //             return NotFound();
-        //         }
-        //         else
-        //         {
-        //             throw;
-        //         }
-        //     }
-        //
-        //     return NoContent();
-        // }
-        //
-        // // POST: api/Donatees
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPost]
-        // public async Task<ActionResult<Donatee>> PostDonatee(DonateeCreateDTO donateeCreateDTO)
-        // {
-        //     var donatee = new Donatee
-        //     {
-        //         Id = donateeCreateDTO.Id,
-        //         FirstName = donateeCreateDTO.FirstName,
-        //         LastName = donateeCreateDTO.LastName,
-        //         Age = donateeCreateDTO.Age,
-        //         Gender = donateeCreateDTO.Gender,
-        //         Bio = donateeCreateDTO.Bio,
-        //         GiftName = donateeCreateDTO.GiftName,
-        //         GiftDescription = donateeCreateDTO.GiftDescription,
-        //         GiftImage = donateeCreateDTO.GiftImage,
-        //         GiftUrl = donateeCreateDTO.GiftUrl,
-        //         ActiveFrom = donateeCreateDTO.ActiveFrom,
-        //         ActiveTo = donateeCreateDTO.ActiveTo,
-        //         ActionTypeId = donateeCreateDTO.ActionTypeId,
-        //         StatusId = donateeCreateDTO.StatusId
-        //     };
-        //     
-        //     _uow.Donatees.Add(donatee);
-        //     
-        //     await _uow.SaveChangesAsync();
-        //
-        //     return CreatedAtAction("GetDonatee", new { id = donatee.Id }, donatee);
-        // }
-        //
-        // // DELETE: api/Donatees/5
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult<Donatee>> DeleteDonatee(Guid id)
-        // {
-        //     var donatee = await _uow.Donatees.FirstOrDefaultAsync(id);
-        //     if (donatee == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     _uow.Donatees.Remove(donatee);
-        //     await _uow.SaveChangesAsync();
-        //
-        //     return Ok(donatee);
-        // }
     }
 }

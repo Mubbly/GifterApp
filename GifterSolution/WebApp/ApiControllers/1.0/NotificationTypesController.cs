@@ -32,7 +32,7 @@ namespace WebApp.ApiControllers._1._0
             _logger = logger;
         }
         
-                // GET: api/NotificationTypes
+        // GET: api/NotificationTypes
         /// <summary>
         ///     Get all NotificationTypes
         /// </summary>
@@ -64,7 +64,6 @@ namespace WebApp.ApiControllers._1._0
             {
                 return NotFound(new V1DTO.MessageDTO($"NotificationType with id {id} not found"));
             }
-
             return Ok(_mapper.Map(actionType));
         }
 
@@ -98,26 +97,9 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"No NotificationType found for id {id}"));
             }
             // Update existing actionType
-            // actionType.NotificationTypeValue = actionTypeEditDTO.NotificationTypeValue;
-            // actionType.Comment = actionTypeEditDTO.Comment;
             await _bll.NotificationTypes.UpdateAsync(_mapper.Map(actionTypeDTO), User.UserId());
+            await _bll.SaveChangesAsync();
 
-            // Save to db
-            try
-            {
-                await _bll.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _bll.NotificationTypes.ExistsAsync(id, User.UserGuidId()))
-                {
-                    _logger.LogError(
-                        $"EDIT. NotificationType does not exist - cannot save to db: {id}, user: {User.UserGuidId()}");
-                    return NotFound();
-                }
-
-                throw;
-            }
             return NoContent();
         }
 
@@ -139,13 +121,6 @@ namespace WebApp.ApiControllers._1._0
             // Create actionType
             var bllEntity = _mapper.Map(actionTypeDTO);
             _bll.NotificationTypes.Add(bllEntity);
-            
-            // var actionType = new NotificationType
-            // {
-            //     NotificationTypeValue = actionTypeCreateDTO.NotificationTypeValue,
-            //     Comment = actionTypeCreateDTO.Comment
-            // };
-
             await _bll.SaveChangesAsync();
 
             actionTypeDTO.Id = bllEntity.Id;
@@ -176,109 +151,8 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"NotificationType with id {id} not found"));
             }
             await _bll.NotificationTypes.RemoveAsync(id);
-
             await _bll.SaveChangesAsync();
             return Ok(actionType);
         }
-
-        // // GET: api/NotificationTypes
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<V1DTO.NotificationTypeDTO>>> GetNotificationTypes()
-        // {
-        //     return await _context.NotificationTypes
-        //         .Select(nt => new V1DTO.NotificationTypeDTO() 
-        //         {
-        //             Id = nt.Id,
-        //             Comment = nt.Comment,
-        //             NotificationsCount = nt.Notifications.Count,
-        //             NotificationTypeValue = nt.NotificationTypeValue
-        //         }).ToListAsync();
-        // }
-        //
-        // // GET: api/NotificationTypes/5
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<V1DTO.NotificationTypeDTO>> GetNotificationType(Guid id)
-        // {
-        //     var notificationType = await _context.NotificationTypes
-        //         .Select(nt => new V1DTO.NotificationTypeDTO() 
-        //         {
-        //             Id = nt.Id,
-        //             Comment = nt.Comment,
-        //             NotificationsCount = nt.Notifications.Count,
-        //             NotificationTypeValue = nt.NotificationTypeValue
-        //         }).SingleOrDefaultAsync();
-        //
-        //     if (notificationType == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return notificationType;
-        // }
-        //
-        // // PUT: api/NotificationTypes/5
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutNotificationType(Guid id, NotificationType notificationType)
-        // {
-        //     if (id != notificationType.Id)
-        //     {
-        //         return BadRequest();
-        //     }
-        //
-        //     _context.Entry(notificationType).State = EntityState.Modified;
-        //
-        //     try
-        //     {
-        //         await _context.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         if (!NotificationTypeExists(id))
-        //         {
-        //             return NotFound();
-        //         }
-        //         else
-        //         {
-        //             throw;
-        //         }
-        //     }
-        //
-        //     return NoContent();
-        // }
-        //
-        // // POST: api/NotificationTypes
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPost]
-        // public async Task<ActionResult<NotificationType>> PostNotificationType(NotificationType notificationType)
-        // {
-        //     _context.NotificationTypes.Add(notificationType);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return CreatedAtAction("GetNotificationType", new { id = notificationType.Id }, notificationType);
-        // }
-        //
-        // // DELETE: api/NotificationTypes/5
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult<NotificationType>> DeleteNotificationType(Guid id)
-        // {
-        //     var notificationType = await _context.NotificationTypes.FindAsync(id);
-        //     if (notificationType == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     _context.NotificationTypes.Remove(notificationType);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return notificationType;
-        // }
-        //
-        // private bool NotificationTypeExists(Guid id)
-        // {
-        //     return _context.NotificationTypes.Any(e => e.Id == id);
-        // }
     }
 }

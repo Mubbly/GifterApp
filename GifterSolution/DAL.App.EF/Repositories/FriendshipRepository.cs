@@ -1,6 +1,11 @@
-﻿using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
 using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Mappers;
+using Microsoft.EntityFrameworkCore;
 using DomainApp = Domain.App;
 using DALAppDTO = DAL.App.DTO;
 using DomainAppIdentity = Domain.App.Identity;
@@ -14,6 +19,20 @@ namespace DAL.App.EF.Repositories
         public FriendshipRepository(AppDbContext dbContext) :
             base(dbContext, new DALMapper<DomainApp.Friendship, DALAppDTO.FriendshipDAL>())
         {
+        }
+        
+        public async Task<IEnumerable<DALAppDTO.FriendshipDAL>> GetAllPersonalAsync(Guid userId, bool isConfirmed = true, bool noTracking = true)
+        {
+            // User's friendships
+            var friendships = PrepareQuery(userId, noTracking);
+            var personalFriendships = 
+                await friendships
+                    .Where(e => e.IsConfirmed == isConfirmed && (e.AppUser1Id == userId || e.AppUser2Id == userId))
+                    .OrderBy(e => e.CreatedAt)
+                    .Select(e => Mapper.Map(e))
+                    .ToListAsync();
+            
+            return personalFriendships;
         }
 
         // public async Task<IEnumerable<Friendship>> AllAsync(Guid? userId = null)
@@ -85,19 +104,19 @@ namespace DAL.App.EF.Repositories
         //                 Id = f.AppUser1!.Id,
         //                 FirstName = f.AppUser1!.FirstName,
         //                 LastName = f.AppUser1!.LastName,
-        //                 IsCampaignManager = f.AppUser1!.IsCampaignManager,
+        //                 IsFriendshipManager = f.AppUser1!.IsFriendshipManager,
         //                 IsActive = f.AppUser1!.IsActive,
         //                 LastActive = f.AppUser1!.LastActive,
         //                 DateJoined = f.AppUser1!.DateJoined,
         //                 UserPermissionsCount = f.AppUser1!.UserPermissions.Count,
         //                 UserProfilesCount = f.AppUser1!.UserProfiles.Count,
         //                 UserNotificationsCount = f.AppUser1!.UserNotifications.Count,
-        //                 UserCampaignsCount = f.AppUser1!.UserCampaigns.Count,
-        //                 GiftsCount = f.AppUser1!.Gifts.Count,
-        //                 ReservedGiftsByUserCount = f.AppUser1!.ReservedGiftsByUser.Count,
-        //                 ReservedGiftsForUserCount = f.AppUser1!.ReservedGiftsForUser.Count,
-        //                 ArchivedGiftsByUserCount = f.AppUser1!.ArchivedGiftsByUser.Count,
-        //                 ArchivedGiftsForUserCount = f.AppUser1!.ArchivedGiftsForUser.Count,
+        //                 UserFriendshipsCount = f.AppUser1!.UserFriendships.Count,
+        //                 FriendshipsCount = f.AppUser1!.Friendships.Count,
+        //                 ReservedFriendshipsByUserCount = f.AppUser1!.ReservedFriendshipsByUser.Count,
+        //                 ReservedFriendshipsForUserCount = f.AppUser1!.ReservedFriendshipsForUser.Count,
+        //                 ArchivedFriendshipsByUserCount = f.AppUser1!.ArchivedFriendshipsByUser.Count,
+        //                 ArchivedFriendshipsForUserCount = f.AppUser1!.ArchivedFriendshipsForUser.Count,
         //                 ConfirmedFriendshipsCount = f.AppUser1!.ConfirmedFriendships.Count,
         //                 PendingFriendshipsCount = f.AppUser1!.PendingFriendships.Count,
         //                 SentPrivateMessagesCount = f.AppUser1!.SentPrivateMessages.Count,
@@ -109,19 +128,19 @@ namespace DAL.App.EF.Repositories
         //                 Id = f.AppUser2!.Id,
         //                 FirstName = f.AppUser2!.FirstName,
         //                 LastName = f.AppUser2!.LastName,
-        //                 IsCampaignManager = f.AppUser2!.IsCampaignManager,
+        //                 IsFriendshipManager = f.AppUser2!.IsFriendshipManager,
         //                 IsActive = f.AppUser2!.IsActive,
         //                 LastActive = f.AppUser2!.LastActive,
         //                 DateJoined = f.AppUser2!.DateJoined,
         //                 UserPermissionsCount = f.AppUser2!.UserPermissions.Count,
         //                 UserProfilesCount = f.AppUser2!.UserProfiles.Count,
         //                 UserNotificationsCount = f.AppUser2!.UserNotifications.Count,
-        //                 UserCampaignsCount = f.AppUser2!.UserCampaigns.Count,
-        //                 GiftsCount = f.AppUser2!.Gifts.Count,
-        //                 ReservedGiftsByUserCount = f.AppUser2!.ReservedGiftsByUser.Count,
-        //                 ReservedGiftsForUserCount = f.AppUser2!.ReservedGiftsForUser.Count,
-        //                 ArchivedGiftsByUserCount = f.AppUser2!.ArchivedGiftsByUser.Count,
-        //                 ArchivedGiftsForUserCount = f.AppUser2!.ArchivedGiftsForUser.Count,
+        //                 UserFriendshipsCount = f.AppUser2!.UserFriendships.Count,
+        //                 FriendshipsCount = f.AppUser2!.Friendships.Count,
+        //                 ReservedFriendshipsByUserCount = f.AppUser2!.ReservedFriendshipsByUser.Count,
+        //                 ReservedFriendshipsForUserCount = f.AppUser2!.ReservedFriendshipsForUser.Count,
+        //                 ArchivedFriendshipsByUserCount = f.AppUser2!.ArchivedFriendshipsByUser.Count,
+        //                 ArchivedFriendshipsForUserCount = f.AppUser2!.ArchivedFriendshipsForUser.Count,
         //                 ConfirmedFriendshipsCount = f.AppUser2!.ConfirmedFriendships.Count,
         //                 PendingFriendshipsCount = f.AppUser2!.PendingFriendships.Count,
         //                 SentPrivateMessagesCount = f.AppUser2!.SentPrivateMessages.Count,
@@ -158,19 +177,19 @@ namespace DAL.App.EF.Repositories
         //                 Id = f.AppUser1!.Id,
         //                 FirstName = f.AppUser1!.FirstName,
         //                 LastName = f.AppUser1!.LastName,
-        //                 IsCampaignManager = f.AppUser1!.IsCampaignManager,
+        //                 IsFriendshipManager = f.AppUser1!.IsFriendshipManager,
         //                 IsActive = f.AppUser1!.IsActive,
         //                 LastActive = f.AppUser1!.LastActive,
         //                 DateJoined = f.AppUser1!.DateJoined,
         //                 UserPermissionsCount = f.AppUser1!.UserPermissions.Count,
         //                 UserProfilesCount = f.AppUser1!.UserProfiles.Count,
         //                 UserNotificationsCount = f.AppUser1!.UserNotifications.Count,
-        //                 UserCampaignsCount = f.AppUser1!.UserCampaigns.Count,
-        //                 GiftsCount = f.AppUser1!.Gifts.Count,
-        //                 ReservedGiftsByUserCount = f.AppUser1!.ReservedGiftsByUser.Count,
-        //                 ReservedGiftsForUserCount = f.AppUser1!.ReservedGiftsForUser.Count,
-        //                 ArchivedGiftsByUserCount = f.AppUser1!.ArchivedGiftsByUser.Count,
-        //                 ArchivedGiftsForUserCount = f.AppUser1!.ArchivedGiftsForUser.Count,
+        //                 UserFriendshipsCount = f.AppUser1!.UserFriendships.Count,
+        //                 FriendshipsCount = f.AppUser1!.Friendships.Count,
+        //                 ReservedFriendshipsByUserCount = f.AppUser1!.ReservedFriendshipsByUser.Count,
+        //                 ReservedFriendshipsForUserCount = f.AppUser1!.ReservedFriendshipsForUser.Count,
+        //                 ArchivedFriendshipsByUserCount = f.AppUser1!.ArchivedFriendshipsByUser.Count,
+        //                 ArchivedFriendshipsForUserCount = f.AppUser1!.ArchivedFriendshipsForUser.Count,
         //                 ConfirmedFriendshipsCount = f.AppUser1!.ConfirmedFriendships.Count,
         //                 PendingFriendshipsCount = f.AppUser1!.PendingFriendships.Count,
         //                 SentPrivateMessagesCount = f.AppUser1!.SentPrivateMessages.Count,
@@ -182,19 +201,19 @@ namespace DAL.App.EF.Repositories
         //                 Id = f.AppUser2!.Id,
         //                 FirstName = f.AppUser2!.FirstName,
         //                 LastName = f.AppUser2!.LastName,
-        //                 IsCampaignManager = f.AppUser2!.IsCampaignManager,
+        //                 IsFriendshipManager = f.AppUser2!.IsFriendshipManager,
         //                 IsActive = f.AppUser2!.IsActive,
         //                 LastActive = f.AppUser2!.LastActive,
         //                 DateJoined = f.AppUser2!.DateJoined,
         //                 UserPermissionsCount = f.AppUser2!.UserPermissions.Count,
         //                 UserProfilesCount = f.AppUser2!.UserProfiles.Count,
         //                 UserNotificationsCount = f.AppUser2!.UserNotifications.Count,
-        //                 UserCampaignsCount = f.AppUser2!.UserCampaigns.Count,
-        //                 GiftsCount = f.AppUser2!.Gifts.Count,
-        //                 ReservedGiftsByUserCount = f.AppUser2!.ReservedGiftsByUser.Count,
-        //                 ReservedGiftsForUserCount = f.AppUser2!.ReservedGiftsForUser.Count,
-        //                 ArchivedGiftsByUserCount = f.AppUser2!.ArchivedGiftsByUser.Count,
-        //                 ArchivedGiftsForUserCount = f.AppUser2!.ArchivedGiftsForUser.Count,
+        //                 UserFriendshipsCount = f.AppUser2!.UserFriendships.Count,
+        //                 FriendshipsCount = f.AppUser2!.Friendships.Count,
+        //                 ReservedFriendshipsByUserCount = f.AppUser2!.ReservedFriendshipsByUser.Count,
+        //                 ReservedFriendshipsForUserCount = f.AppUser2!.ReservedFriendshipsForUser.Count,
+        //                 ArchivedFriendshipsByUserCount = f.AppUser2!.ArchivedFriendshipsByUser.Count,
+        //                 ArchivedFriendshipsForUserCount = f.AppUser2!.ArchivedFriendshipsForUser.Count,
         //                 ConfirmedFriendshipsCount = f.AppUser2!.ConfirmedFriendships.Count,
         //                 PendingFriendshipsCount = f.AppUser2!.PendingFriendships.Count,
         //                 SentPrivateMessagesCount = f.AppUser2!.SentPrivateMessages.Count,

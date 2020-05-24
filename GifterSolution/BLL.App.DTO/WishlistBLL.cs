@@ -14,7 +14,7 @@ namespace BLL.App.DTO
         [MaxLength(2048)] [MinLength(3)] public string? Comment { get; set; }
 
         public Guid AppUserId { get; set; }
-        public AppUserBLL AppUser { get; set; } = default!;
+        public AppUserBLL? AppUser { get; set; } = default!;
         
         // List of all gifts that are in this wishlist
         [InverseProperty(nameof(GiftBLL.Wishlist))]

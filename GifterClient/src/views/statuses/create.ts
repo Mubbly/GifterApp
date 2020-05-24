@@ -34,11 +34,11 @@ export class StatusesCreate {
     }
 
     onSubmit(event: Event) {
-        if(Utils.isEmpty(this._statusValue)) {
+        if(Utils.isNullOrEmpty(this._statusValue)) {
             this._errorMessage = this.ERROR_REQUIRED_FIELDS;
             return;
         }
-        if(Utils.isEmpty(this._comment)) {
+        if(Utils.isNullOrEmpty(this._comment)) {
             this._comment = null;
         }
 

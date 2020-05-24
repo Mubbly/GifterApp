@@ -43,12 +43,12 @@ export class StatusesEdit {
     private getNewValuesFromInputs() {
         let statusValueInput = <string>this._status!.statusValue;
 
-        if(Utils.isEmpty(statusValueInput)) {
+        if(Utils.isNullOrEmpty(statusValueInput)) {
             this._errorMessage = this.ERROR_REQUIRED_FIELDS;
             return;
         }
         let commentInput = <Optional<string>>this._status!.comment;
-        this._status!.comment = Utils.isEmpty(commentInput) ? null : commentInput;
+        this._status!.comment = Utils.isNullOrEmpty(commentInput) ? null : commentInput;
     }
 
     private updateStatus(): void {

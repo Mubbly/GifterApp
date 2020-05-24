@@ -107,26 +107,9 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"No ActionType found for id {id}"));
             }
             // Update existing actionType
-            // actionType.ActionTypeValue = actionTypeEditDTO.ActionTypeValue;
-            // actionType.Comment = actionTypeEditDTO.Comment;
             await _bll.ActionTypes.UpdateAsync(_mapper.Map(actionTypeDTO), User.UserId());
+            await _bll.SaveChangesAsync();
 
-            // Save to db
-            try
-            {
-                await _bll.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _bll.ActionTypes.ExistsAsync(id, User.UserGuidId()))
-                {
-                    _logger.LogError(
-                        $"EDIT. ActionType does not exist - cannot save to db: {id}, user: {User.UserGuidId()}");
-                    return NotFound();
-                }
-
-                throw;
-            }
             return NoContent();
         }
 
@@ -149,13 +132,6 @@ namespace WebApp.ApiControllers._1._0
             // Create actionType
             var bllEntity = _mapper.Map(actionTypeDTO);
             _bll.ActionTypes.Add(bllEntity);
-            
-            // var actionType = new ActionType
-            // {
-            //     ActionTypeValue = actionTypeCreateDTO.ActionTypeValue,
-            //     Comment = actionTypeCreateDTO.Comment
-            // };
-
             await _bll.SaveChangesAsync();
 
             actionTypeDTO.Id = bllEntity.Id;

@@ -131,47 +131,17 @@ namespace WebApp.ApiControllers._1._0
             {
                 return BadRequest(new V1DTO.MessageDTO("id and campaign.id do not match"));
             }
-            var campaign = await _bll.Campaigns.FirstOrDefaultAsync(campaignDTO.Id, User.UserGuidId()); // TODO: Get personal campaign
+            var campaign = await _bll.Campaigns.GetPersonalAsync(campaignDTO.Id, User.UserGuidId());
             if (campaign == null)
             {
                 _logger.LogError($"EDIT. No such campaign for id: {campaignDTO.Id} and user: {User.UserGuidId()}");
                 return NotFound(new V1DTO.MessageDTO($"No Campaign found for this user with id {id}"));
             }
             // Update existing campaign
-            // campaign.CampaignValue = campaignEditDTO.CampaignValue;
-            // campaign.Comment = campaignEditDTO.Comment;
             await _bll.Campaigns.UpdateAsync(_mapper.Map(campaignDTO), User.UserId());
+            await _bll.SaveChangesAsync();
 
-            // Save to db
-            try
-            {
-                await _bll.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _bll.Campaigns.ExistsAsync(id, User.UserGuidId()))
-                {
-                    _logger.LogError(
-                        $"EDIT. Campaign does not exist - cannot save to db: {id}, user: {User.UserGuidId()}");
-                    return NotFound();
-                }
-
-                throw;
-            }
             return NoContent();
-            
-            // Only allow campaignManagers to edit their own campaigns
-            // var currentUserCampaigns = await _uow.UserCampaigns.DTOAllAsync(User.UserGuidId());
-            // if (currentUserCampaigns == null)
-            // {
-            //     _logger.LogError($"EDIT. This user does not have any campaigns: {User.UserGuidId()}");
-            //     return StatusCode(403);
-            // }
-            // if (currentUserCampaigns.All(uc => uc.CampaignId != id))
-            // {
-            //     _logger.LogError($"EDIT. This user does not own this campaign: {id}, user: {User.UserGuidId()}");
-            //     return StatusCode(403);
-            // }
         }
 
         // POST: api/Campaigns
@@ -240,109 +210,5 @@ namespace WebApp.ApiControllers._1._0
             await _bll.SaveChangesAsync();
             return Ok(campaign);
         }
-
-        // // GET: api/Campaigns
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<V1DTO.CampaignDTO>>> GetCampaigns()
-        // {
-        //     return Ok(await _uow.Campaigns.DTOAllAsync());
-        // }
-        //
-        // // GET: api/Campaigns/5
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<V1DTO.CampaignDTO>> GetCampaign(Guid id)
-        // {
-        //     var campaign = await _uow.Campaigns.DTOFirstOrDefaultAsync(id);
-        //
-        //     if (campaign == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return campaign;
-        // }
-        //
-        // // PUT: api/Campaigns/5
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutCampaign(Guid id, CampaignEditDTO campaignEditDTO)
-        // {
-        //     if (id != campaignEditDTO.Id)
-        //     {
-        //         return BadRequest();
-        //     }
-        //
-        //     var campaign = await _uow.Campaigns.FirstOrDefaultAsync(campaignEditDTO.Id);
-        //     if (campaign == null)
-        //     {
-        //         return BadRequest();
-        //     }
-        //     campaign.Name = campaignEditDTO.Name;
-        //     campaign.Description = campaignEditDTO.Description;
-        //     campaign.AdImage = campaignEditDTO.AdImage;
-        //     campaign.Institution = campaignEditDTO.Institution;
-        //     campaign.ActiveFromDate = campaignEditDTO.ActiveFromDate;
-        //     campaign.ActiveToDate = campaignEditDTO.ActiveToDate;
-        //
-        //     _uow.Campaigns.Update(campaign);
-        //     
-        //     try
-        //     {
-        //         await _uow.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         if (!await _uow.Campaigns.ExistsAsync(id))
-        //         {
-        //             return NotFound();
-        //         }
-        //         else
-        //         {
-        //             throw;
-        //         }
-        //     }
-        //
-        //     return NoContent();
-        // }
-        //
-        // // POST: api/Campaigns
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPost]
-        // public async Task<ActionResult<Campaign>> PostCampaign(CampaignCreateDTO campaignCreateDTO)
-        // {
-        //     var campaign = new Campaign
-        //     {
-        //         Name = campaignCreateDTO.Name,
-        //         Description = campaignCreateDTO.Description,
-        //         AdImage = campaignCreateDTO.AdImage,
-        //         Institution = campaignCreateDTO.Institution,
-        //         ActiveFromDate = campaignCreateDTO.ActiveFromDate,
-        //         ActiveToDate = campaignCreateDTO.ActiveToDate
-        //     };
-        //     
-        //     _uow.Campaigns.Add(campaign);
-        //     
-        //     await _uow.SaveChangesAsync();
-        //
-        //     return CreatedAtAction("GetCampaign", new { id = campaign.Id }, campaign);
-        // }
-        //
-        // // DELETE: api/Campaigns/5
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult<Campaign>> DeleteCampaign(Guid id)
-        // {
-        //     var campaign = await _uow.Campaigns.FirstOrDefaultAsync(id);
-        //     if (campaign == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     _uow.Campaigns.Remove(campaign);
-        //     await _uow.SaveChangesAsync();
-        //
-        //     return Ok(campaign);
-        // }
     }
 }

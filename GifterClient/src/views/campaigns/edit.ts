@@ -45,7 +45,7 @@ export class CampaignsEdit {
         let activeToInput = <string>this._campaign!.activeToDate;
         let activeFromInput = <string>(this._campaign!.activeFromDate);
 
-        if(Utils.isEmpty(nameInput) || Utils.isEmpty(activeToInput) || Utils.isEmpty(activeFromInput)) {
+        if(Utils.isNullOrEmpty(nameInput) || Utils.isNullOrEmpty(activeToInput) || Utils.isNullOrEmpty(activeFromInput)) {
             this._errorMessage = this.ERROR_REQUIRED_FIELDS;
             return;
         }
@@ -53,9 +53,9 @@ export class CampaignsEdit {
         let adImageInput = <Optional<string>>this._campaign!.adImage;
         let institutionInput = <Optional<string>>this._campaign!.institution;
 
-        this._campaign!.description = Utils.isEmpty(descInput) ? null : descInput;
-        this._campaign!.adImage = Utils.isEmpty(adImageInput) ? null : adImageInput;
-        this._campaign!.institution = Utils.isEmpty(institutionInput) ? null : institutionInput;
+        this._campaign!.description = Utils.isNullOrEmpty(descInput) ? null : descInput;
+        this._campaign!.adImage = Utils.isNullOrEmpty(adImageInput) ? null : adImageInput;
+        this._campaign!.institution = Utils.isNullOrEmpty(institutionInput) ? null : institutionInput;
 
         console.log(this._campaign);
     }

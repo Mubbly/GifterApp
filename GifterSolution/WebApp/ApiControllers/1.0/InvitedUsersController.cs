@@ -32,53 +32,43 @@ namespace WebApp.ApiControllers._1._0
             _logger = logger;
         }
 
-        // GET: api/InvitedUsers
+        // GET: api/InvitedUsers/personal
         /// <summary>
-        ///     Get all InvitedUsers
+        ///     Get all personal InvitedUsers
         /// </summary>
         /// <returns>List of InvitedUsers</returns>
-        [HttpGet]
+        [HttpGet("personal")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
-        public async Task<ActionResult<IEnumerable<V1DTO.InvitedUserDTO>>> GetInvitedUsers()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.InvitedUserDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTO.InvitedUserDTO>>> GetPersonalInvitedUsers()
         {
-            // TODO: Move to BLL
-            var invitedUsers = await _bll.InvitedUsers.GetAllAsync();
-            var personalUsersBll = invitedUsers
-                .Where(u => u.InvitorUserId == User.UserGuidId())
-                .ToList();
-            if (!personalUsersBll.Any())
-            {
-                return NotFound(new V1DTO.MessageDTO($"No invited users found for user {User.UserGuidId()}"));
-            }
-            var personalInvitedUsers = personalUsersBll.Select(e => _mapper.Map(e));
-            return Ok(personalInvitedUsers);
+            var personalInvitedUsers = await _bll.InvitedUsers.GetAllPersonalAsync(User.UserGuidId());
+            return Ok(personalInvitedUsers.Select(e => _mapper.Map(e)));
         }
 
-        // GET: api/InvitedUsers/5
+        // GET: api/InvitedUsers/personal/5
         /// <summary>
-        ///     Get a single InvitedUser
+        ///     Get a single personal InvitedUser
         /// </summary>
         /// <param name="id"></param>
         /// <returns>InvitedUser object</returns>
-        [HttpGet("{id}")]
+        [HttpGet("personal/{id}")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
-        public async Task<ActionResult<V1DTO.InvitedUserDTO>> GetInvitedUser(Guid id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.InvitedUserDTO>))]
+        public async Task<ActionResult<V1DTO.InvitedUserDTO>> GetPersonalInvitedUser(Guid id)
         {
             var invitedUser = await _bll.InvitedUsers.FirstOrDefaultAsync(id);
             if (invitedUser == null)
             {
                 return NotFound(new V1DTO.MessageDTO($"InvitedUser with id {id} not found"));
             }
+            // Allow only personally invited users - TODO BLL
             if (invitedUser.InvitorUserId != User.UserGuidId())
             {
                 return NotFound(new V1DTO.MessageDTO($"InvitedUser with id {id} not found"));
             }
-
             return Ok(_mapper.Map(invitedUser));
         }
 
@@ -112,26 +102,9 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"No InvitedUser found for id {id}"));
             }
             // Update existing invitedUser
-            // invitedUser.InvitedUserValue = invitedUserEditDTO.InvitedUserValue;
-            // invitedUser.Comment = invitedUserEditDTO.Comment;
             await _bll.InvitedUsers.UpdateAsync(_mapper.Map(invitedUserDTO), User.UserId());
+            await _bll.SaveChangesAsync();
 
-            // Save to db
-            try
-            {
-                await _bll.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _bll.InvitedUsers.ExistsAsync(id, User.UserGuidId()))
-                {
-                    _logger.LogError(
-                        $"EDIT. InvitedUser does not exist - cannot save to db: {id}, user: {User.UserGuidId()}");
-                    return NotFound();
-                }
-
-                throw;
-            }
             return NoContent();
         }
 
@@ -155,20 +128,13 @@ namespace WebApp.ApiControllers._1._0
             bllEntity.DateInvited = DateTime.Now;
             bllEntity.HasJoined = false;
             bllEntity.InvitorUserId = User.UserGuidId();
-            
+            // Add to db
             _bll.InvitedUsers.Add(bllEntity);
-            
-            // var invitedUser = new InvitedUser
-            // {
-            //     InvitedUserValue = invitedUserCreateDTO.InvitedUserValue,
-            //     Comment = invitedUserCreateDTO.Comment
-            // };
-
             await _bll.SaveChangesAsync();
 
             invitedUserDTO.Id = bllEntity.Id;
             return CreatedAtAction(
-                "GetInvitedUser",
+                "GetPersonalInvitedUser",
                 new {id = invitedUserDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
                 invitedUserDTO
                 );
@@ -184,7 +150,7 @@ namespace WebApp.ApiControllers._1._0
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.InvitedUserDTO>))]
         public async Task<ActionResult<V1DTO.InvitedUserDTO>> DeleteInvitedUser(Guid id)
         {
             var invitedUser = await _bll.InvitedUsers.FirstOrDefaultAsync(id, User.UserGuidId());
@@ -194,115 +160,8 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"InvitedUser with id {id} not found"));
             }
             await _bll.InvitedUsers.RemoveAsync(id);
-
             await _bll.SaveChangesAsync();
             return Ok(invitedUser);
         }
-
-        // // GET: api/InvitedUsers
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<V1DTO.InvitedUserDTO>>> GetInvitedUsers()
-        // {
-        //     return await _context.InvitedUsers
-        //         .Select(iu => new V1DTO.InvitedUserDTO() 
-        //         {
-        //             Id = iu.Id,
-        //             Email = iu.Email,
-        //             Message = iu.Email,
-        //             DateInvited = iu.DateInvited,
-        //             HasJoined = iu.HasJoined,
-        //             InvitorUserId = iu.InvitorUserId,
-        //             PhoneNumber = iu.PhoneNumber
-        //         }).ToListAsync();
-        // }
-        //
-        // // GET: api/InvitedUsers/5
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<V1DTO.InvitedUserDTO>> GetInvitedUser(Guid id)
-        // {
-        //     var invitedUser = await _context.InvitedUsers
-        //         .Select(iu => new V1DTO.InvitedUserDTO() 
-        //         {
-        //             Id = iu.Id,
-        //             Email = iu.Email,
-        //             Message = iu.Email,
-        //             DateInvited = iu.DateInvited,
-        //             HasJoined = iu.HasJoined,
-        //             InvitorUserId = iu.InvitorUserId,
-        //             PhoneNumber = iu.PhoneNumber
-        //         }).SingleOrDefaultAsync();
-        //
-        //     if (invitedUser == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return invitedUser;
-        // }
-        //
-        // // PUT: api/InvitedUsers/5
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutInvitedUser(Guid id, InvitedUser invitedUser)
-        // {
-        //     if (id != invitedUser.Id)
-        //     {
-        //         return BadRequest();
-        //     }
-        //
-        //     _context.Entry(invitedUser).State = EntityState.Modified;
-        //
-        //     try
-        //     {
-        //         await _context.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         if (!InvitedUserExists(id))
-        //         {
-        //             return NotFound();
-        //         }
-        //         else
-        //         {
-        //             throw;
-        //         }
-        //     }
-        //
-        //     return NoContent();
-        // }
-        //
-        // // POST: api/InvitedUsers
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPost]
-        // public async Task<ActionResult<InvitedUser>> PostInvitedUser(InvitedUser invitedUser)
-        // {
-        //     _context.InvitedUsers.Add(invitedUser);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return CreatedAtAction("GetInvitedUser", new { id = invitedUser.Id }, invitedUser);
-        // }
-        //
-        // // DELETE: api/InvitedUsers/5
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult<InvitedUser>> DeleteInvitedUser(Guid id)
-        // {
-        //     var invitedUser = await _context.InvitedUsers.FindAsync(id);
-        //     if (invitedUser == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     _context.InvitedUsers.Remove(invitedUser);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return invitedUser;
-        // }
-        //
-        // private bool InvitedUserExists(Guid id)
-        // {
-        //     return _context.InvitedUsers.Any(e => e.Id == id);
-        // }
     }
 }

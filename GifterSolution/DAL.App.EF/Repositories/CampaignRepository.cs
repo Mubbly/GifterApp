@@ -23,11 +23,13 @@ namespace DAL.App.EF.Repositories
         
         public async Task<IEnumerable<DALAppDTO.CampaignDAL>> GetAllPersonalAsync(Guid userId, bool noTracking = true)
         {
+            // TODO : Fix tracking, and populating middle tables by EF?
             var personalCampaigns = 
                 await RepoDbContext
                     .UserCampaigns
                     .Include(a => a.Campaign)
                     .Where(cd => cd.AppUserId == userId)
+                    .OrderBy(e => e.CreatedAt)
                     .Select(e => Mapper.Map(e.Campaign!))
                     .ToListAsync();
 

@@ -65,10 +65,10 @@ export class DonateesEdit {
         let activeFromInput = <string>this._donatee!.activeFrom;
         let activeToInput = <string>this._donatee!.activeTo;
 
-        if(UtilFunctions.isEmpty(firstNameInput) 
-            || UtilFunctions.isEmpty(giftNameInput)
-            || UtilFunctions.isEmpty(activeFromInput)
-            || UtilFunctions.isEmpty(activeToInput)) {
+        if(UtilFunctions.isNullOrEmpty(firstNameInput) 
+            || UtilFunctions.isNullOrEmpty(giftNameInput)
+            || UtilFunctions.isNullOrEmpty(activeFromInput)
+            || UtilFunctions.isNullOrEmpty(activeToInput)) {
             alert("Name missing!")
             return;
         }
@@ -80,13 +80,13 @@ export class DonateesEdit {
         let giftImageInput = <Optional<string>>this._donatee!.giftImage;
         let giftUrlInput = <Optional<string>>this._donatee!.giftUrl;
 
-        this._donatee!.lastName = UtilFunctions.isEmpty(lastNameInput) ? null : lastNameInput;
-        this._donatee!.gender = UtilFunctions.isEmpty(genderInput) ? null : genderInput;
-        this._donatee!.age = UtilFunctions.isEmpty(ageInput) ? null : Number(ageInput);
-        this._donatee!.bio = UtilFunctions.isEmpty(bioInput) ? null : bioInput;
-        this._donatee!.giftDescription = UtilFunctions.isEmpty(giftDescriptionInput) ? null : giftDescriptionInput;
-        this._donatee!.giftImage = UtilFunctions.isEmpty(giftImageInput) ? null : giftImageInput;
-        this._donatee!.giftUrl = UtilFunctions.isEmpty(giftUrlInput) ? null : giftUrlInput;
+        this._donatee!.lastName = UtilFunctions.isNullOrEmpty(lastNameInput) ? null : lastNameInput;
+        this._donatee!.gender = UtilFunctions.isNullOrEmpty(genderInput) ? null : genderInput;
+        this._donatee!.age = UtilFunctions.isNullOrEmpty(ageInput) ? null : Number(ageInput);
+        this._donatee!.bio = UtilFunctions.isNullOrEmpty(bioInput) ? null : bioInput;
+        this._donatee!.giftDescription = UtilFunctions.isNullOrEmpty(giftDescriptionInput) ? null : giftDescriptionInput;
+        this._donatee!.giftImage = UtilFunctions.isNullOrEmpty(giftImageInput) ? null : giftImageInput;
+        this._donatee!.giftUrl = UtilFunctions.isNullOrEmpty(giftUrlInput) ? null : giftUrlInput;
 
         console.log(this._donatee);
 

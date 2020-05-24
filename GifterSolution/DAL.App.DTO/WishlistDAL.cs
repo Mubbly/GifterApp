@@ -14,7 +14,7 @@ namespace DAL.App.DTO
         [MaxLength(2048)] [MinLength(3)] public string? Comment { get; set; }
 
         public Guid AppUserId { get; set; }
-        public AppUserDAL AppUser { get; set; } = default!;
+        public AppUserDAL? AppUser { get; set; } = default!;
         
         // List of all gifts that are in this wishlist
         [InverseProperty(nameof(GiftDAL.Wishlist))]

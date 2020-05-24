@@ -64,7 +64,6 @@ namespace WebApp.ApiControllers._1._0
             {
                 return NotFound(new V1DTO.MessageDTO($"ReservedGift with id {id} not found"));
             }
-
             return Ok(_mapper.Map(actionType));
         }
 
@@ -98,26 +97,9 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"No ReservedGift found for id {id}"));
             }
             // Update existing actionType
-            // actionType.ReservedGiftValue = actionTypeEditDTO.ReservedGiftValue;
-            // actionType.Comment = actionTypeEditDTO.Comment;
             await _bll.ReservedGifts.UpdateAsync(_mapper.Map(actionTypeDTO), User.UserId());
+            await _bll.SaveChangesAsync();
 
-            // Save to db
-            try
-            {
-                await _bll.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _bll.ReservedGifts.ExistsAsync(id, User.UserGuidId()))
-                {
-                    _logger.LogError(
-                        $"EDIT. ReservedGift does not exist - cannot save to db: {id}, user: {User.UserGuidId()}");
-                    return NotFound();
-                }
-
-                throw;
-            }
             return NoContent();
         }
 
@@ -139,13 +121,6 @@ namespace WebApp.ApiControllers._1._0
             // Create actionType
             var bllEntity = _mapper.Map(actionTypeDTO);
             _bll.ReservedGifts.Add(bllEntity);
-            
-            // var actionType = new ReservedGift
-            // {
-            //     ReservedGiftValue = actionTypeCreateDTO.ReservedGiftValue,
-            //     Comment = actionTypeCreateDTO.Comment
-            // };
-
             await _bll.SaveChangesAsync();
 
             actionTypeDTO.Id = bllEntity.Id;
@@ -176,117 +151,8 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"ReservedGift with id {id} not found"));
             }
             await _bll.ReservedGifts.RemoveAsync(id);
-
             await _bll.SaveChangesAsync();
             return Ok(actionType);
         }
-
-        // // GET: api/ReservedGifts
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<V1DTO.ReservedGiftDTO>>> GetReservedGifts()
-        // {
-        //     return await _context.ReservedGifts
-        //         .Select(rg => new V1DTO.ReservedGiftDTO() 
-        //         {
-        //             Id = rg.Id,
-        //             Comment = rg.Comment,
-        //             GiftId = rg.GiftId,
-        //             ReservedFrom = rg.ReservedFrom,
-        //             StatusId = rg.StatusId,
-        //             ActionTypeId = rg.ActionTypeId,
-        //             UserGiverId = rg.UserGiverId,
-        //             UserReceiverId = rg.UserReceiverId
-        //         }).ToListAsync();
-        // }
-        //
-        // // GET: api/ReservedGifts/5
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<V1DTO.ReservedGiftDTO>> GetReservedGift(Guid id)
-        // {
-        //     var reservedGift = await _context.ReservedGifts
-        //         .Select(rg => new V1DTO.ReservedGiftDTO() 
-        //         {
-        //             Id = rg.Id,
-        //             Comment = rg.Comment,
-        //             GiftId = rg.GiftId,
-        //             ReservedFrom = rg.ReservedFrom,
-        //             StatusId = rg.StatusId,
-        //             ActionTypeId = rg.ActionTypeId,
-        //             UserGiverId = rg.UserGiverId,
-        //             UserReceiverId = rg.UserReceiverId
-        //         }).SingleOrDefaultAsync();
-        //
-        //     if (reservedGift == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     return reservedGift;
-        // }
-        //
-        // // PUT: api/ReservedGifts/5
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutReservedGift(Guid id, ReservedGift reservedGift)
-        // {
-        //     if (id != reservedGift.Id)
-        //     {
-        //         return BadRequest();
-        //     }
-        //
-        //     _context.Entry(reservedGift).State = EntityState.Modified;
-        //
-        //     try
-        //     {
-        //         await _context.SaveChangesAsync();
-        //     }
-        //     catch (DbUpdateConcurrencyException)
-        //     {
-        //         if (!ReservedGiftExists(id))
-        //         {
-        //             return NotFound();
-        //         }
-        //         else
-        //         {
-        //             throw;
-        //         }
-        //     }
-        //
-        //     return NoContent();
-        // }
-        //
-        // // POST: api/ReservedGifts
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // [HttpPost]
-        // public async Task<ActionResult<ReservedGift>> PostReservedGift(ReservedGift reservedGift)
-        // {
-        //     _context.ReservedGifts.Add(reservedGift);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return CreatedAtAction("GetReservedGift", new { id = reservedGift.Id }, reservedGift);
-        // }
-        //
-        // // DELETE: api/ReservedGifts/5
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult<ReservedGift>> DeleteReservedGift(Guid id)
-        // {
-        //     var reservedGift = await _context.ReservedGifts.FindAsync(id);
-        //     if (reservedGift == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //
-        //     _context.ReservedGifts.Remove(reservedGift);
-        //     await _context.SaveChangesAsync();
-        //
-        //     return reservedGift;
-        // }
-        //
-        // private bool ReservedGiftExists(Guid id)
-        // {
-        //     return _context.ReservedGifts.Any(e => e.Id == id);
-        // }
     }
 }

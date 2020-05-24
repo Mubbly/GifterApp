@@ -4,31 +4,26 @@ import { GiftService } from 'service/giftService';
 import * as UtilFunctions from 'utils/utilFunctions';
 import { IGift } from 'domain/IGift';
 import { Optional } from 'types/generalTypes';
+import { AppState } from 'state/appState';
+import * as Utils from 'utils/utilFunctions';
+import { PermissionDetails } from '../permissions/details';
 
 @autoinject
 export class GiftsDelete {
     private _gift?: IGift;
     private _errorMessage: Optional<string> = null;
 
-    constructor(private giftService: GiftService, private router: Router) {
+    constructor(private giftService: GiftService, private router: Router, private appState: AppState) {
     }
 
     attached() {
     }
 
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-        const giftId = params.id;
-        if(UtilFunctions.existsAndIsString(giftId)) {
-            this.giftService.get(giftId).then(
-                response => {
-                    if(UtilFunctions.isSuccessful(response)) {
-                        this._gift = response.data!;
-                    } else {
-                        this._errorMessage = UtilFunctions.getErrorMessage(response);
-
-                    }
-                }
-            )
+        if(!this.appState.jwt) {
+            this.router.navigateToRoute(Utils.LOGIN_ROUTE);
+        } else {
+            this.getGift(params.id);
         }
     }
 
@@ -46,5 +41,20 @@ export class GiftsDelete {
             }
         );
         event.preventDefault();
+    }
+
+    private getGift(id: string): void {
+        if(UtilFunctions.existsAndIsString(id)) {
+            this.giftService.get(id).then(
+                response => {
+                    if(UtilFunctions.isSuccessful(response)) {
+                        this._gift = response.data!;
+                    } else {
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
+                    }
+                }
+            )
+        }
     }
 }

@@ -5,31 +5,25 @@ import { IGiftEdit } from 'domain/IGift';
 import * as UtilFunctions from 'utils/utilFunctions';
 import { Optional } from 'types/generalTypes';
 import { IFetchResponse } from 'types/IFetchResponse';
+import { AppState } from 'state/appState';
+import * as Utils from 'utils/utilFunctions';
 
 @autoinject
 export class GiftsEdit {
     private _gift?: IGiftEdit;
     private _errorMessage: Optional<string> = null;
 
-    constructor(private giftService: GiftService, private router: Router) {
+    constructor(private giftService: GiftService, private router: Router, private appState: AppState) {
     }
 
     attached() {
     }
 
     activate(params: any, routeConfig: RouteConfig, navigationInstruction: NavigationInstruction) {
-        const giftId = params.id;
-        if(UtilFunctions.existsAndIsString(giftId)) {
-            this.giftService.get(giftId).then(
-                response => {
-                    if(UtilFunctions.isSuccessful(response)) {
-                        this._gift = response.data!;
-                    } else {
-                        this._errorMessage = UtilFunctions.getErrorMessage(response);
-
-                    }
-                }
-            )
+        if(!this.appState.jwt) {
+            this.router.navigateToRoute(Utils.LOGIN_ROUTE);
+        } else {
+            this.getGift(params.id);
         }
     }
 
@@ -56,14 +50,28 @@ export class GiftsEdit {
             .then(
                 (response: IFetchResponse<IGiftEdit>) => {
                     if (UtilFunctions.isSuccessful(response)) {
-                        this.router.navigateToRoute('giftsIndex', {});
+                        this.router.navigateToRoute('profilesPersonal', {});
                     } else {
                         this._errorMessage = UtilFunctions.getErrorMessage(response);
-
                     }
                 }
             );
 
         event.preventDefault();
+    }
+
+    private getGift(id: string): void {
+        if(UtilFunctions.existsAndIsString(id)) {
+            this.giftService.get(id).then(
+                response => {
+                    if(UtilFunctions.isSuccessful(response)) {
+                        this._gift = response.data!;
+                    } else {
+                        this._errorMessage = UtilFunctions.getErrorMessage(response);
+
+                    }
+                }
+            )
+        }
     }
 }

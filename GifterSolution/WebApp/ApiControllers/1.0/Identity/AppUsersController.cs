@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.BLL.App;
 using Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -24,12 +25,13 @@ namespace WebApp.ApiControllers._1._0.Identity
     public class AppUsersController : ControllerBase
     {
         private readonly UserManager<DomainIdentity.AppUser> _userManager;
-        private readonly AppUserMapperToDomain _toDomainMapper = new AppUserMapperToDomain();
-        private readonly AppUserMapperToPublic _toPublicMapper = new AppUserMapperToPublic();
+        private readonly IAppBLL _bll;
+        private readonly AppUserMapper _mapper = new AppUserMapper();
 
-        public AppUsersController(UserManager<DomainIdentity.AppUser> userManager)
+        public AppUsersController(UserManager<DomainIdentity.AppUser> userManager, IAppBLL bll)
         {
             _userManager = userManager;
+            _bll = bll;
         }
         
         // TODO:fix, https://stackoverflow.com/questions/38751616/asp-net-core-identity-get-current-user
@@ -41,7 +43,7 @@ namespace WebApp.ApiControllers._1._0.Identity
         public async Task<ActionResult<IEnumerable<V1DTOIdentity.AppUserDTO>>> GetAppUsers()
         {
             var allDomainUsers = await _userManager.Users.ToListAsync();
-            var allUsers = allDomainUsers.Select(u => _toPublicMapper.Map(u));
+            var allUsers = allDomainUsers.Select(u => _mapper.Map(u));
             return Ok(allUsers);
         }
         
@@ -64,7 +66,7 @@ namespace WebApp.ApiControllers._1._0.Identity
             { 
                 return NotFound(new V1DTO.MessageDTO($"Could not find users with name {name}"));
             }
-            var usersByName = domainUsersByName.Select(u => _toPublicMapper.Map(u));
+            var usersByName = domainUsersByName.Select(u => _mapper.Map(u));
             return Ok(usersByName);
         }
 
@@ -80,7 +82,7 @@ namespace WebApp.ApiControllers._1._0.Identity
             {
                 return NotFound(new V1DTO.MessageDTO($"User with id {id} not found"));
             }
-            var user = _toPublicMapper.Map(domainUser);
+            var user = _mapper.Map(domainUser);
             return Ok(user);
         }
         
@@ -96,7 +98,7 @@ namespace WebApp.ApiControllers._1._0.Identity
             {
                 return NotFound(new V1DTO.MessageDTO("User not found"));
             }
-            var user = _toPublicMapper.Map(domainUser);
+            var user = _mapper.Map(domainUser);
             return Ok(user);        
         }
 
@@ -125,8 +127,17 @@ namespace WebApp.ApiControllers._1._0.Identity
             {
                 return BadRequest(new V1DTO.MessageDTO($"Cannot update the user with id {id}"));
             }
+            
+            //await _userManager.UpdateSecurityStampAsync(_mapper.Map(appUser));
+            domainUser.UserName = appUser.UserName;
+            domainUser.Email = appUser.Email;
+            domainUser.FirstName = appUser.FirstName;
+            domainUser.LastName = appUser.LastName;
+            
             // Update existing user
-            await _userManager.UpdateAsync(_toDomainMapper.Map(appUser));
+            await _userManager.UpdateAsync(domainUser);
+            await _bll.SaveChangesAsync();
+            
             return NoContent();
         }
 

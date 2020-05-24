@@ -13,6 +13,9 @@ import { Optional } from "types/generalTypes";
 import { WishlistService } from '../../service/wishlistService';
 import { IFetchResponse } from "types/IFetchResponse";
 import { ActionTypes, Statuses } from "domain/PredefinedData";
+import { PermissionDetails } from '../permissions/details';
+import * as Utils from 'utils/utilFunctions';
+import { AppState } from "state/appState";
 
 @autoinject
 export class GiftsCreate {
@@ -35,14 +38,19 @@ export class GiftsCreate {
 
     constructor(
         private giftService: GiftService,
-        private router: Router
+        private router: Router,
+        private appState: AppState
     ) {}
 
     attached() {
     }
 
     activate(params: any) {
-        this.getRelatedData(params);
+        if(!this.appState.jwt) {
+            this.router.navigateToRoute(Utils.LOGIN_ROUTE);
+        } else {
+            this.getRelatedData(params);
+        }
     }
 
     // From other tables that are connected to this one via foreign keys
@@ -58,10 +66,10 @@ export class GiftsCreate {
 
         let newGift: IGiftCreate = {
             name: this._name,
-            description: this._description,
-            image: this._image,
-            url: this._url,
-            partnerUrl: this._partnerUrl,
+            description: Utils.setNullIfEmpty(this._description),
+            image: Utils.setNullIfEmpty(this._image),
+            url: Utils.setNullIfEmpty(this._url),
+            partnerUrl: Utils.setNullIfEmpty(this._partnerUrl),
             isPartnered: this._isPartnered,
             isPinned: this._isPinned,
             actionTypeId: this._actionTypeId,
@@ -80,6 +88,9 @@ export class GiftsCreate {
                 } else {
                     this._errorMessage = UtilFunctions.getErrorMessage(response);
                 }
+            })
+            .catch((error) => {
+                console.log(error);
             });
     }
 }
