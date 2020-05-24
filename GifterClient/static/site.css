@@ -264,7 +264,7 @@ section.intro {
     background: #9FA8DA;
     /* background: #C5CAE9; */
     color: white !important;
-    border: 1px solid #9FA8DA;
+    /* border: 1px solid #9FA8DA; */
     margin: 0 10px 10px 0;
     padding: 0.5rem 2rem;
     text-align: center;
@@ -272,10 +272,17 @@ section.intro {
     cursor: pointer;
 }
 
+.nav-link.active {
+    border-bottom: 3px solid #9FA8DA;
+    padding-bottom: -20px;
+    margin-bottom: -7px;
+}
+
 .button:focus,
 .button:hover,
 input[type='submit']:focus,
-input[type='submit']:hover {
+input[type='submit']:hover,
+.panel-heading:hover {
     background-color: #7986CB;
     /* background-color: #9FA8DA;
     background: #C5CAE9; */
@@ -413,6 +420,11 @@ input[type='radio']:checked:before {
 
 .profile-info {
     flex: 1.5;
+    max-width: 30%;
+}
+
+.profile-pic {
+    min-width: 30%;
 }
 
 .profile-wishlist {
@@ -611,30 +623,53 @@ body {
 
 body.dark-theme {
     background-color: #212121;
-    color: #BDBDBD;
 }
 
-.body.dark-theme table {
-    color: #BDBDBD !important;
+body.dark-theme,
+body.dark-theme table,
+body.dark-theme .navbar .nav-link,
+body.dark-theme a.button,
+body.dark-theme input::placeholder,
+body.dark-theme .panel-heading a {
+    color: #E0E0E0 !important;
 }
 
-.body.dark-theme a {
-    color: #C5CAE9;
+body.dark-theme input {
+    color: #F5F5F5;
 }
 
-.body.dark-theme .button,
-.body.dark-theme .button {
-    background: #7986CB;
+body.dark-theme a {
+    color: #B39DDB !important;
 }
 
-.body.dark-theme .button:hover,
-.body.dark-theme .button:focus {
-    background: #5C6BC0;
+body.dark-theme .navbar {
+    border-bottom: 1px solid #616161 !important;
 }
 
-.body.dark-theme .card {
-    box-shadow: 0 2px 6px 0 #616161, 0 2px 15px 0 #424242;
-    background-color: #BDBDBD;
+body.dark-theme .navbar,
+body.dark-theme input {
+    background: #424242 !important;
+}
+
+body.dark-theme .button,
+body.dark-theme .button {
+    background: #7E57C2;
+}
+
+body.dark-theme .button:hover,
+body.dark-theme .button:focus {
+    background: #9575CD;
+}
+
+body.dark-theme .panel-heading {
+    background: #9575CD;
+    border-bottom: 2px solid #424242;
+    /* box-shadow: 0 2px 2px 0 #616161, 0 2px 2px 0 #424242; */
+}
+
+body.dark-theme .card {
+    box-shadow: 0 2px 2px 0 #616161, 0 2px 2px 0 #424242;
+    background-color: #424242;
 }
 
 table {

@@ -43,6 +43,12 @@ export class ProfilesEdit {
         if(!this.appState.jwt) {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         } else {
+            if(this.appState.showEmail) {
+                this._showEmail = !!this.appState.showEmail;
+            }
+            if(this.appState.profileBannerUrl) {
+                this._profileBannerUrl = this.appState.profileBannerUrl;
+            }
             this.getCurrentAppUser();
             this.getPersonalProfile();
         }
@@ -119,11 +125,9 @@ export class ProfilesEdit {
 
         // Non-db fields
         this._profileBannerUrl = <Optional<string>>this._profileBannerUrl;
-        this._routeProps.profileBannerUrl = this._profileBannerUrl;
-
+        
         let showEmailInput = <boolean>this._showEmail;
         this._showEmail = showEmailInput;
-        this._routeProps.showEmail = this._showEmail;
 
         // Update data
         if(this._appUser && this._profile) {
@@ -138,7 +142,6 @@ export class ProfilesEdit {
             .then((response) => {
                 if (UtilFunctions.isSuccessful(response)) {
                     this.updateAppUser();
-                    console.log(response);
                 } else {
                     this._errorMessage = Utils.getErrorMessage(response);
                 }
@@ -152,7 +155,9 @@ export class ProfilesEdit {
             .update(this._appUser!)
             .then((response) => {
                 if (UtilFunctions.isSuccessful(response)) {
-                    this.router.navigateToRoute(ApiEndpointUrls.PROFILES_PERSONAL, this._routeProps);
+                    this.appState.profileBannerUrl = this._profileBannerUrl;
+                    this.appState.showEmail = this._showEmail.toString();
+                    this.router.navigateToRoute("profilesPersonal");
                 } else {
                     this._errorMessage = Utils.getErrorMessage(response);
                 }

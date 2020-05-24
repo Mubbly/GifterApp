@@ -12,6 +12,7 @@ import { IAppUser } from "domain/IAppUser";
 import { WishlistService } from "service/wishlistService";
 import { IWishlist } from '../../domain/IWishlist';
 import { IFetchResponse } from "types/IFetchResponse";
+import { EventEmitter } from "events";
 
 @autoinject
 export class ProfilesPersonal {
@@ -27,6 +28,8 @@ export class ProfilesPersonal {
 
     private _showEmail: boolean = false;
     private _profileBannerUrl: Optional<string> = null;
+
+    private _draggedElement = null;
 
     constructor(
         private profileService: ProfileService,
@@ -44,11 +47,11 @@ export class ProfilesPersonal {
         if(!this.appState.jwt) {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         } else {
-            if(props.showEmail) {
-                this._showEmail = props.showEmail;
+            if(this.appState.showEmail) {
+                this._showEmail = !!this.appState.showEmail;
             }
-            if(props.profileBannerUrl) {
-                this._profileBannerUrl = props.profileBannerUrl;
+            if(this.appState.profileBannerUrl) {
+                this._profileBannerUrl = this.appState.profileBannerUrl;
             }
             this.getCurrentAppUser();
             this.getPersonalProfile();
@@ -138,5 +141,49 @@ export class ProfilesPersonal {
                 this._errorMessage = Utils.getErrorMessage(response);
         }
     }
+
+
+    // TODO: Drag and drop Gift panels to change order. Save to local storage?
+    // https://stackoverflow.com/questions/10588607/tutorial-for-html5-dragdrop-sortable-list ; https://codepen.io/crouchingtigerhiddenadam/pen/qKXgap
+    // https://stackoverflow.com/questions/43667677/using-html5-drag-and-drop-with-aurelia ; https://gist.run/?id=375dbed8d63cff44075e5f93403dd9dc
+    // https://stackoverflow.com/questions/7110353/html5-dragleave-fired-when-hovering-a-child-element
+    // https://stackoverflow.com/questions/54626442/drag-and-drop-events-for-image-file-upload-not-working-in-aurelia
+    // https://davismj.me/blog/aurelia-drag-and-drop/
+    
+    // aurelia: draggable="true" dragstart.trigger="onDragStart($event)" dragover.trigger="onDragOver($event)" drop.trigger="onDragDrop($event)"
+
+    // onDragStart(event: any) {
+    //     // event.preventDefault();
+    //     event.dataTransfer.effectAllowed = "move";
+    //     event.dataTransfer.setData("text/plain", null);
+    //     this._draggedElement = event.target.parentNode;
+    //     $('.gift-panel').css('cursor', 'pointer');
+    //     return true;
+    // }
+
+    // onDragOver(event: any) {
+    //     event.preventDefault();
+    //     if (this.isBefore(this._draggedElement, event.target)) {
+    //         event.target.parentNode.insertBefore(this._draggedElement, event.target);
+    //     } else {
+    //         event.target.parentNode.insertBefore(this._draggedElement, event.target.nextSibling);
+    //     }
+    // }
+
+    // onDragDrop(event: any) {
+    //     event.preventDefault();
+    // }
+
+    // private isBefore(el1: any, el2: any) {
+    //     const DOCUMENT_NODE = 9;
+    //     if (el2.parentNode === el1.parentNode) {
+    //         for (var current = el1.previousSibling; current && current.nodeType !== DOCUMENT_NODE; current = current.previousSibling) {
+    //             if (current === el2) {
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    //     return false;
+    //   }
 }
 

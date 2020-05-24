@@ -38,9 +38,9 @@ namespace DAL.App.EF.Helpers
                 }
             }
 
-            var users = new (string username, string password, string firstName, string lastName, Guid Id)[]
+            var users = new (string email, string username, string password, string firstName, string lastName, Guid Id)[]
             {
-                ("test@test.com", "Test123!", "Test", "Tester", new Guid("00000000-0000-0000-0000-000000000001"))
+                ("test@test.com", "TestAccount", "Test123!", "Test", "Tester", new Guid("00000000-0000-0000-0000-000000000001"))
             };
 
             foreach (var userInfo in users)
@@ -50,7 +50,7 @@ namespace DAL.App.EF.Helpers
                 {
                     user = new AppUser
                     {
-                        Email = userInfo.username,
+                        Email = userInfo.email,
                         UserName = userInfo.username,
                         FirstName = userInfo.firstName,
                         LastName = userInfo.lastName

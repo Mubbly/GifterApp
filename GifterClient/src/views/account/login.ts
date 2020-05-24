@@ -40,6 +40,9 @@ export class AccountLogin {
                 this.appState.jwt = responseData.token;
                 this.appState.userId = responseData.id;
                 this.appState.userFullName = `${responseData.firstName} ${responseData.lastName}`;
+                if (!this.appState.isDarkTheme) {
+                    this.appState.isDarkTheme = "false";
+                }
 
                 this.router!.navigateToRoute(this.app.HOME_ROUTE);
             } else {

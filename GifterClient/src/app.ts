@@ -5,6 +5,7 @@ import routes from 'router';
 import { AppState } from 'state/appState';
 import { AppUserService } from './service/base/appUserService';
 import { IAppUserEdit } from 'domain/IAppUser';
+import * as Utils from 'utils/utilFunctions';
 
 @autoinject
 export class App {
@@ -12,10 +13,14 @@ export class App {
     
     public readonly HOME_ROUTE = 'homeIndex';
     public readonly LOGIN_ROUTE = 'accountLogin';
-    private readonly _username = '';
     router?: Router;
 
     constructor(private appState: AppState) {
+    }
+
+    activate() {
+        this.initAppTheme();
+        // this.initNavTabs();
     }
 
     configureRouter(config: RouterConfiguration, router: Router): void {
@@ -32,6 +37,21 @@ export class App {
         this.appState.jwt = null;
         this.router!.navigateToRoute(this.HOME_ROUTE);
     }
+
+    private initAppTheme(): void {
+        if(this.appState.isDarkTheme) {
+            let body = document.getElementsByTagName('body')[0];
+            body.classList.add(Utils.DARK_THEME_CLASS);
+        }
+    }
+
+    // private initNavTabs(): void {
+    //     let activeNavLink = document.getElementsByClassName('nav-link.active')[0];
+    //     if(!activeNavLink) 
+    //     {
+    //         // TODO
+    //     }
+    // }
 
     //const routeConfigs = getRouteConfigs();
     //console.log(routeConfigs);

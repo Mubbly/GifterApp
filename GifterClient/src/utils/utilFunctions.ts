@@ -11,6 +11,8 @@ export const STATUS_CODE_SERVER_ERROR = 500;
 
 export const HOME_ROUTE = "homeIndex";
 export const LOGIN_ROUTE = "accountLogin";
+export const PERSONAL_PROFILE_ROUTE = "profilesPersonal";
+export const DARK_THEME_CLASS = 'dark-theme';
 
 export function isSuccessful(response: Response | IFetchResponse<any>): boolean {
     return response.status >= STATUS_CODE_OK && response.status < STATUS_CODE_LAST_SUCCESS;

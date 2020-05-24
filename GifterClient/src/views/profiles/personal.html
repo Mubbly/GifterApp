@@ -15,7 +15,7 @@
             <div class="flex profile-summary">
                 <div class="flex-column profile-pic">
                     <a if.bind="!_profile.profilePicture" route-href="route: profilesEdit; params.bind: {}" title="Change profile picture">
-                        <!-- <img class="img-profile" src="/dp.png"/> -->
+                        <!-- <img class=w"img-profile" src="/dp.png"/> -->
                         <img if.bind="!_profile.gender || _profile.gender == '' || _profile.gender == 'Non-binary'" class="img-profile" src="/icons/icon-dp-unisex-colorful.png"/>
                         <img if.bind="_profile.gender == 'Female'" class="img-profile" src="/icons/icon-dp-female-colorful.png"/>
                         <img if.bind="_profile.gender == 'Male'" class="img-profile" src="/icons/icon-dp-male-colorful.png"/>
@@ -24,7 +24,7 @@
                         <img class="img-profile" src="${_profile.profilePicture}"/>
                     </a>
                 </div>
-                <div class="flex flex-column">    
+                <div class="flex flex-column profile-intro">    
                     <div class="flex">
                         <div if.bind="_appUser.fullName" class="flex-column">${_appUser.fullName}</div>
                         <div if.bind="_profile.age"class="separator">|</div> 
@@ -36,14 +36,7 @@
                 </div>
             </div>
             <hr class="profile-hr">
-            <p class="biography">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                ${_profile.bio}
-            </p>
+            <p class="biography">${_profile.bio}</p>
         </section>
 
         <section class="profile-wishlist flex-column" if.bind="_wishlist">
@@ -79,8 +72,8 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody if.bind="_gifts">
-                    <tr repeat.for="gift of _gifts">
+                <tbody if.bind="_gifts" class="gift-panels">
+                    <tr repeat.for="gift of _gifts" class="gift-panel">
                         <td>
                             ${gift.name}
                         </td>
@@ -101,6 +94,7 @@
                             <a route-href="route: giftsEdit; params.bind: { id: gift.id }" class="flex-column" title="Edit gift"><img src="/icons/icon-edit.png" class="icon"/></a>
                             <a href="#" class="flex-column" title="Archive gift"><img src="/icons/icon-archive.png" class="icon"/></a>
                             <a route-href="route: giftsDelete; params.bind: { id: gift.id }" class="flex-column" title="Delete gift"><img src="/icons/icon-delete.png" class="icon"/></a>
+                            <!-- <a class="flex-column" title="Reorder gift"><img src="/icons/icon-reorder.png" class="icon"/></a> -->
                         </td>
                     </tr>
                 </tbody>
