@@ -7,15 +7,24 @@
     </section>
 
     <section if.bind="appState.jwt" class="home-authorized">
-        <h1>Welcome back${appState.userFullName ? ', ' + appState.userFullName : ''}!</h1>
+        <h1 class="welcome-text">Welcome back${appState.userFullName ? ', ' + appState.userFullName : ''}!</h1>
         <!-- <hr/> -->
         <section class="notifications home">
             <div class="card">[ Notifications ]</div>
         </section>
         <!-- <hr/> -->
         <section class="ads home">
-            <div class="ad wrapper flex crop-banner-ad card">
-                <img class="home campaign-ad flex" src="/images/gift.png" title="Ad for latest active campaign(s)"/>
+            <div class="card flex flex-row">
+                <div class="ad wrapper flex crop-banner-ad">
+                    <a href="#" title="Go to campaign"><img class="home campaign-ad flex" src="/images/gift.png" alt="Ad for latest active campaign(s)"/></a>
+                </div>
+                <div class="flex flex-column campaign-ad-text">
+                    <a href="#" title="Go to campaign"><h2>Lorem ipsum dolor sit amet</h2></a>
+                    <p>consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
             </div>
             <!-- <div class="ad wrapper flex crop-banner-ad">
                 <img class="home campaign-ad flex" src="/gift.png" title="Ad for latest active campaign(s)"/>

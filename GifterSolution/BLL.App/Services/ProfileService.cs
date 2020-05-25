@@ -20,11 +20,11 @@ namespace BLL.App.Services
         {
             
         }
-
-        public async Task<BLLAppDTO.ProfileBLL> GetPersonalAsync(Guid userId, Guid? profileId = null, bool noTracking = true)
+        
+        public async Task<BLLAppDTO.ProfileBLL> GetByUserAsync(Guid userId, Guid? profileId = null, bool noTracking = true)
         {
-            var existingProfile = await Repository.GetPersonalAsync(userId, profileId, noTracking);
-            return Mapper.Map(existingProfile);
+            var userProfile = await UOW.Profiles.GetByUserAsync(userId, profileId, noTracking);
+            return Mapper.Map(userProfile);
         }
 
         /**

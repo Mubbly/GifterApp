@@ -21,11 +21,15 @@
 
                     <ul if.bind="appState.jwt" class="navbar-nav account flex">
                         <li class="nav-item">
+                            <a if.bind="!appState.isDarkTheme" href="#" click.delegate="onToggleTheme($event)" class="nav-link" title="Toggle theme"><img src="/icons/icon-switch-on.png" class="icon on"/></a>
+                            <a if.bind="appState.isDarkTheme" href="#" click.delegate="onToggleTheme($event)" class="nav-link" title="Toggle theme"><img src="/icons/icon-switch-off.png" class="icon off"/></a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" route-href="route: aboutIndex; params.bind: {}">Help</a>
                         </li>
                         <div class="separator">|</div>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="#" click.delegate="logoutOnClick()">Log out</a>
+                            <a class="nav-link text-dark" href="#" click.delegate="onLogOut()">Log out</a>
                         </li>
                     </ul>
 
@@ -47,8 +51,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 – GifterApp by Melissa Eenmaa –
-            Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+            &copy; 2020 – GifterApp by Melissa Eenmaa – Icons from <a href="https://www.materialui.co/icons" title="Material UI">www.materialui.co/icons</a> & by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
         </div>
     </footer>
 </template>

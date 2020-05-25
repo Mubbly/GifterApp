@@ -6,7 +6,7 @@
                     ${_appUser.userName}
                 </h1> 
                 <a route-href="route: profilesEdit; params.bind: {}" class="flex-column icon-container" title="Edit profile">
-                    <img src="/icons/icon-settings.png" class="icon profile-settings"/>
+                    <img src="/icons/icon-settings-grey-m.png" class="icon profile-settings"/>
                 </a>
             </div>
             <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
@@ -81,7 +81,7 @@
                             ${gift.description}
                         </td>
                         <td>
-                            <a if.bind="gift.image" href="${gift.image}">Image</a>
+                            <a if.bind="gift.image" href="${gift.image}">Open image</a>
                         </td>
                         <td if.bind="gift.partnerUrl">
                             <a href="${gift.partnerUrl}">Go to shop</a> 
@@ -90,11 +90,12 @@
                             <a if.bind="gift.url" href="${gift.url}">Go to shop</a>
                         </td>
                         <td class="flex icon-group">
-                            <a href="#" class="flex-column" title="Pin gift"><img src="/icons/icon-pin.png" class="icon"/></a>
-                            <a route-href="route: giftsEdit; params.bind: { id: gift.id }" class="flex-column" title="Edit gift"><img src="/icons/icon-edit.png" class="icon"/></a>
-                            <a href="#" class="flex-column" title="Archive gift"><img src="/icons/icon-archive.png" class="icon"/></a>
-                            <a route-href="route: giftsDelete; params.bind: { id: gift.id }" class="flex-column" title="Delete gift"><img src="/icons/icon-delete.png" class="icon"/></a>
-                            <!-- <a class="flex-column" title="Reorder gift"><img src="/icons/icon-reorder.png" class="icon"/></a> -->
+                            <a if.bind="!gift.isPinned" href="#" class="flex-column" title="Pin to top"><img src="/icons/icon-notpinned-grey-m.png" class="icon" alt="Pin"/></a>
+                            <a if.bind="gift.isPinned" href="#" class="flex-column" title="Unpin from top"><img src="/icons/icon-pinned-grey-m.png" class="icon" alt="Unpin"/></a>
+                            <a route-href="route: giftsEdit; params.bind: { id: gift.id }" class="flex-column" title="Edit"><img src="/icons/icon-edit-grey-m.png" class="icon" alt="Edit"/></a>
+                            <a href="#" class="flex-column" title="Archive"><img src="/icons/icon-archive-grey-m.png" class="icon" alt="Archive"/></a>
+                            <a route-href="route: giftsDelete; params.bind: { id: gift.id }" class="flex-column" title="Delete"><img src="/icons/icon-delete-grey-m.png" class="icon" alt="Delete"/></a>
+                            <a class="flex-column" title="Reorder"><img src="/icons/icon-reorder-grey-m.png" class="icon" alt="Reorder"/></a>
                         </td>
                     </tr>
                 </tbody>

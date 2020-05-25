@@ -7,14 +7,17 @@
         </form>
         <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
     </section>
-    <section if.bind="_users">
+    <section if.bind="_users.length > 0" class="search-results card">
         <table class="table">
             <thead>
             </thead>
             <tbody>
                 <tr repeat.for="user of _users">
-                    <td>
-                        <img src="#" class="profile-picture icon"/>
+                    <td if.bind="!user.profilePicture">
+                        <img class="profile-picture icon" src="/icons/icon-dp-unisex-colorful.png"/>
+                    </td>
+                    <td if.bind="user.profilePicture">                        
+                        <img src="${user.profilePicture}" class="profile-picture icon"/>
                     </td>
                     <td>
                         ${user.fullName}
@@ -26,10 +29,12 @@
                         ${user.lastActive}
                     </td>
                     <td class="flex">      
-                        <a route-href="route: profilesIndex; params.bind: { userId: user.id }" class="button">Go to profile</a>
-                        <a if.bind="!_isFriend" class="button" href="#">Add friend</a> 
+                        <!-- <a route-href="route: profilesIndex; params.bind: { userId: user.id }" class="button">Go to profile</a> -->
+                        <a route-href="route: profilesIndex; params.bind: { userId: user.id }" title="Go to profile">Profile<img src="/icons/icon-open-grey-m.png" class="icon" alt="Go to profile"/></a>
+                        <a if.bind="!_isFriend" href="#" title="Add friend"><img src="/icons/icon-add-friend-grey-m.png" class="icon" alt="Add friend"/></a> 
                         <!-- click.delegate="addFriend(user.id)"         -->
-                        <a if.bind="_isFriend" route-href="route: friendshipsDelete; params.bind: { id: user.id }" class="button">Unfriend</a>  
+                        <a if.bind="_isFriend" route-href="route: friendshipsDelete; params.bind: { id: user.id }" title="Unfriend"><img src="/icons/icon-delete-grey-m.png" class="icon" alt="Unfriend"/></a> 
+                        <!-- click.delegate="unFriend(user.id)"         -->
                     </td>
                 </tr>
             </tbody>

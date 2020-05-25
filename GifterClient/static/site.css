@@ -95,7 +95,19 @@ h3 {
 }
 
 section.home {
-    padding: 10px 0;
+    padding: 0.4rem 0;
+}
+
+.welcome-text {
+    padding-bottom: 1rem;
+}
+
+.profile-wishlist {
+    margin-top: -17px;
+}
+
+.navbar {
+    z-index: 9999;
 }
 
 
@@ -122,9 +134,10 @@ h1.username {
     position: relative;
     overflow: hidden;
     margin-bottom: 1%;
+    clip-path: polygon(100% 100%, 1% 0%, 100% 0, 100% 100%);
     /* clip-path: polygon(75% 100%, 1% 0%, 100% 0, 100% 100%); */
-    clip-path: polygon(74% 100%, 1% 0%, 100% 0, 100% 100%, 71% 61%);
-    border: 1px solid black;
+    /* clip-path: polygon(74% 100%, 1% 0%, 100% 0, 100% 100%, 71% 61%); */
+    border: 1px solid #212121;
     /* border-radius: 50% 1%; */
 }
 
@@ -136,25 +149,31 @@ h1.username {
     top: -190px;
 }
 
+.ads.home .card {
+    padding: 0;
+    max-height: 300px;
+}
+
 .crop-banner-ad {
-    display: block;
-    height: 250px;
-    width: 100%;
+    height: 299px;
+    width: 50%;
     position: relative;
     overflow: hidden;
+    border-radius: 0.70rem 0 0 0.70rem;
 }
 
 .crop-banner-ad img {
     position: absolute;
+    width: 100%;
     /* alter this to move left or right */
     left: 0;
     /* alter this to move up or down */
     top: 0;
 }
 
-img.home.campaign-ad {
+.campaign-ad-text {
     width: 50%;
-    /* height: 250px; */
+    padding: 2rem;
 }
 
 .crop-banner-profile.small {
@@ -164,7 +183,7 @@ img.home.campaign-ad {
 }
 
 .wishlist-heading {
-    margin-top: -21.5%;
+    margin-top: -20.5%;
 }
 
 .button.add-gift {
@@ -213,8 +232,8 @@ hr.profile-hr {
 }
 
 input[type='submit'].search-button {
-    background: url('/icons/icon-search-bold.png') no-repeat center #fff;
-    background-size: 20px;
+    background: url('/icons/icon-search-grey-36-m.png') no-repeat center #fff;
+    background-size: 27px;
     width: 30px;
     height: 30px;
     border: none;
@@ -247,8 +266,9 @@ input[type='submit'].search-button {
 
 .card {
     padding: 2%;
-    margin: 1% 0;
+    margin: 0.5rem 0 0.75rem 0;
     box-shadow: 0 2px 6px 0 #EEEEEE, 0 2px 15px 0 #E0E0E0;
+    overflow: hidden;
     /* margin: 0.5% 0;
     box-shadow: 0 2px 2px 0 #EEEEEE, 0 2px 2px 0 #E0E0E0; */
     /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
@@ -264,7 +284,7 @@ section.intro {
     background: #9FA8DA;
     /* background: #C5CAE9; */
     color: white !important;
-    /* border: 1px solid #9FA8DA; */
+    border: 1px solid #9FA8DA;
     margin: 0 10px 10px 0;
     padding: 0.5rem 2rem;
     text-align: center;
@@ -328,10 +348,14 @@ input {
 input[type='text']:focus,
 input[type='date']:focus,
 input[type='number']:focus,
+input[type='email']:focus,
+input[type='password']:focus,
 textarea:focus,
 input[type='text']:hover,
 input[type='date']:hover,
 input[type='number']:hover,
+input[type='email']:hover,
+input[type='password']:hover,
 textarea:hover {
     box-shadow: 0 .10rem .25rem #C5CAE9 !important;
     /* box-shadow: 0 2px 2px 0 #C5CAE9, 0 2px 2px 0 #C5CAE9; */
@@ -405,8 +429,8 @@ input[type='radio']:checked:before {
 input[type='radio']:checked:before {
     content: '•';
     position: relative;
-    padding-left: 0.2rem;
-    top: -20px;
+    padding-left: 0.20rem;
+    top: -21px;
     font-size: 36px;
 }
 
@@ -621,6 +645,43 @@ body {
     /* #616161, #424242 */
 }
 
+.table td {
+    border-top: none !important;
+}
+
+table tbody tr {
+    border-top: 1px solid #E0E0E0;
+}
+
+textarea {
+    overflow: hidden;
+}
+
+.navbar,
+.footer {
+    padding: 0.3rem 1rem;
+}
+
+.footer {
+    line-height: 55px !important;
+}
+
+.nav-link {
+    padding: 0 1rem;
+}
+
+.icon.on,
+.icon.off {
+    margin: 0;
+}
+
+.profile-picture.icon {
+    cursor: default;
+}
+
+
+/* DARK THEME */
+
 body.dark-theme {
     background-color: #212121;
 }
@@ -629,13 +690,26 @@ body.dark-theme,
 body.dark-theme table,
 body.dark-theme .navbar .nav-link,
 body.dark-theme a.button,
-body.dark-theme input::placeholder,
-body.dark-theme .panel-heading a {
+body.dark-theme .panel-heading a,
+body.dark-theme table th,
+body.dark-theme form label {
+    /* color: #BDBDBD !important; */
     color: #E0E0E0 !important;
 }
 
-body.dark-theme input {
-    color: #F5F5F5;
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6,
+body.dark-theme .heading {
+    color: #E0E0E0 !important;
+}
+
+body.dark-theme input,
+body.dark-theme textarea {
+    color: #F5F5F5 !important;
 }
 
 body.dark-theme a {
@@ -644,33 +718,117 @@ body.dark-theme a {
 
 body.dark-theme .navbar {
     border-bottom: 1px solid #616161 !important;
+    /* box-shadow: 0 0 4rem black; */
+}
+
+
+/* .card {
+    box-shadow: 0 0 .1rem black !important;
+} */
+
+body.dark-theme table th {
+    border-bottom: 2px solid #616161 !important;
+}
+
+body.dark-theme .footer.border-top,
+body.dark-theme table tbody tr {
+    border-top: 1px solid #616161 !important;
 }
 
 body.dark-theme .navbar,
-body.dark-theme input {
+body.dark-theme input,
+body.dark-theme textarea {
     background: #424242 !important;
 }
 
 body.dark-theme .button,
-body.dark-theme .button {
-    background: #7E57C2;
+body.dark-theme .button,
+body.dark-theme input[type='submit']:not(.search-button) {
+    background: #7E57C2 !important;
+    border: 1px solid #7E57C2 !important;
 }
 
 body.dark-theme .button:hover,
-body.dark-theme .button:focus {
-    background: #9575CD;
+body.dark-theme .button:focus,
+body.dark-theme input[type='submit']:not(.search-button):focus,
+body.dark-theme input[type='submit']:not(.search-button):hover {
+    background: #9575CD !important;
+}
+
+body.dark-theme .search-button {
+    background: url('/icons/icon-search-grey-36-m.png') no-repeat center #424242 !important;
+    background-size: 27px !important;
+    color: transparent !important;
 }
 
 body.dark-theme .panel-heading {
     background: #9575CD;
-    border-bottom: 2px solid #424242;
+    border: 2px solid #424242;
+    margin: 0;
+    box-shadow: 0 2px 2px 0 #424242, 0 2px 2px 0 #626262;
     /* box-shadow: 0 2px 2px 0 #616161, 0 2px 2px 0 #424242; */
 }
 
 body.dark-theme .card {
-    box-shadow: 0 2px 2px 0 #616161, 0 2px 2px 0 #424242;
+    box-shadow: none;
+    /* border: 1px solid #616161; */
+    /* box-shadow: 0 1px 2px 0 #616161, 0 2px 2px 0 #424242; */
     background-color: #424242;
 }
+
+body.dark-theme .form-control,
+body.dark-theme input[type='text'],
+body.dark-theme input[type='email'],
+body.dark-theme input[type='password'],
+body.dark-theme input[type='number'],
+body.dark-theme input[type='date'],
+body.dark-theme input[type='radio'],
+body.dark-theme input[type='checkbox'],
+body.dark-theme textarea {
+    border: 1px solid #424242;
+}
+
+body.dark-theme input[type='text']:focus,
+body.dark-theme input[type='date']:focus,
+body.dark-theme input[type='number']:focus,
+body.dark-theme input[type='email']:focus,
+body.dark-theme input[type='password']:focus,
+body.dark-theme textarea:focus,
+body.dark-theme input[type='text']:hover,
+body.dark-theme input[type='date']:hover,
+body.dark-theme input[type='number']:hover,
+body.dark-theme input[type='email']:hover,
+body.dark-theme input[type='password']:hover,
+body.dark-theme textarea:hover,
+body.dark-theme input[type='checkbox']:hover,
+body.dark-theme input[type='radio']:hover,
+body.dark-theme input[type='checkbox']:checked,
+body.dark-theme input[type='radio']:checked {
+    box-shadow: 0 0 .5rem #9575CD !important;
+    /* box-shadow: 0 2px 2px 0 #C5CAE9, 0 2px 2px 0 #C5CAE9; */
+    border: 1px solid #9575CD !important;
+    color: #F5F5F5;
+}
+
+body.dark-theme input[disabled],
+body.dark-theme input[disabled]:hover {
+    box-shadow: inset 0px 0px 20px 5px #212121 !important;
+    border: none !important;
+    color: #616161 !important;
+}
+
+body.dark-theme input::placeholder,
+body.dark-theme textarea::placeholder {
+    color: #757575 !important;
+}
+
+body.dark-theme input[type='radio']:checked:before {
+    padding-left: 0.26rem;
+    top: -20.5px;
+}
+
+
+/* OTHER */
 
 table {
     color: #616161 !important;
@@ -690,8 +848,20 @@ table {
     /* Vertically center the text there */
 }
 
+.profile.other .wishlist-heading {
+    margin-top: -15.5%;
+    padding-bottom: 2rem;
+}
 
-/* custom css */
+
+/* .profile.other .wishlist-heading {
+    font-size: 2rem;
+} */
+
+
+/* table tbody:first-child {
+    border-top: none !important;
+} */
 
 
 /* body {

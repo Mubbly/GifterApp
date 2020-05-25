@@ -1,143 +1,174 @@
-// import { Router } from "aurelia-router";
-// import { autoinject } from "aurelia-framework";
-// import { IProfile } from "domain/IProfile";
-// import { ProfileService } from "service/profileService";
-// import * as Utils from "utils/utilFunctions";
-// import { Optional, GifterInterface } from "types/generalTypes";
-// import { AppState } from "state/appState";
-// import { AppUserService } from "service/base/appUserService";
-// import { IGift } from "domain/IGift";
-// import { GiftService } from "service/giftService";
-// import { IAppUser } from "domain/IAppUser";
-// import { WishlistService } from "service/wishlistService";
-// import { IWishlist } from '../../domain/IWishlist';
-// import { IFetchResponse } from "types/IFetchResponse";
+import { Router } from "aurelia-router";
+import { autoinject } from "aurelia-framework";
+import { IProfile } from "domain/IProfile";
+import { ProfileService } from "service/profileService";
+import * as Utils from "utils/utilFunctions";
+import { Optional, GifterInterface } from "types/generalTypes";
+import { AppState } from "state/appState";
+import { AppUserService } from "service/base/appUserService";
+import { IGift } from "domain/IGift";
+import { GiftService } from "service/giftService";
+import { IAppUser } from "domain/IAppUser";
+import { WishlistService } from "service/wishlistService";
+import { IFetchResponse } from "types/IFetchResponse";
+import { IWishlist } from "domain/IWishlist";
 
-// @autoinject
-// export class ProfilesIndex {
-//     //private _profiles: IProfile[] = [];
-//     private _profile: Optional<IProfile> = null;
-//     private _currentUser: Optional<IAppUser> = null;
-//     private _targetUser: Optional<IAppUser> = null;
-//     private _wishlist: Optional<IWishlist> = null;
-//     private _gifts: IGift[] = [];
-//     private _lastActiveDate: string = '';
-//     private _errorMessage: Optional<string> = null;
+@autoinject
+export class ProfilesIndex {
+    private readonly EMPTY_WISHLIST_MESSAGE = "This user's wishlist seems to be empty! :(";
+    private readonly ERROR_PROFILE_NOT_FOUND = "404 Not Found";
 
-//     constructor(
-//         private profileService: ProfileService,
-//         private appUserService: AppUserService,
-//         private wishlistService: WishlistService,
-//         private giftService: GiftService,
-//         private router: Router,
-//         private appState: AppState
-//     ) {
-//     }
+    private _profile: Optional<IProfile> = null;
+    private _currentUser: Optional<IAppUser> = null;
+    private _profileOwner: Optional<IAppUser> = null;
+    private _wishlist: Optional<IWishlist> = null;
+    private _gifts: IGift[] = [];
+    private _errorMessage: Optional<string> = null;
 
-//     attached() {}
+    private _lastActiveDate: string = '';
+    private _emptyWishlistMessage: Optional<string> = null;
 
-//     activate(params: any) {
-//         if(!this.appState.jwt) {
-//             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
-//         } else {
-//             this.getCurrentAppUser();
-//             this.getTargetAppUser(params.userId);
-//             this.getProfile(params.userId);
-//             this.getWishlist();
-//             this.getGifts();
-//         }
-//     }
+    // TODO: These need to go to the db!
+    private _showEmail: boolean = false;
+    private _profileBannerUrl: Optional<string> = null;
 
-//     private getCurrentAppUser(): void {
-//         this.appUserService
-//             .getCurrentUser()
-//             .then((response) => {
-//                 if(Utils.isSuccessful(response) && response.data) {
-//                     this._currentUser = response.data;
-//                 } else {
-//                     this.handleErrors(response);
-//                 }
-//             })
-//             .catch((error) => {
-//                 console.log(error);
-//             });
-//     }
+    constructor(
+        private profileService: ProfileService,
+        private appUserService: AppUserService,
+        private wishlistService: WishlistService,
+        private giftService: GiftService,
+        private router: Router,
+        private appState: AppState
+    ) {
+    }
 
-//     private getTargetAppUser(): Promise<void> {
-//         return this.appUserService
-//             .getCurrentUser()
-//             .then((response) => {
-//                 if(Utils.isSuccessful(response) && response.data) {
-//                     this._currentUser = response.data;
-//                 } else {
-//                     this.handleErrors(response);
-//                 }
-//             })
-//             .catch((error) => {
-//                 console.log(error);
-//             });
-//     }
+    attached() {}
 
-//     /**
-//      * Get user's profile. Default initial one if not edited yet.
-//      */
-//     private getProfile(profileId: string): Promise<void> {
-//         return this.profileService
-//             .get(profileId)
-//             .then((response) => {
-//                 if (!Utils.isSuccessful(response)) {
-//                     this.handleErrors(response);
-//                 } else {                    
-//                     this._profile = response.data!;
-//                     this._lastActiveDate = Utils.formatAsHtml5Date(this._profile.appUser.lastActive);
-//                     console.log(this._profile.id);
-//                 }
-//             })
-//             .catch((error) => {
-//                 console.log(error);
-//             });
-//     }
+    activate(params: any) {
+        if(!this.appState.jwt) {
+            this.router.navigateToRoute(Utils.LOGIN_ROUTE);
+        } else {
+            if(params.userId) {
+                if(params.userId === this.appState.userId) {
+                    this.router.navigateToRoute(Utils.PERSONAL_PROFILE_ROUTE);
+                } else {
+                    this.getFullRequestedProfile(params.userId);
+                }
+            } else {
+                this._errorMessage = this.ERROR_PROFILE_NOT_FOUND;
+            }
+        }
+    }
 
-//     private getWishlist(wishlistId: string): Promise<void> {
-//         return this.wishlistService
-//             .get(wishlistId)
-//             .then((response) => {
-//                 if (!Utils.isSuccessful(response)) {
-//                     this.handleErrors(response);
-//                 } else {                    
-//                     this._wishlist = response.data!;
-//                 }
-//             })
-//             .catch((error) => {
-//                 console.log(error);
-//             });
-//     }
+    private getFullRequestedProfile(profileOwnerId: string): void {
+        this.getRequestingUser();
+        this.getProfileOwner(profileOwnerId);
+    }
 
-//     private getGifts(): Promise<void> {
-//         return this.giftService
-//             .getAll()
-//             .then((response) => {
-//                 if (!Utils.isSuccessful(response)) {
-//                     this.handleErrors(response);
-//                 } else {                    
-//                     this._gifts = response.data!;
-//                 }
-//             })
-//             .catch((error) => {
-//                 console.log(error);
-//             });
-//     }
+    private getRequestingUser(): void {
+        this.appUserService
+            .getCurrentUser()
+            .then((response) => {
+                if(Utils.isSuccessful(response) && response.data) {
+                    this._currentUser = response.data;
+                } else {
+                    this.handleErrors(response);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
 
-//     /**
-//      * Set error message or route to login/home page
-//      */
-//     private handleErrors(response: IFetchResponse<GifterInterface | GifterInterface[]>) {
-//         switch(response.status) {
-//             case Utils.STATUS_CODE_UNAUTHORIZED:
-//                 this.router.navigateToRoute(Utils.LOGIN_ROUTE);
-//                 break;
-//             default:
-//                 this._errorMessage = Utils.getErrorMessage(response);
-//         }
-//     }
-// }
+    private getProfileOwner(userId: string): Promise<void> {
+        return this.appUserService
+            .getUser(userId)
+            .then((response) => {
+                if(Utils.isSuccessful(response) && response.data) {
+                    this._profileOwner = response.data;
+                    // If user is found, get requested profile and related items
+                    if(this._profileOwner && this._profileOwner.id === userId) {
+                        this.getProfile(userId);
+                    }
+                } else {
+                    this.handleErrors(response);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    /**
+     * Get user's profile. Default initial one if not edited yet.
+     */
+    private getProfile(userId: string): Promise<void> {
+        return this.profileService
+            .getUserProfile(userId)
+            .then((response) => {
+                if (!Utils.isSuccessful(response)) {
+                    this.handleErrors(response);
+                } else {                    
+                    this._profile = response.data!;
+                    if(this._profile) {
+                        this._lastActiveDate = Utils.formatAsHtml5Date(this._profileOwner!.lastActive);
+
+                        this.getWishlist(this._profile.wishlistId);
+                        this.getGifts(userId);
+                    }
+                    console.log(this._profile.id);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    private getWishlist(wishlistId: string): Promise<void> {
+        return this.wishlistService
+            .get(wishlistId)
+            .then((response) => {
+                if (!Utils.isSuccessful(response)) {
+                    this.handleErrors(response);
+                } else {                    
+                    this._wishlist = response.data!;
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    private getGifts(userId: string): Promise<void> {
+        return this.giftService
+            .getAllForUser(userId)
+            .then((response) => {
+                if (!Utils.isSuccessful(response)) {
+                    this.handleErrors(response);
+                } else {                    
+                    this._gifts = response.data!;
+                    if(!this._gifts || this._gifts.length <= 0) {
+                        this._emptyWishlistMessage = this.EMPTY_WISHLIST_MESSAGE;
+                    } else {
+                        this._emptyWishlistMessage = null;
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    /**
+     * Set error message or route to login/home page
+     */
+    private handleErrors(response: IFetchResponse<GifterInterface | GifterInterface[]>) {
+        switch(response.status) {
+            case Utils.STATUS_CODE_UNAUTHORIZED:
+                this.router.navigateToRoute(Utils.LOGIN_ROUTE);
+                break;
+            default:
+                this._errorMessage = Utils.getErrorMessage(response);
+        }
+    }
+}

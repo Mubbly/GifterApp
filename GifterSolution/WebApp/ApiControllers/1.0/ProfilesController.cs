@@ -29,8 +29,6 @@ namespace WebApp.ApiControllers._1._0
     {
         private readonly IAppBLL _bll;
         private readonly ProfileMapper _mapper = new ProfileMapper();
-        private readonly UserManager<DomainIdentity.AppUser> _userManager;
-        private readonly AppUserMapper _userMapper = new AppUserMapper();
         private readonly ILogger<ProfilesController> _logger;
 
         /// <summary>
@@ -38,38 +36,37 @@ namespace WebApp.ApiControllers._1._0
         /// </summary>
         /// <param name="appBLL"></param>
         /// <param name="logger"></param>
-        /// <param name="userManager"></param>
-        public ProfilesController(IAppBLL appBLL, ILogger<ProfilesController> logger, UserManager<DomainIdentity.AppUser> userManager)
+        public ProfilesController(IAppBLL appBLL, ILogger<ProfilesController> logger)
         {
             _bll = appBLL;
             _logger = logger;
-            _userManager = userManager;
         }
 
         // ----------------------------- GET ONLY PROFILE TABLE DATA WITHOUT WISHLIST/GIFTS --------------------------
 
-        // GET: api/Profiles/5/Data
+        // GET: api/Profiles/User/5
         /// <summary>
         ///     Get a single profile - just the data without wishlist/gifts
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="userId"></param>
         /// <returns>Profile object</returns>
-        [HttpGet("{id}")]
+        [HttpGet("user/{userId}")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
-        public async Task<ActionResult<V1DTO.ProfileDTO>> GetProfile(Guid id)
+        public async Task<ActionResult<V1DTO.ProfileDTO>> GetUserProfile(Guid userId)
         {
-            var profile = await _bll.Profiles.FirstOrDefaultAsync(id);
+            // TODO: If private profile, check whether a friend is accessing!
+            var profile = await _bll.Profiles.GetByUserAsync(userId);
             if (profile == null)
             {
-                return NotFound(new V1DTO.MessageDTO($"Profile with id {id} not found"));
+                return NotFound(new V1DTO.MessageDTO($"Profile for user {userId} not found"));
             }
             return Ok(_mapper.Map(profile));
         }
         
-        // GET: api/Profiles/Personal/Data
+        // GET: api/Profiles/Personal
         /// <summary>
         ///     Get a single personal profile - just the data without wishlist/gifts
         /// </summary>
@@ -81,14 +78,14 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
         public async Task<ActionResult<V1DTO.ProfileDTO>> GetPersonalProfile()
         {
-            var personalProfile = await _bll.Profiles.GetPersonalAsync(User.UserGuidId());
+            var personalProfile = await _bll.Profiles.GetByUserAsync(User.UserGuidId());
             if (personalProfile == null)
             {
                 return NotFound(new V1DTO.MessageDTO($"Profile not found"));
             }
             if (personalProfile.AppUserId != User.UserGuidId())
             {
-                return BadRequest(new V1DTO.MessageDTO($"Profile not found"));
+                return NotFound(new V1DTO.MessageDTO($"Profile not found"));
             }
             
             return Ok(_mapper.Map(personalProfile));
@@ -117,7 +114,7 @@ namespace WebApp.ApiControllers._1._0
                 return BadRequest(new V1DTO.MessageDTO("Cannot update this profile"));
             }
             // Update existing profile
-            var profile = await _bll.Profiles.GetPersonalAsync(User.UserGuidId(), id);
+            var profile = await _bll.Profiles.GetByUserAsync(User.UserGuidId(), id);
             if (profile == null)
             {
                 _logger.LogError($"EDIT. No such profile: {profileDTO.Id}, user: {User.UserGuidId()}");

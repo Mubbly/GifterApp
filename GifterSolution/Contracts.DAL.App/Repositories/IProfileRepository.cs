@@ -7,6 +7,6 @@ namespace Contracts.DAL.App.Repositories
 {
     public interface IProfileRepository : IBaseRepository<DALAppDTO.ProfileDAL>, IProfileRepositoryCustom
     {
-        Task<DALAppDTO.ProfileDAL> GetPersonalAsync(Guid userId, Guid? profileId, bool noTracking = true);
+        Task<DALAppDTO.ProfileDAL> GetByUserAsync(Guid userId, Guid? profileId, bool noTracking = true);
     }
 }

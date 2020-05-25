@@ -1,132 +1,134 @@
 <template>
     <section>
-        <h1>Archived gifts</h1>
-        <div>
-            <p>Gifts that are no longer active. Either someone already gifted it to you or you gifted it to someone else.</p>
-            <p><i><strong>Note:</strong> If you wish to receive the same gift again - you could re-activate it.</i></p>
-        </div>
-    </section>
-
-    <section>
-        <h2>Gifts that I've given to others</h2>
-        <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        To
-                    </th>
-                    <th>
-                        Date
-                    </th>
-                    <th>
-                        Gift
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                    <th>
-                        Image
-                    </th>
-                    <th>
-                        Url
-                    </th>
-                    <th>
-                        PartnerUrl
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <a href="#" title="Go to profile">Full Name (username)</a>
-                    </td>
-                    <td>
-                        11.11.2011
-                    </td>
-                    <td>
-                        Gift name
-                    </td>
-                    <td>
-                        Gift desc
-                    </td>
-                    <td>
-                        Image url
-                    </td>
-                    <td>
-                        Link to shop
-                    </td>
-                    <td>
-                        Link to partner
-                    </td>
-                    <td>
-                        <a route-href="route: archivedgiftsDelete; params.bind: {}" class="button">Delete</a>   
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
-
-    <section>
-        <h2>My gifts</h2>
-        <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        From
-                    </th>
-                    <th>
-                        Date
-                    </th>
-                    <th>
-                        Gift
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                    <th>
-                        Image
-                    </th>
-                    <th>
-                        Url
-                    </th>
-                    <th>
-                        PartnerUrl
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <a href="#" title="Go to profile">Full Name (username)</a>
-                    </td>
-                    <td>
-                        11.11.2011
-                    </td>
-                    <td>
-                        Gift name
-                    </td>
-                    <td>
-                        Gift desc
-                    </td>
-                    <td>
-                        Image url
-                    </td>
-                    <td>
-                        Link to shop
-                    </td>
-                    <td>
-                        Link to partner
-                    </td>
-                    <td class="flex">
-                        <a route-href="route: archivedgiftsCreate; params.bind: {}" class="button">Re-activate</a>
-                        <a route-href="route: archivedgiftsDelete; params.bind: {}" class="button">Delete</a>       
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <section class="intro">
+            <h1>Archived gifts</h1>
+            <div>
+                <p>Gifts that are no longer active. Either someone already gifted it to you or you gifted it to someone else.</p>
+                <p><i><strong>Note:</strong> If you wish to receive the same gift again - you could re-activate it.</i></p>
+            </div>
+            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+        </section>
+        <section class="others-archived-gifts card">
+            <h2>Given by me</h2>
+            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            To whom
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Gift
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Image
+                        </th>
+                        <th>
+                            Url
+                        </th>
+                        <th>
+                            PartnerUrl
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="#" title="Go to profile">Full Name (username)</a>
+                        </td>
+                        <td>
+                            11.11.2011
+                        </td>
+                        <td>
+                            Gift name
+                        </td>
+                        <td>
+                            Gift desc
+                        </td>
+                        <td>
+                            Image url
+                        </td>
+                        <td>
+                            Link to shop
+                        </td>
+                        <td>
+                            Link to partner
+                        </td>
+                        <td>
+                            <a route-href="route: archivedgiftsDelete; params.bind: {}" class="button">Delete</a>   
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    
+        <section class="my-archived-gifts card">
+            <h2>My gifts</h2>
+            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Received from
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Gift
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Image
+                        </th>
+                        <th>
+                            Url
+                        </th>
+                        <th>
+                            PartnerUrl
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="#" title="Go to profile">Full Name (username)</a>
+                        </td>
+                        <td>
+                            11.11.2011
+                        </td>
+                        <td>
+                            Gift name
+                        </td>
+                        <td>
+                            Gift desc
+                        </td>
+                        <td>
+                            Image url
+                        </td>
+                        <td>
+                            Link to shop
+                        </td>
+                        <td>
+                            Link to partner
+                        </td>
+                        <td class="flex">
+                            <a route-href="route: archivedgiftsCreate; params.bind: {}" class="button">Re-activate</a>
+                            <a route-href="route: archivedgiftsDelete; params.bind: {}" class="button">Delete</a>       
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
     </section>
 </template>

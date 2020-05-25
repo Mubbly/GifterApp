@@ -32,10 +32,27 @@ export class App {
         config.mapUnknownRoutes(DEFAULT_VIEW);
     }
 
-    logoutOnClick() {
+    onLogOut() {
         // this.updateUserActivity();
         this.appState.jwt = null;
         this.router!.navigateToRoute(this.HOME_ROUTE);
+    }
+
+    onToggleTheme(event: Event) {
+        event.preventDefault();
+
+        let body = document.getElementsByTagName('body')[0];
+        let isDarkTheme = this.appState.isDarkTheme && body.classList.contains(Utils.DARK_THEME_CLASS);
+
+        if(isDarkTheme) {
+            // Set light theme
+            body.classList.remove(Utils.DARK_THEME_CLASS);
+            this.appState.isDarkTheme = null;
+        } else {
+            // Set dark theme
+            body.classList.add(Utils.DARK_THEME_CLASS);
+            this.appState.isDarkTheme = "true";
+        }
     }
 
     private initAppTheme(): void {

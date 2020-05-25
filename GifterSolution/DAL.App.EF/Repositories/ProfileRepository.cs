@@ -19,18 +19,21 @@ namespace DAL.App.EF.Repositories
             base(dbContext, new DALMapper<DomainApp.Profile, DALAppDTO.ProfileDAL>())
         {
         }
-        
-        public async Task<DALAppDTO.ProfileDAL> GetPersonalAsync(Guid userId, Guid? profileId, bool noTracking = true)
+
+        public async Task<DALAppDTO.ProfileDAL> GetByUserAsync(Guid userId, Guid? profileId = null,
+            bool noTracking = true)
         {
             var query = PrepareQuery(userId, noTracking);
-            var personalProfiles = 
+            var profiles =
                 await query
                     .Where(a => a.AppUserId == userId)
                     .OrderBy(e => e.CreatedAt)
                     .Select(e => Mapper.Map(e))
                     .ToListAsync();
             // If no specific profile ID provided, get the first one
-            return profileId == null ? personalProfiles.FirstOrDefault() : personalProfiles.Find(p => p.Id == profileId);
+            return profileId == null
+                ? profiles.FirstOrDefault()
+                : profiles.Find(p => p.Id == profileId);
         }
 
         // public async Task<IEnumerable<Profile>> AllAsync(Guid? userId = null)

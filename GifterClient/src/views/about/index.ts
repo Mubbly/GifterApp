@@ -10,20 +10,20 @@ export class AboutIndex {
 
     attached() {}
 
-    onToggleTheme(event: Event) {
-        event.preventDefault();
+    // onToggleTheme(event: Event) {
+    //     event.preventDefault();
 
-        let body = document.getElementsByTagName('body')[0];
-        let isDarkTheme = this.appState.isDarkTheme && body.classList.contains(Utils.DARK_THEME_CLASS);
+    //     let body = document.getElementsByTagName('body')[0];
+    //     let isDarkTheme = this.appState.isDarkTheme && body.classList.contains(Utils.DARK_THEME_CLASS);
 
-        if(isDarkTheme) {
-            // Set light theme
-            body.classList.remove(Utils.DARK_THEME_CLASS);
-            this.appState.isDarkTheme = null;
-        } else {
-            // Set dark theme
-            body.classList.add(Utils.DARK_THEME_CLASS);
-            this.appState.isDarkTheme = "true";
-        }
-    }
+    //     if(isDarkTheme) {
+    //         // Set light theme
+    //         body.classList.remove(Utils.DARK_THEME_CLASS);
+    //         this.appState.isDarkTheme = null;
+    //     } else {
+    //         // Set dark theme
+    //         body.classList.add(Utils.DARK_THEME_CLASS);
+    //         this.appState.isDarkTheme = "true";
+    //     }
+    // }
 }

@@ -1,3 +1,108 @@
 <template>
-    All profiles
+    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+    <section if.bind="_profile" class="profile other flex">
+        <section class="profile-info flex-column">
+            <div class="flex middle profile-heading">
+                <h1 if.bind="_profileOwner.firstName || _profileOwner.userName"class="flex-column username">
+                    ${_profileOwner.userName}
+                </h1> 
+            </div>
+            <p if.bind="_lastActiveDate" class="date">Last active: ${_lastActiveDate}</p>
+            <hr class="profile-hr">
+            <div class="flex profile-summary">
+                <div class="flex-column profile-pic">
+                    <div if.bind="!_profile.profilePicture">
+                        <!-- <img class=w"img-profile" src="/dp.png"/> -->
+                        <img if.bind="!_profile.gender || _profile.gender == '' || _profile.gender == 'Non-binary'" class="img-profile" src="/icons/icon-dp-unisex-colorful.png"/>
+                        <img if.bind="_profile.gender == 'Female'" class="img-profile" src="/icons/icon-dp-female-colorful.png"/>
+                        <img if.bind="_profile.gender == 'Male'" class="img-profile" src="/icons/icon-dp-male-colorful.png"/>
+                    </div>
+                    <a if.bind="_profile.profilePicture" href="${_profile.profilePicture}" title="Profile picture">
+                        <img class="img-profile" src="${_profile.profilePicture}"/>
+                    </a>
+                </div>
+                <div class="flex flex-column profile-intro">    
+                    <div class="flex">
+                        <div if.bind="_profileOwner.fullName" class="flex-column">${_profileOwner.fullName}</div>
+                        <div if.bind="_profile.age"class="separator">|</div> 
+                        <div if.bind="_profile.age" class="flex-column">${_profile.age}</div> 
+                        <div if.bind="_profile.gender" class="separator">|</div> 
+                        <div if.bind="_profile.gender" class="flex-column">${_profile.gender}</div>
+                    </div>
+                    <div if.bind="_showEmail">${_profileOwner.email}</div>
+                </div>
+            </div>
+            <hr class="profile-hr">
+            <p class="biography">${_profile.bio}</p>
+        </section>
+
+        <section class="profile-wishlist flex-column" if.bind="_wishlist">
+            <div class="crop-banner-profile">
+                <img if.bind="_profileBannerUrl" class="img-profile-banner" src="${_profileBannerUrl}" alt="Profile banner"/>
+                <img if.bind="!_profileBannerUrl" class="img-profile-banner" src="/images/default-banner.png" alt="Profile banner"/>
+            </div>
+            <h2 class="wishlist-heading">Wishlist</h2>
+            
+            <p if.bind="_emptyWishlistMessage" class="text-muted"><i>${_emptyWishlistMessage}</i></p>
+            <table class="table wishlist-gifts" if.bind="_gifts.length > 0">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Image
+                        </th>
+                        <th>
+                            Shop
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody if.bind="_gifts" class="gift-panels">
+                    <tr repeat.for="gift of _gifts" class="gift-panel">
+                        <td>
+                            ${gift.name}
+                        </td>
+                        <td>
+                            ${gift.description}
+                        </td>
+                        <td>
+                            <a if.bind="gift.image" href="${gift.image}">Open image</a>
+                        </td>
+                        <td if.bind="gift.partnerUrl">
+                            <a href="${gift.partnerUrl}">Go to shop</a> 
+                        </td>
+                        <td if.bind="!gift.partnerUrl">
+                            <a if.bind="gift.url" href="${gift.url}">Go to shop</a>
+                        </td>
+                        <td class="flex icon-group">
+                            <!-- TODO: If not reserved -->
+                            <a href="#" title="Reserve" class="flex-column button">Reserve</a>
+                            
+                            <!-- TODO: If reserved by you -->
+                            <!-- <a href="#" title="Reserve" class="flex-column button">Mark gifted</a>
+                            <a href="#" title="Reserve" class="flex-column button">Cancel</a> -->
+
+                            <!-- TODO: If reserved by someone else -->
+                            <!-- <a href="#" title="Reserve" class="flex-column button">Request confirmation</a> -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </section>
+    <!-- <section>
+        <div class="crop-banner-profile small">
+            <img class="img-profile-banner small" src="/galaxy2.png" alt="Profile banner"/>
+        </div>
+    </section> -->
+    <!-- <section>
+        <div>
+            <img src="/galaxy2.png" alt="Profile banner" width="100%" height="70"/>
+        </div>
+    </section> -->
 </template>
