@@ -71,7 +71,7 @@ export class AppUserService {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.appUserApiEndpointUrl}/${name}`, {
+                .fetch(`${this.appUserApiEndpointUrl}/name/${name}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });

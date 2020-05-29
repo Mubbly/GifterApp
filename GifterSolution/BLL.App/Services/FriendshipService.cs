@@ -21,10 +21,61 @@ namespace BLL.App.Services
         {
         }
 
-        public async Task<IEnumerable<BLLAppDTO.FriendshipBLL>> GetAllPersonalAsync(Guid userId, bool isConfirmed = true, bool noTracking = true)
+        public async Task<IEnumerable<BLLAppDTO.FriendshipBLL>> GetAllConfirmedForUserAsync(Guid userId, bool noTracking = true)
         {
-            var personalCampaigns = await Repository.GetAllPersonalAsync(userId, isConfirmed, noTracking);
-            return personalCampaigns.Select(e => Mapper.Map(e));
+            var userFriendships = await UOW.Friendships.GetAllForUserAsync(userId, true, noTracking);
+            return userFriendships.Select(e => Mapper.Map(e));
+        }
+        
+        public async Task<IEnumerable<BLLAppDTO.FriendshipBLL>> GetAllPendingForUserAsync(Guid userId, bool noTracking = true)
+        {
+            var userFriendships = await UOW.Friendships.GetAllForUserAsync(userId, false, noTracking);
+            return userFriendships.Select(e => Mapper.Map(e));
+        }
+
+        public async Task<BLLAppDTO.FriendshipBLL> GetConfirmedForUserAsync(Guid userId, Guid friendId, bool noTracking = true)
+        {
+            var friendship = await UOW.Friendships.GetForUserAsync(userId, friendId, true, noTracking);
+            return Mapper.Map(friendship);
+        }
+
+        public async Task<BLLAppDTO.FriendshipBLL> GetPendingForUserAsync(Guid userId, Guid friendId, bool noTracking = true)
+        {
+            var friendship = await UOW.Friendships.GetForUserAsync(userId, friendId, false, noTracking);
+            return Mapper.Map(friendship);
+        }
+        
+        public new BLLAppDTO.FriendshipBLL Add(BLLAppDTO.FriendshipBLL entity, object? userId = null)
+        {
+            // UserId is mandatory for adding Friendship
+            if (userId == null)
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            var userGuidId = new Guid(userId.ToString());
+            var existingFriendship = UOW.Friendships.GetForUserAsync(userGuidId, entity.AppUser2Id, true);
+            var existingPendingRequest = UOW.Friendships.GetForUserAsync(userGuidId, entity.AppUser2Id, false);
+            if (existingFriendship != null || existingPendingRequest != null)
+            {
+                // return new BLLAppDTO.FriendshipBLL();
+                throw new NotSupportedException($"Could not add friendship - relationship between users {userGuidId.ToString()} {entity.AppUser2Id} already exists");
+            }
+            // Add relationship with pending status
+            entity.IsConfirmed = false;
+            return base.Add(entity, userId);
+        }
+
+        public new async Task<BLLAppDTO.FriendshipBLL> UpdateAsync(BLLAppDTO.FriendshipBLL entity, object? userId = null)
+        {
+            // UserId is mandatory for updating Friendship
+            if (userId == null)
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+            // Update relationship to confirmed status
+            entity.IsConfirmed = true;
+            return await base.UpdateAsync(entity, userId);
         }
     }
 }

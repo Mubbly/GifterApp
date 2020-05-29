@@ -83,7 +83,7 @@ export default [
         { route: ['gifts/delete/:id?'], name: 'giftsDelete', moduleId: PLATFORM.moduleName('views/gifts/delete'), nav: false, title: 'GiftsDelete' },
         { route: ['gifts/create'], name: 'giftsCreate', moduleId: PLATFORM.moduleName('views/gifts/create'), nav: false, title: 'GiftsCreate' },
 
-        { route: ['reservedgifts', 'reservedgifts/index'], name: 'reservedgiftsIndex', moduleId: PLATFORM.moduleName('views/reservedgifts/index'), nav: true, title: 'To Do' },
+        { route: ['reservedgifts', 'reservedgifts/index'], name: 'reservedgiftsIndex', moduleId: PLATFORM.moduleName('views/reservedgifts/index'), nav: true, title: 'Reserved' },
         { route: ['reservedgifts/details/:id'], name: 'reservedgiftsDetails', moduleId: PLATFORM.moduleName('views/reservedgifts/details'), nav: false, title: 'ReservedGiftsDetails' },
         { route: ['reservedgifts/edit/:id?'], name: 'reservedgiftsEdit', moduleId: PLATFORM.moduleName('views/reservedgifts/edit'), nav: false, title: 'ReservedGiftsEdit' },
         { route: ['reservedgifts/delete/:id?'], name: 'reservedgiftsDelete', moduleId: PLATFORM.moduleName('views/reservedgifts/delete'), nav: false, title: 'ReservedGiftsDelete' },

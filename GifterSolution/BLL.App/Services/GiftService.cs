@@ -21,20 +21,23 @@ namespace BLL.App.Services
         {
         }
 
-        public async Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllForUser(Guid userId, bool noTracking = true)
+        public async Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllForUserAsync(Guid userId, bool noTracking = true)
         {
-            var userGifts = await Repository.GetAllForUserAsync(userId, noTracking);
+            var userGifts = await UOW.Gifts.GetAllForUserAsync(userId, noTracking);
             return userGifts.Select(e => Mapper.Map(e));
         }
-
-        public async Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllPersonalAsync(Guid userId, bool noTracking = true)
-        {
-            return await GetAllForUser(userId, noTracking);
-        }
         
-        public virtual async Task<BLLAppDTO.GiftBLL> GetPersonalAsync(Guid giftId, Guid userId, bool noTracking = true)
+        public async Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllPinnedForUserAsync(Guid userId, bool noTracking = true)
         {
-            var allPersonalGifts = await GetAllPersonalAsync(userId, noTracking);
+            var userGifts = await UOW.Gifts.GetAllForUserAsync(userId, noTracking);
+            var giftList = userGifts.ToList();
+            var pinnedGifts = giftList.Where(g => g.IsPinned);
+            return pinnedGifts.Select(e => Mapper.Map(e));
+        }
+
+        public virtual async Task<BLLAppDTO.GiftBLL> GetForUserAsync(Guid giftId, Guid userId, bool noTracking = true)
+        {
+            var allPersonalGifts = await GetAllForUserAsync(userId, noTracking);
             var personalGift = allPersonalGifts.Where(e => e.Id == giftId);
 
             return personalGift.FirstOrDefault();

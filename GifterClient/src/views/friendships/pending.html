@@ -1,72 +1,76 @@
 <template>
     <h1>Pending friend requests</h1>
     <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-    <h2>Received</h2>
-    <table if.bind="!_pendingFriendships" class="table">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Profile
-                </th>
-                <th>
-                    Last active
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    Example Name
-                </td>
-                <td>
-                    <a href="#">Example profile link</a>
-                </td>
-                <td>
-                    11.11.2011
-                </td>
-                <td class="flex">
-                    <a route-href="route: friendshipsPending; params.bind: {}" class="button">Accept</a>
-                    <a route-href="route: search; params.bind: {}" class="button">Decline</a> 
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <h2>Sent</h2>
-    <table if.bind="!_pendingFriendships" class="table">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Profile
-                </th>
-                <th>
-                    Last active
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    Example Name
-                </td>
-                <td>
-                    <a href="#">Example profile link</a>
-                </td>
-                <td>
-                    11.11.2011
-                </td>
-                <td class="flex">
-                    <a route-href="route: search; params.bind: {}" class="button hidden">Cancel</a>
-                    <a route-href="route: search; params.bind: {}" class="button">Cancel</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <section if.bind="_pendingFriendships" class="card">
+        <h2>Received</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Profile
+                    </th>
+                    <th>
+                        Last active
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Example Name
+                    </td>
+                    <td>
+                        <a href="#">Example profile link</a>
+                    </td>
+                    <td>
+                        11.11.2011
+                    </td>
+                    <td class="flex">
+                        <a route-href="route: friendshipsPending; params.bind: {}" class="button">Accept</a>
+                        <a route-href="route: search; params.bind: {}" class="button">Decline</a> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <section if.bind="_pendingFriendships" class="card">
+        <h2>Sent</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Profile
+                    </th>
+                    <th>
+                        Last active
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Example Name
+                    </td>
+                    <td>
+                        <a href="#">Example profile link</a>
+                    </td>
+                    <td>
+                        11.11.2011
+                    </td>
+                    <td class="flex">
+                        <a route-href="route: search; params.bind: {}" class="button hidden">Cancel</a>
+                        <a route-href="route: search; params.bind: {}" class="button">Cancel</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 </template>

@@ -1,59 +1,65 @@
 <template>
-    <h1>My reserved gifts</h1>
-    <div>
-        <p>Other users' gifts that you have reserved. Buy these and gift to people who requested them!</p> 
-        <p><i><strong>Note:</strong> In case you changed your mind please "Cancel" the reservation so someone else can gift it to the person instead.</i></p>
-    </div>
-    <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    User
-                </th>
-                <th>
-                    Gift
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Image
-                </th>
-                <th>
-                    Url
-                </th>
-                <th>
-                    PartnerUrl
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <a href="#" title="Go to profile">Full Name (username)</a>
-                </td>
-                <td>
-                    Gift name
-                </td>
-                <td>
-                    Gift desc
-                </td>
-                <td>
-                    Image url
-                </td>
-                <td>
-                    Link to shop
-                </td>
-                <td>
-                    Link to partner
-                </td>
-                <td class="flex">
-                    <a route-href="route: archivedgiftsCreate; params.bind: {}" class="button">Mark gifted</a>
-                    <a route-href="route: reservedgiftsDelete; params.bind: {}" class="button">Cancel</a>       
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <section class="reserved-gifts">
+        <section class="intro">
+            <h1>Reserved gifts</h1>
+            <div>
+                <p>Other users' gifts that you have reserved. Buy these and gift to people who requested them!</p> 
+                <p><i><strong>Note:</strong> In case you changed your mind please "Cancel" the reservation so someone else can gift it to the person instead.</i></p>
+            </div>
+            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+        </section>
+    </section>
+    <section class="my-reserved-gifts card">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        User
+                    </th>
+                    <th>
+                        Gift
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Image
+                    </th>
+                    <th>
+                        Url
+                    </th>
+                    <th>
+                        PartnerUrl
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <a href="#" title="Go to profile">Full Name (username)</a>
+                    </td>
+                    <td>
+                        Gift name
+                    </td>
+                    <td>
+                        Gift desc
+                    </td>
+                    <td>
+                        Image url
+                    </td>
+                    <td>
+                        Link to shop
+                    </td>
+                    <td>
+                        Link to partner
+                    </td>
+                    <td class="flex">
+                        <a route-href="route: archivedgiftsCreate; params.bind: {}" class="button">Mark gifted</a>
+                        <a route-href="route: reservedgiftsDelete; params.bind: {}" class="button">Cancel</a>       
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 </template>

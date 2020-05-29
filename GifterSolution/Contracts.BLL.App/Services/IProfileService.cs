@@ -11,6 +11,7 @@ namespace Contracts.BLL.App.Services
         IProfileRepositoryCustom<BLLAppDTO.ProfileBLL>
     {
         Task<BLLAppDTO.ProfileBLL> GetByUserAsync(Guid userId, Guid? profileId = null, bool noTracking = true);
+        Task<BLLAppDTO.ProfileBLL> GetFullByUserAsync(Guid userId, Guid? profileId = null, bool noTracking = true);
         BLLAppDTO.ProfileBLL CreateDefaultProfile(Guid userId);
     }
 }

@@ -55,11 +55,16 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
-        public async Task<ActionResult<V1DTO.ProfileDTO>> GetUserProfile(Guid userId)
+        public async Task<ActionResult<V1DTO.ProfileDTO>> GetUserProfileData(Guid userId)
         {
-            // TODO: If private profile, check whether a friend is accessing!
             var profile = await _bll.Profiles.GetByUserAsync(userId);
             if (profile == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Profile for user {userId} not found"));
+            }
+            // Only friends can see profile if it's set as private
+            var isRequestingUserFriend = _bll.Friendships.GetConfirmedForUserAsync(userId, User.UserGuidId()) != null;
+            if (profile.IsPrivate && !isRequestingUserFriend)
             {
                 return NotFound(new V1DTO.MessageDTO($"Profile for user {userId} not found"));
             }
@@ -76,13 +81,14 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
-        public async Task<ActionResult<V1DTO.ProfileDTO>> GetPersonalProfile()
+        public async Task<ActionResult<V1DTO.ProfileDTO>> GetPersonalProfileData()
         {
             var personalProfile = await _bll.Profiles.GetByUserAsync(User.UserGuidId());
             if (personalProfile == null)
             {
                 return NotFound(new V1DTO.MessageDTO($"Profile not found"));
             }
+            // Reassure it really is a personal profile
             if (personalProfile.AppUserId != User.UserGuidId())
             {
                 return NotFound(new V1DTO.MessageDTO($"Profile not found"));
@@ -100,7 +106,7 @@ namespace WebApp.ApiControllers._1._0
         /// <param name="id"></param>
         /// <param name="profileDTO"></param>
         /// <returns></returns>
-        [HttpPut("{id}")]
+        [HttpPut("personal/{id}")]
         [Produces("application/json")]
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
@@ -120,6 +126,11 @@ namespace WebApp.ApiControllers._1._0
                 _logger.LogError($"EDIT. No such profile: {profileDTO.Id}, user: {User.UserGuidId()}");
                 return NotFound(new V1DTO.MessageDTO("No profile found"));
             }
+            // Reassure it really is a personal profile
+            if (profile.AppUserId != User.UserGuidId())
+            {
+                return NotFound(new V1DTO.MessageDTO($"Profile not found"));
+            }
 
             var profileBLL = _mapper.Map(profileDTO);
             await _bll.Profiles.UpdateAsync(profileBLL, User.UserGuidId());
@@ -130,54 +141,59 @@ namespace WebApp.ApiControllers._1._0
         }
 
         // --------------------------------- GET FULL PROFILE WITH USER DATA, WISHLISTS AND GIFTS --------------------------------------
-        //
-        //
-        // // GET: api/Profiles/5
-        // /// <summary>
-        // ///     Get a single Profile
-        // /// </summary>
-        // /// <param name="id"></param>
-        // /// <returns>Profile object</returns>
-        // [HttpGet("{id}")]
-        // [Produces("application/json")]
-        // [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
-        // [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        // [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
-        // public async Task<ActionResult<V1DTO.ProfileDTO>> GetProfile(Guid id)
-        // {
-        //     var profile = await _bll.Profiles.FirstOrDefaultAsync(id);
-        //     if (profile == null)
-        //     {
-        //         return NotFound(new V1DTO.MessageDTO($"Profile with id {id} not found"));
-        //     }
-        //
-        //     return Ok(_mapper.Map(profile));
-        // }
-        //
-        // // GET: api/Profiles/Personal
-        // /// <summary>
-        // ///     Get a single personal Profile
-        // /// </summary>
-        // /// <returns>Personal profile object</returns>
-        // [HttpGet("personal")]
-        // [Produces("application/json")]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
-        // [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        // [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
-        // public async Task<ActionResult<V1DTO.ProfileDTO>> GetPersonalProfile()
-        // {
-        //     var personalProfile = await _bll.Profiles.GetPersonalAsync(User.UserGuidId());
-        //     if (personalProfile == null)
-        //     {
-        //         return NotFound(new V1DTO.MessageDTO($"Profile not found"));
-        //     }
-        //     if (personalProfile.AppUserId != User.UserGuidId())
-        //     {
-        //         return BadRequest(new V1DTO.MessageDTO($"Profile not found"));
-        //     }
-        //     
-        //     return Ok(_mapper.Map(personalProfile));
-        // }
+        
+        
+        // GET: api/Profiles/Full/User/5
+        /// <summary>
+        ///     Get a single Profile
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>Profile object</returns>
+        [HttpGet("full/user/{userId}")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        public async Task<ActionResult<V1DTO.ProfileDTO>> GetFullUserProfile(Guid userId)
+        {
+            var profile = await _bll.Profiles.GetFullByUserAsync(userId);
+            if (profile == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Profile for user {userId} not found"));
+            }
+            // Only friends can see profile if it's set as private
+            var isRequestingUserFriend = _bll.Friendships.GetConfirmedForUserAsync(userId, User.UserGuidId()) != null;
+            if (profile.IsPrivate && !isRequestingUserFriend)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Profile for user {userId} not found"));
+            }
+            return Ok(_mapper.Map(profile));
+        }
+        
+        // GET: api/Profiles/Full/Personal
+        /// <summary>
+        ///     Get a single personal Profile
+        /// </summary>
+        /// <returns>Personal profile object</returns>
+        [HttpGet("full/personal")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        public async Task<ActionResult<V1DTO.ProfileDTO>> GetFullPersonalProfile()
+        {
+            var personalProfile = await _bll.Profiles.GetFullByUserAsync(User.UserGuidId());
+            if (personalProfile == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Profile not found"));
+            }
+            if (personalProfile.AppUserId != User.UserGuidId())
+            {
+                return BadRequest(new V1DTO.MessageDTO($"Profile not found"));
+            }
+            
+            return Ok(_mapper.Map(personalProfile));
+        }
 
         // // DELETE: api/Profiles/5
         // /// <summary>
@@ -202,55 +218,6 @@ namespace WebApp.ApiControllers._1._0
         //
         //     await _bll.SaveChangesAsync();
         //     return Ok(profile);
-        // }
-        
-        // // PUT: api/Profiles/5
-        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // // more details see https://aka.ms/RazorPagesCRUD.
-        // /// <summary>
-        // ///     Update profile
-        // /// </summary>
-        // /// <param name="id"></param>
-        // /// <param name="profileDTO"></param>
-        // /// <returns></returns>
-        // [HttpPut("{id}")]
-        // [Produces("application/json")]
-        // [Consumes("application/json")]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
-        // [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        // [ProducesResponseType(StatusCodes.Status204NoContent)]
-        // public async Task<IActionResult> PutProfile(Guid id, V1DTO.ProfileDTO profileDTO)
-        // {
-        //     // TODO: Move to BLL
-        //     // Don't allow wrong data
-        //     if (id != profileDTO.Id)
-        //     {
-        //         return BadRequest(new V1DTO.MessageDTO("Cannot update this profile"));
-        //     }
-        //     // Update existing profile
-        //     var profile = await _bll.Profiles.GetPersonalAsync(User.UserGuidId(), id);
-        //     if (profile == null)
-        //     {
-        //         _logger.LogError($"EDIT. No such profile: {profileDTO.Id}, user: {User.UserGuidId()}");
-        //         return NotFound(new V1DTO.MessageDTO($"No profile found for id {id}"));
-        //     }
-        //     await _bll.Profiles.UpdateAsync(_mapper.Map(profileDTO), User.UserId());
-        //     
-        //     // Update existing user
-        //     var user = await _userManager.FindByIdAsync(User.UserGuidId().ToString());
-        //     if (user == null || profileDTO.AppUser == null)
-        //     {
-        //         _logger.LogError($"PROFILE EDIT. No such user: {User.UserGuidId()}");
-        //         return BadRequest(new V1DTO.MessageDTO("Cannot update this profile for this user"));
-        //     }
-        //     user.FirstName = profileDTO.AppUser.FirstName != null ? profileDTO.AppUser.FirstName : user.FirstName;
-        //     user.LastName = profileDTO.AppUser.LastName != null ? profileDTO.AppUser.LastName : user.LastName;
-        //     user.Email = profileDTO.AppUser.Email != null ? profileDTO.AppUser.Email : user.Email;
-        //     await _userManager.UpdateAsync(user);
-        //
-        //     // Save to db
-        //     await _bll.SaveChangesAsync();
-        //     return NoContent();
         // }
     }
 }

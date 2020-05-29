@@ -55,13 +55,13 @@ namespace BLL.App.Services
 
         public new BLLAppDTO.CampaignBLL Add(BLLAppDTO.CampaignBLL bllCampaign, object? userId = null)
         {
+            // UserId is mandatory for adding Campaign
             if (userId == null)
             {
-                throw new ArgumentNullException(userId as string);
+                throw new ArgumentNullException(nameof(userId));
             }
             
             // Add new Campaign
-            
             var dalCampaign = Mapper.Map(bllCampaign);
             var dalCampaignTracked = Repository.Add(dalCampaign);
 

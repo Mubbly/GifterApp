@@ -20,6 +20,26 @@ namespace DAL.App.EF.Repositories
         {
         }
 
+        public async Task<DALAppDTO.ProfileDAL> GetFullByUserAsync(Guid userId, Guid? profileId = null,
+            bool noTracking = true)
+        {
+            var query = PrepareQuery(userId, noTracking);
+            var profiles = 
+                query
+                .Where(a => a.AppUserId == userId)
+                .OrderBy(e => e.CreatedAt)
+                .Include(a => a.AppUser)
+                .Include(a => a.Wishlist)
+                    .ThenInclude(w => w!.Gifts)
+                .Select(e => Mapper.Map(e));
+            var profilesList = await profiles.ToListAsync();
+            var debug = profilesList.FirstOrDefault().Wishlist.Gifts;
+            // If no specific profile ID provided, just get the first one
+            return profileId == null
+                ? profilesList.FirstOrDefault()
+                : profilesList.FirstOrDefault(p => p.Id == profileId);
+        }
+        
         public async Task<DALAppDTO.ProfileDAL> GetByUserAsync(Guid userId, Guid? profileId = null,
             bool noTracking = true)
         {
@@ -30,10 +50,10 @@ namespace DAL.App.EF.Repositories
                     .OrderBy(e => e.CreatedAt)
                     .Select(e => Mapper.Map(e))
                     .ToListAsync();
-            // If no specific profile ID provided, get the first one
+            // If no specific profile ID provided, just get the first one
             return profileId == null
                 ? profiles.FirstOrDefault()
-                : profiles.Find(p => p.Id == profileId);
+                : profiles.FirstOrDefault(p => p.Id == profileId);
         }
 
         // public async Task<IEnumerable<Profile>> AllAsync(Guid? userId = null)

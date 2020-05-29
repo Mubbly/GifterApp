@@ -21,7 +21,7 @@ export class ProfilesPersonal {
     private _profile: Optional<IProfile> = null;
     private _appUser: Optional<IAppUser> = null;
     private _wishlist: Optional<IWishlist> = null;
-    private _gifts: IGift[] = [];
+    private _gifts: Optional<IGift[]> = null;
     private _lastActiveDate: string = '';
     private _emptyWishlistMessage: Optional<string> = null;
     private _errorMessage: Optional<string> = null;
@@ -53,74 +53,29 @@ export class ProfilesPersonal {
             if(this.appState.profileBannerUrl) {
                 this._profileBannerUrl = this.appState.profileBannerUrl;
             }
-            this.getCurrentAppUser();
-            this.getPersonalProfile();
-            this.getPersonalWishlist();
-            this.getPersonalGifts();
+            this.getPersonalFullProfile();
+            // this.getCurrentAppUser();
+            // this.getPersonalProfile();
+            // this.getPersonalWishlist();
+            // this.getPersonalGifts();
         }
-    }
-
-    private getCurrentAppUser(): void {
-        this.appUserService
-        .getCurrentUser()
-        .then((response) => {
-            if(Utils.isSuccessful(response) && response.data) {
-                this._appUser = response.data;
-                this._lastActiveDate = Utils.formatAsHtml5Date(this._appUser.lastActive);
-            } else {
-                this.handleErrors(response);
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-        });
     }
 
     /**
      * Get user's personal profile. Default initial one if not edited yet.
      */
-    private getPersonalProfile(): Promise<void> {
+    private getPersonalFullProfile(): Promise<void> {
         return this.profileService
-            .getPersonal()
+            .getFullPersonal()
             .then((response) => {
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {                    
                     this._profile = response.data!;
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-
-    private getPersonalWishlist(): Promise<void> {
-        return this.wishlistService
-            .getPersonal()
-            .then((response) => {
-                if (!Utils.isSuccessful(response)) {
-                    this.handleErrors(response);
-                } else {                    
-                    this._wishlist = response.data!;
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-
-    private getPersonalGifts(): Promise<void> {
-        return this.giftService
-            .getAllPersonal()
-            .then((response) => {
-                if (!Utils.isSuccessful(response)) {
-                    this.handleErrors(response);
-                } else {                    
-                    this._gifts = response.data!;
-                    if(this._gifts.length <= 0) {
-                        this._emptyWishlistMessage = this.EMPTY_WISHLIST_MESSAGE; 
-                    } else {
-                        this._emptyWishlistMessage = null; 
+                    if(this._profile) {
+                        this._wishlist = this._profile.wishlist;
+                        this._appUser = this._profile.appUser;
+                        this._gifts = this._profile.wishlist.gifts;
                     }
                 }
             })
@@ -128,6 +83,75 @@ export class ProfilesPersonal {
                 console.log(error);
             });
     }
+
+    // private getCurrentAppUser(): void {
+    //     this.appUserService
+    //     .getCurrentUser()
+    //     .then((response) => {
+    //         if(Utils.isSuccessful(response) && response.data) {
+    //             this._appUser = response.data;
+    //             this._lastActiveDate = Utils.formatAsHtml5Date(this._appUser.lastActive);
+    //         } else {
+    //             this.handleErrors(response);
+    //         }
+    //     })
+    //     .catch((error) => {
+    //         console.log(error);
+    //     });
+    // }
+
+    // /**
+    //  * Get user's personal profile. Default initial one if not edited yet.
+    //  */
+    // private getPersonalProfile(): Promise<void> {
+    //     return this.profileService
+    //         .getPersonal()
+    //         .then((response) => {
+    //             if (!Utils.isSuccessful(response)) {
+    //                 this.handleErrors(response);
+    //             } else {                    
+    //                 this._profile = response.data!;
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
+
+    // private getPersonalWishlist(): Promise<void> {
+    //     return this.wishlistService
+    //         .getPersonal()
+    //         .then((response) => {
+    //             if (!Utils.isSuccessful(response)) {
+    //                 this.handleErrors(response);
+    //             } else {                    
+    //                 this._wishlist = response.data!;
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
+
+    // private getPersonalGifts(): Promise<void> {
+    //     return this.giftService
+    //         .getAllPersonal()
+    //         .then((response) => {
+    //             if (!Utils.isSuccessful(response)) {
+    //                 this.handleErrors(response);
+    //             } else {                    
+    //                 this._gifts = response.data!;
+    //                 if(this._gifts.length <= 0) {
+    //                     this._emptyWishlistMessage = this.EMPTY_WISHLIST_MESSAGE; 
+    //                 } else {
+    //                     this._emptyWishlistMessage = null; 
+    //                 }
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
 
     /**
      * Set error message or route to login/home page

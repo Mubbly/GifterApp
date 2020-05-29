@@ -52,7 +52,8 @@ export class ProfilesIndex {
                 if(params.userId === this.appState.userId) {
                     this.router.navigateToRoute(Utils.PERSONAL_PROFILE_ROUTE);
                 } else {
-                    this.getFullRequestedProfile(params.userId);
+                    // this.getFullRequestedProfile(params.userId);
+                    this.getFullProfile(params.userId);
                 }
             } else {
                 this._errorMessage = this.ERROR_PROFILE_NOT_FOUND;
@@ -60,62 +61,23 @@ export class ProfilesIndex {
         }
     }
 
-    private getFullRequestedProfile(profileOwnerId: string): void {
-        this.getRequestingUser();
-        this.getProfileOwner(profileOwnerId);
-    }
-
-    private getRequestingUser(): void {
-        this.appUserService
-            .getCurrentUser()
-            .then((response) => {
-                if(Utils.isSuccessful(response) && response.data) {
-                    this._currentUser = response.data;
-                } else {
-                    this.handleErrors(response);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-
-    private getProfileOwner(userId: string): Promise<void> {
-        return this.appUserService
-            .getUser(userId)
-            .then((response) => {
-                if(Utils.isSuccessful(response) && response.data) {
-                    this._profileOwner = response.data;
-                    // If user is found, get requested profile and related items
-                    if(this._profileOwner && this._profileOwner.id === userId) {
-                        this.getProfile(userId);
-                    }
-                } else {
-                    this.handleErrors(response);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-
-    /**
+        /**
      * Get user's profile. Default initial one if not edited yet.
      */
-    private getProfile(userId: string): Promise<void> {
+    private getFullProfile(userId: string): Promise<void> {
         return this.profileService
-            .getUserProfile(userId)
+            .getFullForUser(userId)
             .then((response) => {
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {                    
                     this._profile = response.data!;
-                    if(this._profile) {
-                        this._lastActiveDate = Utils.formatAsHtml5Date(this._profileOwner!.lastActive);
+                    // if(this._profile) {
+                    //     this._lastActiveDate = Utils.formatAsHtml5Date(this._profileOwner!.lastActive);
 
-                        this.getWishlist(this._profile.wishlistId);
-                        this.getGifts(userId);
-                    }
+                    //     // this.getWishlist(this._profile.wishlistId);
+                    //     // this.getGifts(userId);
+                    // }
                     console.log(this._profile.id);
                 }
             })
@@ -124,40 +86,104 @@ export class ProfilesIndex {
             });
     }
 
-    private getWishlist(wishlistId: string): Promise<void> {
-        return this.wishlistService
-            .get(wishlistId)
-            .then((response) => {
-                if (!Utils.isSuccessful(response)) {
-                    this.handleErrors(response);
-                } else {                    
-                    this._wishlist = response.data!;
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
+    // private getFullRequestedProfile(profileOwnerId: string): void {
+    //     this.getRequestingUser();
+    //     this.getProfileOwner(profileOwnerId);
+    // }
 
-    private getGifts(userId: string): Promise<void> {
-        return this.giftService
-            .getAllForUser(userId)
-            .then((response) => {
-                if (!Utils.isSuccessful(response)) {
-                    this.handleErrors(response);
-                } else {                    
-                    this._gifts = response.data!;
-                    if(!this._gifts || this._gifts.length <= 0) {
-                        this._emptyWishlistMessage = this.EMPTY_WISHLIST_MESSAGE;
-                    } else {
-                        this._emptyWishlistMessage = null;
-                    }
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
+    // private getRequestingUser(): void {
+    //     this.appUserService
+    //         .getCurrentUser()
+    //         .then((response) => {
+    //             if(Utils.isSuccessful(response) && response.data) {
+    //                 this._currentUser = response.data;
+    //             } else {
+    //                 this.handleErrors(response);
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
+
+    // private getProfileOwner(userId: string): Promise<void> {
+    //     return this.appUserService
+    //         .getUser(userId)
+    //         .then((response) => {
+    //             if(Utils.isSuccessful(response) && response.data) {
+    //                 this._profileOwner = response.data;
+    //                 // If user is found, get requested profile and related items
+    //                 if(this._profileOwner && this._profileOwner.id === userId) {
+    //                     this.getProfile(userId);
+    //                 }
+    //             } else {
+    //                 this.handleErrors(response);
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
+
+    // /**
+    //  * Get user's profile. Default initial one if not edited yet.
+    //  */
+    // private getProfile(userId: string): Promise<void> {
+    //     return this.profileService
+    //         .getUserProfile(userId)
+    //         .then((response) => {
+    //             if (!Utils.isSuccessful(response)) {
+    //                 this.handleErrors(response);
+    //             } else {                    
+    //                 this._profile = response.data!;
+    //                 if(this._profile) {
+    //                     this._lastActiveDate = Utils.formatAsHtml5Date(this._profileOwner!.lastActive);
+
+    //                     this.getWishlist(this._profile.wishlistId);
+    //                     this.getGifts(userId);
+    //                 }
+    //                 console.log(this._profile.id);
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
+
+    // private getWishlist(wishlistId: string): Promise<void> {
+    //     return this.wishlistService
+    //         .get(wishlistId)
+    //         .then((response) => {
+    //             if (!Utils.isSuccessful(response)) {
+    //                 this.handleErrors(response);
+    //             } else {                    
+    //                 this._wishlist = response.data!;
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
+
+    // private getGifts(userId: string): Promise<void> {
+    //     return this.giftService
+    //         .getAllForUser(userId)
+    //         .then((response) => {
+    //             if (!Utils.isSuccessful(response)) {
+    //                 this.handleErrors(response);
+    //             } else {                    
+    //                 this._gifts = response.data!;
+    //                 if(!this._gifts || this._gifts.length <= 0) {
+    //                     this._emptyWishlistMessage = this.EMPTY_WISHLIST_MESSAGE;
+    //                 } else {
+    //                     this._emptyWishlistMessage = null;
+    //                 }
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // }
 
     /**
      * Set error message or route to login/home page

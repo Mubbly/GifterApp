@@ -7,10 +7,11 @@ import { Optional, GifterInterface } from "types/generalTypes";
 import { IFetchResponse } from "types/IFetchResponse";
 import * as Utils from 'utils/utilFunctions';
 import { AppState } from 'state/appState';
+import { STATUS_CODE_NOT_FOUND } from '../../utils/utilFunctions';
 
 @autoinject
 export class FriendshipsIndex {
-    private _pendingFriendships: IFriendship[] = [];
+    private _pendingFriendships: Optional<IFriendship[]> = null;
     private _errorMessage: Optional<string> = null;
 
     constructor(private friendshipService: FriendshipService, 
@@ -30,7 +31,9 @@ export class FriendshipsIndex {
             if (!UtilFunctions.isSuccessful(response)) {
                 this.handleErrors(response);
             } else {
-                this._pendingFriendships = response.data!;
+                if(response.data && (response.data).length > 0) {
+                    this._pendingFriendships = response.data;
+                }
             }
         })
         .catch((error) => {

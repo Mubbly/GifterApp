@@ -47,28 +47,28 @@ namespace WebApp.ApiControllers._1._0.Identity
             return Ok(allUsers);
         }
         
-        // // GET: api/AppUsers/Alexandra
-        // [HttpGet("{name}")]
-        // [Consumes("application/json")]
-        // [Produces("application/json")]
-        // [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
-        // public async Task<ActionResult<IEnumerable<V1DTOIdentity.AppUserDTO>>> GetAppUsersByName(string name)
-        // {
-        //     // TODO: Move to BLL
-        //     var lowercaseName = name.ToLower();
-        //     var allDomainUsers = await _userManager.Users.ToListAsync();
-        //     var domainUsersByName = allDomainUsers
-        //         .Where(u => u.FirstName.ToLower().Contains(lowercaseName) 
-        //                     || u.LastName.ToLower().Contains(lowercaseName) 
-        //                     || u.FullName.ToLower().Contains(lowercaseName))
-        //         .ToList();
-        //     if (!domainUsersByName.Any())
-        //     { 
-        //         return NotFound(new V1DTO.MessageDTO($"Could not find users with name {name}"));
-        //     }
-        //     var usersByName = domainUsersByName.Select(u => _mapper.Map(u));
-        //     return Ok(usersByName);
-        // }
+        // GET: api/AppUsers/name/Alexandra
+        [HttpGet("name/{name}")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTOIdentity.AppUserDTO>>> GetAppUsersByName(string name)
+        {
+            // TODO: Move to BLL
+            var lowercaseName = name.ToLower();
+            var allDomainUsers = await _userManager.Users.ToListAsync();
+            var domainUsersByName = allDomainUsers
+                .Where(u => u.FirstName.ToLower().Contains(lowercaseName) 
+                            || u.LastName.ToLower().Contains(lowercaseName) 
+                            || u.FullName.ToLower().Contains(lowercaseName))
+                .ToList();
+            if (!domainUsersByName.Any())
+            { 
+                return NotFound(new V1DTO.MessageDTO($"Could not find users with name {name}"));
+            }
+            var usersByName = domainUsersByName.Select(u => _mapper.Map(u));
+            return Ok(usersByName);
+        }
 
         // GET: api/AppUsers/5
         [HttpGet("{id}")]

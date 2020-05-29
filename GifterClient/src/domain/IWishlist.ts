@@ -14,4 +14,5 @@ export interface IWishlistEdit extends IBaseEntity, IWishlistCreate {
 export interface IWishlist extends IWishlistEdit {
     appUserId: string;
     appUser: IAppUser;
+    gifts: Optional<IGift[]>;
 }

@@ -24,7 +24,6 @@ namespace WebApp.Controllers
         }
 
         // GET: ActionTypes
-        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var result = await _context.ActionTypes.ToListAsync();
@@ -32,7 +31,6 @@ namespace WebApp.Controllers
         }
 
         // GET: ActionTypes/Details/5
-        [AllowAnonymous]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BLL.App.Mappers;
 using com.mubbly.gifterapp.BLL.Base.Services;
@@ -6,6 +7,7 @@ using Contracts.BLL.App.Mappers;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using PublicApi.DTO.v1.Identity;
 using DALAppDTO = DAL.App.DTO;
 using BLLAppDTO = BLL.App.DTO;
@@ -21,9 +23,17 @@ namespace BLL.App.Services
             
         }
         
+        /* Gets just the profile data */
         public async Task<BLLAppDTO.ProfileBLL> GetByUserAsync(Guid userId, Guid? profileId = null, bool noTracking = true)
         {
             var userProfile = await UOW.Profiles.GetByUserAsync(userId, profileId, noTracking);
+            return Mapper.Map(userProfile);
+        }
+
+        /* Gets profile with user data, wishlist and gifts */
+        public async Task<BLLAppDTO.ProfileBLL> GetFullByUserAsync(Guid userId, Guid? profileId = null, bool noTracking = true)
+        {
+            var userProfile = await UOW.Profiles.GetFullByUserAsync(userId, profileId, noTracking);
             return Mapper.Map(userProfile);
         }
 

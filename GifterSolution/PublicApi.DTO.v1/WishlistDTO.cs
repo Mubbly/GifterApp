@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using BLL.App.DTO;
 using PublicApi.DTO.v1.Identity;
 
 namespace PublicApi.DTO.v1
@@ -13,7 +16,10 @@ namespace PublicApi.DTO.v1
         public Guid AppUserId { get; set; }
         public AppUserDTO? AppUser { get; set; } = default!;
 
-        public int GiftsCount { get; set; }
+        // List of all gifts that are in this wishlist
+        [InverseProperty(nameof(GiftBLL.Wishlist))]
+        public ICollection<GiftBLL>? Gifts { get; set; }
+        
         public int ProfilesCount { get; set; }
     }
 }

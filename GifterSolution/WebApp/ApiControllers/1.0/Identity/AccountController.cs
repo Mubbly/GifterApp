@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BLL.App.DTO;
@@ -136,11 +137,16 @@ namespace WebApp.ApiControllers._1._0.Identity
             }
             
             // Create default profile with an empty wishlist
-            _bll.Profiles.CreateDefaultProfile(newRegisteredUser.Id);
-
-            // Save to db
-            await _bll.SaveChangesAsync();
-
+            try
+            {
+                _bll.Profiles.CreateDefaultProfile(newRegisteredUser.Id);
+                await _bll.SaveChangesAsync();
+            }
+            catch (ArgumentNullException e)
+            {
+                _logger.LogError($"Could not create default profile for new registered user {registerDTO.Email} - userId not provided", e);
+            }
+            
             // Log new user in
             return await LogIn(newRegisteredUser);
         }

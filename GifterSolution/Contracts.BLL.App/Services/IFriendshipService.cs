@@ -10,6 +10,12 @@ namespace Contracts.BLL.App.Services
     public interface IFriendshipService : IBaseEntityService<BLLAppDTO.FriendshipBLL>,
         IFriendshipRepositoryCustom<BLLAppDTO.FriendshipBLL>
     {
-        Task<IEnumerable<BLLAppDTO.FriendshipBLL>> GetAllPersonalAsync(Guid userId, bool isConfirmed = true, bool noTracking = true);
+        Task<IEnumerable<BLLAppDTO.FriendshipBLL>> GetAllConfirmedForUserAsync(Guid userId, bool noTracking = true);
+        Task<IEnumerable<BLLAppDTO.FriendshipBLL>> GetAllPendingForUserAsync(Guid userId, bool noTracking = true);
+
+        Task<BLLAppDTO.FriendshipBLL> GetConfirmedForUserAsync(Guid userId, Guid friendId, bool noTracking = true);
+        Task<BLLAppDTO.FriendshipBLL> GetPendingForUserAsync(Guid userId, Guid friendId, bool noTracking = true);
+        new BLLAppDTO.FriendshipBLL Add(BLLAppDTO.FriendshipBLL entity, object? userId = null);
+        new Task<BLLAppDTO.FriendshipBLL> UpdateAsync(BLLAppDTO.FriendshipBLL entity, object? userId = null);
     }
 }

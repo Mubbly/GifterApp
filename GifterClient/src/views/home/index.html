@@ -1,9 +1,9 @@
 <template>
     <section if.bind="!appState.jwt" class="home-unauthorized">
-        <h1>Welcome to Gifter app!</h1>
+        <h1>Welcome to GifterApp!</h1>
         <p>Make wishlists and enjoy stress-free gift exhange</p>
         <p class="text-muted"><i>Please <a route-href="route: accountLogin; params.bind: {}">log in</a> to continue.</i></p>
-        <img src="/images/gift.png"/>
+        <img class="welcome-img" src="/images/gift.png"/>
     </section>
 
     <section if.bind="appState.jwt" class="home-authorized">
@@ -16,11 +16,11 @@
         <section class="ads home">
             <div class="card flex flex-row">
                 <div class="ad wrapper flex crop-banner-ad">
-                    <a href="#" title="Go to campaign"><img class="home campaign-ad flex" src="/images/gift.png" alt="Ad for latest active campaign(s)"/></a>
+                    <a href="#" title="Go to campaign"><img class="home campaign-ad flex" src="/images/gifts.png" alt="Ad for latest active campaign(s)"/></a>
                 </div>
                 <div class="flex flex-column campaign-ad-text">
-                    <a href="#" title="Go to campaign"><h2>Lorem ipsum dolor sit amet</h2></a>
-                    <p>consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                    <a href="#" title="Go to campaign"><h2>Campaign advertisement text</h2></a>
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
                     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
                     Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
                     Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>

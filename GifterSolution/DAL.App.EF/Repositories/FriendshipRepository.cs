@@ -21,7 +21,7 @@ namespace DAL.App.EF.Repositories
         {
         }
         
-        public async Task<IEnumerable<DALAppDTO.FriendshipDAL>> GetAllPersonalAsync(Guid userId, bool isConfirmed = true, bool noTracking = true)
+        public async Task<IEnumerable<DALAppDTO.FriendshipDAL>> GetAllForUserAsync(Guid userId, bool isConfirmed = true, bool noTracking = true)
         {
             // User's friendships
             var friendships = PrepareQuery(userId, noTracking);
@@ -31,8 +31,15 @@ namespace DAL.App.EF.Repositories
                     .OrderBy(e => e.CreatedAt)
                     .Select(e => Mapper.Map(e))
                     .ToListAsync();
-            
             return personalFriendships;
+        }
+
+        public async Task<DALAppDTO.FriendshipDAL> GetForUserAsync(Guid userId, Guid friendId, bool isConfirmed = true, bool noTracking = true)
+        {
+            var friendships = PrepareQuery(userId, noTracking);
+            var personalFriendships =
+                await friendships.FirstOrDefaultAsync(f => f.AppUser1Id == userId && f.AppUser2Id == friendId);
+            return Mapper.Map(personalFriendships);
         }
 
         // public async Task<IEnumerable<Friendship>> AllAsync(Guid? userId = null)

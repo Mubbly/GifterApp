@@ -1,6 +1,7 @@
 <template>
     <section id="searchpage">
         <h1>Search users</h1>
+        <!-- <hr> -->
         <form submit.trigger="onSubmit($event)">
             <input type="text" class="search-input" title="Search users" value.bind="_searchInput" placeholder="Name"/>
             <input type="submit" value="Search" class="search-button icon"/>
@@ -10,6 +11,19 @@
     <section if.bind="_users.length > 0" class="search-results card">
         <table class="table">
             <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        E-mail
+                    </th>
+                    <th>
+                        Last active
+                    </th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
                 <tr repeat.for="user of _users">
@@ -30,7 +44,7 @@
                     </td>
                     <td class="flex">      
                         <!-- <a route-href="route: profilesIndex; params.bind: { userId: user.id }" class="button">Go to profile</a> -->
-                        <a route-href="route: profilesIndex; params.bind: { userId: user.id }" title="Go to profile">Profile<img src="/icons/icon-open-grey-m.png" class="icon" alt="Go to profile"/></a>
+                        <a route-href="route: profilesIndex; params.bind: { userId: user.id }" title="Go to profile"><img src="/icons/icon-open-grey-m.png" class="icon" alt="Go to profile"/></a>
                         <a if.bind="!_isFriend" href="#" title="Add friend"><img src="/icons/icon-add-friend-grey-m.png" class="icon" alt="Add friend"/></a> 
                         <!-- click.delegate="addFriend(user.id)"         -->
                         <a if.bind="_isFriend" route-href="route: friendshipsDelete; params.bind: { id: user.id }" title="Unfriend"><img src="/icons/icon-delete-grey-m.png" class="icon" alt="Unfriend"/></a> 

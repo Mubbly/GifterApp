@@ -8,7 +8,7 @@ namespace PublicApi.DTO.v1
     {
         public Guid Id { get; set; }
 
-        public bool IsConfirmed { get; set; }
+        public bool IsConfirmed { get; set; } = default!;
 
         [MaxLength(2048)] [MinLength(3)] public string? Comment { get; set; }
 

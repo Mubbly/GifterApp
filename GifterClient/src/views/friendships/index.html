@@ -5,6 +5,7 @@
         <a route-href="route: friendshipsPending; params.bind: {}" class="button">Friend requests</a> 
         <a route-href="route: invitedusersIndex; params.bind: {}" class="button">Sent invitations</a> 
     </p>
+    <hr if.bind="_confirmedFriendships.length <= 0">
     <p if.bind="_errorMessage" class="${_confirmedFriendships.length <= 0 ? '' : 'errormessage'}">${_errorMessage}</p>
     <section if.bind="_confirmedFriendships.length > 0">
         <table class="table">

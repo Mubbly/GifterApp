@@ -24,8 +24,16 @@
                             <a if.bind="!appState.isDarkTheme" href="#" click.delegate="onToggleTheme($event)" class="nav-link" title="Toggle theme"><img src="/icons/icon-switch-on.png" class="icon on"/></a>
                             <a if.bind="appState.isDarkTheme" href="#" click.delegate="onToggleTheme($event)" class="nav-link" title="Toggle theme"><img src="/icons/icon-switch-off.png" class="icon off"/></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" route-href="route: aboutIndex; params.bind: {}">Help</a>
+                        <li class="nav-item dropdown">
+                            <a href="#" role="button" class="nav-link text-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Help">Help</a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" route-href="route: search; params.bind: {}">User search</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" route-href="route: aboutHelp; params.bind: {}">FAQ</a>
+                                    <a class="dropdown-item" route-href="route: aboutIndex; params.bind: {}">About</a>
+                                    <a class="dropdown-item" route-href="route: aboutContacts; params.bind: {}">Contact us</a>
+                                </div>
+                              </li>
                         </li>
                         <div class="separator">|</div>
                         <li class="nav-item">
