@@ -58,6 +58,10 @@ namespace DAL.App.EF
             foreach (var relationship in modelBuilder.Model
                 .GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            
+            modelBuilder.Entity<Wishlist>()
+                .HasMany(w => w.Gifts)
+                .WithOne(g => g.Wishlist!);
 
             // EXAMPLE on how to enable cascade delete for some entities:
 

@@ -68,18 +68,18 @@ namespace BLL.App.Services
             UOW.AddToEntityTracker(dalCampaignTracked, bllCampaign);
             var bllNewCampaign = Mapper.Map(dalCampaignTracked);
 
-            // Add new UserCampaign
-            var userIdGuid = new Guid(userId.ToString());
-            var bllUserCampaign = new BLLAppDTO.UserCampaignBLL()
-            {
-                AppUserId = userIdGuid,
-                CampaignId = bllNewCampaign.Id
-            };
-            var dalUserCampaign = Mapper.MapUserCampaignToDAL(bllUserCampaign);
-            var dalUserCampaignTracked = UOW.UserCampaigns.Add(dalUserCampaign);
-
-            UOW.AddToEntityTracker(dalUserCampaignTracked, bllUserCampaign);
-            Mapper.MapUserCampaignToBLL(dalUserCampaignTracked);
+            // // Add new UserCampaign
+            // var userIdGuid = new Guid(userId.ToString());
+            // var bllUserCampaign = new BLLAppDTO.UserCampaignBLL()
+            // {
+            //     AppUserId = userIdGuid,
+            //     CampaignId = bllNewCampaign.Id
+            // };
+            // var dalUserCampaign = Mapper.MapUserCampaignToDAL(bllUserCampaign);
+            // var dalUserCampaignTracked = UOW.UserCampaigns.Add(dalUserCampaign);
+            //
+            // UOW.AddToEntityTracker(dalUserCampaignTracked, bllUserCampaign);
+            // Mapper.MapUserCampaignToBLL(dalUserCampaignTracked);
 
             return bllNewCampaign;
         }

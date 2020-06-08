@@ -11,8 +11,11 @@ import { FriendshipService } from 'service/friendshipService';
 @autoinject
 export class UsersIndex {
     //private readonly SEARCH_FOR_ALL_KEYWORD = "*";
+    private readonly MESSAGE_FRIEND_REQUEST_SENT = 'Friend request sent';
     private _users: IAppUser[] = [];
     private _searchInput: string = '';
+    private _isFriend: boolean = false;
+    private _successMessage: Optional<string> = null;
     private _errorMessage: Optional<string> = null;
 
     constructor(
@@ -34,8 +37,27 @@ export class UsersIndex {
         this.getSearchResults(this._searchInput);
     }
 
-    // addFriend(id: string) {
-    // }
+    addFriend(event: Event, friendId: string) {
+        event.preventDefault();
+        this.sendFriendRequest(friendId);
+    }
+
+    private sendFriendRequest(friendId: string) {
+        this.friendshipService
+        .createPending(friendId)
+        .then((response) => {
+            if(Utils.isSuccessful(response)) {
+                this._isFriend = true;
+                this._successMessage = this.MESSAGE_FRIEND_REQUEST_SENT;
+            } else {
+                this._isFriend = false;
+                this._errorMessage = Utils.getErrorMessage(response);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 
     private getSearchResults(inputValue: string): void {
         if(inputValue.length && inputValue !== '*') {

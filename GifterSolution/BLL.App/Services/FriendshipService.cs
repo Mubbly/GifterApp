@@ -45,7 +45,10 @@ namespace BLL.App.Services
             return Mapper.Map(friendship);
         }
         
-        public new BLLAppDTO.FriendshipBLL Add(BLLAppDTO.FriendshipBLL entity, object? userId = null)
+        /**
+         * @param userId is mandatory and represents current user's Id
+         */
+        public new async Task<BLLAppDTO.FriendshipBLL> Add(BLLAppDTO.FriendshipBLL entity, object? userId = null)
         {
             // UserId is mandatory for adding Friendship
             if (userId == null)
@@ -54,8 +57,8 @@ namespace BLL.App.Services
             }
 
             var userGuidId = new Guid(userId.ToString());
-            var existingFriendship = UOW.Friendships.GetForUserAsync(userGuidId, entity.AppUser2Id, true);
-            var existingPendingRequest = UOW.Friendships.GetForUserAsync(userGuidId, entity.AppUser2Id, false);
+            var existingFriendship = await UOW.Friendships.GetForUserAsync(userGuidId, entity.AppUser2Id, true);
+            var existingPendingRequest = await UOW.Friendships.GetForUserAsync(userGuidId, entity.AppUser2Id, false);
             if (existingFriendship != null || existingPendingRequest != null)
             {
                 // return new BLLAppDTO.FriendshipBLL();
@@ -63,6 +66,7 @@ namespace BLL.App.Services
             }
             // Add relationship with pending status
             entity.IsConfirmed = false;
+            entity.AppUser1Id = userGuidId;
             return base.Add(entity, userId);
         }
 

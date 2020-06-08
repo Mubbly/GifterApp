@@ -3,17 +3,17 @@ import { IAppUser } from "./IAppUser";
 import { IBaseEntity } from "./base/IBaseEntity";
 
 export interface IFriendshipCreate {
+    appUser2Id: string; // friend id
     comment: Optional<string>;
-    friendUserId: string;
 }
 
 export interface IFriendshipEdit extends IBaseEntity {
     isConfirmed: boolean;
-    friendUserId: string;
+    appUser2Id: string; // friend id
 }
 
 export interface IFriendship extends IBaseEntity {
     comment: Optional<string>;
     isConfirmed: boolean;
-    friendUserId: string;
+    appUser2Id: string; // friend id
 }

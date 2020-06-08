@@ -5,11 +5,51 @@ import { IFriendship, IFriendshipCreate, IFriendshipEdit } from 'domain/IFriends
 import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
 import { AppState } from 'state/appState';
 import { IFetchResponse } from 'types/IFetchResponse';
+import * as Utils from 'utils/utilFunctions';
 
 @autoinject
 export class FriendshipService extends BaseService<IFriendship, IFriendshipCreate, IFriendshipEdit> {
     constructor(protected httpClient: HttpClient, appState: AppState) {
         super(ApiEndpointUrls.FRIENDSHIPS, httpClient, appState);
+    }
+
+    /** Do not use */
+    async create(entity: IFriendshipCreate): Promise<IFetchResponse<IFriendshipCreate>> {
+        return Utils.actionNotAllowed();
+    }
+
+    async createPending(friendId: string): Promise<IFetchResponse<IFriendshipCreate>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
+        let newPendingFriendship: IFriendshipCreate = {
+            appUser2Id:  friendId,
+            comment: null
+        }
+        try {
+            const response = await this.httpClient.post(`${this.apiEndpointUrl}/personal/pending`, 
+                JSON.stringify(newPendingFriendship),
+                { 
+                    cache: "no-store",
+                    headers: AUTH_HEADERS
+                }
+            );
+
+            if(response.ok) {
+                console.log('response', response);
+                return {
+                    status: response.status
+                    // no data
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+        } catch (reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
     }
 
     async getAllPendingFriendships(): Promise<IFetchResponse<IFriendship[]>> {

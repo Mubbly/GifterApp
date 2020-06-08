@@ -45,7 +45,7 @@
                     <td class="flex">      
                         <!-- <a route-href="route: profilesIndex; params.bind: { userId: user.id }" class="button">Go to profile</a> -->
                         <a route-href="route: profilesIndex; params.bind: { userId: user.id }" title="Go to profile"><img src="/icons/icon-open-grey-m.png" class="icon" alt="Go to profile"/></a>
-                        <a if.bind="!_isFriend" href="#" title="Add friend"><img src="/icons/icon-add-friend-grey-m.png" class="icon" alt="Add friend"/></a> 
+                        <a if.bind="!_isFriend" href="#" click.delegate="addFriend($event, user.id)" title="Add friend"><img src="/icons/icon-add-friend-grey-m.png" class="icon" alt="Add friend"/></a> 
                         <!-- click.delegate="addFriend(user.id)"         -->
                         <a if.bind="_isFriend" route-href="route: friendshipsDelete; params.bind: { id: user.id }" title="Unfriend"><img src="/icons/icon-delete-grey-m.png" class="icon" alt="Unfriend"/></a> 
                         <!-- click.delegate="unFriend(user.id)"         -->

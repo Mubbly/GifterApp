@@ -3,9 +3,17 @@
     <section if.bind="_profile" class="profile other flex">
         <section class="profile-info flex-column">
             <div class="flex middle profile-heading">
-                <h1 if.bind="_profileOwner.firstName || _profileOwner.userName"class="flex-column username">
+                <h1 if.bind="_profileOwner.firstName || _profileOwner.userName" class="flex-column username">
                     ${_profileOwner.userName}
                 </h1> 
+                <a if.bind="!_isFriend" href="#" click.delegate="addFriend($event, _profileOwner.id)" title="Add friend" class="flex-column icon-container">
+                    <img src="/icons/icon-add-friend-grey-m.png" class="icon" alt="Add friend"/>
+                </a> 
+                <!-- click.delegate="addFriend(user.id)"         -->
+                <a if.bind="_isFriend" route-href="route: friendshipsDelete; params.bind: { id: user.id }" title="Unfriend" class="flex-column icon-container">
+                    <img src="/icons/icon-delete-grey-m.png" class="icon" alt="Unfriend"/>
+                </a> 
+                <!-- click.delegate="unFriend(user.id)"         -->
             </div>
             <p if.bind="_lastActiveDate" class="date">Last active: ${_lastActiveDate}</p>
             <hr class="profile-hr">

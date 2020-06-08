@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BLL.App.Mappers;
 using com.mubbly.gifterapp.BLL.Base.Services;
@@ -24,16 +25,27 @@ namespace BLL.App.Services
         }
         
         /* Gets just the profile data */
-        public async Task<BLLAppDTO.ProfileBLL> GetByUserAsync(Guid userId, Guid? profileId = null, bool noTracking = true)
+        public async Task<BLLAppDTO.ProfileBLL> GetByUserAsync(Guid userId, Guid accessingUserId, Guid? profileId = null, bool noTracking = true)
         {
             var userProfile = await UOW.Profiles.GetByUserAsync(userId, profileId, noTracking);
             return Mapper.Map(userProfile);
         }
 
         /* Gets profile with user data, wishlist and gifts */
-        public async Task<BLLAppDTO.ProfileBLL> GetFullByUserAsync(Guid userId, Guid? profileId = null, bool noTracking = true)
+        public async Task<BLLAppDTO.ProfileBLL> GetFullByUserAsync(Guid userId, Guid accessingUserId, Guid? profileId = null, bool noTracking = true)
         {
             var userProfile = await UOW.Profiles.GetFullByUserAsync(userId, profileId, noTracking);
+            
+            // if (userProfile.IsPrivate)
+            // {
+            //     // Only friends can see profile
+            //     var isRequestingUserFriend = UOW.Friendships.GetConfirmedForUserAsync(userId, accessingUserId) != null;
+            //     if (!isRequestingUserFriend)
+            //     {
+            //         userProfile = null;
+            //     }
+            // }
+
             return Mapper.Map(userProfile);
         }
 

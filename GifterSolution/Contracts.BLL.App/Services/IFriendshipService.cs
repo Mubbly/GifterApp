@@ -15,7 +15,7 @@ namespace Contracts.BLL.App.Services
 
         Task<BLLAppDTO.FriendshipBLL> GetConfirmedForUserAsync(Guid userId, Guid friendId, bool noTracking = true);
         Task<BLLAppDTO.FriendshipBLL> GetPendingForUserAsync(Guid userId, Guid friendId, bool noTracking = true);
-        new BLLAppDTO.FriendshipBLL Add(BLLAppDTO.FriendshipBLL entity, object? userId = null);
+        new Task<BLLAppDTO.FriendshipBLL> Add(BLLAppDTO.FriendshipBLL entity, object? userId = null);
         new Task<BLLAppDTO.FriendshipBLL> UpdateAsync(BLLAppDTO.FriendshipBLL entity, object? userId = null);
     }
 }

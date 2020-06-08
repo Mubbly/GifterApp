@@ -12,18 +12,23 @@ import { IAppUser } from "domain/IAppUser";
 import { WishlistService } from "service/wishlistService";
 import { IFetchResponse } from "types/IFetchResponse";
 import { IWishlist } from "domain/IWishlist";
+import { FriendshipService } from '../../service/friendshipService';
 
 @autoinject
 export class ProfilesIndex {
     private readonly EMPTY_WISHLIST_MESSAGE = "This user's wishlist seems to be empty! :(";
+    private readonly MESSAGE_FRIEND_REQUEST_SENT = 'Friend request sent';
     private readonly ERROR_PROFILE_NOT_FOUND = "404 Not Found";
 
     private _profile: Optional<IProfile> = null;
     private _currentUser: Optional<IAppUser> = null;
     private _profileOwner: Optional<IAppUser> = null;
     private _wishlist: Optional<IWishlist> = null;
-    private _gifts: IGift[] = [];
+    private _gifts: Optional<IGift[]> = null;
+    private _successMessage: Optional<string> = null;
     private _errorMessage: Optional<string> = null;
+
+    private _isFriend: boolean = false;
 
     private _lastActiveDate: string = '';
     private _emptyWishlistMessage: Optional<string> = null;
@@ -37,6 +42,7 @@ export class ProfilesIndex {
         private appUserService: AppUserService,
         private wishlistService: WishlistService,
         private giftService: GiftService,
+        private friendshipService: FriendshipService,
         private router: Router,
         private appState: AppState
     ) {
@@ -61,7 +67,28 @@ export class ProfilesIndex {
         }
     }
 
-        /**
+    addFriend(event: Event, friendId: string) {
+        event.preventDefault();
+        this.sendFriendRequest(friendId);
+    }
+
+    private sendFriendRequest(friendId: string) {
+        this.friendshipService
+        .createPending(friendId)
+        .then((response) => {
+            if(Utils.isSuccessful(response)) {
+                this._isFriend = true;
+                this._successMessage = this.MESSAGE_FRIEND_REQUEST_SENT;
+            } else {
+                this._errorMessage = Utils.getErrorMessage(response);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+    /**
      * Get user's profile. Default initial one if not edited yet.
      */
     private getFullProfile(userId: string): Promise<void> {
@@ -78,7 +105,16 @@ export class ProfilesIndex {
                     //     // this.getWishlist(this._profile.wishlistId);
                     //     // this.getGifts(userId);
                     // }
-                    console.log(this._profile.id);
+                    if(this._profile) {
+                        this._wishlist = this._profile.wishlist;
+                        this._profileOwner = this._profile.appUser;
+                        this._gifts = this._profile.wishlist.gifts;
+                        if(!this._gifts || (this._gifts && this._gifts?.length <= 0)) {
+                            this._emptyWishlistMessage = this.EMPTY_WISHLIST_MESSAGE;
+                        } else {
+                            this._emptyWishlistMessage = null;
+                        }
+                    }
                 }
             })
             .catch((error) => {

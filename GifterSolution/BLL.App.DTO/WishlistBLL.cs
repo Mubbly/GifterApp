@@ -17,7 +17,7 @@ namespace BLL.App.DTO
         public AppUserBLL? AppUser { get; set; } = default!;
         
         // List of all gifts that are in this wishlist
-        [InverseProperty(nameof(GiftBLL.Wishlist))]
+        // [InverseProperty(nameof(GiftBLL.Wishlist))]
         public ICollection<GiftBLL>? Gifts { get; set; }
         // List of all profiles that correspond to this wishlist
         [InverseProperty(nameof(ProfileBLL.Wishlist))]

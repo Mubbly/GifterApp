@@ -12,12 +12,12 @@ namespace PublicApi.DTO.v1
 
         [MaxLength(2048)] [MinLength(3)] public string? Comment { get; set; }
 
-        // Requester
-        public Guid AppUser1Id { get; set; }
+        // // Requester
+        // public Guid AppUser1Id { get; set; }
+        //
+        // public AppUserDTO? AppUser1 { get; set; } = default!;
 
-        public AppUserDTO? AppUser1 { get; set; } = default!;
-
-        // Addressee
+        // Addressee / Friend user
         public Guid AppUser2Id { get; set; }
         public AppUserDTO? AppUser2 { get; set; } = default!;
     }

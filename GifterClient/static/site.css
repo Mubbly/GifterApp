@@ -256,11 +256,17 @@ input[type='submit'].search-button {
     padding-left: 5%;
 }
 
-.icon.profile-settings {
-    margin: 5px 10px;
-}
 
-.icon-container .icon.profile-settings {
+/* .icon.profile-settings {
+    margin: 5px 10px;
+} */
+
+
+/* .icon-container .icon.profile-settings {
+    margin: 15px 10px 0 10px;
+} */
+
+h1+.icon-container .icon {
     margin: 15px 10px 0 10px;
 }
 

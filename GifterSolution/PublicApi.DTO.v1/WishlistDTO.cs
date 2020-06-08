@@ -17,7 +17,7 @@ namespace PublicApi.DTO.v1
         public AppUserDTO? AppUser { get; set; } = default!;
 
         // List of all gifts that are in this wishlist
-        [InverseProperty(nameof(GiftBLL.Wishlist))]
+        // [InverseProperty(nameof(GiftBLL.Wishlist))]
         public ICollection<GiftBLL>? Gifts { get; set; }
         
         public int ProfilesCount { get; set; }

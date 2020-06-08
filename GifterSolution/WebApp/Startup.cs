@@ -38,8 +38,8 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options =>
-                options.UseMySql(
-                    Configuration.GetConnectionString("MySqlConnection"))); // CUSTOM DB CONNECTION STRING
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("MsSqlConnection"))); // CUSTOM DB CONNECTION STRING
 
             services.AddScoped<IUserNameProvider, UserNameProvider>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();

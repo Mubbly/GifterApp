@@ -24,16 +24,16 @@ namespace BLL.App.DTO
         public bool IsPinned { get; set; }
 
         public Guid ActionTypeId { get; set; }
-        public ActionTypeBLL ActionType { get; set; } = default!;
+        public ActionTypeBLL? ActionType { get; set; } = default!;
         
         // public Guid AppUserId { get; set; }
         // public AppUserBLL AppUser { get; set; } = default!;
         
         public Guid StatusId { get; set; }
-        public StatusBLL Status { get; set; } = default!;
+        public StatusBLL? Status { get; set; } = default!;
         
         public Guid WishlistId { get; set; }
-        public WishlistBLL Wishlist { get; set; } = default!;
+        // public WishlistBLL? Wishlist { get; set; } = default!;
 
         // List of all gifts that have reserved status
         [InverseProperty(nameof(ReservedGiftBLL.Gift))]

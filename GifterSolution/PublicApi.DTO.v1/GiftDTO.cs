@@ -27,7 +27,7 @@ namespace PublicApi.DTO.v1
         public Guid StatusId { get; set; }
         public StatusDTO? Status { get; set; } = default!;
         public Guid WishlistId { get; set; }
-        public WishlistDTO? Wishlist { get; set; } = default!;
+        // public WishlistDTO? Wishlist { get; set; } = default!;
 
         public int ReservedGiftsCount { get; set; }
         public int ArchivedGiftsCount { get; set; }

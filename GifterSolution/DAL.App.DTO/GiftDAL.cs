@@ -24,16 +24,16 @@ namespace DAL.App.DTO
         public bool IsPinned { get; set; }
 
         public Guid ActionTypeId { get; set; }
-        public ActionTypeDAL ActionType { get; set; } = default!;
+        public ActionTypeDAL? ActionType { get; set; } = default!;
         
         // public Guid AppUserId { get; set; }
         // public AppUserDAL AppUser { get; set; } = default!;
         
         public Guid StatusId { get; set; }
-        public StatusDAL Status { get; set; } = default!;
+        public StatusDAL? Status { get; set; } = default!;
         
         public Guid WishlistId { get; set; }
-        public WishlistDAL Wishlist { get; set; } = default!;
+        // public WishlistDAL? Wishlist { get; set; } = default!;
 
         // List of all gifts that have reserved status
         [InverseProperty(nameof(ReservedGiftDAL.Gift))]

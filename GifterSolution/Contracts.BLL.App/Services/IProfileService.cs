@@ -10,8 +10,8 @@ namespace Contracts.BLL.App.Services
     public interface IProfileService : IBaseEntityService<BLLAppDTO.ProfileBLL>,
         IProfileRepositoryCustom<BLLAppDTO.ProfileBLL>
     {
-        Task<BLLAppDTO.ProfileBLL> GetByUserAsync(Guid userId, Guid? profileId = null, bool noTracking = true);
-        Task<BLLAppDTO.ProfileBLL> GetFullByUserAsync(Guid userId, Guid? profileId = null, bool noTracking = true);
+        Task<BLLAppDTO.ProfileBLL> GetByUserAsync(Guid userId, Guid accessingUserId, Guid? profileId = null, bool noTracking = true);
+        Task<BLLAppDTO.ProfileBLL> GetFullByUserAsync(Guid userId, Guid accessingUserId, Guid? profileId = null, bool noTracking = true);
         BLLAppDTO.ProfileBLL CreateDefaultProfile(Guid userId);
     }
 }

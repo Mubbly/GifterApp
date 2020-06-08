@@ -45,6 +45,7 @@ export class DonateeService extends BaseService<IDonatee, IDonateeCreate, IDonat
         }
     }
     
+    /** Do not use */
     async create(entity: IDonateeCreate): Promise<IFetchResponse<IDonateeCreate>> {
         return Utils.actionNotAllowed();
     }

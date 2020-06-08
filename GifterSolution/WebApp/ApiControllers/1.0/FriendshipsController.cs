@@ -147,7 +147,7 @@ namespace WebApp.ApiControllers._1._0
                 return BadRequest(new V1DTO.MessageDTO($"User {User.UserGuidId().ToString()} cannot confirm this friendship"));
             }
             // Find friendship, don't allow if not found
-            var friendship = await _bll.Friendships.GetPendingForUserAsync(User.UserGuidId(), friendshipDTO.AppUser1Id);
+            var friendship = await _bll.Friendships.GetPendingForUserAsync(User.UserGuidId(), friendshipDTO.AppUser2Id);
             if (friendship == null)
             {
                 _logger.LogError($"EDIT. No such friendship: {friendshipDTO.Id}, user: {User.UserGuidId()}");
@@ -174,11 +174,6 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.FriendshipDTO))]
         public async Task<ActionResult<V1DTO.FriendshipDTO>> PostPersonalFriendship(V1DTO.FriendshipDTO friendshipDTO)
         {
-            // Don't allow creating friendships where current user is not the requester
-            if (friendshipDTO.AppUser1Id != User.UserGuidId())
-            {
-                return BadRequest(new V1DTO.MessageDTO($"Cannot add friendship {friendshipDTO.Id}"));
-            }
             // Don't allow creating an already confirmed friendship
             if (friendshipDTO.IsConfirmed)
             {
@@ -189,12 +184,13 @@ namespace WebApp.ApiControllers._1._0
             var pendingFriendship = await _bll.Friendships.GetPendingForUserAsync(User.UserGuidId(),friendshipDTO.AppUser2Id);
             if (existingFriendship != null || pendingFriendship != null)
             {
-                return BadRequest(new V1DTO.MessageDTO($"Cannot add already existing friendship {friendshipDTO.Id}"));
+                var friendshipId = existingFriendship?.Id ?? pendingFriendship.Id;
+                return BadRequest(new V1DTO.MessageDTO($"Cannot add already existing friendship {friendshipId}"));
             }
             
             // Create pending friendship
             var bllEntity = _mapper.Map(friendshipDTO);
-            _bll.Friendships.Add(bllEntity);
+            await _bll.Friendships.Add(bllEntity, User.UserGuidId());
             await _bll.SaveChangesAsync();
 
             friendshipDTO.Id = bllEntity.Id;

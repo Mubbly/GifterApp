@@ -17,8 +17,9 @@ namespace DAL.App.DTO
         public AppUserDAL? AppUser { get; set; } = default!;
         
         // List of all gifts that are in this wishlist
-        [InverseProperty(nameof(GiftDAL.Wishlist))]
+        // [InverseProperty(nameof(GiftDAL.Wishlist))]
         public ICollection<GiftDAL>? Gifts { get; set; }
+        
         // List of all profiles that correspond to this wishlist
         [InverseProperty(nameof(ProfileDAL.Wishlist))]
         public ICollection<ProfileDAL>? Profiles { get; set; }

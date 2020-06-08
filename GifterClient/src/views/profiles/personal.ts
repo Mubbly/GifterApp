@@ -64,8 +64,8 @@ export class ProfilesPersonal {
     /**
      * Get user's personal profile. Default initial one if not edited yet.
      */
-    private getPersonalFullProfile(): Promise<void> {
-        return this.profileService
+    private getPersonalFullProfile(): void {
+        this.profileService
             .getFullPersonal()
             .then((response) => {
                 if (!Utils.isSuccessful(response)) {
@@ -76,6 +76,11 @@ export class ProfilesPersonal {
                         this._wishlist = this._profile.wishlist;
                         this._appUser = this._profile.appUser;
                         this._gifts = this._profile.wishlist.gifts;
+                        if(!this._gifts || (this._gifts && this._gifts?.length <= 0)) {
+                            this._emptyWishlistMessage = this.EMPTY_WISHLIST_MESSAGE;
+                        } else {
+                            this._emptyWishlistMessage = null;
+                        }
                     }
                 }
             })

@@ -20,36 +20,37 @@ namespace DAL.App.EF.Repositories
         {
         }
 
+        // TODO: Wth is up with page loading time (~3sec) using includes? https://github.com/dotnet/efcore/issues/18022 ?
         public async Task<DALAppDTO.ProfileDAL> GetFullByUserAsync(Guid userId, Guid? profileId = null,
             bool noTracking = true)
         {
             var query = PrepareQuery(userId, noTracking);
-            var profiles = 
-                query
-                .Where(a => a.AppUserId == userId)
-                .OrderBy(e => e.CreatedAt)
-                .Include(a => a.AppUser)
-                .Include(a => a.Wishlist)
+
+            var profiles = await query
+                .Where(p => p.AppUserId == userId)
+                .OrderBy(p => p.CreatedAt)
+                .Include(p => p.AppUser)
+                .Include(p => p.Wishlist)
                     .ThenInclude(w => w!.Gifts)
-                .Select(e => Mapper.Map(e));
-            var profilesList = await profiles.ToListAsync();
-            var debug = profilesList.FirstOrDefault().Wishlist.Gifts;
+                .ToListAsync();
+
             // If no specific profile ID provided, just get the first one
-            return profileId == null
-                ? profilesList.FirstOrDefault()
-                : profilesList.FirstOrDefault(p => p.Id == profileId);
+            return profileId == null 
+                ? Mapper.Map(profiles.FirstOrDefault()) 
+                : Mapper.Map(profiles.FirstOrDefault(p => p.Id == profileId));
         }
         
         public async Task<DALAppDTO.ProfileDAL> GetByUserAsync(Guid userId, Guid? profileId = null,
             bool noTracking = true)
         {
             var query = PrepareQuery(userId, noTracking);
-            var profiles =
-                await query
-                    .Where(a => a.AppUserId == userId)
-                    .OrderBy(e => e.CreatedAt)
-                    .Select(e => Mapper.Map(e))
+            
+            var profiles = await query
+                    .Where(p => p.AppUserId == userId)
+                    .OrderBy(p => p.CreatedAt)
+                    .Select(p => Mapper.Map(p))
                     .ToListAsync();
+            
             // If no specific profile ID provided, just get the first one
             return profileId == null
                 ? profiles.FirstOrDefault()
