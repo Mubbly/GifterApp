@@ -41,6 +41,11 @@ export function actionNotAllowed(): IFetchResponse<any> {
     }
 }
 
+export function refreshPage(): boolean {
+    location.reload();
+    return false;
+}
+
 /**
 * Returns date as YYYY-MM-DD (or the same unedited date if parsing fails)
 * so that html5 date input value could be filled in

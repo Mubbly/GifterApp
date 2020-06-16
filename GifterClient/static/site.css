@@ -1,11 +1,11 @@
 /* TODO: Remove all "important" and do the overwriting properly */
 
 .errormessage {
-    color: #e57373;
+    color: #e57373 !important;
 }
 
 .successmessage {
-    color: #388E3C;
+    color: #388E3C !important;
     /* #4CAF50, #388E3C */
 }
 
@@ -268,6 +268,10 @@ input[type='submit'].search-button {
 
 h1+.icon-container .icon {
     margin: 15px 10px 0 10px;
+}
+
+h1+.icon-container+.icon-container .icon {
+    margin: 15px 10px 0 0;
 }
 
 .card {

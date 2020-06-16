@@ -58,6 +58,7 @@ namespace BLL.App.Mappers
             MapperConfigurationExpression.CreateMap<InvitedUserDAL, InvitedUserBLL>();
             MapperConfigurationExpression.CreateMap<FriendshipBLL, FriendshipDAL>();
             MapperConfigurationExpression.CreateMap<FriendshipDAL, FriendshipBLL>();
+            MapperConfigurationExpression.CreateMap<FriendshipDAL, FriendshipResponseBLL>();
             MapperConfigurationExpression.CreateMap<PrivateMessageBLL, PrivateMessageDAL>();
             MapperConfigurationExpression.CreateMap<PrivateMessageDAL, PrivateMessageBLL>();
 

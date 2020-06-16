@@ -76,6 +76,7 @@ export class ProfilesPersonal {
                         this._wishlist = this._profile.wishlist;
                         this._appUser = this._profile.appUser;
                         this._gifts = this._profile.wishlist.gifts;
+                        
                         if(!this._gifts || (this._gifts && this._gifts?.length <= 0)) {
                             this._emptyWishlistMessage = this.EMPTY_WISHLIST_MESSAGE;
                         } else {

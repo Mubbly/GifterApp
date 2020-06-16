@@ -68,17 +68,17 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
         }
     }
 
-    async get(id: string): Promise<IFetchResponse<TEntity>> {
+    async getAllPersonal(): Promise<IFetchResponse<TEntity[]>> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/${id}`, {
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.PERSONAL}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
             // happy case
             if (response.ok) {
-                const data = (await response.json()) as TEntity;
+                const data = (await response.json()) as TEntity[];
                 console.log(data);
                 return {
                     status: response.status,
@@ -99,17 +99,17 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
         }
     }
 
-    async getAllPersonal(): Promise<IFetchResponse<TEntity[]>> {
+    async get(id: string): Promise<IFetchResponse<TEntity>> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.PERSONAL}`, {
+                .fetch(`${this.apiEndpointUrl}/${id}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
             // happy case
             if (response.ok) {
-                const data = (await response.json()) as TEntity[];
+                const data = (await response.json()) as TEntity;
                 console.log(data);
                 return {
                     status: response.status,
@@ -221,7 +221,7 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
         }
     }
 
-    async delete(id: string): Promise<IFetchResponse<string>> {
+    async delete(id: string): Promise<IFetchResponse<TEntity>> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient.delete(`${this.apiEndpointUrl}/${id}`, null, 

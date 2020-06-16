@@ -37,7 +37,7 @@ export class InvitedUsersDelete {
     private getInvitedUser(id: string): void {
         if (Utils.existsAndIsString(id)) {
             this.invitedUserService
-                .get(id)
+                .getPersonal(id)
                 .then((response) => {
                     if (!Utils.isSuccessful(response)) {
                         this.handleErrors(response);

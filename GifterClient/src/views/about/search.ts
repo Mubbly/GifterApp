@@ -7,14 +7,20 @@ import { IFetchResponse } from 'types/IFetchResponse';
 import { AppUserService } from 'service/base/appUserService';
 import { IAppUser } from 'domain/IAppUser';
 import { FriendshipService } from 'service/friendshipService';
+import { IFriendship } from '../../domain/IFriendship';
 
 @autoinject
 export class UsersIndex {
     //private readonly SEARCH_FOR_ALL_KEYWORD = "*";
     private readonly MESSAGE_FRIEND_REQUEST_SENT = 'Friend request sent';
+    private readonly MESSAGE_FRIENDSHIP_DELETED = "Friendship deleted";
     private _users: IAppUser[] = [];
+    private _friends: IFriendship[] = [];
     private _searchInput: string = '';
+
     private _isFriend: boolean = false;
+    private _isConfirmedFriend: boolean = false;
+
     private _successMessage: Optional<string> = null;
     private _errorMessage: Optional<string> = null;
 
@@ -37,9 +43,31 @@ export class UsersIndex {
         this.getSearchResults(this._searchInput);
     }
 
-    addFriend(event: Event, friendId: string) {
+    onAddFriend(event: Event, friendId: string) {
         event.preventDefault();
         this.sendFriendRequest(friendId);
+    }
+
+    onUnfriend(event: Event, friendId: string) {
+        event.preventDefault();
+        this.deleteFriendship(friendId);
+    }
+
+    /** Delete existing confirmed friendship or pending request */
+    private deleteFriendship(friendId: string): void {
+        this.friendshipService
+        .delete(friendId)
+        .then((response) => {
+            if (!Utils.isSuccessful(response)) {
+                this.handleErrors(response);
+            } else {
+                this._isFriend = false;
+                this._successMessage = this.MESSAGE_FRIENDSHIP_DELETED;
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     private sendFriendRequest(friendId: string) {
@@ -65,6 +93,7 @@ export class UsersIndex {
             this.getAppUser(validatedInputValue);
         } else {
             this.getAppUsers();
+            // this.getPersonalFriendships();
         }
     }
 
@@ -112,6 +141,24 @@ export class UsersIndex {
 
     private validateUserInput(inputValue: string) {
         return inputValue; // TODO
+    }
+
+    private getPersonalFriendships(): void {
+        this.friendshipService
+            .getAllPersonal()
+            .then((response) => {
+                if (!Utils.isSuccessful(response)) {
+                    this.handleErrors(response);
+                } else {
+                    if(!response.data || response.data.length <= 0) {
+                        return;
+                    }
+                    this._friends = response.data;
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     /**

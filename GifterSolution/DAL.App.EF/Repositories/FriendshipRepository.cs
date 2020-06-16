@@ -20,12 +20,13 @@ namespace DAL.App.EF.Repositories
             base(dbContext, new DALMapper<DomainApp.Friendship, DALAppDTO.FriendshipDAL>())
         {
         }
-        
-        public async Task<IEnumerable<DALAppDTO.FriendshipDAL>> GetAllForUserAsync(Guid userId, bool isConfirmed = true, bool noTracking = true)
+
+        public async Task<IEnumerable<DALAppDTO.FriendshipDAL>> GetAllForUserAsync(Guid userId, bool isConfirmed = true,
+            bool noTracking = true)
         {
             // User's friendships
             var friendships = PrepareQuery(userId, noTracking);
-            var personalFriendships = 
+            var personalFriendships =
                 await friendships
                     .Where(e => e.IsConfirmed == isConfirmed && (e.AppUser1Id == userId || e.AppUser2Id == userId))
                     .OrderBy(e => e.CreatedAt)
@@ -34,12 +35,47 @@ namespace DAL.App.EF.Repositories
             return personalFriendships;
         }
 
-        public async Task<DALAppDTO.FriendshipDAL> GetForUserAsync(Guid userId, Guid friendId, bool isConfirmed = true, bool noTracking = true)
+        public async Task<IEnumerable<DALAppDTO.FriendshipDAL>> GetAllPendingForUserAsync(Guid userId,
+            bool isSent = true, bool noTracking = true)
         {
+            // All user's friendships
             var friendships = PrepareQuery(userId, noTracking);
-            var personalFriendships =
-                await friendships.FirstOrDefaultAsync(f => f.AppUser1Id == userId && f.AppUser2Id == friendId);
-            return Mapper.Map(personalFriendships);
+
+            // Sent friend requests
+            if (isSent)
+            {
+                var sentFriendRequests =
+                    await friendships
+                        .Where(e => e.IsConfirmed == false && (e.AppUser1Id == userId))
+                        .OrderBy(e => e.CreatedAt)
+                        .Select(e => Mapper.Map(e))
+                        .ToListAsync();
+                return sentFriendRequests;
+            }
+
+            // Received friend requests
+            var receivedFriendRequests =
+                await friendships
+                    .Where(e => e.IsConfirmed == false && (e.AppUser2Id == userId))
+                    .OrderBy(e => e.CreatedAt)
+                    .Select(e => Mapper.Map(e))
+                    .ToListAsync();
+            return receivedFriendRequests;
+
+        }
+
+        public async Task<DALAppDTO.FriendshipDAL> GetForUserAsync(Guid userId, Guid friendId, bool isConfirmed = true,
+            bool noTracking = true)
+        {
+            var query = PrepareQuery(userId, noTracking);
+
+            // Get friendship where current user is AppUser1 and friend Appuser2, or the other way around
+            var friendship = await query.FirstOrDefaultAsync(f =>
+                    f.IsConfirmed == isConfirmed 
+                    && (f.AppUser1Id == userId && f.AppUser2Id == friendId 
+                        || f.AppUser2Id == userId && f.AppUser1Id == friendId));
+            
+            return Mapper.Map(friendship);
         }
 
         // public async Task<IEnumerable<Friendship>> AllAsync(Guid? userId = null)

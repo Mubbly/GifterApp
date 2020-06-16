@@ -63,7 +63,7 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"Profile for user {userId} not found"));
             }
             // Only friends can see profile if it's set as private
-            var isRequestingUserFriend = _bll.Friendships.GetConfirmedForUserAsync(userId, User.UserGuidId()) != null;
+            var isRequestingUserFriend = _bll.Friendships.GetForUserConfirmedAsync(userId, User.UserGuidId()) != null;
             if (profile.IsPrivate && !isRequestingUserFriend)
             {
                 return NotFound(new V1DTO.MessageDTO($"Profile for user {userId} not found"));

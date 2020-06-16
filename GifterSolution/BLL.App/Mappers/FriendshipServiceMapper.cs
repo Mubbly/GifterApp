@@ -7,5 +7,9 @@ namespace BLL.App.Mappers
     public class FriendshipServiceMapper : BLLMapper<DALAppDTO.FriendshipDAL, BLLAppDTO.FriendshipBLL>,
         IFriendshipServiceMapper
     {
+        public BLLAppDTO.FriendshipResponseBLL MapFriendshipToResponseBLL(DALAppDTO.FriendshipDAL inObject)
+        {
+            return Mapper.Map<BLLAppDTO.FriendshipResponseBLL>(inObject);
+        }
     }
 }

@@ -18,6 +18,7 @@ import { FriendshipService } from '../../service/friendshipService';
 export class ProfilesIndex {
     private readonly EMPTY_WISHLIST_MESSAGE = "This user's wishlist seems to be empty! :(";
     private readonly MESSAGE_FRIEND_REQUEST_SENT = 'Friend request sent';
+    private readonly MESSAGE_FRIENDSHIP_DELETED = "Friendship deleted";
     private readonly ERROR_PROFILE_NOT_FOUND = "404 Not Found";
 
     private _profile: Optional<IProfile> = null;
@@ -28,7 +29,9 @@ export class ProfilesIndex {
     private _successMessage: Optional<string> = null;
     private _errorMessage: Optional<string> = null;
 
+    /** Either confirmed or pending relationship is present */ 
     private _isFriend: boolean = false;
+    private _isConfirmedFriend: boolean = false;
 
     private _lastActiveDate: string = '';
     private _emptyWishlistMessage: Optional<string> = null;
@@ -67,9 +70,14 @@ export class ProfilesIndex {
         }
     }
 
-    addFriend(event: Event, friendId: string) {
+    onAddFriend(event: Event, friendId: string) {
         event.preventDefault();
         this.sendFriendRequest(friendId);
+    }
+
+    onUnfriend(event: Event, friendId: string) {
+        event.preventDefault();
+        this.deleteFriendship(friendId);
     }
 
     private sendFriendRequest(friendId: string) {
@@ -81,6 +89,23 @@ export class ProfilesIndex {
                 this._successMessage = this.MESSAGE_FRIEND_REQUEST_SENT;
             } else {
                 this._errorMessage = Utils.getErrorMessage(response);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+    /** Delete existing confirmed friendship or pending request */
+    private deleteFriendship(friendId: string): void {
+        this.friendshipService
+        .delete(friendId)
+        .then((response) => {
+            if (!Utils.isSuccessful(response)) {
+                this.handleErrors(response);
+            } else {
+                this._isFriend = false;
+                this._successMessage = this.MESSAGE_FRIENDSHIP_DELETED;
             }
         })
         .catch((error) => {
@@ -109,12 +134,33 @@ export class ProfilesIndex {
                         this._wishlist = this._profile.wishlist;
                         this._profileOwner = this._profile.appUser;
                         this._gifts = this._profile.wishlist.gifts;
-                        if(!this._gifts || (this._gifts && this._gifts?.length <= 0)) {
+
+                        let noGiftsInWishlist: boolean = !this._gifts || (this._gifts && this._gifts?.length <= 0);
+                        if(noGiftsInWishlist) {
                             this._emptyWishlistMessage = this.EMPTY_WISHLIST_MESSAGE;
                         } else {
                             this._emptyWishlistMessage = null;
                         }
+
+                        this.getFriendship(userId);
                     }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    private getFriendship(userId: string): Promise<void> {
+        return this.friendshipService
+            .getPersonal(userId)
+            .then((response) => {
+                // Either friend or not
+                this._isFriend = Utils.isSuccessful(response);
+
+                // Either confirmed or pending friendship
+                if(this._isFriend) {
+                    this._isConfirmedFriend = response.data !== undefined && response.data.isConfirmed;
                 }
             })
             .catch((error) => {

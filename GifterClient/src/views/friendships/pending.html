@@ -1,7 +1,8 @@
 <template>
     <h1>Pending friend requests</h1>
     <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-    <section if.bind="_pendingFriendships" class="card">
+    <p if.bind="_successMessage" class="successmessage">${_successMessage}</p>
+    <section if.bind="_pendingReceivedFriendships" class="card">
         <h2>Received</h2>
         <table class="table">
             <thead>
@@ -10,34 +11,29 @@
                         Name
                     </th>
                     <th>
-                        Profile
-                    </th>
-                    <th>
                         Last active
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr repeat.for="recFriend of _pendingReceivedFriendships">
                     <td>
-                        Example Name
+                        ${recFriend.name}
                     </td>
                     <td>
-                        <a href="#">Example profile link</a>
+                        ${recFriend.lastActive}
                     </td>
-                    <td>
-                        11.11.2011
-                    </td>
-                    <td class="flex">
-                        <a route-href="route: friendshipsPending; params.bind: {}" class="button">Accept</a>
-                        <a route-href="route: search; params.bind: {}" class="button">Decline</a> 
+                    <td class="flex icon-group">
+                        <a route-href="route: profilesIndex; params.bind: { userId: recFriend.appUser2Id }" title="Go to profile"><img src="/icons/icon-open-grey-m.png" class="icon" alt="Go to profile"/></a>
+                        <a href="#" click.delegate="onAcceptFriend($event, recFriend.appUser2Id)" class="button">Accept</a>
+                        <a href="#" click.delegate="onDeclineFriend($event, recFriend.appUser2Id)" class="button">Decline</a> 
                     </td>
                 </tr>
             </tbody>
         </table>
     </section>
-    <section if.bind="_pendingFriendships" class="card">
+    <section if.bind="_pendingSentFriendships" class="card">
         <h2>Sent</h2>
         <table class="table">
             <thead>
@@ -46,28 +42,22 @@
                         Name
                     </th>
                     <th>
-                        Profile
-                    </th>
-                    <th>
                         Last active
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr repeat.for="sentFriend of _pendingSentFriendships">
                     <td>
-                        Example Name
+                        ${sentFriend.name}
                     </td>
                     <td>
-                        <a href="#">Example profile link</a>
+                        ${sentFriend.lastActive}
                     </td>
-                    <td>
-                        11.11.2011
-                    </td>
-                    <td class="flex">
-                        <a route-href="route: search; params.bind: {}" class="button hidden">Cancel</a>
-                        <a route-href="route: search; params.bind: {}" class="button">Cancel</a>
+                    <td class="flex icon-group">
+                        <a route-href="route: profilesIndex; params.bind: { userId: sentFriend.appUser2Id }" title="Go to profile"><img src="/icons/icon-open-grey-m.png" class="icon" alt="Go to profile"/></a>
+                        <a href="#" click.delegate="onDeclineFriend($event, sentFriend.appUser2Id)" class="button">Cancel</a> 
                     </td>
                 </tr>
             </tbody>

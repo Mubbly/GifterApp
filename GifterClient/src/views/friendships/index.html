@@ -6,16 +6,13 @@
         <a route-href="route: invitedusersIndex; params.bind: {}" class="button">Sent invitations</a> 
     </p>
     <hr if.bind="_confirmedFriendships.length <= 0">
-    <p if.bind="_errorMessage" class="${_confirmedFriendships.length <= 0 ? '' : 'errormessage'}">${_errorMessage}</p>
+    <p if.bind="_errorMessage" class="${_confirmedFriendships.length <= 0 ? 'text-muted' : 'errormessage'}">${_errorMessage}</p>
     <section if.bind="_confirmedFriendships.length > 0">
         <table class="table">
             <thead>
                 <tr>
                     <th>
                         Name
-                    </th>
-                    <th>
-                        Profile
                     </th>
                     <th>
                         Last active
@@ -26,17 +23,17 @@
             <tbody>
                 <tr repeat.for="friend of _confirmedFriendships">
                     <td>
-                        ${friend.friendUserId}
+                        <a route-href="route: profilesIndex; params.bind: { userId: friend.appUser2Id }" title="Go to profile">
+                            ${friend.name}
+                        </a>
                     </td>
                     <td>
-                        Profile url
+                        ${friend.lastActive}
                     </td>
-                    <td>
-                        11.11.2011
-                    </td>
-                    <td>
-                        <a href="#">Message</a> |
-                        <a href="#">Unfriend</a>
+                    <td class="flex icon-group">
+                        <a route-href="route: profilesIndex; params.bind: { userId: friend.appUser2Id }" title="Go to profile"><img src="/icons/icon-open-grey-m.png" class="icon" alt="Go to profile"/></a>
+                        <a route-href="route: personalMessagesIndex; params.bind: { userId: friend.appUser2Id }" title="Message"><img src="/icons/icon-chat-grey-m.png" class="icon" alt="Message"/></a>
+                        <a href="#" click.delegate="onUnfriend($event, friend.appUser2Id)" title="Unfriend"><img src="/icons/icon-unfriend-grey-m.png" class="icon" alt="Unfriend"/></a>
                     </td>
                 </tr>
             </tbody>

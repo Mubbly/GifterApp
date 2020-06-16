@@ -6,14 +6,15 @@
                 <h1 if.bind="_profileOwner.firstName || _profileOwner.userName" class="flex-column username">
                     ${_profileOwner.userName}
                 </h1> 
-                <a if.bind="!_isFriend" href="#" click.delegate="addFriend($event, _profileOwner.id)" title="Add friend" class="flex-column icon-container">
+                <a if.bind="!_isFriend" href="#" click.delegate="onAddFriend($event, _profileOwner.id)" title="Add friend" class="flex-column icon-container">
                     <img src="/icons/icon-add-friend-grey-m.png" class="icon" alt="Add friend"/>
                 </a> 
-                <!-- click.delegate="addFriend(user.id)"         -->
-                <a if.bind="_isFriend" route-href="route: friendshipsDelete; params.bind: { id: user.id }" title="Unfriend" class="flex-column icon-container">
-                    <img src="/icons/icon-delete-grey-m.png" class="icon" alt="Unfriend"/>
+                <a if.bind="_isConfirmedFriend" route-href="route: personalMessagesIndex; params.bind: { userId: user.id }" title="Message" class="flex-column icon-container">
+                    <img src="/icons/icon-chat-grey-m.png" class="icon" alt="Message"/>
+                </a>
+                <a if.bind="_isFriend" href="#" click.delegate="onUnfriend($event, _profileOwner.id)" title="Unfriend" class="flex-column icon-container">
+                    <img src="/icons/icon-unfriend-grey-m.png" class="icon" alt="Unfriend"/>
                 </a> 
-                <!-- click.delegate="unFriend(user.id)"         -->
             </div>
             <p if.bind="_lastActiveDate" class="date">Last active: ${_lastActiveDate}</p>
             <hr class="profile-hr">

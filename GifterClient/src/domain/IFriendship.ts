@@ -17,3 +17,8 @@ export interface IFriendship extends IBaseEntity {
     isConfirmed: boolean;
     appUser2Id: string; // friend id
 }
+
+export interface IFriendshipResponse extends IFriendship {
+    name: string;
+    lastActive: string;
+}

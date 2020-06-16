@@ -33,52 +33,80 @@ namespace WebApp.ApiControllers._1._0
             _logger = logger;
         }
         
-        // GET: api/Friendships/Personal
+        // GET: api/Friendships/5
         /// <summary>
-        ///     Get user confirmed Friendships
+        ///     Get user confirmed Friendships. Pending ones are always personal.
         /// </summary>
         /// <param name="userId"></param>
-        /// <returns>List of Friendships</returns>
+        /// <returns>List of confirmed Friendships for given user</returns>
         [HttpGet("{userId}")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
-        public async Task<ActionResult<IEnumerable<V1DTO.FriendshipDTO>>> GetUserFriendships(Guid userId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipResponseDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTO.FriendshipResponseDTO>>> GetUserFriendships(Guid userId)
         {
             var personalFriendships = await _bll.Friendships.GetAllConfirmedForUserAsync(userId);
-            return Ok(personalFriendships.Select(e => _mapper.Map(e)));
+            return Ok(personalFriendships.Select(e => _mapper.MapFriendshipResponseToDTO(e)));
+        }
+        
+        // GET: api/Friendships/Personal
+        /// <summary>
+        ///     Get all personal Friendships - both pending and confirmed.
+        /// </summary>
+        /// <returns>List of all personal Friendships</returns>
+        [HttpGet("personal")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipResponseDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTO.FriendshipResponseDTO>>> GetPersonalFriendships()
+        {
+            var friendships = await _bll.Friendships.GetAllForUserAsync(User.UserGuidId());
+            return Ok(friendships.Select(e => _mapper.MapFriendshipResponseToDTO(e)));
         }
 
-        // GET: api/Friendships/Personal
+        // GET: api/Friendships/Personal/Confirmed
         /// <summary>
         ///     Get personal confirmed Friendships
         /// </summary>
-        /// <returns>List of Friendships</returns>
-        [HttpGet("personal")]
+        /// <returns>List of confirmed personal Friendships</returns>
+        [HttpGet("personal/confirmed")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
-        public async Task<ActionResult<IEnumerable<V1DTO.FriendshipDTO>>> GetPersonalFriendships()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipResponseDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTO.FriendshipResponseDTO>>> GetPersonalConfirmedFriendships()
         {
             var personalFriendships = await _bll.Friendships.GetAllConfirmedForUserAsync(User.UserGuidId());
-            return Ok(personalFriendships.Select(e => _mapper.Map(e)));
-        }
-        
-        // GET: api/Friendships/Personal/Pending
-        /// <summary>
-        ///     Get personal pending Friendships
-        /// </summary>
-        /// <returns>List of Friendships</returns>
-        [HttpGet("personal/pending")]
-        [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
-        public async Task<ActionResult<IEnumerable<V1DTO.FriendshipDTO>>> GetPersonalPendingFriendships()
-        {
-            var pendingFriendships = await _bll.Friendships.GetAllPendingForUserAsync(User.UserGuidId());
-            return Ok(pendingFriendships.Select(e => _mapper.Map(e)));
+            return Ok(personalFriendships.Select(e => _mapper.MapFriendshipResponseToDTO(e)));
         }
 
+        // GET: api/Friendships/Personal/Pending/Sent
+        /// <summary>
+        ///     Get personal pending Friendships that the user sent
+        /// </summary>
+        /// <returns>List of pending personal Friendships</returns>
+        [HttpGet("personal/pending/sent")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipResponseDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTO.FriendshipResponseDTO>>> GetPersonalSentPendingFriendships()
+        {
+            var pendingFriendships = await _bll.Friendships.GetAllPendingForUserAsync(User.UserGuidId(), true);
+            return Ok(pendingFriendships.Select(e => _mapper.MapFriendshipResponseToDTO(e)));
+        }
+        
+        // GET: api/Friendships/Personal/Pending/Received
+        /// <summary>
+        ///     Get personal pending Friendships that the user received
+        /// </summary>
+        /// <returns>List of pending personal Friendships</returns>
+        [HttpGet("personal/pending/received")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipResponseDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTO.FriendshipResponseDTO>>> GetPersonalReceivedPendingFriendships()
+        {
+            var pendingFriendships = await _bll.Friendships.GetAllPendingForUserAsync(User.UserGuidId(), false);
+            return Ok(pendingFriendships.Select(e => _mapper.MapFriendshipResponseToDTO(e)));
+        }
+        
         // GET: api/Friendships/Personal/5
         /// <summary>
-        ///     Get a single personal confirmed Friendship
+        ///     Get a single personal Friendship - no matter the status (pending or confirmed)
         /// </summary>
         /// <param name="friendUserId"></param>
         /// <returns>Friendship object</returns>
@@ -87,14 +115,35 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
-        public async Task<ActionResult<V1DTO.FriendshipDTO>> GetConfirmedFriendship(Guid friendUserId)
+        public async Task<ActionResult<V1DTO.FriendshipDTO>> GetFriendship(Guid friendUserId)
         {
-            var friendship = await _bll.Friendships.GetConfirmedForUserAsync(User.UserGuidId(), friendUserId);
+            var friendship = await _bll.Friendships.GetForUserAsync(User.UserGuidId(), friendUserId);
             if (friendship == null)
             {
                 return NotFound(new V1DTO.MessageDTO($"Friendship with user {friendUserId} not found"));
             }
-            return Ok(_mapper.Map(friendship));
+            return Ok(_mapper.MapFriendshipResponseToDTO(friendship));
+        }
+
+        // GET: api/Friendships/Personal/Confirmed/5
+        /// <summary>
+        ///     Get a single personal confirmed Friendship
+        /// </summary>
+        /// <param name="friendUserId"></param>
+        /// <returns>Friendship object</returns>
+        [HttpGet("personal/confirmed/{friendUserId}")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
+        public async Task<ActionResult<V1DTO.FriendshipDTO>> GetConfirmedFriendship(Guid friendUserId)
+        {
+            var friendship = await _bll.Friendships.GetForUserConfirmedAsync(User.UserGuidId(), friendUserId);
+            if (friendship == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Friendship with user {friendUserId} not found"));
+            }
+            return Ok(_mapper.MapFriendshipResponseToDTO(friendship));
         }
         
         // GET: api/Friendships/Personal/Pending/5
@@ -103,19 +152,19 @@ namespace WebApp.ApiControllers._1._0
         /// </summary>
         /// <param name="friendUserId"></param>
         /// <returns>Friendship object</returns>
-        [HttpGet("personal/pending/{id}")]
+        [HttpGet("personal/pending/{friendUserId}")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
         public async Task<ActionResult<V1DTO.FriendshipDTO>> GetPendingFriendship(Guid friendUserId)
         {
-            var friendship = await _bll.Friendships.GetPendingForUserAsync(User.UserGuidId(), friendUserId);
+            var friendship = await _bll.Friendships.GetForUserPendingAsync(User.UserGuidId(), friendUserId);
             if (friendship == null)
             {
                 return NotFound(new V1DTO.MessageDTO($"Friendship with user {friendUserId} not found"));
             }
-            return Ok(_mapper.Map(friendship));
+            return Ok(_mapper.MapFriendshipResponseToDTO(friendship));
         }
 
         // PUT: api/Friendships/personal/pending/5
@@ -141,18 +190,19 @@ namespace WebApp.ApiControllers._1._0
             {
                 return BadRequest(new V1DTO.MessageDTO("id and friendship.id do not match"));
             }
-            // Don't allow if current user has no rights to confirm this friendship (not the addressee)
-            if (friendshipDTO.AppUser2Id != User.UserGuidId())
-            {
-                return BadRequest(new V1DTO.MessageDTO($"User {User.UserGuidId().ToString()} cannot confirm this friendship"));
-            }
-            // Find friendship, don't allow if not found
-            var friendship = await _bll.Friendships.GetPendingForUserAsync(User.UserGuidId(), friendshipDTO.AppUser2Id);
+            // Find pending friendship, don't allow if not found
+            // // TODO: Change AppUser2Id name to FriendId in DTO
+            var friendship = await _bll.Friendships.GetForUserPendingAsync(User.UserGuidId(), friendshipDTO.AppUser2Id);
             if (friendship == null)
             {
                 _logger.LogError($"EDIT. No such friendship: {friendshipDTO.Id}, user: {User.UserGuidId()}");
                 return NotFound(new V1DTO.MessageDTO($"No Friendship found for id {id}"));
             }
+            // Don't allow if current user has no rights to confirm this friendship (not the addressee!)
+            // if (friendship.AppUser2Id != User.UserGuidId())
+            // {
+            //     return BadRequest(new V1DTO.MessageDTO($"User {User.UserGuidId().ToString()} cannot confirm this friendship"));
+            // }
             // Update existing friendship (status to confirmed)
             await _bll.Friendships.UpdateAsync(_mapper.Map(friendshipDTO), User.UserGuidId());
             await _bll.SaveChangesAsync();
@@ -174,14 +224,14 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.FriendshipDTO))]
         public async Task<ActionResult<V1DTO.FriendshipDTO>> PostPersonalFriendship(V1DTO.FriendshipDTO friendshipDTO)
         {
-            // Don't allow creating an already confirmed friendship
+            // Don't allow creating a confirmed friendship (only pending ones can be created)
             if (friendshipDTO.IsConfirmed)
             {
                 return BadRequest(new V1DTO.MessageDTO($"Cannot add already confirmed friendship {friendshipDTO.Id}"));
             }
             // Don't allow re-creating an existing friendship
-            var existingFriendship = await _bll.Friendships.GetConfirmedForUserAsync(User.UserGuidId(),friendshipDTO.AppUser2Id);
-            var pendingFriendship = await _bll.Friendships.GetPendingForUserAsync(User.UserGuidId(),friendshipDTO.AppUser2Id);
+            var existingFriendship = await _bll.Friendships.GetForUserConfirmedAsync(User.UserGuidId(),friendshipDTO.AppUser2Id);
+            var pendingFriendship = await _bll.Friendships.GetForUserPendingAsync(User.UserGuidId(),friendshipDTO.AppUser2Id);
             if (existingFriendship != null || pendingFriendship != null)
             {
                 var friendshipId = existingFriendship?.Id ?? pendingFriendship.Id;
@@ -201,26 +251,30 @@ namespace WebApp.ApiControllers._1._0
             );
         }
 
-        // DELETE: api/Friendships/personal/5
+        // DELETE: api/Friendships/5
         /// <summary>
-        ///     Delete friendship - remove pending request or unfriend an existing friend
+        ///     Delete personal friendship - remove pending request or unfriend an existing friend
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="friendId"></param>
         /// <returns></returns>
-        [HttpDelete("personal/{id}")]
+        [HttpDelete("{friendId}")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
-        public async Task<ActionResult<V1DTO.FriendshipDTO>> DeletePersonalFriendship(Guid id)
+        public async Task<ActionResult<V1DTO.FriendshipDTO>> DeleteFriendship(Guid friendId)
         {
-            var friendship = await _bll.Friendships.FirstOrDefaultAsync(id, User.UserGuidId());
+            var friendship = await _bll.Friendships.GetForUserAsync(User.UserGuidId(), friendId);
+
+            // No pending or confirmed friendship found
             if (friendship == null)
             {
-                _logger.LogError($"DELETE. No such friendship: {id}, user: {User.UserGuidId()}");
-                return NotFound(new V1DTO.MessageDTO($"Friendship with id {id} not found"));
+                _logger.LogError($"DELETE. No such friendship: {friendId.ToString()}, user: {User.UserGuidId()}");
+                return NotFound(new V1DTO.MessageDTO($"Friendship with id {friendId.ToString()} not found"));
             }
-            await _bll.Friendships.RemoveAsync(id);
+            
+            // Pending or confirmed relationship found - delete it
+            await _bll.Friendships.RemoveAsync(friendship.Id);
             await _bll.SaveChangesAsync();
             return Ok(friendship);
         }
