@@ -147,6 +147,25 @@ namespace WebApp.ApiControllers._1._0.Identity
                 _logger.LogError($"Could not create default profile for new registered user {registerDTO.Email} - userId not provided", e);
             }
             
+            // Check if user was invited by existing user
+            var invitedUsers = (await _bll.InvitedUsers.GetAllAsync())
+                .Where(i => i.Email == newRegisteredUser.Email)
+                .ToList();
+            if (invitedUsers != null && invitedUsers.Any())
+            {
+                foreach (var invitedUser in invitedUsers)
+                {
+                    // Update invitedUser to mark they have joined
+                    invitedUser.HasJoined = true;
+                    await _bll.InvitedUsers.UpdateAsync(invitedUser);
+                    await _bll.SaveChangesAsync();
+
+                    // Send notification to the invitor about their friend joining
+                    var invitor = await _userManager.FindByIdAsync(invitedUser.InvitorUserId.ToString());
+                    // TODO 
+                }
+            }
+            
             // Log new user in
             return await LogIn(newRegisteredUser);
         }
@@ -172,25 +191,7 @@ namespace WebApp.ApiControllers._1._0.Identity
                 LastName = appUser.LastName
             });
         }
-        
-        // // Check if user was invited by existing user
-        // var invitedUsers = (await _bll.InvitedUsers.GetAllAsync())
-        //     .Where(i => i.Email == newRegisteredUser.Email)
-        //     .ToList();
-        // if (invitedUsers != null && invitedUsers.Any())
-        // {
-        //     foreach (var invitedUser in invitedUsers)
-        //     {
-        //         // Update invitedUser to mark they have joined
-        //         invitedUser.HasJoined = true;
-        //         await _bll.InvitedUsers.UpdateAsync(invitedUser);
-        //         
-        //         // Send notification to the invitor about their friend joining
-        //         var invitor = await _userManager.FindByIdAsync(invitedUser.InvitorUserId.ToString());
-        //         // TODO 
-        //     }
-        // }
-        
+
         // /// <summary>
         // ///     Endpoint for user log-out (update activity related data)
         // /// </summary>
