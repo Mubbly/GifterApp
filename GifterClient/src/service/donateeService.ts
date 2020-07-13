@@ -14,37 +14,6 @@ export class DonateeService extends BaseService<IDonatee, IDonateeCreate, IDonat
         super(ApiEndpointUrls.DONATEES, httpClient, appState);
     }
 
-    async getAllForCampaign(campaignId: string): Promise<IFetchResponse<IDonatee[]>> {
-        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
-        try {
-            const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/Campaign/${campaignId}`, {
-                    cache: "no-store",
-                    headers: AUTH_HEADERS
-                });
-            // happy case
-            if (response.ok) {
-                const data = (await response.json()) as IDonatee[];
-                console.log(data);
-                return {
-                    status: response.status,
-                    data: data
-                }
-            }
-            // something went wrong
-            return {
-                status: response.status,
-                errorMessage: response.statusText
-            }
-
-        } catch (reason) {
-            return {
-                status: 0,
-                errorMessage: JSON.stringify(reason)
-            }
-        }
-    }
-    
     /** Do not use */
     async create(entity: IDonateeCreate): Promise<IFetchResponse<IDonateeCreate>> {
         return Utils.actionNotAllowed();
@@ -72,6 +41,37 @@ export class DonateeService extends BaseService<IDonatee, IDonateeCreate, IDonat
                 status: response.status,
                 errorMessage: response.statusText
             }
+        } catch (reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
+    }
+
+    async getAllForCampaign(campaignId: string): Promise<IFetchResponse<IDonatee[]>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
+        try {
+            const response = await this.httpClient
+                .fetch(`${this.apiEndpointUrl}/Campaign/${campaignId}`, {
+                    cache: "no-store",
+                    headers: AUTH_HEADERS
+                });
+            // happy case
+            if (response.ok) {
+                const data = (await response.json()) as IDonatee[];
+                console.log(data);
+                return {
+                    status: response.status,
+                    data: data
+                }
+            }
+            // something went wrong
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+
         } catch (reason) {
             return {
                 status: 0,

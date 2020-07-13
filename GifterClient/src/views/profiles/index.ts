@@ -6,13 +6,18 @@ import * as Utils from "utils/utilFunctions";
 import { Optional, GifterInterface } from "types/generalTypes";
 import { AppState } from "state/appState";
 import { AppUserService } from "service/base/appUserService";
-import { IGift } from "domain/IGift";
+import { IGift, IGiftEdit, IGiftCreate } from "domain/IGift";
 import { GiftService } from "service/giftService";
 import { IAppUser } from "domain/IAppUser";
 import { WishlistService } from "service/wishlistService";
 import { IFetchResponse } from "types/IFetchResponse";
 import { IWishlist } from "domain/IWishlist";
 import { FriendshipService } from '../../service/friendshipService';
+import { ReservedGiftService } from "service/reservedGiftService";
+import { IReservedGiftCreate } from "domain/IReservedGift";
+import { ACTION_TYPES, ARCHIVED_GIFTS } from '../../utils/apiEndpointUrls';
+import { profile } from "console";
+import { Statuses } from "domain/PredefinedData";
 
 @autoinject
 export class ProfilesIndex {
@@ -20,6 +25,9 @@ export class ProfilesIndex {
     private readonly MESSAGE_FRIEND_REQUEST_SENT = 'Friend request sent';
     private readonly MESSAGE_FRIENDSHIP_DELETED = "Friendship deleted";
     private readonly ERROR_PROFILE_NOT_FOUND = "404 Not Found";
+    private readonly ACTIVE_STATUS = Statuses.ACTIVE;
+    private readonly RESERVED_STATUS = Statuses.RESERVED;
+    private readonly ARCHIVED_STATUS = Statuses.ARCHIVED;
 
     private _profile: Optional<IProfile> = null;
     private _currentUser: Optional<IAppUser> = null;
@@ -45,6 +53,7 @@ export class ProfilesIndex {
         private appUserService: AppUserService,
         private wishlistService: WishlistService,
         private giftService: GiftService,
+        private reservedGiftService: ReservedGiftService,
         private friendshipService: FriendshipService,
         private router: Router,
         private appState: AppState
@@ -80,6 +89,81 @@ export class ProfilesIndex {
         this.deleteFriendship(friendId);
     }
 
+    onReserveGift(event: Event, gift: IGift) {
+        event.preventDefault();
+        this.reserve(gift);
+    }
+
+    onCancelReservation(event: Event, gift: IGift) {
+        event.preventDefault();
+        this.cancelReservation(gift);
+    }
+
+    onMarkAsGifted(event: Event, gift: IGift) {
+        event.preventDefault();
+        this.archive(gift);
+    }
+
+     /** Get user's full profile including wishlist and gifts if there are any. Default initial one if not edited yet. */
+    private getFullProfile(userId: string): Promise<void> {
+        return this.profileService
+            .getFullForUser(userId)
+            .then((response) => {
+                if (!Utils.isSuccessful(response)) {
+                    this.handleErrors(response);
+                } else {                    
+                    this._profile = response.data!;
+                    // if(this._profile) {
+                    //     this._lastActiveDate = Utils.formatAsHtml5Date(this._profileOwner!.lastActive);
+
+                    //     // this.getWishlist(this._profile.wishlistId);
+                    //     // this.getGifts(userId);
+                    // }
+                    if(this._profile) {
+                        this._wishlist = this._profile.wishlist;
+                        this._profileOwner = this._profile.appUser;
+                        this._gifts = this._profile.wishlist.gifts;
+
+                        let noGiftsInWishlist: boolean = !this._gifts || (this._gifts && this._gifts?.length <= 0);
+                        if(noGiftsInWishlist) {
+                            this._emptyWishlistMessage = this.EMPTY_WISHLIST_MESSAGE;
+                        } else {
+                            this._gifts!.forEach(gift => {
+                                if(gift.reservedFrom) {
+                                    gift.reservedFrom = Utils.formatAsHtml5Date(gift.reservedFrom);
+                                }
+                            });
+                            this._emptyWishlistMessage = null;
+                        }
+
+                        this.getFriendshipStatus(userId);
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    /** Get the info on whether the requested profile belongs to a friend or not (and whether it's aconfirmed friendship) */
+    private getFriendshipStatus(userId: string): Promise<void> {
+        return this.friendshipService
+            .getPersonal(userId)
+            .then((response) => {
+                // Either friend or not
+                this._isFriend = Utils.isSuccessful(response);
+
+                // Either confirmed or pending friendship
+                if(this._isFriend) {
+                    this._isConfirmedFriend = response.data !== undefined && response.data.isConfirmed;
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    /** Create a new pending friendship */
     private sendFriendRequest(friendId: string) {
         this.friendshipService
         .createPending(friendId)
@@ -113,59 +197,72 @@ export class ProfilesIndex {
         });
     }
 
-    /**
-     * Get user's profile. Default initial one if not edited yet.
-     */
-    private getFullProfile(userId: string): Promise<void> {
-        return this.profileService
-            .getFullForUser(userId)
+    /** Sets gift status to reserved */
+    private reserve(gift: IGift) {
+        const giftOwnerId = this._profile?.appUserId;
+        if(giftOwnerId) {
+            this.giftService
+            .updateToReservedStatus(gift, giftOwnerId)
             .then((response) => {
-                if (!Utils.isSuccessful(response)) {
-                    this.handleErrors(response);
-                } else {                    
-                    this._profile = response.data!;
-                    // if(this._profile) {
-                    //     this._lastActiveDate = Utils.formatAsHtml5Date(this._profileOwner!.lastActive);
-
-                    //     // this.getWishlist(this._profile.wishlistId);
-                    //     // this.getGifts(userId);
-                    // }
-                    if(this._profile) {
-                        this._wishlist = this._profile.wishlist;
-                        this._profileOwner = this._profile.appUser;
-                        this._gifts = this._profile.wishlist.gifts;
-
-                        let noGiftsInWishlist: boolean = !this._gifts || (this._gifts && this._gifts?.length <= 0);
-                        if(noGiftsInWishlist) {
-                            this._emptyWishlistMessage = this.EMPTY_WISHLIST_MESSAGE;
-                        } else {
-                            this._emptyWishlistMessage = null;
-                        }
-
-                        this.getFriendship(userId);
-                    }
+                if(!Utils.isSuccessful(response)) {
+                    this._errorMessage = Utils.getErrorMessage(response);
+                } else {
+                    Utils.refreshPage(); // To getFullProfile again - with updated gifts
                 }
             })
             .catch((error) => {
                 console.log(error);
             });
+        }
     }
 
-    private getFriendship(userId: string): Promise<void> {
-        return this.friendshipService
-            .getPersonal(userId)
+    /** Sets gift status to archived */
+    private archive(gift: IGift) {
+        const giftOwnerId = this._profile?.appUserId;
+        if(giftOwnerId) {
+            this.giftService
+            .updateToGiftedStatus(gift, giftOwnerId)
             .then((response) => {
-                // Either friend or not
-                this._isFriend = Utils.isSuccessful(response);
-
-                // Either confirmed or pending friendship
-                if(this._isFriend) {
-                    this._isConfirmedFriend = response.data !== undefined && response.data.isConfirmed;
+                if(!Utils.isSuccessful(response)) {
+                    this._errorMessage = Utils.getErrorMessage(response);
+                } else {
+                    Utils.refreshPage(); // To getFullProfile again - with updated gifts
                 }
             })
             .catch((error) => {
                 console.log(error);
             });
+        }
+    }
+ 
+    /** Sets gift status back to active */
+    private cancelReservation(gift: IGift) {
+        const giftOwnerId = this._profile?.appUserId;
+        if(giftOwnerId) {
+            this.giftService
+            .cancelReservation(gift, giftOwnerId)
+            .then((response) => {
+                if(!Utils.isSuccessful(response)) {
+                    this._errorMessage = Utils.getErrorMessage(response);
+                } else {
+                    Utils.refreshPage(); // To getFullProfile again - with updated gifts
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
+    }
+
+    /** Set error message or route to login/home page */
+    private handleErrors(response: IFetchResponse<GifterInterface | GifterInterface[]>) {
+        switch(response.status) {
+            case Utils.STATUS_CODE_UNAUTHORIZED:
+                this.router.navigateToRoute(Utils.LOGIN_ROUTE);
+                break;
+            default:
+                this._errorMessage = Utils.getErrorMessage(response);
+        }
     }
 
     // private getFullRequestedProfile(profileOwnerId: string): void {
@@ -266,17 +363,4 @@ export class ProfilesIndex {
     //             console.log(error);
     //         });
     // }
-
-    /**
-     * Set error message or route to login/home page
-     */
-    private handleErrors(response: IFetchResponse<GifterInterface | GifterInterface[]>) {
-        switch(response.status) {
-            case Utils.STATUS_CODE_UNAUTHORIZED:
-                this.router.navigateToRoute(Utils.LOGIN_ROUTE);
-                break;
-            default:
-                this._errorMessage = Utils.getErrorMessage(response);
-        }
-    }
 }

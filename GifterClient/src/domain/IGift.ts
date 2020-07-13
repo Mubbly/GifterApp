@@ -27,6 +27,14 @@ export interface IGift extends IGiftEdit {
     status: IStatus;
     wishlist: IWishlist;
 
+    reservedFrom?: Optional<string>;
+    archivedFrom?: Optional<string>;
+    isArchivalConfirmed?: Optional<string>;
+    userGiverId?: Optional<string>;
+    userGiverName?: Optional<string>;
+    userReceiverId?: Optional<string>;
+    userReceiverName?: Optional<string>;
+    
     reservedGiftsCount: number;
     archivedGiftsCount: number;
 }

@@ -1,6 +1,11 @@
-﻿using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
 using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Mappers;
+using Microsoft.EntityFrameworkCore;
 using DomainApp = Domain.App;
 using DALAppDTO = DAL.App.DTO;
 using DomainAppIdentity = Domain.App.Identity;
@@ -15,346 +20,116 @@ namespace DAL.App.EF.Repositories
             base(dbContext, new DALMapper<DomainApp.ArchivedGift, DALAppDTO.ArchivedGiftDAL>())
         {
         }
+        
+        /**
+         * Get all ArchivedGifts - only gifts that they have archived / given as a gift to someone else.
+         * Even gifts that are not yet confirmed to be archived by the owner appear here.
+         */
+        public async Task<IEnumerable<DALAppDTO.ArchivedGiftDAL>> GetAllGiftedByUserAsync(Guid userId, bool noTracking = true)
+        {
+            var archivedGifts = PrepareQuery(userId, noTracking);
+            var personalArchivedGifts =
+                await archivedGifts
+                    .Where(a => a.UserGiverId == userId)
+                    .Include(a => a.UserReceiver)
+                    .OrderBy(a => a.CreatedAt)
+                    .Select(a => Mapper.Map(a))
+                    .ToListAsync();
+            return personalArchivedGifts;
+        }
 
-        // TODO: Includes in all repos
+        /**
+         * Get all ArchivedGifts - only gifts that belong to current user / they have received as a gift.
+         * Gift has to be confirmed by owner to be fully archived.
+         */
+        public async Task<IEnumerable<DALAppDTO.ArchivedGiftDAL>> GetAllReceivedByUserAsync(Guid userId, bool noTracking = true)
+        {
+            var archivedGifts = PrepareQuery(userId, noTracking);
+            var personalArchivedGifts =
+                await archivedGifts
+                    .Where(a => a.IsConfirmed && a.UserReceiverId == userId)
+                    .Include(a => a.UserGiver)
+                    .OrderBy(a => a.CreatedAt)
+                    .Select(a => Mapper.Map(a))
+                    .ToListAsync();
+            return personalArchivedGifts;
+        }
+        
+        /**
+         * Get all ArchivedGifts - only gifts that belong to current user / they have received as a gift.
+         * Not yet confirmed to be archived by the user.
+         */
+        public async Task<IEnumerable<DALAppDTO.ArchivedGiftDAL>> GetAllPendingReceivedByUserAsync(Guid userId, bool noTracking = true)
+        {
+            var archivedGifts = PrepareQuery(userId, noTracking);
+            var personalArchivedGifts =
+                await archivedGifts
+                    .Where(a => a.IsConfirmed == false && a.UserReceiverId == userId)
+                    .Include(a => a.UserGiver)
+                    .OrderBy(a => a.CreatedAt)
+                    .Select(a => Mapper.Map(a))
+                    .ToListAsync();
+            return personalArchivedGifts;
+        }
+        
+        /**
+         * Get an ArchivedGift based on giftId - only if the gift is archived by them / given as a gift to someone else.
+         * Gift has to be confirmed by owner to be fully archived.
+         */
+        public async Task<DALAppDTO.ArchivedGiftDAL> GetGiftedByGiftIdAsync(Guid giftId, Guid? userId = null, bool noTracking = true)
+        {
+            var query = PrepareQuery(userId, noTracking);
 
-        // public async Task<IEnumerable<ArchivedGift>> AllAsync(Guid? userId = null)
-        // {
-        //     var query = RepoDbSet
-        //         .Include(a => a.Gift)
-        //         .Include(a => a.ActionType)
-        //         .Include(a => a.Status)
-        //         .Include(a => a.UserGiver)
-        //         .Include(a => a.UserReceiver)
-        //         .AsQueryable();
-        //
-        //     if (userId != null) 
-        //     { 
-        //         // See others gifts that you have archived as well as your own gifts that others have archived
-        //         query = query.Where(a => a.UserGiverId == userId || a.UserReceiverId == userId);
-        //     }
-        //
-        //     return await query.ToListAsync();
-        // }
-        //
-        // public async Task<ArchivedGift> FirstOrDefaultAsync(Guid id, Guid? userId = null)
-        // {
-        //     var query = RepoDbSet
-        //         .Include(a => a.Gift)
-        //         .Include(a => a.ActionType)
-        //         .Include(a => a.Status)
-        //         .Include(a => a.UserGiver)
-        //         .Include(a => a.UserReceiver)
-        //         .Where(a => a.Id == id)
-        //         .AsQueryable();
-        //
-        //     if (userId != null)
-        //     {
-        //         // See others gifts that you have archived as well as your own gifts that others have archived
-        //         query = query.Where(a => a.UserGiverId == userId || a.UserReceiverId == userId);
-        //     }
-        //
-        //     return await query.FirstOrDefaultAsync();
-        // }
-        //
-        // public async Task<bool> ExistsAsync(Guid id, Guid? userId = null)
-        // {
-        //     if (userId != null)
-        //     {
-        //         return await RepoDbSet.AnyAsync(a => a.UserGiverId == userId || a.UserReceiverId == userId);
-        //     }
-        //     
-        //     return await RepoDbSet.AnyAsync(a => a.Id == id);
-        // }
-        //
-        // public async Task DeleteAsync(Guid id, Guid? userId = null)
-        // {
-        //     var archivedGift = await FirstOrDefaultAsync(id, userId);
-        //     base.Remove(archivedGift);
-        // }
-        //
-        // public async Task<IEnumerable<ArchivedGiftDTO>> DTOAllAsync(Guid? userId = null)
-        // {
-        //     var query = RepoDbSet
-        //         .Include(a => a.Gift)
-        //         .Include(a => a.ActionType)
-        //         .Include(a => a.Status)
-        //         .Include(a => a.UserGiver)
-        //         .Include(a => a.UserReceiver)
-        //         .AsQueryable();
-        //     
-        //     if (userId != null)
-        //     {
-        //         // See others gifts that you have archived as well as your own gifts that others have archived
-        //         query = query.Where(a => a.UserGiverId == userId || a.UserReceiverId == userId);
-        //     }
-        //
-        //     return await query
-        //         .Select(ag => new ArchivedGiftDTO()
-        //         {
-        //             Id = ag.Id,
-        //             Comment = ag.Comment,
-        //             DateArchived = ag.DateArchived,
-        //             IsConfirmed = ag.IsConfirmed,
-        //             GiftId = ag.GiftId,
-        //             ActionTypeId = ag.ActionTypeId,
-        //             StatusId = ag.StatusId,
-        //             UserGiverId = ag.UserGiverId,
-        //             UserReceiverId = ag.UserReceiverId,
-        //             Gift = new GiftDTO()
-        //             {
-        //                 Id = ag.Gift!.Id,
-        //                 Description = ag.Gift!.Description,
-        //                 ActionTypeId = ag.Gift!.ActionTypeId,
-        //                 AppUserId = ag.Gift!.AppUserId,
-        //                 ArchivedGiftsCount = ag.Gift!.ArchivedGifts.Count,
-        //                 Image = ag.Gift!.Image,
-        //                 IsPartnered = ag.Gift!.IsPartnered,
-        //                 IsPinned = ag.Gift!.IsPinned,
-        //                 Name = ag.Gift!.Name,
-        //                 PartnerUrl = ag.Gift!.PartnerUrl,
-        //                 Url = ag.Gift!.Url,
-        //                 StatusId = ag.Gift!.StatusId,
-        //                 WishlistId = ag.Gift!.WishlistId,
-        //                 ReservedGiftsCount = ag.Gift!.ReservedGifts.Count
-        //             },
-        //             ActionType = new ActionTypeDTO()
-        //             {
-        //                 Id = ag.ActionType!.Id,
-        //                 Comment = ag.ActionType!.Comment,
-        //                 DonateesCount = ag.ActionType!.Donatees.Count,
-        //                 GiftsCount = ag.ActionType!.Gifts.Count,
-        //                 ActionTypeValue = ag.ActionType!.ActionTypeValue,
-        //                 ArchivedGiftsCount = ag.ActionType!.ArchivedGifts.Count,
-        //                 ReservedGiftsCount = ag.ActionType!.ReservedGifts.Count,
-        //             },
-        //             Status = new StatusDTO()
-        //             {
-        //                 Id = ag.Status!.Id,
-        //                 Comment = ag.Status!.Comment,
-        //                 DonateesCount = ag.Status!.Donatees.Count,
-        //                 GiftsCount = ag.Status!.Gifts.Count,
-        //                 StatusValue = ag.Status!.StatusValue,
-        //                 ArchivedGiftsCount = ag.Status!.ArchivedGifts.Count,
-        //                 ReservedGiftsCount = ag.Status!.ReservedGifts.Count
-        //             },
-        //             UserGiver = new AppUserDTO()
-        //             {
-        //                 Id = ag.UserGiver!.Id,
-        //                 FirstName = ag.UserGiver!.FirstName,
-        //                 LastName = ag.UserGiver!.LastName,
-        //                 IsCampaignManager = ag.UserGiver!.IsCampaignManager,
-        //                 IsActive = ag.UserGiver!.IsActive,
-        //                 LastActive = ag.UserGiver!.LastActive,
-        //                 DateJoined = ag.UserGiver!.DateJoined,
-        //                 UserPermissionsCount = ag.UserGiver!.UserPermissions.Count,
-        //                 UserProfilesCount = ag.UserGiver!.UserProfiles.Count,
-        //                 UserNotificationsCount = ag.UserGiver!.UserNotifications.Count,
-        //                 UserCampaignsCount = ag.UserGiver!.UserCampaigns.Count,
-        //                 GiftsCount = ag.UserGiver!.Gifts.Count,
-        //                 ReservedGiftsByUserCount = ag.UserGiver!.ReservedGiftsByUser.Count,
-        //                 ReservedGiftsForUserCount = ag.UserGiver!.ReservedGiftsForUser.Count,
-        //                 ArchivedGiftsByUserCount = ag.UserGiver!.ArchivedGiftsByUser.Count,
-        //                 ArchivedGiftsForUserCount = ag.UserGiver!.ArchivedGiftsForUser.Count,
-        //                 ConfirmedFriendshipsCount = ag.UserGiver!.ConfirmedFriendships.Count,
-        //                 PendingFriendshipsCount = ag.UserGiver!.PendingFriendships.Count,
-        //                 SentPrivateMessagesCount = ag.UserGiver!.SentPrivateMessages.Count,
-        //                 ReceivedPrivateMessagesCount = ag.UserGiver!.ReceivedPrivateMessages.Count,
-        //                 InvitedUsersCount = ag.UserGiver!.InvitedUsers.Count
-        //             },
-        //             UserReceiver = new AppUserDTO()
-        //             {
-        //                 Id = ag.UserReceiver!.Id,
-        //                 FirstName = ag.UserReceiver!.FirstName,
-        //                 LastName = ag.UserReceiver!.LastName,
-        //                 IsCampaignManager = ag.UserReceiver!.IsCampaignManager,
-        //                 IsActive = ag.UserReceiver!.IsActive,
-        //                 LastActive = ag.UserReceiver!.LastActive,
-        //                 DateJoined = ag.UserReceiver!.DateJoined,
-        //                 UserPermissionsCount = ag.UserReceiver!.UserPermissions.Count,
-        //                 UserProfilesCount = ag.UserReceiver!.UserProfiles.Count,
-        //                 UserNotificationsCount = ag.UserReceiver!.UserNotifications.Count,
-        //                 UserCampaignsCount = ag.UserReceiver!.UserCampaigns.Count,
-        //                 GiftsCount = ag.UserReceiver!.Gifts.Count,
-        //                 ReservedGiftsByUserCount = ag.UserReceiver!.ReservedGiftsByUser.Count,
-        //                 ReservedGiftsForUserCount = ag.UserReceiver!.ReservedGiftsForUser.Count,
-        //                 ArchivedGiftsByUserCount = ag.UserReceiver!.ArchivedGiftsByUser.Count,
-        //                 ArchivedGiftsForUserCount = ag.UserReceiver!.ArchivedGiftsForUser.Count,
-        //                 ConfirmedFriendshipsCount = ag.UserReceiver!.ConfirmedFriendships.Count,
-        //                 PendingFriendshipsCount = ag.UserReceiver!.PendingFriendships.Count,
-        //                 SentPrivateMessagesCount = ag.UserReceiver!.SentPrivateMessages.Count,
-        //                 ReceivedPrivateMessagesCount = ag.UserReceiver!.ReceivedPrivateMessages.Count,
-        //                 InvitedUsersCount = ag.UserReceiver!.InvitedUsers.Count
-        //             }
-        //         }).ToListAsync();
-        // }
-        //
-        // public async Task<ArchivedGiftDTO> DTOFirstOrDefaultAsync(Guid id, Guid? userId = null)
-        // {
-        //     var query = RepoDbSet
-        //         .Include(a => a.Gift)
-        //         .Include(a => a.ActionType)
-        //         .Include(a => a.Status)
-        //         .Include(a => a.UserGiver)
-        //         .Include(a => a.UserReceiver)
-        //         .AsQueryable();
-        //
-        //     if (userId != null)
-        //     {
-        //         // See others gifts that you have archived as well as your own gifts that others have archived
-        //         query = query.Where(a => a.UserGiverId == userId || a.UserReceiverId == userId);
-        //     }
-        //
-        //     return await query.Select(ag => new ArchivedGiftDTO()
-        //     {
-        //         Id = ag.Id,
-        //         Comment = ag.Comment,
-        //         DateArchived = ag.DateArchived,
-        //         IsConfirmed = ag.IsConfirmed,
-        //         GiftId = ag.GiftId,
-        //         ActionTypeId = ag.ActionTypeId,
-        //         StatusId = ag.StatusId,
-        //         UserGiverId = ag.UserGiverId,
-        //         UserReceiverId = ag.UserReceiverId,
-        //         Gift = new GiftDTO()
-        //             {
-        //                 Id = ag.Gift!.Id,
-        //                 Description = ag.Gift!.Description,
-        //                 ActionTypeId = ag.Gift!.ActionTypeId,
-        //                 AppUserId = ag.Gift!.AppUserId,
-        //                 ArchivedGiftsCount = ag.Gift!.ArchivedGifts.Count,
-        //                 Image = ag.Gift!.Image,
-        //                 IsPartnered = ag.Gift!.IsPartnered,
-        //                 IsPinned = ag.Gift!.IsPinned,
-        //                 Name = ag.Gift!.Name,
-        //                 PartnerUrl = ag.Gift!.PartnerUrl,
-        //                 Url = ag.Gift!.Url,
-        //                 StatusId = ag.Gift!.StatusId,
-        //                 WishlistId = ag.Gift!.WishlistId,
-        //                 ReservedGiftsCount = ag.Gift!.ReservedGifts.Count
-        //             },
-        //             ActionType = new ActionTypeDTO()
-        //             {
-        //                 Id = ag.ActionType!.Id,
-        //                 Comment = ag.ActionType!.Comment,
-        //                 DonateesCount = ag.ActionType!.Donatees.Count,
-        //                 GiftsCount = ag.ActionType!.Gifts.Count,
-        //                 ActionTypeValue = ag.ActionType!.ActionTypeValue,
-        //                 ArchivedGiftsCount = ag.ActionType!.ArchivedGifts.Count,
-        //                 ReservedGiftsCount = ag.ActionType!.ReservedGifts.Count,
-        //             },
-        //             Status = new StatusDTO()
-        //             {
-        //                 Id = ag.Status!.Id,
-        //                 Comment = ag.Status!.Comment,
-        //                 DonateesCount = ag.Status!.Donatees.Count,
-        //                 GiftsCount = ag.Status!.Gifts.Count,
-        //                 StatusValue = ag.Status!.StatusValue,
-        //                 ArchivedGiftsCount = ag.Status!.ArchivedGifts.Count,
-        //                 ReservedGiftsCount = ag.Status!.ReservedGifts.Count
-        //             },
-        //             UserGiver = new AppUserDTO()
-        //             {
-        //                 Id = ag.UserGiver!.Id,
-        //                 FirstName = ag.UserGiver!.FirstName,
-        //                 LastName = ag.UserGiver!.LastName,
-        //                 IsCampaignManager = ag.UserGiver!.IsCampaignManager,
-        //                 IsActive = ag.UserGiver!.IsActive,
-        //                 LastActive = ag.UserGiver!.LastActive,
-        //                 DateJoined = ag.UserGiver!.DateJoined,
-        //                 UserPermissionsCount = ag.UserGiver!.UserPermissions.Count,
-        //                 UserProfilesCount = ag.UserGiver!.UserProfiles.Count,
-        //                 UserNotificationsCount = ag.UserGiver!.UserNotifications.Count,
-        //                 UserCampaignsCount = ag.UserGiver!.UserCampaigns.Count,
-        //                 GiftsCount = ag.UserGiver!.Gifts.Count,
-        //                 ReservedGiftsByUserCount = ag.UserGiver!.ReservedGiftsByUser.Count,
-        //                 ReservedGiftsForUserCount = ag.UserGiver!.ReservedGiftsForUser.Count,
-        //                 ArchivedGiftsByUserCount = ag.UserGiver!.ArchivedGiftsByUser.Count,
-        //                 ArchivedGiftsForUserCount = ag.UserGiver!.ArchivedGiftsForUser.Count,
-        //                 ConfirmedFriendshipsCount = ag.UserGiver!.ConfirmedFriendships.Count,
-        //                 PendingFriendshipsCount = ag.UserGiver!.PendingFriendships.Count,
-        //                 SentPrivateMessagesCount = ag.UserGiver!.SentPrivateMessages.Count,
-        //                 ReceivedPrivateMessagesCount = ag.UserGiver!.ReceivedPrivateMessages.Count,
-        //                 InvitedUsersCount = ag.UserGiver!.InvitedUsers.Count
-        //             },
-        //             UserReceiver = new AppUserDTO()
-        //             {
-        //                 Id = ag.UserReceiver!.Id,
-        //                 FirstName = ag.UserReceiver!.FirstName,
-        //                 LastName = ag.UserReceiver!.LastName,
-        //                 IsCampaignManager = ag.UserReceiver!.IsCampaignManager,
-        //                 IsActive = ag.UserReceiver!.IsActive,
-        //                 LastActive = ag.UserReceiver!.LastActive,
-        //                 DateJoined = ag.UserReceiver!.DateJoined,
-        //                 UserPermissionsCount = ag.UserReceiver!.UserPermissions.Count,
-        //                 UserProfilesCount = ag.UserReceiver!.UserProfiles.Count,
-        //                 UserNotificationsCount = ag.UserReceiver!.UserNotifications.Count,
-        //                 UserCampaignsCount = ag.UserReceiver!.UserCampaigns.Count,
-        //                 GiftsCount = ag.UserReceiver!.Gifts.Count,
-        //                 ReservedGiftsByUserCount = ag.UserReceiver!.ReservedGiftsByUser.Count,
-        //                 ReservedGiftsForUserCount = ag.UserReceiver!.ReservedGiftsForUser.Count,
-        //                 ArchivedGiftsByUserCount = ag.UserReceiver!.ArchivedGiftsByUser.Count,
-        //                 ArchivedGiftsForUserCount = ag.UserReceiver!.ArchivedGiftsForUser.Count,
-        //                 ConfirmedFriendshipsCount = ag.UserReceiver!.ConfirmedFriendships.Count,
-        //                 PendingFriendshipsCount = ag.UserReceiver!.PendingFriendships.Count,
-        //                 SentPrivateMessagesCount = ag.UserReceiver!.SentPrivateMessages.Count,
-        //                 ReceivedPrivateMessagesCount = ag.UserReceiver!.ReceivedPrivateMessages.Count,
-        //                 InvitedUsersCount = ag.UserReceiver!.InvitedUsers.Count
-        //             },
-        //     }).FirstOrDefaultAsync();
-        // }
+            var archivedGift = await query
+                .Where(a => a.IsConfirmed && a.GiftId == giftId)
+                .Where(a => a.UserGiverId == userId)
+                .OrderBy(a => a.CreatedAt)
+                .Include(a => a.Gift)
+                .ThenInclude(g => g != null ? g.Wishlist : null)
+                .ThenInclude(w => w != null ? w.AppUser : null)
+                .FirstOrDefaultAsync();
+            
+            return Mapper.Map(archivedGift);
+        }
 
-        // public async Task<IEnumerable<ArchivedGift>> AllAsyncWithConnectedData()
-        // {
-        //     var archivedGifts = RepoDbSet
-        //         .Include(a => a.ActionType)
-        //         .Include(a => a.Gift)
-        //         .Include(a => a.Status)
-        //         .Include(a => a.UserGiver)
-        //         .Include(a => a.UserReceiver);
-        //     return await archivedGifts.ToListAsync();
-        // }
-        //
-        // public async Task<ArchivedGift> FindAsyncWithConnectedData(params object[] id)
-        // {
-        //     var archivedGift = await base.FindAsync(id);
-        //     if (archivedGift.Equals(null))
-        //     {
-        //         return archivedGift;
-        //     }
-        //     // NB: Every load causes additional 'round trip' to the database... TODO: Is there a better way to do this?
-        //     // TODO: Can't use lamba as param in .Reference() because entity name is not recognized - why?
-        //     await RepoDbContext.Entry(archivedGift).Reference("ActionType").LoadAsync();
-        //     await RepoDbContext.Entry(archivedGift).Reference("Gift").LoadAsync();
-        //     await RepoDbContext.Entry(archivedGift).Reference("Status").LoadAsync();
-        //     await RepoDbContext.Entry(archivedGift).Reference("UserGiver").LoadAsync();
-        //     await RepoDbContext.Entry(archivedGift).Reference("UserReceiver").LoadAsync();
-        //     return archivedGift;
-        // }
-        //
-        // public Task<IEnumerable<ActionType>> GetArchivedGiftActionType()
-        // {
-        //     throw new NotImplementedException();
-        // }
-        //
-        // public Task<IEnumerable<Gift>> GetArchivedGiftGift()
-        // {
-        //     throw new NotImplementedException();
-        // }
-        //
-        // public Task<IEnumerable<Status>> GetArchivedGiftStatus()
-        // {
-        //     throw new NotImplementedException();
-        // }
-        //
-        // public Task<IEnumerable<AppUser>> GetArchivedGiftGiverUser()
-        // {
-        //     throw new NotImplementedException();
-        // }
-        //
-        // public Task<IEnumerable<AppUser>> GetArchivedGiftReceiverUser()
-        // {
-        //     throw new NotImplementedException();
-        // }
+        /**
+         * Get an ArchivedGift based on giftId - only if the gift belongs to current user / they have received as a gift.
+         * Gift has to be confirmed by owner to be fully archived.
+         */
+        public async Task<DALAppDTO.ArchivedGiftDAL> GetReceivedByGiftIdAsync(Guid giftId, Guid? userId = null, bool noTracking = true)
+        {
+            var query = PrepareQuery(userId, noTracking);
+        
+            var archivedGift = await query
+                .Where(a => a.IsConfirmed && a.GiftId == giftId)
+                .Where(a => a.UserReceiverId == userId)
+                .OrderBy(a => a.CreatedAt)
+                .Include(a => a.Gift)
+                .ThenInclude(g => g != null ? g.Wishlist : null)
+                .ThenInclude(w => w != null ? w.AppUser : null)
+                .FirstOrDefaultAsync();
+            
+            return Mapper.Map(archivedGift);
+        }
+        
+        /**
+         * Get an ArchivedGift based on giftId - only if the gift belongs to current user / they have received as a gift.
+         * Not yet confirmed to be archived by the user.
+         */
+        public async Task<DALAppDTO.ArchivedGiftDAL> GetPendingReceivedByGiftIdAsync(Guid giftId, Guid? userId = null, bool noTracking = true)
+        {
+            var query = PrepareQuery(userId, noTracking);
+        
+            var archivedGift = await query
+                .Where(a => a.IsConfirmed == false && a.GiftId == giftId)
+                .Where(a => a.UserReceiverId == userId)
+                .OrderBy(a => a.CreatedAt)
+                .Include(a => a.Gift)
+                .ThenInclude(g => g != null ? g.Wishlist : null)
+                .ThenInclude(w => w != null ? w.AppUser : null)
+                .FirstOrDefaultAsync();
+            
+            return Mapper.Map(archivedGift);
+        }
     }
 }

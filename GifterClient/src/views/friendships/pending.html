@@ -2,6 +2,7 @@
     <h1>Pending friend requests</h1>
     <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
     <p if.bind="_successMessage" class="successmessage">${_successMessage}</p>
+    <p if.bind="_noPendingFriendships" class="text-muted">${_noPendingFriendshipsMessage}</p>
     <section if.bind="_pendingReceivedFriendships" class="card">
         <h2>Received</h2>
         <table class="table">

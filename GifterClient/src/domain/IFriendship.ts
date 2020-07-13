@@ -20,5 +20,6 @@ export interface IFriendship extends IBaseEntity {
 
 export interface IFriendshipResponse extends IFriendship {
     name: string;
+    email: string;
     lastActive: string;
 }

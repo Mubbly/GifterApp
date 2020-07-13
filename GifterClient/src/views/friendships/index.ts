@@ -13,6 +13,7 @@ import { ProfileService } from 'service/profileService';
 export class FriendshipsIndex {
     private readonly ERROR_MESSAGE_NO_FRIENDS_ADDED = 'You have not added any friends. ¯\\_(ツ)_/¯';
     private _confirmedFriendships: IFriendshipResponse[] = [];
+
     private _errorMessage: Optional<string> = null;
 
     constructor(private friendshipService: FriendshipService, 
@@ -25,6 +26,27 @@ export class FriendshipsIndex {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         }
         this.getPersonalConfirmedFriendships();
+    }
+
+    onUnfriend(event: Event, friendId: string) {
+        event.preventDefault();
+        this.deleteFriendship(friendId);
+    }
+
+    /** Delete existing confirmed friendship */
+    private deleteFriendship(friendId: string): void {
+        this.friendshipService
+        .delete(friendId)
+        .then((response) => {
+            if (!Utils.isSuccessful(response)) {
+                this.handleErrors(response);
+            } else {
+                Utils.refreshPage();
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     private getPersonalConfirmedFriendships(): Promise<void> {

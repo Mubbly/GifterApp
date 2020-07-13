@@ -4,7 +4,7 @@ using PublicApi.DTO.v1.Identity;
 
 namespace PublicApi.DTO.v1
 {
-    public class ReservedGiftDTO
+    public class ReservedGiftFullDTO
     {
         public Guid Id { get; set; }
 
@@ -26,5 +26,19 @@ namespace PublicApi.DTO.v1
         public AppUserDTO UserGiver { get; set; } = default!;
         public Guid UserReceiverId { get; set; }
         public AppUserDTO UserReceiver { get; set; } = default!;
+    }
+
+    public class ReservedGiftDTO
+    {
+        [MaxLength(2048)] [MinLength(3)] public string? Comment { get; set; }
+
+        public Guid GiftId { get; set; }
+        
+        public Guid UserReceiverId { get; set; }
+    }
+    
+    public class ReservedGiftResponseDTO : ReservedGiftDTO
+    {
+        public DateTime ReservedFrom { get; set; }
     }
 }

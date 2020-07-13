@@ -5,16 +5,19 @@
             <div class="flex middle profile-heading">
                 <h1 if.bind="_profileOwner.firstName || _profileOwner.userName" class="flex-column username">
                     ${_profileOwner.userName}
-                </h1> 
-                <a if.bind="!_isFriend" href="#" click.delegate="onAddFriend($event, _profileOwner.id)" title="Add friend" class="flex-column icon-container">
-                    <img src="/icons/icon-add-friend-grey-m.png" class="icon" alt="Add friend"/>
-                </a> 
-                <a if.bind="_isConfirmedFriend" route-href="route: personalMessagesIndex; params.bind: { userId: user.id }" title="Message" class="flex-column icon-container">
-                    <img src="/icons/icon-chat-grey-m.png" class="icon" alt="Message"/>
+                </h1>
+                <a if.bind="!_isFriend" href="#" click.delegate="onAddFriend($event, _profileOwner.id)"
+                    title="Add friend" class="flex-column icon-container">
+                    <img src="/icons/icon-add-friend-grey-m.png" class="icon" alt="Add friend" />
                 </a>
-                <a if.bind="_isFriend" href="#" click.delegate="onUnfriend($event, _profileOwner.id)" title="Unfriend" class="flex-column icon-container">
-                    <img src="/icons/icon-unfriend-grey-m.png" class="icon" alt="Unfriend"/>
-                </a> 
+                <a if.bind="_isConfirmedFriend" href="mailto:${friend.email}?body=Sent via GifterApp" title="Message"
+                    class="flex-column icon-container">
+                    <img src="/icons/icon-chat-grey-m.png" class="icon" alt="Message" />
+                </a>
+                <a if.bind="_isFriend" href="#" click.delegate="onUnfriend($event, _profileOwner.id)" title="Unfriend"
+                    class="flex-column icon-container">
+                    <img src="/icons/icon-unfriend-grey-m.png" class="icon" alt="Unfriend" />
+                </a>
             </div>
             <p if.bind="_lastActiveDate" class="date">Last active: ${_lastActiveDate}</p>
             <hr class="profile-hr">
@@ -22,20 +25,23 @@
                 <div class="flex-column profile-pic">
                     <div if.bind="!_profile.profilePicture">
                         <!-- <img class=w"img-profile" src="/dp.png"/> -->
-                        <img if.bind="!_profile.gender || _profile.gender == '' || _profile.gender == 'Non-binary'" class="img-profile" src="/icons/icon-dp-unisex-colorful.png"/>
-                        <img if.bind="_profile.gender == 'Female'" class="img-profile" src="/icons/icon-dp-female-colorful.png"/>
-                        <img if.bind="_profile.gender == 'Male'" class="img-profile" src="/icons/icon-dp-male-colorful.png"/>
+                        <img if.bind="!_profile.gender || _profile.gender == '' || _profile.gender == 'Non-binary'"
+                            class="img-profile" src="/icons/icon-dp-unisex-colorful.png" />
+                        <img if.bind="_profile.gender == 'Female'" class="img-profile"
+                            src="/icons/icon-dp-female-colorful.png" />
+                        <img if.bind="_profile.gender == 'Male'" class="img-profile"
+                            src="/icons/icon-dp-male-colorful.png" />
                     </div>
                     <a if.bind="_profile.profilePicture" href="${_profile.profilePicture}" title="Profile picture">
-                        <img class="img-profile" src="${_profile.profilePicture}"/>
+                        <img class="img-profile" src="${_profile.profilePicture}" />
                     </a>
                 </div>
-                <div class="flex flex-column profile-intro">    
+                <div class="flex flex-column profile-intro">
                     <div class="flex">
                         <div if.bind="_profileOwner.fullName" class="flex-column">${_profileOwner.fullName}</div>
-                        <div if.bind="_profile.age"class="separator">|</div> 
-                        <div if.bind="_profile.age" class="flex-column">${_profile.age}</div> 
-                        <div if.bind="_profile.gender" class="separator">|</div> 
+                        <div if.bind="_profile.age" class="separator">|</div>
+                        <div if.bind="_profile.age" class="flex-column">${_profile.age}</div>
+                        <div if.bind="_profile.gender" class="separator">|</div>
                         <div if.bind="_profile.gender" class="flex-column">${_profile.gender}</div>
                     </div>
                     <div if.bind="_showEmail">${_profileOwner.email}</div>
@@ -47,11 +53,13 @@
 
         <section class="profile-wishlist flex-column" if.bind="_wishlist">
             <div class="crop-banner-profile">
-                <img if.bind="_profileBannerUrl" class="img-profile-banner" src="${_profileBannerUrl}" alt="Profile banner"/>
-                <img if.bind="!_profileBannerUrl" class="img-profile-banner" src="/images/default-banner.png" alt="Profile banner"/>
+                <img if.bind="_profileBannerUrl" class="img-profile-banner" src="${_profileBannerUrl}"
+                    alt="Profile banner" />
+                <img if.bind="!_profileBannerUrl" class="img-profile-banner" src="/images/default-banner.png"
+                    alt="Profile banner" />
             </div>
             <h2 class="wishlist-heading">Wishlist</h2>
-            
+
             <p if.bind="_emptyWishlistMessage" class="text-muted"><i>${_emptyWishlistMessage}</i></p>
             <table class="table wishlist-gifts" if.bind="_gifts.length > 0">
                 <thead>
@@ -72,7 +80,7 @@
                     </tr>
                 </thead>
                 <tbody if.bind="_gifts" class="gift-panels">
-                    <tr repeat.for="gift of _gifts" class="gift-panel">
+                    <tr repeat.for="gift of _gifts" if.bind="gift.statusId !== ARCHIVED_STATUS"class="gift-panel">
                         <td>
                             ${gift.name}
                         </td>
@@ -83,21 +91,37 @@
                             <a if.bind="gift.image" href="${gift.image}">Open image</a>
                         </td>
                         <td if.bind="gift.partnerUrl">
-                            <a href="${gift.partnerUrl}">Go to shop</a> 
+                            <a href="${gift.partnerUrl}">Go to shop</a>
                         </td>
                         <td if.bind="!gift.partnerUrl">
                             <a if.bind="gift.url" href="${gift.url}">Go to shop</a>
                         </td>
                         <td class="flex icon-group">
-                            <!-- TODO: If not reserved -->
-                            <a href="#" title="Reserve" class="flex-column button">Reserve</a>
-                            
-                            <!-- TODO: If reserved by you -->
-                            <!-- <a href="#" title="Reserve" class="flex-column button">Mark gifted</a>
-                            <a href="#" title="Reserve" class="flex-column button">Cancel</a> -->
-
-                            <!-- TODO: If reserved by someone else -->
-                            <!-- <a href="#" title="Reserve" class="flex-column button">Request confirmation</a> -->
+                            <!-- <a if.bind="gift.statusId !== RESERVED_STATUS" href="#" click.delegate="onReserveGift($event, gift)"title="Reserve" class="flex-column icon-container">
+                                <img src="/icons/icon-reserve-grey-8.png" class="icon" alt="Reserve"/>
+                            </a> -->
+                            <a if.bind="gift.statusId !== RESERVED_STATUS" href="#"
+                                click.delegate="onReserveGift($event, gift)" title="Reserve" class="flex-column button">
+                                Reserve
+                            </a>
+                            <div if.bind="gift.statusId === RESERVED_STATUS">
+                                <p if.bind="gift.userGiverId !== appState.userId" class="flex-column reserved-label"
+                                    title="Reserved since ${gift.reservedFrom}">
+                                    Reserved
+                                </p>
+                                <p class="flex-column reserved-actions">
+                                    <a if.bind="gift.userGiverId === appState.userId"
+                                        click.delegate="onMarkAsGifted($event, gift)" href="#" title="Mark as gifted"
+                                        class="flex-column icon-container">
+                                        <img src="/icons/icon-mark-gifted-grey-8.png" class="icon"
+                                            alt="Mark as gifted" /></a>
+                                    <a if.bind="gift.userGiverId === appState.userId"
+                                        click.delegate="onCancelReservation($event, gift)" href="#"
+                                        title="Cancel reservation" class="flex-column icon-container">
+                                        <img src="/icons/icon-cancel-grey-8.png" class="icon"
+                                            alt="Cancel reservation" /></a>
+                                </p>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

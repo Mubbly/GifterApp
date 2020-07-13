@@ -6,7 +6,21 @@ using com.mubbly.gifterapp.Contracts.Domain;
 
 namespace BLL.App.DTO
 {
-    public class ReservedGiftBLL : IDomainEntityId
+    public class ReservedGiftBLL
+    {
+        [MaxLength(2048)] [MinLength(3)] public string? Comment { get; set; }
+
+        public Guid GiftId { get; set; }
+        
+        public Guid UserReceiverId { get; set; }
+    }
+    
+    public class ReservedGiftResponseBLL : ReservedGiftBLL
+    {
+        public DateTime ReservedFrom { get; set; }
+    }
+    
+    public class ReservedGiftFullBLL : IDomainEntityId
     {
         public Guid Id { get; set; }
 

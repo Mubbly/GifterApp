@@ -183,6 +183,7 @@ namespace WebApp.ApiControllers._1._0.Identity
 
             _logger.LogInformation($"Web-Api login. Token generated for user {appUser.Email}");
             return Ok(new JwtResponseDTO()
+            
             {
                 Token = jwt,
                 Status = $"User {appUser.Email} logged in.",

@@ -3,18 +3,22 @@
         <section class="intro">
             <h1>Reserved gifts</h1>
             <div>
-                <p>Other users' gifts that you have reserved. Buy these and gift to people who requested them!</p> 
-                <p><i><strong>Note:</strong> In case you changed your mind please "Cancel" the reservation so someone else can gift it to the person instead.</i></p>
+                <p>Other users' gifts that you have reserved. Buy these and gift to people who requested them!</p>
+                <p><i><strong>Note:</strong> In case you changed your mind please "Cancel" the reservation so someone
+                        else can gift it to the person instead.</i></p>
             </div>
             <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
         </section>
     </section>
-    <section class="my-reserved-gifts card">
+    <section if.bind="_reservedGifts.length" class="my-reserved-gifts card">
         <table class="table">
             <thead>
                 <tr>
                     <th>
-                        User
+                        For
+                    </th>
+                    <th>
+                        Reserved
                     </th>
                     <th>
                         Gift
@@ -35,28 +39,39 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr repeat.for="reservedGift of _reservedGifts">
                     <td>
-                        <a href="#" title="Go to profile">Full Name (username)</a>
+                        <a route-href="route: profilesIndex; params.bind: { userId: reservedGift.userReceiverId }" title="Go to profile">
+                            ${reservedGift.userReceiverName}
+                        </a>
                     </td>
                     <td>
-                        Gift name
+                        ${reservedGift.reservedFrom}
                     </td>
                     <td>
-                        Gift desc
+                        ${reservedGift.name}
                     </td>
                     <td>
-                        Image url
+                        ${reservedGift.description}
                     </td>
                     <td>
-                        Link to shop
+                        ${reservedGift.image}
                     </td>
                     <td>
-                        Link to partner
+                        ${reservedGift.url}
                     </td>
-                    <td class="flex">
-                        <a route-href="route: archivedgiftsCreate; params.bind: {}" class="button">Mark gifted</a>
-                        <a route-href="route: reservedgiftsDelete; params.bind: {}" class="button">Cancel</a>       
+                    <td>
+                        ${reservedGift.partnerUrl}
+                    </td>
+                    <td class="flex icon-group">
+                        <p class="flex-column reserved-actions">
+                            <a click.delegate="onMarkAsGifted($event, reservedGift)" href="#" title="Mark as gifted"
+                                class="flex-column icon-container">
+                                <img src="/icons/icon-mark-gifted-grey-8.png" class="icon" alt="Mark as gifted" /></a>
+                            <a click.delegate="onCancelReservation($event, reservedGift)" href="#" title="Cancel reservation"
+                                class="flex-column icon-container">
+                                <img src="/icons/icon-cancel-grey-8.png" class="icon" alt="Cancel reservation" /></a>
+                        </p>
                     </td>
                 </tr>
             </tbody>

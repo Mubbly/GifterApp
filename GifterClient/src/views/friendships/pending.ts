@@ -15,13 +15,16 @@ import { PermissionDetails } from '../permissions/details';
 export class FriendshipsIndex {
     private readonly MESSAGE_FRIENDSHIP_CONFIRMED = "Friendship confirmed";
     private readonly MESSAGE_FRIENDSHIP_DELETED = "Friendship deleted";
+    private readonly MESSAGE_NO_PENDING_FRIENDSHIPS = "No pending friend requests";
 
     // private _pendingFriendships: Optional<IFriendshipResponse[]> = null;
     private _pendingSentFriendships: Optional<IFriendshipResponse[]> = null;
     private _pendingReceivedFriendships: Optional<IFriendshipResponse[]> = null;
+    private _noPendingFriendships: boolean = this._pendingSentFriendships === null && this._pendingReceivedFriendships === null;
 
     private _successMessage: Optional<string> = null;
     private _errorMessage: Optional<string> = null;
+    private _noPendingFriendshipsMessage: string = this.MESSAGE_NO_PENDING_FRIENDSHIPS;
 
     constructor(private friendshipService: FriendshipService, 
         private router: Router, private appState: AppState) {}

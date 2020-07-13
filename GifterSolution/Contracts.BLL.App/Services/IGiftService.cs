@@ -11,6 +11,18 @@ namespace Contracts.BLL.App.Services
     {
         Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllForUserAsync(Guid userId, bool noTracking = true);
         Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllPinnedForUserAsync(Guid userId, bool noTracking = true);
+        Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllReservedForUserAsync(Guid userId, bool noTracking = true);
+        Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllArchivedForUserAsync(Guid userId, bool isGiven = false,
+            bool noTracking = true);
+        Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllPendingReceivedForUserAsync(Guid userId, bool noTracking = true);
+
         Task<BLLAppDTO.GiftBLL> GetForUserAsync(Guid giftId, Guid userId, bool noTracking = true);
+        Task<BLLAppDTO.GiftBLL> GetReservedForUserAsync(Guid giftId, Guid userId, bool noTracking = true);
+        Task<BLLAppDTO.GiftBLL> GetArchivedForUserAsync(Guid giftId, Guid userId, bool isGiven = false,
+            bool noTracking = true);
+        
+        Task<BLLAppDTO.GiftBLL> MarkAsReservedAsync(BLLAppDTO.ReservedGiftBLL entity, Guid userId);
+        Task<BLLAppDTO.GiftBLL> MarkAsGiftedAsync(BLLAppDTO.ReservedGiftBLL entity, Guid userId);
+        Task<BLLAppDTO.GiftBLL> CancelReservationAsync(BLLAppDTO.ReservedGiftBLL entity, Guid userId);
     }
 }

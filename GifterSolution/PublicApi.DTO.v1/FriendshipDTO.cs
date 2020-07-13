@@ -7,6 +7,7 @@ namespace PublicApi.DTO.v1
     public class FriendshipResponseDTO : FriendshipDTO
     {
         public string Name { get; set; } = default!;
+        public string Email { get; set; } = default!;
         public DateTime LastActive { get; set; } = default!;
     }
     

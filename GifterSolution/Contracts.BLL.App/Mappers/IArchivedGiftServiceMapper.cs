@@ -4,7 +4,8 @@ using DALAppDTO = DAL.App.DTO;
 
 namespace Contracts.BLL.App.Mappers
 {
-    public interface IArchivedGiftServiceMapper : IBaseMapper<DALAppDTO.ArchivedGiftDAL, BLLAppDTO.ArchivedGiftBLL>
+    public interface IArchivedGiftServiceMapper : IBaseMapper<DALAppDTO.ArchivedGiftDAL, BLLAppDTO.ArchivedGiftFullBLL>
     {
+        BLLAppDTO.GiftBLL MapGiftToBLL(DALAppDTO.GiftDAL inObject);
     }
 }

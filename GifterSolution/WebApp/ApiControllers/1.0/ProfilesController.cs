@@ -145,7 +145,7 @@ namespace WebApp.ApiControllers._1._0
         
         // GET: api/Profiles/Full/User/5
         /// <summary>
-        ///     Get a single Profile
+        ///     Get a single Profile - archived gifts excluded
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>Profile object</returns>
@@ -166,7 +166,7 @@ namespace WebApp.ApiControllers._1._0
         
         // GET: api/Profiles/Full/Personal
         /// <summary>
-        ///     Get a single personal Profile
+        ///     Get a single personal Profile - archived gifts excluded
         /// </summary>
         /// <returns>Personal profile object</returns>
         [HttpGet("full/personal")]

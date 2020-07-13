@@ -22,6 +22,14 @@ namespace BLL.App.DTO
 
         public bool IsPartnered { get; set; }
         public bool IsPinned { get; set; }
+        
+        // TODO: Move to separate GiftResponseDTO
+        public DateTime? ReservedFrom { get; set; } = null;
+        public DateTime? ArchivedFrom { get; set; } = null;
+        public Guid? UserGiverId { get; set; } = null;
+        public Guid? UserReceiverId { get; set; } = null;
+        public string? UserReceiverName { get; set; } = null;
+        public string? UserGiverName { get; set; } = null;
 
         public Guid ActionTypeId { get; set; }
         public ActionTypeBLL? ActionType { get; set; } = default!;
@@ -36,11 +44,11 @@ namespace BLL.App.DTO
         // public WishlistBLL? Wishlist { get; set; } = default!;
 
         // List of all gifts that have reserved status
-        [InverseProperty(nameof(ReservedGiftBLL.Gift))]
-        public ICollection<ReservedGiftBLL>? ReservedGifts { get; set; }
+        [InverseProperty(nameof(ReservedGiftFullBLL.Gift))]
+        public ICollection<ReservedGiftFullBLL>? ReservedGifts { get; set; }
 
         // List of all gifts that have archived status
-        [InverseProperty(nameof(ArchivedGiftBLL.Gift))]
-        public ICollection<ArchivedGiftBLL>? ArchivedGifts { get; set; }
+        [InverseProperty(nameof(ArchivedGiftFullBLL.Gift))]
+        public ICollection<ArchivedGiftFullBLL>? ArchivedGifts { get; set; }
     }
 }

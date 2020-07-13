@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
 using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Helpers;
 using DAL.App.EF.Mappers;
 using Microsoft.EntityFrameworkCore;
 using DomainApp = Domain.App;
@@ -16,9 +17,15 @@ namespace DAL.App.EF.Repositories
         EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.Gift, DALAppDTO.GiftDAL>,
         IGiftRepository
     {
+        // Statuses
+        private static string _activeId = "";
+
         public GiftRepository(AppDbContext dbContext) :
             base(dbContext, new DALMapper<DomainApp.Gift, DALAppDTO.GiftDAL>())
         {
+            // Get necessary statuses & actionTypes
+            var enums = new Enums();
+            _activeId = enums.GetStatusId(Enums.Status.Active);
         }
         
         public async Task<IEnumerable<DALAppDTO.GiftDAL>> GetAllForUserAsync(Guid userId, bool noTracking = true)
@@ -29,7 +36,7 @@ namespace DAL.App.EF.Repositories
                     .Wishlists
                     .Where(wishlist => wishlist.AppUserId == userId)
                     .Select(wishlist => wishlist.Id)
-                    .FirstOrDefaultAsync();
+                    .SingleOrDefaultAsync();
             
             // User's gifts
             var gifts = PrepareQuery(userId, noTracking);

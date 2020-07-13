@@ -19,13 +19,25 @@ namespace PublicApi.DTO.v1
 
         public bool IsPartnered { get; set; }
         public bool IsPinned { get; set; }
+        
+        // TODO: Move to separate GiftResponseDTO
+        public DateTime? ReservedFrom { get; set; } = null;
+        public DateTime? ArchivedFrom { get; set; } = null;
+        public bool? IsArchivalConfirmed { get; set; } = false;
+        public Guid? UserGiverId { get; set; } = null;
+        public Guid? UserReceiverId { get; set; } = null;
+        public string? UserReceiverName { get; set; } = null;
+        public string? UserGiverName { get; set; } = null;
 
         public Guid ActionTypeId { get; set; }
         public ActionTypeDTO? ActionTypeDTO { get; set; } = default!;
+        
         // public Guid AppUserId { get; set; }
         // public AppUserDTO AppUser { get; set; } = default!;
+        
         public Guid StatusId { get; set; }
         public StatusDTO? Status { get; set; } = default!;
+        
         public Guid WishlistId { get; set; }
         // public WishlistDTO? Wishlist { get; set; } = default!;
 

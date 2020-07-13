@@ -144,7 +144,7 @@ namespace WebApp
                 endpoints.MapRazorPages();
             });
         }
-
+        
         // CUSTOM CODE START
         private static void UpdateDatabase(IApplicationBuilder app, IWebHostEnvironment env, IConfiguration conf)
         {

@@ -13,6 +13,8 @@ namespace PublicApi.DTO.v1.Mappers
         public BaseMapper() : base()
         {
             MapperConfigurationExpression.CreateMap<FriendshipResponseBLL, FriendshipResponseDTO>();
+            MapperConfigurationExpression.CreateMap<ReservedGiftDTO, ReservedGiftBLL>();
+            // MapperConfigurationExpression.CreateMap<ReservedGiftResponseBLL, ReservedGiftResponseDTO>();
             Mapper = new Mapper(new MapperConfiguration(MapperConfigurationExpression));
         }
     }

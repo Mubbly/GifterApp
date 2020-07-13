@@ -1,12 +1,15 @@
-﻿using com.mubbly.gifterapp.Contracts.BLL.Base.Services;
+﻿using System.Threading.Tasks;
+using com.mubbly.gifterapp.Contracts.BLL.Base.Services;
 using Contracts.DAL.App.Repositories;
 using BLLAppDTO = BLL.App.DTO;
 
 namespace Contracts.BLL.App.Services
 {
-    public interface IArchivedGiftService : IBaseEntityService<BLLAppDTO.ArchivedGiftBLL>,
-        IArchivedGiftRepositoryCustom<BLLAppDTO.ArchivedGiftBLL>
+    public interface IArchivedGiftService : IBaseEntityService<BLLAppDTO.ArchivedGiftFullBLL>,
+        IArchivedGiftRepositoryCustom<BLLAppDTO.ArchivedGiftFullBLL>
     {
+        public Task<BLLAppDTO.GiftBLL> ReactivateAsync(BLLAppDTO.ArchivedGiftFullBLL entity, object? userId = null);
+
         // public virtual async Task<IEnumerable<BLLAppDTO.ArchivedGiftBLL>> GetAllPersonalAsync(Guid userId = null, bool noTracking = true)
         // {
         //     var dalEntities = await Repository.GetAllAsync(userId, noTracking);

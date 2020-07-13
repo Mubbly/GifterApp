@@ -6,6 +6,31 @@ import { IAppUser } from "./IAppUser";
 import { IBaseEntity } from "./base/IBaseEntity";
 
 export interface IReservedGiftCreate {
+    comment: Optional<string>;
+    giftId: string;
+    userReceiverId: string;
+}
+
+export interface IReservedGiftEdit extends IReservedGiftCreate {}
+
+/** TODO: Remove this temporary workaround to satisfy ReservedGifts service */
+export interface IReservedGiftEditTemp extends IBaseEntity {} 
+
+export interface IReservedGiftResponse extends IReservedGiftCreate {
+    reservedFrom: string;
+}
+
+export interface IReservedGift extends IBaseEntity, IReservedGiftEdit {
+    dateToSendReminder: string;
+
+    actionType: IActionType;
+    status: IStatus;
+    gift: IGift;
+    userGiver: IAppUser;
+    userReceiver: IAppUser;
+}
+
+export interface IReservedGiftFull {
     reservedFrom: string;
     comment: Optional<string>;
 
@@ -18,18 +43,5 @@ export interface IReservedGiftCreate {
     userGiverId: string;
     userGiver: IAppUser;
     userReceiverId: string;
-    userReceiver: IAppUser;
-}
-
-export interface IReservedGiftEdit extends IBaseEntity, IReservedGiftCreate {
-}
-
-export interface IReservedGift extends IReservedGiftEdit {
-    dateToSendReminder: string;
-
-    actionType: IActionType;
-    status: IStatus;
-    gift: IGift;
-    userGiver: IAppUser;
     userReceiver: IAppUser;
 }

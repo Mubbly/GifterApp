@@ -4,8 +4,12 @@ using BLLAppDTO = BLL.App.DTO;
 
 namespace BLL.App.Mappers
 {
-    public class ArchivedGiftServiceMapper : BLLMapper<DALAppDTO.ArchivedGiftDAL, BLLAppDTO.ArchivedGiftBLL>,
+    public class ArchivedGiftServiceMapper : BLLMapper<DALAppDTO.ArchivedGiftDAL, BLLAppDTO.ArchivedGiftFullBLL>,
         IArchivedGiftServiceMapper
     {
+        public BLLAppDTO.GiftBLL MapGiftToBLL(DALAppDTO.GiftDAL inObject)
+        {
+            return Mapper.Map<BLLAppDTO.GiftBLL>(inObject);
+        }
     }
 }

@@ -33,7 +33,7 @@ namespace DAL.App.EF.Repositories
                 .Include(p => p.Wishlist)
                     .ThenInclude(w => w!.Gifts)
                 .ToListAsync();
-
+            
             // If no specific profile ID provided, just get the first one
             return profileId == null 
                 ? Mapper.Map(profiles.FirstOrDefault()) 

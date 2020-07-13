@@ -56,7 +56,7 @@ export class InvitedUsersIndex {
                 this.router.navigateToRoute(Utils.LOGIN_ROUTE);
                 break;
             case Utils.STATUS_CODE_NOT_FOUND:
-                this._errorMessage = "You have not invited anyone";
+                this._errorMessage = "No invited friends";
                 break;
             default:
                 this._errorMessage = Utils.getErrorMessage(response);

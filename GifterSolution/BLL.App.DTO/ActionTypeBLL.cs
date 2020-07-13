@@ -19,12 +19,12 @@ namespace BLL.App.DTO
         public ICollection<GiftBLL>? Gifts { get; set; } // = new List<Gift>(); TODO: Should lists be initialized?
 
         // List of all the reserved gifts that correspond to this action
-        [InverseProperty(nameof(ReservedGiftBLL.ActionType))]
-        public ICollection<ReservedGiftBLL>? ReservedGifts { get; set; }
+        [InverseProperty(nameof(ReservedGiftFullBLL.ActionType))]
+        public ICollection<ReservedGiftFullBLL>? ReservedGifts { get; set; }
 
         // List of all the archived gifts that correspond to this action
-        [InverseProperty(nameof(ArchivedGiftBLL.ActionType))]
-        public ICollection<ArchivedGiftBLL>? ArchivedGifts { get; set; }
+        [InverseProperty(nameof(ArchivedGiftFullBLL.ActionType))]
+        public ICollection<ArchivedGiftFullBLL>? ArchivedGifts { get; set; }
 
         // List of all the donatees that correspond to this action
         [InverseProperty(nameof(DonateeBLL.ActionType))]

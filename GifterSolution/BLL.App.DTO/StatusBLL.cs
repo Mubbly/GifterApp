@@ -19,12 +19,12 @@ namespace BLL.App.DTO
         public ICollection<GiftBLL>? Gifts { get; set; }
 
         // List of all the reserved gifts that correspond to this status
-        [InverseProperty(nameof(ReservedGiftBLL.Status))]
-        public ICollection<ReservedGiftBLL>? ReservedGifts { get; set; }
+        [InverseProperty(nameof(ReservedGiftFullBLL.Status))]
+        public ICollection<ReservedGiftFullBLL>? ReservedGifts { get; set; }
 
         // List of all the archived gifts that correspond to this status
-        [InverseProperty(nameof(ArchivedGiftBLL.Status))]
-        public ICollection<ArchivedGiftBLL>? ArchivedGifts { get; set; }
+        [InverseProperty(nameof(ArchivedGiftFullBLL.Status))]
+        public ICollection<ArchivedGiftFullBLL>? ArchivedGifts { get; set; }
 
         // List of all the donatees that correspond to this status
         [InverseProperty(nameof(DonateeBLL.Status))]

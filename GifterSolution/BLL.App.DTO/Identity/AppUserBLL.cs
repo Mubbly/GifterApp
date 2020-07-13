@@ -46,16 +46,16 @@ namespace BLL.App.DTO.Identity
         public ICollection<UserCampaignBLL>? UserCampaigns { get; set; }
 
         // List of all reserved gifts that correspond to this user
-        [InverseProperty(nameof(ReservedGiftBLL.UserGiver))]
-        public ICollection<ReservedGiftBLL>? ReservedGiftsByUser { get; set; }
-        [InverseProperty(nameof(ReservedGiftBLL.UserReceiver))]
-        public ICollection<ReservedGiftBLL>? ReservedGiftsForUser { get; set; }
+        [InverseProperty(nameof(ReservedGiftFullBLL.UserGiver))]
+        public ICollection<ReservedGiftFullBLL>? ReservedGiftsByUser { get; set; }
+        [InverseProperty(nameof(ReservedGiftFullBLL.UserReceiver))]
+        public ICollection<ReservedGiftFullBLL>? ReservedGiftsForUser { get; set; }
 
         // List of all archived gifts that correspond to this user
-        [InverseProperty(nameof(ArchivedGiftBLL.UserGiver))]
-        public ICollection<ArchivedGiftBLL>? ArchivedGiftsByUser { get; set; }
-        [InverseProperty(nameof(ArchivedGiftBLL.UserReceiver))]
-        public ICollection<ArchivedGiftBLL>? ArchivedGiftsForUser { get; set; }
+        [InverseProperty(nameof(ArchivedGiftFullBLL.UserGiver))]
+        public ICollection<ArchivedGiftFullBLL>? ArchivedGiftsByUser { get; set; }
+        [InverseProperty(nameof(ArchivedGiftFullBLL.UserReceiver))]
+        public ICollection<ArchivedGiftFullBLL>? ArchivedGiftsForUser { get; set; }
 
         // List of all friends/other users that correspond to this user
         [InverseProperty(nameof(FriendshipBLL.AppUser1))]

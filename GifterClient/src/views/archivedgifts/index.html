@@ -3,132 +3,216 @@
         <section class="intro">
             <h1>Archived gifts</h1>
             <div>
-                <p>Gifts that are no longer active. Either someone already gifted it to you or you gifted it to someone else.</p>
-                <p><i><strong>Note:</strong> If you wish to receive the same gift again - you could re-activate it.</i></p>
+                <p>Gifts that are no longer active. Either someone already gifted it to you or you gifted it to someone
+                    else.</p>
+                <p><i><strong>Note:</strong> If you wish to receive the same gift again you can reactivate it here.</i>
+                </p>
             </div>
             <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
         </section>
-        <section class="others-archived-gifts card">
-            <h2>Given by me</h2>
-            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            To whom
-                        </th>
-                        <th>
-                            Date
-                        </th>
-                        <th>
-                            Gift
-                        </th>
-                        <th>
-                            Description
-                        </th>
-                        <th>
-                            Image
-                        </th>
-                        <th>
-                            Url
-                        </th>
-                        <th>
-                            PartnerUrl
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <a href="#" title="Go to profile">Full Name (username)</a>
-                        </td>
-                        <td>
-                            11.11.2011
-                        </td>
-                        <td>
-                            Gift name
-                        </td>
-                        <td>
-                            Gift desc
-                        </td>
-                        <td>
-                            Image url
-                        </td>
-                        <td>
-                            Link to shop
-                        </td>
-                        <td>
-                            Link to partner
-                        </td>
-                        <td>
-                            <a route-href="route: archivedgiftsDelete; params.bind: {}" class="button">Delete</a>   
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-    
-        <section class="my-archived-gifts card">
-            <h2>My gifts</h2>
-            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            Received from
-                        </th>
-                        <th>
-                            Date
-                        </th>
-                        <th>
-                            Gift
-                        </th>
-                        <th>
-                            Description
-                        </th>
-                        <th>
-                            Image
-                        </th>
-                        <th>
-                            Url
-                        </th>
-                        <th>
-                            PartnerUrl
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <a href="#" title="Go to profile">Full Name (username)</a>
-                        </td>
-                        <td>
-                            11.11.2011
-                        </td>
-                        <td>
-                            Gift name
-                        </td>
-                        <td>
-                            Gift desc
-                        </td>
-                        <td>
-                            Image url
-                        </td>
-                        <td>
-                            Link to shop
-                        </td>
-                        <td>
-                            Link to partner
-                        </td>
-                        <td class="flex">
-                            <a route-href="route: archivedgiftsCreate; params.bind: {}" class="button">Re-activate</a>
-                            <a route-href="route: archivedgiftsDelete; params.bind: {}" class="button">Delete</a>       
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <section class="archived-gifts-cards cards-wrapper">
+            <section if.bind="_pendingReceivedGifts.length" class="my-pending-gifts card">
+                <h2>Pending received</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                From who
+                            </th>
+                            <th>
+                                Date
+                            </th>
+                            <th>
+                                Gift
+                            </th>
+                            <th>
+                                Description
+                            </th>
+                            <!-- <th>
+                                Image
+                            </th>
+                            <th>
+                                Url
+                            </th>
+                            <th>
+                                PartnerUrl
+                            </th> -->
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr repeat.for="pendingGift of _pendingReceivedGifts">
+                            <td>
+                                <a href="#" title="Go to profile">${pendingGift.userGiverName}</a>
+                            </td>
+                            <td>
+                                ${pendingGift.archivedFrom}
+                            </td>
+                            <td>
+                                ${pendingGift.name}
+                            </td>
+                            <td>
+                                ${pendingGift.description}
+                            </td>
+                            <!-- <td>
+                                ${pendingGift.image}
+                            </td>
+                            <td>
+                                ${pendingGift.url}
+                            </td>
+                            <td>
+                                ${pendingGift.partnerUrl}
+                            </td> -->
+                            <td class="flex archived-actions-wrap">
+                                <p class="flex-column archived-actions">
+                                    <a click.delegate="onConfirm($event, pendingGift)" href="#"
+                                        title="Confirm getting this gift" class="flex-column icon-container">
+                                        <img src="/icons/icon-mark-gifted-grey-8.png" class="icon"
+                                            alt="Confirm getting this gift" /></a>
+                                    <a click.delegate="onDeny($event, pendingGift)" href="#"
+                                        title="Deny getting this gift" class="flex-column icon-container">
+                                        <img src="/icons/icon-cancel-grey-8.png" class="icon"
+                                            alt="Deny getting this gift" /></a>
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section class="my-archived-gifts">
+                <section class="my-given-gifts card">
+                    <h2>Given by me</h2>
+                    <p if.bind="_noGivenGiftsMessage" class="text-muted">${_noGivenGiftsMessage}</p>
+                    <table if.bind="_givenGifts.length" class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    To whom
+                                </th>
+                                <th>
+                                    Date
+                                </th>
+                                <th>
+                                    Gift
+                                </th>
+                                <!-- <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Image
+                                </th>
+                                <th>
+                                    Url
+                                </th>
+                                <th>
+                                    PartnerUrl
+                                </th> -->
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr repeat.for="givenGift of _givenGifts">
+                                <td>
+                                    <a href="#" title="Go to profile">${givenGift.userReceiverName}</a>
+                                </td>
+                                <td>
+                                    ${givenGift.archivedFrom}
+                                </td>
+                                <td>
+                                    ${givenGift.name}
+                                </td>
+                                <!-- <td>
+                                    ${givenGift.description}
+                                </td>
+                                <td>
+                                    ${givenGift.image}
+                                </td>
+                                <td>
+                                    ${givenGift.url}
+                                </td>
+                                <td>
+                                    ${givenGift.partnerUrl}
+                                </td> -->
+                                <td class="flex archived-actions-wrap">
+                                    <a click.delegate="onDelete($event, givenGift)" href="#" title="Delete gift"
+                                        class="flex-column icon-container">
+                                        <img src="/icons/icon-delete-grey-m.png" class="icon" alt="Delete gift" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section class="my-received-gifts card">
+                    <h2>Received</h2>
+                    <p if.bind="_noReceivedGiftsMessage" class="text-muted">${_noReceivedGiftsMessage}</p>
+                    <table if.bind="_receivedGifts.length" class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    From who
+                                </th>
+                                <th>
+                                    Date
+                                </th>
+                                <th>
+                                    Gift
+                                </th>
+                                <!-- <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Image
+                                </th>
+                                <th>
+                                    Url
+                                </th>
+                                <th>
+                                    PartnerUrl
+                                </th> -->
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr repeat.for="receivedGift of _receivedGifts">
+                                <td>
+                                    <a href="#" title="Go to profile">${receivedGift.userGiverName}</a>
+                                </td>
+                                <td>
+                                    ${receivedGift.archivedFrom}
+                                </td>
+                                <td>
+                                    ${receivedGift.name}
+                                </td>
+                                <!-- <td>
+                                    ${receivedGift.description}
+                                </td>
+                                <td>
+                                    ${receivedGift.image}
+                                </td>
+                                <td>
+                                    ${receivedGift.url}
+                                </td>
+                                <td>
+                                    ${receivedGift.partnerUrl}
+                                </td> -->
+                                <td class="flex archived-actions-wrap">
+                                    <p class="flex-column archived-actions">
+                                        <a click.delegate="onReactivate($event, receivedGift)" href="#"
+                                            title="Re-activate gift" class="flex-column icon-container">
+                                            <img src="/icons/icon-reactivate-grey-m.png" class="icon"
+                                                alt="Re-activate gift" /></a>
+                                        <a click.delegate="onDelete($event, receivedGift)" href="#" title="Delete gift"
+                                            class="flex-column icon-container">
+                                            <img src="/icons/icon-delete-grey-m.png" class="icon"
+                                                alt="Delete gift" /></a>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </section>
         </section>
     </section>
 </template>

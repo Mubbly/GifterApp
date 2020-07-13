@@ -35,7 +35,7 @@ namespace WebApp.ApiControllers._1._0
         
         // GET: api/Friendships/5
         /// <summary>
-        ///     Get user confirmed Friendships. Pending ones are always personal.
+        ///     Get user confirmed Friendships.
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>List of confirmed Friendships for given user</returns>
@@ -61,7 +61,7 @@ namespace WebApp.ApiControllers._1._0
             var friendships = await _bll.Friendships.GetAllForUserAsync(User.UserGuidId());
             return Ok(friendships.Select(e => _mapper.MapFriendshipResponseToDTO(e)));
         }
-
+        
         // GET: api/Friendships/Personal/Confirmed
         /// <summary>
         ///     Get personal confirmed Friendships
@@ -102,27 +102,6 @@ namespace WebApp.ApiControllers._1._0
         {
             var pendingFriendships = await _bll.Friendships.GetAllPendingForUserAsync(User.UserGuidId(), false);
             return Ok(pendingFriendships.Select(e => _mapper.MapFriendshipResponseToDTO(e)));
-        }
-        
-        // GET: api/Friendships/Personal/5
-        /// <summary>
-        ///     Get a single personal Friendship - no matter the status (pending or confirmed)
-        /// </summary>
-        /// <param name="friendUserId"></param>
-        /// <returns>Friendship object</returns>
-        [HttpGet("personal/{friendUserId}")]
-        [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
-        public async Task<ActionResult<V1DTO.FriendshipDTO>> GetFriendship(Guid friendUserId)
-        {
-            var friendship = await _bll.Friendships.GetForUserAsync(User.UserGuidId(), friendUserId);
-            if (friendship == null)
-            {
-                return NotFound(new V1DTO.MessageDTO($"Friendship with user {friendUserId} not found"));
-            }
-            return Ok(_mapper.MapFriendshipResponseToDTO(friendship));
         }
 
         // GET: api/Friendships/Personal/Confirmed/5
@@ -166,12 +145,33 @@ namespace WebApp.ApiControllers._1._0
             }
             return Ok(_mapper.MapFriendshipResponseToDTO(friendship));
         }
+        
+        // GET: api/Friendships/Personal/5
+        /// <summary>
+        ///     Get a single personal Friendship - no matter the status (pending or confirmed)
+        /// </summary>
+        /// <param name="friendUserId"></param>
+        /// <returns>Friendship object</returns>
+        [HttpGet("personal/{friendUserId}")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.FriendshipDTO>))]
+        public async Task<ActionResult<V1DTO.FriendshipDTO>> GetFriendship(Guid friendUserId)
+        {
+            var friendship = await _bll.Friendships.GetForUserAsync(User.UserGuidId(), friendUserId);
+            if (friendship == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Friendship with user {friendUserId} not found"));
+            }
+            return Ok(_mapper.MapFriendshipResponseToDTO(friendship));
+        }
 
         // PUT: api/Friendships/personal/pending/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         /// <summary>
-        ///     Confirm friendship (from pending status to confirmed)
+        ///     Confirm friendship (from pending status to confirmed) - when request is accepted
         /// </summary>
         /// <param name="id"></param>
         /// <param name="friendshipDTO"></param>
@@ -213,7 +213,7 @@ namespace WebApp.ApiControllers._1._0
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         /// <summary>
-        ///     Add new pending Friendship - when request is sent but not yet accepted
+        ///     Add new (pending) Friendship - when request is sent
         /// </summary>
         /// <param name="friendshipDTO"></param>
         /// <returns></returns>
@@ -224,7 +224,7 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.FriendshipDTO))]
         public async Task<ActionResult<V1DTO.FriendshipDTO>> PostPersonalFriendship(V1DTO.FriendshipDTO friendshipDTO)
         {
-            // Don't allow creating a confirmed friendship (only pending ones can be created)
+            // Don't allow creating a confirmed friendship (only pending ones can be created) TODO: Remove from request DTO
             if (friendshipDTO.IsConfirmed)
             {
                 return BadRequest(new V1DTO.MessageDTO($"Cannot add already confirmed friendship {friendshipDTO.Id}"));

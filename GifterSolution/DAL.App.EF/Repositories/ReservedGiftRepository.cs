@@ -1,6 +1,11 @@
-﻿using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
 using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Mappers;
+using Microsoft.EntityFrameworkCore;
 using DomainApp = Domain.App;
 using DALAppDTO = DAL.App.DTO;
 using DomainAppIdentity = Domain.App.Identity;
@@ -14,6 +19,41 @@ namespace DAL.App.EF.Repositories
         public ReservedGiftRepository(AppDbContext dbContext) :
             base(dbContext, new DALMapper<DomainApp.ReservedGift, DALAppDTO.ReservedGiftDAL>())
         {
+        }
+
+        /**
+         * Get all ReservedGifts - only which are reserved by current user.
+         */
+        public async Task<IEnumerable<DALAppDTO.ReservedGiftDAL>> GetAllForUserAsync(Guid userId, bool noTracking = true)
+        {
+            var reservedGifts = PrepareQuery(userId, noTracking);
+            var personalReservedGifts =
+                await reservedGifts
+                    .Where(r => r.UserGiverId == userId)
+                    .Include(r => r.UserReceiver)
+                    .OrderBy(r => r.CreatedAt)
+                    .Select(r => Mapper.Map(r))
+                    .ToListAsync();
+            return personalReservedGifts;
+        }
+
+        /**
+         * Get a ReservedGift based on giftId - only if it is reserved by current user.
+         */
+        public async Task<DALAppDTO.ReservedGiftDAL> GetByGiftId(Guid giftId, Guid? reserverUserId = null, bool noTracking = true)
+        {
+            var query = PrepareQuery(reserverUserId, noTracking);
+
+            var reservedGift = await query
+                .Where(r => r.GiftId == giftId)
+                .Where(r => r.UserGiverId == reserverUserId)
+                .OrderBy(r => r.CreatedAt)
+                // .Include(r => r.Gift)
+                // .ThenInclude(g => g != null ? g.Wishlist : null)
+                // .ThenInclude(w => w != null ? w.AppUser : null) // TODO: Error InvalidOperationException instance of type Gift cannot be tracked blabla
+                .FirstOrDefaultAsync();
+            
+            return Mapper.Map(reservedGift);
         }
 
         // public async Task<IEnumerable<ReservedGift>> AllAsync(Guid? userId = null)

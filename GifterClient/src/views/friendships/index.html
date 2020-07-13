@@ -1,13 +1,13 @@
 <template>
     <h1>My friends</h1>
     <p>
-        <a route-href="route: search; params.bind: {}" class="button">Search users</a>
-        <a route-href="route: friendshipsPending; params.bind: {}" class="button">Friend requests</a> 
-        <a route-href="route: invitedusersIndex; params.bind: {}" class="button">Sent invitations</a> 
+        <a route-href="route: search; params.bind: {}" title="Search users"><img src="/icons/icon-search-grey-m.png" alt="Search users" class="icon"/></a> 
+        <a route-href="route: friendshipsPending; params.bind: {}" title="Friend requests"><img src="/icons/icon-friend-requests-grey-m.png" alt="Friend requests" class="icon"/></a> 
+        <a route-href="route: invitedusersIndex; params.bind: {}" title="Invitations to join"><img src="/icons/icon-invited-users-grey-m.png" alt="Invitations to join" class="icon" /></a> 
     </p>
-    <hr if.bind="_confirmedFriendships.length <= 0">
+    <!-- <hr if.bind="_confirmedFriendships.length <= 0"> -->
     <p if.bind="_errorMessage" class="${_confirmedFriendships.length <= 0 ? 'text-muted' : 'errormessage'}">${_errorMessage}</p>
-    <section if.bind="_confirmedFriendships.length > 0">
+    <section if.bind="_confirmedFriendships.length > 0" class="card">
         <table class="table">
             <thead>
                 <tr>
@@ -32,7 +32,7 @@
                     </td>
                     <td class="flex icon-group">
                         <a route-href="route: profilesIndex; params.bind: { userId: friend.appUser2Id }" title="Go to profile"><img src="/icons/icon-open-grey-m.png" class="icon" alt="Go to profile"/></a>
-                        <a route-href="route: personalMessagesIndex; params.bind: { userId: friend.appUser2Id }" title="Message"><img src="/icons/icon-chat-grey-m.png" class="icon" alt="Message"/></a>
+                        <a href="mailto:${friend.email}?body=Sent via GifterApp" title="Message"><img src="/icons/icon-chat-grey-m.png" class="icon" alt="Message"/></a>
                         <a href="#" click.delegate="onUnfriend($event, friend.appUser2Id)" title="Unfriend"><img src="/icons/icon-unfriend-grey-m.png" class="icon" alt="Unfriend"/></a>
                     </td>
                 </tr>

@@ -49,8 +49,14 @@ namespace BLL.App.Mappers
             MapperConfigurationExpression.CreateMap<WishlistDAL, WishlistBLL>();
             MapperConfigurationExpression.CreateMap<GiftBLL, GiftDAL>();
             MapperConfigurationExpression.CreateMap<GiftDAL, GiftBLL>();
+            MapperConfigurationExpression.CreateMap<ReservedGiftFullBLL, ReservedGiftDAL>();
+            MapperConfigurationExpression.CreateMap<ReservedGiftDAL, ReservedGiftFullBLL>();
+            MapperConfigurationExpression.CreateMap<ReservedGiftFullBLL, ReservedGiftResponseBLL>();
             MapperConfigurationExpression.CreateMap<ReservedGiftBLL, ReservedGiftDAL>();
             MapperConfigurationExpression.CreateMap<ReservedGiftDAL, ReservedGiftBLL>();
+            MapperConfigurationExpression.CreateMap<ArchivedGiftFullBLL, ArchivedGiftDAL>();
+            MapperConfigurationExpression.CreateMap<ArchivedGiftDAL, ArchivedGiftFullBLL>();
+            MapperConfigurationExpression.CreateMap<ArchivedGiftFullBLL, ArchivedGiftResponseBLL>();
             MapperConfigurationExpression.CreateMap<ArchivedGiftBLL, ArchivedGiftDAL>();
             MapperConfigurationExpression.CreateMap<ArchivedGiftDAL, ArchivedGiftBLL>();
             // Other user interactions
