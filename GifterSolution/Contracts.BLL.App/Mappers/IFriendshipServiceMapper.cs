@@ -9,6 +9,8 @@ namespace Contracts.BLL.App.Mappers
     public interface IFriendshipServiceMapper : IBaseMapper<DALAppDTO.FriendshipDAL, BLLAppDTO.FriendshipBLL>
     {
         BLLAppDTO.FriendshipResponseBLL MapFriendshipToResponseBLL(DALAppDTO.FriendshipDAL inObject);
+        DALAppDTO.UserNotificationDAL MapUserNotificationBLLToDAL(BLLAppDTO.UserNotificationBLL inObject);
+        BLLAppDTO.UserNotificationBLL MapUserNotificationDALToBLL(DALAppDTO.UserNotificationDAL inObject);
 
         // AppUserBLL Map(AppUserDAL friendshipAppUser1);
     }

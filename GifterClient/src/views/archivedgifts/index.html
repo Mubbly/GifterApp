@@ -65,14 +65,14 @@
                             </td> -->
                             <td class="flex archived-actions-wrap">
                                 <p class="flex-column archived-actions">
-                                    <a click.delegate="onConfirm($event, pendingGift)" href="#"
-                                        title="Confirm getting this gift" class="flex-column icon-container">
+                                    <a click.delegate="onConfirmReceiving($event, pendingGift)" href="#"
+                                        title="Confirm receiving this gift" class="flex-column icon-container">
                                         <img src="/icons/icon-mark-gifted-grey-8.png" class="icon"
-                                            alt="Confirm getting this gift" /></a>
-                                    <a click.delegate="onDeny($event, pendingGift)" href="#"
-                                        title="Deny getting this gift" class="flex-column icon-container">
+                                            alt="Confirm receiving this gift" /></a>
+                                    <a click.delegate="onDenyReceiving($event, pendingGift)" href="#"
+                                        title="Deny receiving this gift" class="flex-column icon-container">
                                         <img src="/icons/icon-cancel-grey-8.png" class="icon"
-                                            alt="Deny getting this gift" /></a>
+                                            alt="Deny receiving this gift" /></a>
                                 </p>
                             </td>
                         </tr>

@@ -32,7 +32,7 @@ namespace WebApp.ApiControllers._1._0
             _logger = logger;
         }
         
-                // GET: api/Notifications
+        // GET: api/Notifications
         /// <summary>
         ///     Get all Notifications
         /// </summary>
@@ -44,6 +44,26 @@ namespace WebApp.ApiControllers._1._0
         public async Task<ActionResult<IEnumerable<V1DTO.NotificationDTO>>> GetNotifications()
         {
             return Ok((await _bll.Notifications.GetAllAsync()).Select(e => _mapper.Map(e)));
+        }
+        
+        // GET: api/Notifications/Personal/Active
+        /// <summary>
+        ///     Get all active (new/unread) personal notifications
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("personal/active")]
+        [Produces("application/json")]
+        [Consumes("application/json")]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(V1DTO.NotificationDTO))]
+        public async Task<ActionResult<IEnumerable<V1DTO.UserNotificationDTO>>> GetAllPersonalActive()
+        {
+            var newPersonalNotifications = await _bll.Notifications.GetAllPersonalNew(User.UserGuidId());
+            if (newPersonalNotifications == null)
+            {
+                return NotFound(new V1DTO.MessageDTO("No new notifications found"));
+            }
+            return Ok(newPersonalNotifications.Select(e => _mapper.MapUserNotificationBLLToDTO(e)));
         }
 
         // GET: api/Notifications/5
@@ -71,10 +91,10 @@ namespace WebApp.ApiControllers._1._0
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         /// <summary>
-        ///     Update Notification
+        ///     Update Notification - mark as inactive/seen/read
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="notificationDTO"></param>
+        /// <param name="notificationEditDTO"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
         [Produces("application/json")]
@@ -83,21 +103,21 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> PutNotification(Guid id, V1DTO.NotificationDTO notificationDTO)
+        public async Task<IActionResult> PutNotification(Guid id, V1DTO.UserNotificationEditDTO notificationEditDTO)
         {
             // Don't allow wrong data
-            if (id != notificationDTO.Id)
+            if (id != notificationEditDTO.Id)
             {
                 return BadRequest(new V1DTO.MessageDTO("id and notification.id do not match"));
             }
-            var notification = await _bll.Notifications.FirstOrDefaultAsync(notificationDTO.Id, User.UserGuidId());
-            if (notification == null)
+            var userNotification = await _bll.UserNotifications.FirstOrDefaultAsync(id, User.UserGuidId());
+            if (userNotification == null)
             {
-                _logger.LogError($"EDIT. No such notification: {notificationDTO.Id}, user: {User.UserGuidId()}");
-                return NotFound(new V1DTO.MessageDTO($"No Notification found for id {id}"));
+                _logger.LogError($"EDIT. No such notification: {id.ToString()}, user: {User.UserGuidId().ToString()}");
+                return NotFound(new V1DTO.MessageDTO($"No Notification found for id {id.ToString()}"));
             }
             // Update existing notification
-            await _bll.Notifications.UpdateAsync(_mapper.Map(notificationDTO), User.UserId());
+            await _bll.UserNotifications.UpdateAsync(_mapper.MapUserNotificationEditToBLL(notificationEditDTO), User.UserGuidId());
             await _bll.SaveChangesAsync();
 
             return NoContent();

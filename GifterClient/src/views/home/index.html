@@ -7,11 +7,14 @@
     </section>
 
     <section if.bind="appState.jwt" class="home-authorized">
-        <h1 class="welcome-text">Welcome back${appState.userFullName ? ', ' + appState.userFullName : ''}!</h1>
+        <h1 class="welcome-text">Welcome back, ${_userFullName}!</h1>
         <!-- <hr/> -->
-        <section class="notifications home">
+        <p>
+            <a route-href="route: giftsCreate; params.bind: { wishlistId: _wishlist.id }" class="button add-gift homepage">Add new gift to your profile</a> 
+        </p>
+        <!-- <section class="notifications home">
             <div class="card">[ Notifications ]</div>
-        </section>
+        </section> -->
         <!-- <hr/> -->
         <section class="ads home">
             <div class="card flex flex-row">

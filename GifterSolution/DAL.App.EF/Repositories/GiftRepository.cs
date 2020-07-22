@@ -18,17 +18,18 @@ namespace DAL.App.EF.Repositories
         IGiftRepository
     {
         // Statuses
-        private static string _activeId = "";
+        private static string _archivedId = "";
 
         public GiftRepository(AppDbContext dbContext) :
             base(dbContext, new DALMapper<DomainApp.Gift, DALAppDTO.GiftDAL>())
         {
             // Get necessary statuses & actionTypes
             var enums = new Enums();
-            _activeId = enums.GetStatusId(Enums.Status.Active);
+            _archivedId = enums.GetStatusId(Enums.Status.Archived);
         }
         
-        public async Task<IEnumerable<DALAppDTO.GiftDAL>> GetAllForUserAsync(Guid userId, bool noTracking = true)
+        /** Get Active and Reserved gifts. Note: To get Archived call GetAllArchivedForUserAsync() */
+        public async Task<IEnumerable<DALAppDTO.GiftDAL>> GetAllInWishlistForUserAsync(Guid userId, bool noTracking = true)
         {
             // User's wishlist
             var wishlistId =
@@ -43,6 +44,30 @@ namespace DAL.App.EF.Repositories
             var personalGifts = 
                 await gifts
                     .Where(e => e.WishlistId == wishlistId)
+                    .Where(e => !e.StatusId.ToString().Equals(_archivedId))
+                    .OrderBy(e => e.CreatedAt)
+                    .Select(e => Mapper.Map(e))
+                    .ToListAsync();
+            
+            return personalGifts;
+        }
+        
+        public async Task<IEnumerable<DALAppDTO.GiftDAL>> GetAllArchivedForUserAsync(Guid userId, bool noTracking = true)
+        {
+            // User's wishlist
+            var wishlistId =
+                await RepoDbContext
+                    .Wishlists
+                    .Where(wishlist => wishlist.AppUserId == userId)
+                    .Select(wishlist => wishlist.Id)
+                    .SingleOrDefaultAsync();
+            
+            // User's gifts
+            var gifts = PrepareQuery(userId, noTracking);
+            var personalGifts = 
+                await gifts
+                    .Where(e => e.WishlistId == wishlistId)
+                    .Where(e => e.StatusId.ToString().Equals(_archivedId))
                     .OrderBy(e => e.CreatedAt)
                     .Select(e => Mapper.Map(e))
                     .ToListAsync();

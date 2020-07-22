@@ -25,5 +25,10 @@ namespace BLL.App.Mappers
         {
             return Mapper.Map<BLLAppDTO.ArchivedGiftResponseBLL>(inObject);
         }
+
+        public BLLAppDTO.ArchivedGiftResponseBLL MapArchivedGiftDALToResponse(DALAppDTO.ArchivedGiftDAL inObject)
+        {
+            return Mapper.Map<BLLAppDTO.ArchivedGiftResponseBLL>(inObject);
+        }
     }
 }

@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.App.Helpers;
 using BLL.App.Mappers;
 using com.mubbly.gifterapp.BLL.Base.Services;
 using Contracts.BLL.App.Mappers;
 using Contracts.BLL.App.Services;
 using Contracts.DAL.App;
 using Contracts.DAL.App.Repositories;
+using Domain.App;
 using DALAppDTO = DAL.App.DTO;
 using BLLAppDTO = BLL.App.DTO;
 #pragma warning disable 8603
@@ -19,8 +21,14 @@ namespace BLL.App.Services
             IFriendshipRepository, IFriendshipServiceMapper, DALAppDTO.FriendshipDAL, BLLAppDTO.FriendshipBLL>,
         IFriendshipService
     {
+        private static string _friendRequestNotificationId = "";
+        private static string _friendshipApprovedNotificationId = "";
+
         public FriendshipService(IAppUnitOfWork uow) : base(uow, uow.Friendships, new FriendshipServiceMapper())
         {
+            var enums = new Enums();
+            _friendRequestNotificationId = enums.GetNotificationId(Enums.Notification.FriendRequest);
+            _friendshipApprovedNotificationId = enums.GetNotificationId(Enums.Notification.FriendshipApproved);
         }
 
         public async Task<IEnumerable<BLLAppDTO.FriendshipResponseBLL>> GetAllForUserAsync(Guid userId,
@@ -94,7 +102,7 @@ namespace BLL.App.Services
             return friend;
         }
         
-                /**
+        /**
          * Add a new friendship with pending status
          * @param userId is mandatory and represents current user's Id
          */
@@ -119,6 +127,17 @@ namespace BLL.App.Services
                 throw new NotSupportedException($"Could not add friendship - relationship between users {userGuidId.ToString()} {entity.AppUser2Id} already exists");
             }
             
+            // Add new UserNotification for the friend (about friend request)
+            var userNotificationBLL = new BLLAppDTO.UserNotificationBLL
+            {
+                AppUserId = friendId,
+                NotificationId = new Guid(_friendRequestNotificationId),
+                IsActive = true
+            };
+            var userNotificationDAL = UOW.UserNotifications.Add(Mapper.MapUserNotificationBLLToDAL(userNotificationBLL));
+            UOW.AddToEntityTracker(userNotificationDAL, userNotificationBLL);
+            Mapper.MapUserNotificationDALToBLL(userNotificationDAL);
+            
             // Add new relationship with pending status
             entity.IsConfirmed = false;
             entity.AppUser1Id = userGuidId;
@@ -136,6 +155,17 @@ namespace BLL.App.Services
             {
                 throw new ArgumentNullException(nameof(userId));
             }
+            // Add new UserNotification for the friend (about acceptance)
+            var userNotificationBLL = new BLLAppDTO.UserNotificationBLL
+            {
+                AppUserId = entity.AppUser2Id,
+                NotificationId = new Guid(_friendshipApprovedNotificationId),
+                IsActive = true
+            };
+            var userNotificationDAL = UOW.UserNotifications.Add(Mapper.MapUserNotificationBLLToDAL(userNotificationBLL));
+            UOW.AddToEntityTracker(userNotificationDAL, userNotificationBLL);
+            Mapper.MapUserNotificationDALToBLL(userNotificationDAL);
+            
             // Update relationship to confirmed status
             entity.IsConfirmed = true;
             entity.AppUser1Id = new Guid(userId.ToString());

@@ -47,59 +47,62 @@ namespace BLL.App.Services
         {
             var fullProfile = Mapper.Map(await UOW.Profiles.GetFullByUserAsync(userId, profileId, noTracking));
 
-            // Return profile as usual when there are no gifts
-            if (fullProfile?.Wishlist?.Gifts == null)
+            // Return profile as usual when there are no gifts or only Active ones
+            var hasOnlyActiveGifts = fullProfile?.Wishlist?.Gifts != null && fullProfile!.Wishlist!.Gifts.All(g => g.StatusId.ToString().Equals(_activeId));
+            if (fullProfile?.Wishlist?.Gifts == null || hasOnlyActiveGifts)
             {
                 return fullProfile!; // ignore null error
             }
             
-            // Get reserved gifts data
-            var reservedGifts = (await UOW.ReservedGifts.GetAllAsync(userId))
-                .Where(rg => 
-                    fullProfile.Wishlist.Gifts
-                        .Select(g => g.Id)
-                        .Contains(rg.GiftId))
-                .ToList();
-
-            // Return profile as usual when there are no reserved gifts and no archived gifts
-            if (!reservedGifts.Any() && !fullProfile.Wishlist.Gifts.Any(g => g.StatusId.ToString().Equals(_archivedId)))
+            // If there are any Archived gifts, remove them before returning profile
+            var hasAnyArchivedGifts = fullProfile.Wishlist.Gifts.Any(g => g.StatusId.ToString().Equals(_archivedId));
+            if (hasAnyArchivedGifts)
             {
-                return fullProfile!; // ignore null error
-            }
-            if (!reservedGifts.Any())
-            {
-                return fullProfile!; // ignore null error
-            }
-
-            // Additional logic for Reserved and Archived Gifts
-            foreach (var gift in fullProfile.Wishlist.Gifts.ToList())
-            {
-                // Exclude archived Gifts from Profile
-                var isGiftArchived = gift.StatusId.ToString().Equals(_archivedId);
-                if (isGiftArchived)
+                var archivedGifts = fullProfile.Wishlist.Gifts
+                    .Where(g => g.StatusId.ToString().Equals(_archivedId))
+                    .ToList();
+                foreach (var gift in archivedGifts)
                 {
                     fullProfile.Wishlist.Gifts.Remove(gift);
                 }
-                // Add more info for Reserved Gifts
-                var isGiftReserved = gift.StatusId.ToString().Equals(_reservedId);
-                if (isGiftReserved)
+            }
+            
+            // If there are any Reserved gifts, include additional info before returning profile
+            var hasAnyReservedGifts = fullProfile.Wishlist.Gifts.Any(g => g.StatusId.ToString().Equals(_reservedId));
+            if (hasAnyReservedGifts)
+            {
+                // Get ReservedGifts data
+                var reservedGifts = (await UOW.ReservedGifts.GetAllAsync(userId))
+                    .Where(rg => 
+                        fullProfile.Wishlist.Gifts
+                            .Select(g => g.Id)
+                            .Contains(rg.GiftId))
+                    .ToList();
+                
+                // Get gifts in Reserved status
+                var giftsInReservedStatus = fullProfile.Wishlist.Gifts
+                    .Where(g => g.StatusId.ToString().Equals(_reservedId))
+                    .ToList();
+                
+                // For each Gift in Reserved status, include some data from corresponding ReservedGift
+                foreach (var gift in giftsInReservedStatus)
                 {
                     var reservedGift = reservedGifts
                         .Where(rg => rg.GiftId == gift.Id)
                         .Select(rg => Mapper.MapReservedGiftToBLL(rg))
                         .First();
-                    
-                    // Everyone can see when the gift was reserved
+                
+                    // Include reserving date - everyone can see when the gift was reserved
                     gift.ReservedFrom = reservedGift.ReservedFrom;
                     
-                    // Reserver can see which gifts are theirs, but not who reserved other gifts
+                    // Include reserver user's id for logged in user - reserver can see which gifts are theirs, but not who reserved other gifts
                     if (reservedGift.UserGiverId == accessingUserId)
                     {
                         gift.UserGiverId = reservedGift.UserGiverId;
                     }
                 }
             }
-            // Return profile with new data for reserved gifts
+            
             return fullProfile!; // ignore null error
         }
 

@@ -6,7 +6,6 @@ namespace BLL.App.Helpers
     {
         public Enums()
         {
-            
         }
         
         public enum Status
@@ -23,6 +22,13 @@ namespace BLL.App.Helpers
             Archive = 3
         }
 
+        public enum Notification
+        {
+            Reminder = 1,
+            FriendRequest = 2,
+            FriendshipApproved = 3
+        }
+        
         /**
          * Returns Guid id in string format from the db, corresponding to given param.
          * Needs to be kept in sync with db
@@ -58,6 +64,25 @@ namespace BLL.App.Helpers
                     return "00000000-0000-0000-0000-000000000003";
                 default:
                     throw new NotSupportedException($"No such Status found in enum: {status}");
+            }
+        }
+        
+        /**
+         * Returns Guid id in string format from the db, corresponding to given param.
+         * Needs to be kept in sync with db
+         */
+        public string GetNotificationId(Notification notification)
+        {
+            switch (notification)
+            {
+                case Notification.Reminder:
+                    return "00000000-0000-0000-0000-000000000001";
+                case Notification.FriendRequest:
+                    return "00000000-0000-0000-0000-000000000002";
+                case Notification.FriendshipApproved:
+                    return "00000000-0000-0000-0000-000000000003";
+                default:
+                    throw new NotSupportedException($"No such Notification found in enum: {notification}");
             }
         }
     }

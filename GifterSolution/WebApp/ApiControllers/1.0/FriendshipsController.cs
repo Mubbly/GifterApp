@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BLL.App.DTO;
 using Contracts.BLL.App;
 using Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -229,14 +230,14 @@ namespace WebApp.ApiControllers._1._0
             {
                 return BadRequest(new V1DTO.MessageDTO($"Cannot add already confirmed friendship {friendshipDTO.Id}"));
             }
-            // Don't allow re-creating an existing friendship
-            var existingFriendship = await _bll.Friendships.GetForUserConfirmedAsync(User.UserGuidId(),friendshipDTO.AppUser2Id);
-            var pendingFriendship = await _bll.Friendships.GetForUserPendingAsync(User.UserGuidId(),friendshipDTO.AppUser2Id);
-            if (existingFriendship != null || pendingFriendship != null)
-            {
-                var friendshipId = existingFriendship?.Id ?? pendingFriendship.Id;
-                return BadRequest(new V1DTO.MessageDTO($"Cannot add already existing friendship {friendshipId}"));
-            }
+            // // Don't allow re-creating an existing friendship
+            // var existingFriendship = await _bll.Friendships.GetForUserConfirmedAsync(User.UserGuidId(),friendshipDTO.AppUser2Id);
+            // var pendingFriendship = await _bll.Friendships.GetForUserPendingAsync(User.UserGuidId(),friendshipDTO.AppUser2Id);
+            // if (existingFriendship != null || pendingFriendship != null)
+            // {
+            //     var friendshipId = existingFriendship?.Id ?? pendingFriendship.Id;
+            //     return BadRequest(new V1DTO.MessageDTO($"Cannot add already existing friendship {friendshipId}"));
+            // }
             
             // Create pending friendship
             var bllEntity = _mapper.Map(friendshipDTO);

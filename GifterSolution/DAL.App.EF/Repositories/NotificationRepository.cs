@@ -1,6 +1,11 @@
-﻿using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
 using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Mappers;
+using Microsoft.EntityFrameworkCore;
 using DomainApp = Domain.App;
 using DALAppDTO = DAL.App.DTO;
 using DomainAppIdentity = Domain.App.Identity;
@@ -16,7 +21,6 @@ namespace DAL.App.EF.Repositories
         {
         }
 
-        // // TODO: User stuff 
         //
         // public async Task<IEnumerable<Notification>> AllAsync(Guid? userId = null)
         // {

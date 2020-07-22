@@ -1,6 +1,11 @@
-﻿using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
 using Contracts.DAL.App.Repositories;
 using DAL.App.EF.Mappers;
+using Microsoft.EntityFrameworkCore;
 using DomainApp = Domain.App;
 using DALAppDTO = DAL.App.DTO;
 using DomainAppIdentity = Domain.App.Identity;
@@ -9,12 +14,25 @@ namespace DAL.App.EF.Repositories
 {
     public class UserNotificationRepository :
         EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.UserNotification, DALAppDTO.UserNotificationDAL
-        >,
-        IUserNotificationRepository
+        >, IUserNotificationRepository
     {
         public UserNotificationRepository(AppDbContext dbContext) :
             base(dbContext, new DALMapper<DomainApp.UserNotification, DALAppDTO.UserNotificationDAL>())
         {
+        }
+        
+        public async Task<IEnumerable<DALAppDTO.UserNotificationDAL>> GetAllActiveForUser(Guid userId, bool noTracking = true)
+        {
+            var query = PrepareQuery(userId, noTracking);
+
+            var activeUserNotifications = await query
+                .OrderBy(n => n.CreatedAt)
+                .Where(n => n.IsActive && n.AppUserId == userId)
+                .Include(n => n.Notification)
+                .Select(n => Mapper.Map(n))
+                .ToListAsync();
+            
+            return activeUserNotifications;
         }
 
         // public async Task<IEnumerable<UserNotification>> AllAsync(Guid? userId = null)

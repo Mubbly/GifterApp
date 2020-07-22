@@ -37,16 +37,16 @@ namespace BLL.App.Services
             _archivedId = enums.GetStatusId(Enums.Status.Archived);
         }
 
-        public async Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllForUserAsync(Guid userId, bool noTracking = true)
+        public async Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllInWishlistForUserAsync(Guid userId, bool noTracking = true)
         {
-            var userGifts = (await UOW.Gifts.GetAllForUserAsync(userId, noTracking))
+            var userGifts = (await UOW.Gifts.GetAllInWishlistForUserAsync(userId, noTracking))
                 .Select(e => Mapper.Map(e));
             return userGifts;
         }
         
         public async Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllPinnedForUserAsync(Guid userId, bool noTracking = true)
         {
-            var pinnedGifts = (await UOW.Gifts.GetAllForUserAsync(userId, noTracking))
+            var pinnedGifts = (await UOW.Gifts.GetAllInWishlistForUserAsync(userId, noTracking))
                 .Where(g => g.IsPinned)
                 .Select(g => Mapper.Map(g));
             return pinnedGifts;
@@ -54,7 +54,7 @@ namespace BLL.App.Services
 
         public async Task<BLLAppDTO.GiftBLL> GetForUserAsync(Guid giftId, Guid userId, bool noTracking = true)
         {
-            var personalGift = (await GetAllForUserAsync(userId, noTracking))
+            var personalGift = (await GetAllInWishlistForUserAsync(userId, noTracking))
                 .FirstOrDefault(e => e.Id == giftId);
             return personalGift;
         }
@@ -84,7 +84,7 @@ namespace BLL.App.Services
                 }
                 // Get gift which is in Reserved status and which id matches the one in ReservedGifts table
                 var giftOwner = personalReservedGift.UserReceiverId;
-                var personalGift = (await UOW.Gifts.GetAllForUserAsync(giftOwner, noTracking))
+                var personalGift = (await UOW.Gifts.GetAllInWishlistForUserAsync(giftOwner, noTracking))
                     .Where(g => g.StatusId.ToString().Equals(_reservedId))
                     .Where(g => g.Id == personalReservedGift.GiftId)
                     .Select(g => Mapper.Map(g))
@@ -121,7 +121,7 @@ namespace BLL.App.Services
             }
             // Get gift
             var giftOwner = reservedGift.UserReceiverId;
-            var gift = Mapper.Map((await UOW.Gifts.GetAllForUserAsync(giftOwner, noTracking))
+            var gift = Mapper.Map((await UOW.Gifts.GetAllInWishlistForUserAsync(giftOwner, noTracking))
                 .FirstOrDefault(g => g.Id == giftId));
             if (gift == null)
             {
@@ -156,7 +156,7 @@ namespace BLL.App.Services
                 throw new NotSupportedException($"Could not reserve a gift that does not exist");
             }
             // Check existing gift is not already reserved
-            if (await IsGiftReservedAsync(existingGift, userId)) 
+            if (await IsGiftReservedByRequesterAsync(existingGift, userId)) 
             {
                 throw new NotSupportedException($"Could not reserve gift - {targetGiftId.ToString()} is already reserved");
             }
@@ -193,7 +193,7 @@ namespace BLL.App.Services
             // Check that target gift exists and status is reserved (by current user)
             var gift = Mapper.Map(await UOW.Gifts.FirstOrDefaultAsync(targetGiftId, giftReceiverId));
             var isGiftAlreadyArchived = await IsGiftArchivedAsync(gift, userId, giftReceiverId);
-            var isGiftReservedByRequester = await IsGiftReservedAsync(gift, userId);
+            var isGiftReservedByRequester = await IsGiftReservedByRequesterAsync(gift, userId);
             
             if (gift == null || isGiftAlreadyArchived || !isGiftReservedByRequester)
             {
@@ -210,6 +210,10 @@ namespace BLL.App.Services
             
             // DELETE corresponding ReservedGift
             var reservedGift = await UOW.ReservedGifts.GetByGiftId(targetGiftId, userId);
+            if (reservedGift == null)
+            {
+                throw new NotSupportedException($"Could not find reserved Gift {targetGiftId.ToString()} to mark it as gifted");
+            }
             // gift = Mapper.Map(reservedGift.Gift); // Error InvalidOperationException - maybe a workaround? Right now include removed from Repo
             await UOW.ReservedGifts.RemoveAsync(reservedGift, userId);
             
@@ -228,37 +232,44 @@ namespace BLL.App.Services
         public async Task<BLLAppDTO.GiftBLL> CancelReservationAsync(BLLAppDTO.ReservedGiftBLL entity, Guid userId)
         {
             var targetGiftId = entity.GiftId;
+            var giftGiverId = userId;
             var giftReceiverId = entity.UserReceiverId;
             
             // UserIds are mandatory for deleting ReservedGift
-            if (userId == null || giftReceiverId == null)
+            if (giftGiverId == null || giftReceiverId == null)
             {
                 throw new ArgumentNullException(nameof(userId));
             }
             // Check gift is Reserved and by current user
             var gift = await UOW.Gifts.FirstOrDefaultAsync(targetGiftId, giftReceiverId);
-            if (!(await IsGiftReservedAsync(Mapper.Map(gift), userId)))
+            if (!(await IsGiftReservedByRequesterAsync(Mapper.Map(gift), giftGiverId)))
             {
                 throw new NotSupportedException(
-                    $"Could not find a reserved gift {targetGiftId.ToString()} to cancel reservation by user {userId.ToString()}");
+                    $"Could not find a reserved gift {targetGiftId.ToString()} to cancel reservation by user {giftGiverId.ToString()}");
             }
 
             // DELETE corresponding ReservedGift
-            var reservedGift = await UOW.ReservedGifts.GetByGiftId(targetGiftId, userId);
+            var reservedGift = await UOW.ReservedGifts.GetByGiftId(targetGiftId, giftGiverId);
+            if (reservedGift == null)
+            {
+                throw new NotSupportedException($"Could not find reserved Gift {targetGiftId.ToString()} to cancel reservation");
+            }
             // gift = Mapper.Map(reservedGift.Gift); // Error InvalidOperationException - maybe a workaround? Right now include removed from Repo
-            await UOW.ReservedGifts.RemoveAsync(reservedGift, userId);
+            await UOW.ReservedGifts.RemoveAsync(reservedGift, giftGiverId);
 
             // UPDATE corresponding Gift's status back to Active
-            var reactivatedGift = await UpdateGiftStatusToActiveAsync(Mapper.Map(gift), userId);
+            var reactivatedGift = await UpdateGiftStatusToActiveAsync(Mapper.Map(gift), giftReceiverId);
             
             return reactivatedGift;
         }
 
+        // HELPERS
+        
         /**
          * Gift has to be in Reserved status and corresponding entry in ReservedGifts table
          * Note: True only if requester/current user is the one who reserved the gift - ensured in DAL.
          */
-        private async Task<bool> IsGiftReservedAsync(BLLAppDTO.GiftBLL gift, Guid userId)
+        private async Task<bool> IsGiftReservedByRequesterAsync(BLLAppDTO.GiftBLL gift, Guid userId)
         {
             var targetGiftId = gift.Id;
             var reservedGift = await UOW.ReservedGifts.GetByGiftId(targetGiftId, userId);
@@ -286,8 +297,42 @@ namespace BLL.App.Services
             
             return isGiftStatusArchived && doesArchivedGiftsHaveEntry;
         }
+        
+        /** Add new entry to Gifts table - when reactivating an archived Gift (create a copy of archived entry) */
+        private async Task<BLLAppDTO.GiftBLL?> AddNewGiftBasedOnArchivedEntry(BLLAppDTO.ArchivedGiftResponseBLL archivedGift, Guid userId)
+        {
+            // Get existing Gift in Archived status
+            var existingGift = Mapper.Map((await UOW.Gifts.GetAllArchivedForUserAsync(userId))
+                .SingleOrDefault(g => g.Id == archivedGift.GiftId));
+            if (existingGift == null)
+            {
+                throw new NotSupportedException($"Could not reactivate gift {archivedGift.GiftId.ToString()}  - not found");
+            }
+            // Create a copy but make it Active. Added gifts are by default isPinned=false.
+            var copyOfGift = new BLLAppDTO.GiftBLL
+            {
+                Name = existingGift.Name,
+                Description = existingGift.Description,
+                Image = existingGift.Image,
+                Url = existingGift.Url,
+                PartnerUrl = existingGift.PartnerUrl,
+                IsPartnered = existingGift.IsPartnered,
+                IsPinned = false, 
+                WishlistId = existingGift.WishlistId,
+                ActionTypeId = new Guid(_reservedId),
+                StatusId = new Guid(_activeId)
+            };
+            // Add
+            var newActiveGift = UOW.Gifts.Add(Mapper.Map(copyOfGift), userId); 
+            // Track
+            UOW.AddToEntityTracker(newActiveGift, copyOfGift);
+            // Check added data
+            var isGiftInActiveStatus = copyOfGift.StatusId.ToString().Equals(_activeId);
+            
+            return newActiveGift != null && isGiftInActiveStatus ? copyOfGift : null;
+        }
 
-        /** Add new entry to ReservedGift's table */
+        /** Add new entry to ReservedGifts table */
         private BLLAppDTO.ReservedGiftResponseBLL? AddReservedGift(Guid giftId, Guid userId, Guid receiverId)
         {
             // Create
@@ -379,33 +424,33 @@ namespace BLL.App.Services
             updatedGift.UserGiverId = userId;
             return updatedGift;
         }
-        
-        /** Update gift to Active status if corresponding ReservedGift exists */
-        private async Task<BLLAppDTO.GiftBLL> UpdateGiftStatusToActiveAsync(BLLAppDTO.GiftBLL gift, Guid userId)
-        {
-            var targetGiftId = gift.Id;
-            
-            // Check if target gift is reserved by current user
-            var reservedGift = await UOW.ReservedGifts.GetByGiftId(targetGiftId, userId);
-            if (reservedGift == null)
-            {
-                throw new NotSupportedException($"Could not reactivate gift {gift.Id.ToString()} - no reservation found");
-            }
-            // Update gift's status to Active
-            gift.StatusId = new Guid(_activeId);
-            var updatedGift = Mapper.Map(await UOW.Gifts.UpdateAsync(Mapper.Map(gift), reservedGift.UserReceiverId));
 
-            if (updatedGift == null)
+        /** Update Gift to Active status */
+        private async Task<BLLAppDTO.GiftBLL> UpdateGiftStatusToActiveAsync(BLLAppDTO.GiftBLL gift, Guid userReceiverId)
+        {
+            if (gift == null)
+            {
+                throw new ArgumentNullException(nameof(gift));
+            }
+            // Update existing Gift's data
+            gift.StatusId = new Guid(_activeId);
+            var activeGift = Mapper.Map(await UOW.Gifts.UpdateAsync(Mapper.Map(gift), userReceiverId));
+            if (activeGift == null)
             {
                 return null!;
             }
             // Include new data regarding activation in response
-            updatedGift.ReservedFrom = null;
-            updatedGift.UserGiverId = null;
-            return updatedGift;
+            activeGift.ReservedFrom = null;
+            activeGift.UserGiverId = null;
+            activeGift.UserReceiverId = null;
+            activeGift.UserGiverName = null;
+            activeGift.UserReceiverName = null;
+            activeGift.ArchivedFrom = null;
+            activeGift.IsArchivalConfirmed = false;
+            return activeGift;
         }
-        
-        
+
+
         // -------------------------------------------- ARCHIVED GIFTS ------------------------------------------
 
         
@@ -425,7 +470,7 @@ namespace BLL.App.Services
             return await GetAllReceivedArchivedAsync(userId, noTracking);
         }
         
-        public async Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllPendingReceivedForUserAsync(Guid userId, bool noTracking = true)
+        public async Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllPendingArchivedForUserAsync(Guid userId, bool noTracking = true)
         {
             // UserId is mandatory for getting ArchivedGifts
             if (userId == null)
@@ -453,6 +498,161 @@ namespace BLL.App.Services
             return await GetReceivedArchivedAsync(giftId, userId, noTracking);
         }
 
+        public async Task<BLLAppDTO.GiftBLL> GetPendingArchivedForUserAsync(Guid giftId, Guid userId,
+            bool noTracking = true)
+        {
+            // UserId is mandatory for getting pending ArchivedGift
+            if (userId == null)
+            { 
+                throw new ArgumentNullException(nameof(userId));
+            }
+            // Gifted by another person to current user - waiting for confirmation
+            return await GetPendingReceivedArchivedAsync(giftId, userId, noTracking);
+        }
+        
+        /** Change ArchivedGift to isConfirmed */
+        public async Task<BLLAppDTO.GiftBLL> ConfirmPendingArchivedAsync(BLLAppDTO.ArchivedGiftBLL archivedGift, Guid userId)
+        {
+            var targetGiftId = archivedGift.GiftId;
+            var giftReceiverId = userId;
+            var giftGiverId = archivedGift.UserGiverId;
+
+            // UserIds are mandatory for archiving pending gift. Current user has to be receiver, not giver.
+            if (userId == null || giftGiverId == null || giftGiverId == userId)
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+            // Check that target gift exists and status is archived
+            var gift = Mapper.Map(await UOW.Gifts.FirstOrDefaultAsync(targetGiftId, giftReceiverId));
+            if (gift == null || !gift.StatusId.ToString().Equals(_archivedId))
+            {
+                throw new NotSupportedException(
+                    $"Could not find pending Gift {targetGiftId.ToString()} to confirm archival");
+            }
+            
+            // Get corresponding ArchivedGift
+            var archivedPendingGift = await UOW.ArchivedGifts.GetPendingReceivedByGiftIdAsync(targetGiftId, userId);
+            if (archivedPendingGift == null || giftGiverId != archivedPendingGift.UserGiverId)
+            {
+                throw new NotSupportedException($"Could not find pending archived Gift {targetGiftId.ToString()} to confirm archival");
+            }
+            // UPDATE ArchivedGift to confirmed status
+            archivedPendingGift.IsConfirmed = true;
+            var confirmedArchivedGift = Mapper.MapArchivedGiftDALToResponse(await UOW.ArchivedGifts.UpdateAsync(archivedPendingGift, giftReceiverId));
+            
+            if (confirmedArchivedGift == null || confirmedArchivedGift.IsConfirmed == false)
+            {
+                return null!;
+            }
+            // Include new data regarding reservation in response
+            gift.IsArchivalConfirmed = confirmedArchivedGift.IsConfirmed; // should be 'true'
+            gift.ArchivedFrom = confirmedArchivedGift.DateArchived;
+            gift.UserGiverId = confirmedArchivedGift.UserGiverId;
+            gift.UserGiverName = archivedPendingGift.UserGiver?.FullName;
+            return gift;
+        }
+
+        /** Delete pending archived gift, change Gift status back to Active */
+        public async Task<BLLAppDTO.GiftBLL> DenyPendingArchivedAsync(BLLAppDTO.ArchivedGiftBLL archivedGift, Guid userId)
+        {
+            var targetGiftId = archivedGift.GiftId;
+            var giftReceiverId = userId;
+            var giftGiverId = archivedGift.UserGiverId;
+            
+            // Make Gift active again
+            var gift = await UOW.Gifts.FirstOrDefaultAsync(targetGiftId, giftReceiverId);
+            var reactivatedGift = await UpdateGiftStatusToActiveAsync(Mapper.Map(gift), giftReceiverId);
+            if (reactivatedGift == null)
+            {
+                throw new NotSupportedException(
+                    $"Could not deny gifting and reactivate Gift {targetGiftId.ToString()}");
+            }
+            // Get corresponding pending ArchivedGift and remove it
+            var archivedPendingGift = await UOW.ArchivedGifts.GetPendingReceivedByGiftIdAsync(targetGiftId, userId);
+            if (archivedPendingGift == null || giftGiverId != archivedPendingGift.UserGiverId)
+            {
+                throw new NotSupportedException($"Could not find pending received Gift {targetGiftId.ToString()} to deny");
+            }
+            await UOW.ArchivedGifts.RemoveAsync(archivedPendingGift.Id, userId);
+            
+            return reactivatedGift;
+        }
+
+        /** Create a copy of existing Gift but make it Active, keep archived entries */
+        public async Task<BLLAppDTO.GiftBLL> ReactivateArchivedAsync(BLLAppDTO.ArchivedGiftBLL archivedGift, Guid userId)
+        {
+            var targetGiftId = archivedGift.GiftId;
+            var giftReceiverId = userId;
+            var giftGiverId = archivedGift.UserGiverId;
+
+            // UserIds are mandatory for reactivating gift. Current user has to be receiver, not giver.
+            if (userId == null || giftGiverId == null || giftGiverId == userId)
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+            // Check that target gift exists and status is archived
+            var gift = Mapper.Map(await UOW.Gifts.FirstOrDefaultAsync(targetGiftId, giftReceiverId));
+            if (gift == null || !gift.StatusId.ToString().Equals(_archivedId))
+            {
+                throw new NotSupportedException(
+                    $"Could not find archived Gift {targetGiftId.ToString()} to reactivate");
+            }
+            // Get corresponding ArchivedGift
+            var archivedReceivedGift = await UOW.ArchivedGifts.GetReceivedByGiftIdAsync(targetGiftId, giftReceiverId);
+            if (archivedReceivedGift == null || giftGiverId != archivedReceivedGift.UserGiverId)
+            {
+                throw new NotSupportedException($"Could not find archived Gift {targetGiftId.ToString()} to reactivate");
+            }
+            // Keep the archive entry but create a new copy of it in Active status
+            var activeGift = await AddNewGiftBasedOnArchivedEntry(Mapper.MapArchivedGiftDALToResponse(archivedReceivedGift), giftReceiverId);
+            if (activeGift == null)
+            {
+                throw new NotSupportedException($"Could not reactivate Gift {targetGiftId.ToString()} - data insertion fail");
+            }
+            return activeGift;
+            
+            // // Remove ArchivedGift
+            // await UOW.ArchivedGifts.RemoveAsync(archivedPendingGift, giftReceiverId);
+
+            // Update gift's status to Active
+            // var activeGift = await UpdateGiftStatusToActive(gift, giftReceiverId);
+            // return activeGift;
+        }
+        
+        public async Task<BLLAppDTO.GiftBLL> DeleteArchivedAsync(BLLAppDTO.ArchivedGiftBLL archivedGift, Guid userId)
+        {
+            var targetGiftId = archivedGift.GiftId;
+            var giftReceiverId = userId;
+            var giftGiverId = archivedGift.UserGiverId;
+
+            // UserIds are mandatory for reactivating gift. Current user has to be receiver, not giver.
+            if (userId == null || giftGiverId == null || giftGiverId == userId)
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+            // Check that target gift exists and status is archived
+            var gift = Mapper.Map(await UOW.Gifts.FirstOrDefaultAsync(targetGiftId, giftReceiverId));
+            if (gift == null || !gift.StatusId.ToString().Equals(_archivedId))
+            {
+                throw new NotSupportedException(
+                    $"Could not find pending Gift {targetGiftId.ToString()} to confirm archival");
+            }
+            // Get corresponding ArchivedGift
+            var archivedPendingGift = await UOW.ArchivedGifts.GetReceivedByGiftIdAsync(targetGiftId, giftReceiverId);
+            if (archivedPendingGift == null || giftGiverId != archivedPendingGift.UserGiverId)
+            {
+                throw new NotSupportedException($"Could not find pending archived Gift {targetGiftId.ToString()} to confirm archival");
+            }
+            // Remove ArchivedGift
+            await UOW.ArchivedGifts.RemoveAsync(archivedPendingGift, giftReceiverId);
+
+            // Remove Gift
+            var activeGift = Mapper.Map(await UOW.Gifts.RemoveAsync(Mapper.Map(gift), giftReceiverId));
+            return activeGift;
+        }
+        
+        // HELPERS
+
         /** Other people's Gifts - the ones current user has already gifted */
         private async Task<IEnumerable<BLLAppDTO.GiftBLL>> GetAllGivenArchivedAsync(Guid userId, bool noTracking = false)
         {
@@ -466,8 +666,7 @@ namespace BLL.App.Services
                     continue;
                 }
                 var giftOwner = givenArchivedGift.UserReceiverId;
-                var archivedGift = (await UOW.Gifts.GetAllForUserAsync(giftOwner, noTracking))
-                    .Where(g => g.StatusId.ToString().Equals(_archivedId))
+                var archivedGift = (await UOW.Gifts.GetAllArchivedForUserAsync(giftOwner, noTracking))
                     .Where(g => g.Id == givenArchivedGift.GiftId)
                     .Select(g => Mapper.Map(g))
                     .FirstOrDefault();
@@ -500,11 +699,10 @@ namespace BLL.App.Services
                     continue;
                 }
                 var giftOwner = receivedArchivedGift.UserReceiverId;
-                var archivedGift = (await UOW.Gifts.GetAllForUserAsync(giftOwner, noTracking))
-                    .Where(g => g.StatusId.ToString().Equals(_archivedId))
+                var archivedGift = (await UOW.Gifts.GetAllArchivedForUserAsync(giftOwner, noTracking))
                     .Where(g => g.Id == receivedArchivedGift.GiftId)
                     .Select(g => Mapper.Map(g))
-                    .FirstOrDefault();
+                    .SingleOrDefault();
                 
                 if (archivedGift == null)
                 {
@@ -534,24 +732,10 @@ namespace BLL.App.Services
                     continue;
                 }
                 var giftOwnerId = unconfirmedGift.UserReceiverId;
-                var pendingGift = (await UOW.Gifts.GetAllForUserAsync(giftOwnerId, noTracking))
-                    .Where(g => g.StatusId.ToString().Equals(_archivedId))
+                var pendingGift = (await UOW.Gifts.GetAllArchivedForUserAsync(giftOwnerId, noTracking))
                     .Where(g => g.Id == unconfirmedGift.GiftId)
                     .Select(g => Mapper.Map(g))
-                    .FirstOrDefault();
-                
-                var pendingGift2 = (await UOW.Gifts.GetAllForUserAsync(giftOwnerId, noTracking))
-                    .Where(g => g.StatusId.ToString().Equals(_archivedId))
-                    .Select(g => Mapper.Map(g))
-                    .FirstOrDefault();
-                
-                var pendingGift3 = (await UOW.Gifts.GetAllForUserAsync(giftOwnerId, noTracking))
-                    .Where(g => g.Id == unconfirmedGift.GiftId)
-                    .Select(g => Mapper.Map(g))
-                    .FirstOrDefault();
-                
-                var pendingGift4 = (await UOW.Gifts.GetAllForUserAsync(giftOwnerId, noTracking)).FirstOrDefault();
-                
+                    .SingleOrDefault();
                 if (pendingGift == null)
                 {
                     continue;
@@ -576,8 +760,8 @@ namespace BLL.App.Services
             }
             // Get gift
             var giftOwner = givenArchivedGift.UserReceiverId;
-            var givenGift = Mapper.Map((await UOW.Gifts.GetAllForUserAsync(giftOwner, noTracking))
-                .FirstOrDefault(g => g.Id == giftId));
+            var givenGift = Mapper.Map((await UOW.Gifts.GetAllArchivedForUserAsync(giftOwner, noTracking))
+                .SingleOrDefault(g => g.Id == giftId)); // TODO: Implement getting one gift in repo!
 
             if (givenGift == null)
             {
@@ -601,8 +785,8 @@ namespace BLL.App.Services
             }
             // Get gift
             var giftOwner = receivedArchivedGift.UserReceiverId;
-            var receivedGift = Mapper.Map((await UOW.Gifts.GetAllForUserAsync(giftOwner, noTracking))
-                .FirstOrDefault(g => g.Id == giftId));
+            var receivedGift = Mapper.Map((await UOW.Gifts.GetAllArchivedForUserAsync(giftOwner, noTracking))
+                .SingleOrDefault(g => g.Id == giftId)); // TODO: Implement getting one gift in repo!
 
             if (receivedGift == null)
             {
@@ -614,6 +798,31 @@ namespace BLL.App.Services
             receivedGift.UserGiverName = receivedArchivedGift.UserGiver?.FullName;
 
             return receivedGift;
+        }
+        
+        private async Task<BLLAppDTO.GiftBLL> GetPendingReceivedArchivedAsync(Guid giftId, Guid userId, bool noTracking = true)
+        {
+            // ArchivedGift with corresponding GiftId foreign key value has to exist, receiver has to be current user
+            var pendingReceivedGift = await UOW.ArchivedGifts.GetPendingReceivedByGiftIdAsync(giftId, userId);
+            if (giftId != pendingReceivedGift.GiftId || pendingReceivedGift.UserReceiverId != userId)
+            {
+                throw new NotSupportedException($"Could not find archived gift with giftId {giftId.ToString()}");
+            }
+            // Get gift
+            var giftOwner = pendingReceivedGift.UserReceiverId;
+            var pendingGift = Mapper.Map((await UOW.Gifts.GetAllArchivedForUserAsync(giftOwner, noTracking))
+                .SingleOrDefault(g => g.Id == giftId));
+
+            if (pendingGift == null)
+            {
+                return null!;
+            }
+            // Include additional data regarding archival in the response
+            pendingGift.ArchivedFrom = pendingReceivedGift.DateArchived;
+            pendingGift.UserGiverId = pendingReceivedGift.UserGiverId;
+            pendingGift.UserGiverName = pendingReceivedGift.UserGiver?.FullName;
+
+            return pendingGift;
         }
     }
 }

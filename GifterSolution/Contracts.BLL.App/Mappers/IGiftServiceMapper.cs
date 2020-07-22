@@ -10,5 +10,6 @@ namespace Contracts.BLL.App.Mappers
         BLLAppDTO.ReservedGiftResponseBLL MapReservedGiftFullToResponse(BLLAppDTO.ReservedGiftFullBLL inObject);
         DALAppDTO.ArchivedGiftDAL MapArchivedGiftFullToDAL(BLLAppDTO.ArchivedGiftFullBLL inObject);
         BLLAppDTO.ArchivedGiftResponseBLL MapArchivedGiftFullToResponse(BLLAppDTO.ArchivedGiftFullBLL inObject);
+        BLLAppDTO.ArchivedGiftResponseBLL MapArchivedGiftDALToResponse(DALAppDTO.ArchivedGiftDAL inObject);
     }
 }

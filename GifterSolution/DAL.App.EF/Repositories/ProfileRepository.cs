@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using com.mubbly.gifterapp.DAL.Base.EF.Repositories;
 using Contracts.DAL.App.Repositories;
+using DAL.App.EF.Helpers;
 using DAL.App.EF.Mappers;
 using Microsoft.EntityFrameworkCore;
 using DomainApp = Domain.App;
@@ -15,9 +16,14 @@ namespace DAL.App.EF.Repositories
         EFBaseRepository<AppDbContext, DomainAppIdentity.AppUser, DomainApp.Profile, DALAppDTO.ProfileDAL>,
         IProfileRepository
     {
+        // private static string _archivedId = "";
+
         public ProfileRepository(AppDbContext dbContext) :
             base(dbContext, new DALMapper<DomainApp.Profile, DALAppDTO.ProfileDAL>())
         {
+            // Get necessary statuses & actionTypes
+            // var enums = new Enums();
+            // _archivedId = enums.GetStatusId(Enums.Status.Archived);
         }
 
         // TODO: Wth is up with page loading time (~3sec) using includes? https://github.com/dotnet/efcore/issues/18022 ?
@@ -32,6 +38,7 @@ namespace DAL.App.EF.Repositories
                 .Include(p => p.AppUser)
                 .Include(p => p.Wishlist)
                     .ThenInclude(w => w!.Gifts)
+                // .Where(p=> p.Wishlist!.Gifts.Any(g => g.StatusId.ToString().Equals(_archivedId)))
                 .ToListAsync();
             
             // If no specific profile ID provided, just get the first one

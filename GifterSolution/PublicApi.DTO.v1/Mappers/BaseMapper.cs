@@ -14,6 +14,9 @@ namespace PublicApi.DTO.v1.Mappers
         {
             MapperConfigurationExpression.CreateMap<FriendshipResponseBLL, FriendshipResponseDTO>();
             MapperConfigurationExpression.CreateMap<ReservedGiftDTO, ReservedGiftBLL>();
+            MapperConfigurationExpression.CreateMap<ArchivedGiftDTO, ArchivedGiftBLL>();
+            MapperConfigurationExpression.CreateMap<UserNotificationBLL, UserNotificationDTO>();
+            MapperConfigurationExpression.CreateMap<UserNotificationEditDTO, UserNotificationBLL>();
             // MapperConfigurationExpression.CreateMap<ReservedGiftResponseBLL, ReservedGiftResponseDTO>();
             Mapper = new Mapper(new MapperConfiguration(MapperConfigurationExpression));
         }

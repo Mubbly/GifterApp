@@ -1,6 +1,6 @@
 import { Optional } from "types/generalTypes";
 import { INotificationType } from './INotificationType';
-import { IBaseEntity } from "./base/IBaseEntity";
+import { IBaseEntity, IBaseEditEntity } from './base/IBaseEntity';
 
 export interface INotificationCreate {
     notificationValue: string;
@@ -10,6 +10,13 @@ export interface INotificationCreate {
 }
 
 export interface INotificationEdit extends IBaseEntity, INotificationCreate {
+}
+
+export interface IUserNotificationEdit extends IBaseEditEntity {
+    isActive: boolean;
+    comment: Optional<string>;
+    notificationId: string;
+    appUserId: string;
 }
 
 export interface INotification extends INotificationEdit {

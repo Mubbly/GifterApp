@@ -59,6 +59,7 @@ namespace BLL.App.Mappers
             MapperConfigurationExpression.CreateMap<ArchivedGiftFullBLL, ArchivedGiftResponseBLL>();
             MapperConfigurationExpression.CreateMap<ArchivedGiftBLL, ArchivedGiftDAL>();
             MapperConfigurationExpression.CreateMap<ArchivedGiftDAL, ArchivedGiftBLL>();
+            MapperConfigurationExpression.CreateMap<ArchivedGiftDAL, ArchivedGiftResponseBLL>();
             // Other user interactions
             MapperConfigurationExpression.CreateMap<InvitedUserBLL, InvitedUserDAL>();
             MapperConfigurationExpression.CreateMap<InvitedUserDAL, InvitedUserBLL>();

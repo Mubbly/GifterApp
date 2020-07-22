@@ -145,8 +145,8 @@ namespace DAL.App.EF.Helpers
                 },
                 new NotificationType
                 {
-                    NotificationTypeValue = "NewMessage",
-                    Comment = "User has unread private messages",
+                    NotificationTypeValue = "AcceptedFriendRequest",
+                    Comment = "Friend request sent by the user has been accepted",
                     Id = new Guid("00000000-0000-0000-0000-000000000003")
                 },
                 new NotificationType
@@ -186,12 +186,43 @@ namespace DAL.App.EF.Helpers
                     Id = new Guid("00000000-0000-0000-0000-000000000009")
                 }
             };
-
+            
             foreach (var notificationType in notificationTypes)
                 if (!context.NotificationTypes.Any(n => n.Id == notificationType.Id))
                     context.NotificationTypes.Add(notificationType);
             context.SaveChanges();
             
+            // Insert predefined notifications
+            var notifications = new[]
+            {
+                new Notification
+                {
+                    NotificationValue = "You have reserved some gifts you haven't given yet",
+                    Comment = "Some reservations are older than a certain amount of time",
+                    Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                    NotificationTypeId = new Guid("00000000-0000-0000-0000-000000000001")
+                },
+                new Notification
+                {
+                    NotificationValue = "You have new friend requests",
+                    Comment = "Some friendships are not yet accepted or declined",
+                    Id = new Guid("00000000-0000-0000-0000-000000000002"),
+                    NotificationTypeId = new Guid("00000000-0000-0000-0000-000000000002")
+                },
+                new Notification
+                {
+                    NotificationValue = "Your friend has accepted your friend request",
+                    Comment = "A pending friendship has been confirmed",
+                    Id = new Guid("00000000-0000-0000-0000-000000000003"),
+                    NotificationTypeId = new Guid("00000000-0000-0000-0000-000000000003")
+                },
+            };
+            
+            foreach (var notification in notifications)
+                if (!context.Notifications.Any(n => n.Id == notification.Id))
+                    context.Notifications.Add(notification);
+            context.SaveChanges();
+
             // Test user related data
 
             var user = userManager.FindByEmailAsync("test@test.com").Result;

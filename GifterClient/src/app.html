@@ -21,16 +21,30 @@
 
                     <ul class="navbar-nav account flex">
                         <li class="nav-item">
-                            <a if.bind="!appState.isDarkTheme" href="#" click.delegate="onToggleTheme($event)" class="nav-link" title="Toggle theme"><img src="/icons/icon-switch-on.png" class="icon on"/></a>
-                            <a if.bind="appState.isDarkTheme" href="#" click.delegate="onToggleTheme($event)" class="nav-link" title="Toggle theme"><img src="/icons/icon-switch-off.png" class="icon off"/></a>
+                            <a if.bind="!appState.isDarkTheme" href="#" click.delegate="onToggleTheme($event)" class="nav-link" title="Toggle theme"><img src="/icons/icon-switch-on.png" class="icon no-hover on"/></a>
+                            <a if.bind="appState.isDarkTheme" href="#" click.delegate="onToggleTheme($event)" class="nav-link" title="Toggle theme"><img src="/icons/icon-switch-off.png" class="icon no-hover off"/></a>
+                        </li>
+                        <li if.bind="appState.jwt" class="nav-item dropdown">
+                            <a href="#" role="button" class="nav-link text-dark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Notifications">
+                                <img src="/icons/icon-notifications-white-m.png" class="icon no-hover notifications"/>
+                            </a>
+                                <div if.bind="_notifications" repeat.for="notification of _notifications" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#" click.delegate="onNotificationClick($event, notification)">${notification.notification.notificationValue}</a>
+                                </div>
+                                <div if.bind="_noNotificationMessage" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <p>${_noNotificationMessage}</p>
+                                </div>
+                              </li>
                         </li>
                         <li if.bind="appState.jwt" class="nav-item dropdown">
                             <a href="#" role="button" class="nav-link text-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Help">Help</a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" route-href="route: search; params.bind: {}">User search</a>
+                                    <a class="dropdown-item" route-href="route: profilesPersonal; params.bind: {}">My profile</a>
                                     <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" route-href="route: search; params.bind: {}">User search</a>
                                     <a class="dropdown-item" route-href="route: aboutHelp; params.bind: {}">FAQ</a>
                                     <a class="dropdown-item" route-href="route: aboutIndex; params.bind: {}">About</a>
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" route-href="route: aboutContacts; params.bind: {}">Contact us</a>
                                 </div>
                               </li>

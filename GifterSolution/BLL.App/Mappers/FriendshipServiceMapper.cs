@@ -11,5 +11,15 @@ namespace BLL.App.Mappers
         {
             return Mapper.Map<BLLAppDTO.FriendshipResponseBLL>(inObject);
         }
+
+        public DALAppDTO.UserNotificationDAL MapUserNotificationBLLToDAL(BLLAppDTO.UserNotificationBLL inObject)
+        {
+            return Mapper.Map<DALAppDTO.UserNotificationDAL>(inObject);
+        }
+
+        public BLLAppDTO.UserNotificationBLL MapUserNotificationDALToBLL(DALAppDTO.UserNotificationDAL inObject)
+        {
+            return Mapper.Map<BLLAppDTO.UserNotificationBLL>(inObject);
+        }
     }
 }

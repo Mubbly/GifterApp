@@ -8,6 +8,7 @@ namespace Contracts.DAL.App.Repositories
 {
     public interface IGiftRepository : IBaseRepository<DALAppDTO.GiftDAL>, IGiftRepositoryCustom
     {
-        Task<IEnumerable<DALAppDTO.GiftDAL>> GetAllForUserAsync(Guid userId, bool noTracking = true);
+        Task<IEnumerable<DALAppDTO.GiftDAL>> GetAllInWishlistForUserAsync(Guid userId, bool noTracking = true);
+        Task<IEnumerable<DALAppDTO.GiftDAL>> GetAllArchivedForUserAsync(Guid userId, bool noTracking = true);
     }
 }

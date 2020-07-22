@@ -6,17 +6,19 @@ namespace PublicApi.DTO.v1
 {
     public class ArchivedGiftDTO
     {
-        public bool IsConfirmed { get; set; }
-
         [MaxLength(2048)] [MinLength(3)] public string? Comment { get; set; }
 
         public Guid GiftId { get; set; }
         
         public Guid UserReceiverId { get; set; }
+        
+        public Guid UserGiverId { get; set; }
     }
     
     public class ArchivedGiftResponseDTO : ArchivedGiftDTO
     {
+        public bool IsConfirmed { get; set; }
+
         public DateTime DateArchived { get; set; }
     }
     

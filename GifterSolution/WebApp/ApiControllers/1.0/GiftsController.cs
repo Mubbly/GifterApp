@@ -69,7 +69,7 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(V1DTO.ActionTypeDTO))]
         public async Task<ActionResult<IEnumerable<V1DTO.GiftDTO>>> GetGifts(Guid userId)
         {
-            var personalGifts = await _bll.Gifts.GetAllForUserAsync(userId);
+            var personalGifts = await _bll.Gifts.GetAllInWishlistForUserAsync(userId);
             if (personalGifts == null)
             {
                 return NotFound(new V1DTO.MessageDTO($"Gifts not found"));
@@ -109,10 +109,10 @@ namespace WebApp.ApiControllers._1._0
         [Produces("application/json")]
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(V1DTO.ActionTypeDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(V1DTO.GiftDTO))]
         public async Task<ActionResult<IEnumerable<V1DTO.GiftDTO>>> GetPersonalGifts()
         {
-            var personalGifts = await _bll.Gifts.GetAllForUserAsync(User.UserGuidId());
+            var personalGifts = await _bll.Gifts.GetAllInWishlistForUserAsync(User.UserGuidId());
             if (personalGifts == null)
             {
                 return NotFound(new V1DTO.MessageDTO("Gifts not found"));
@@ -459,7 +459,7 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.GiftDTO>))]
         public async Task<ActionResult<IEnumerable<V1DTO.GiftDTO>>> GetAllPendingReceivedArchivedGifts()
         {
-            var pendingReceivedGifts = (await _bll.Gifts.GetAllPendingReceivedForUserAsync(User.UserGuidId(), false))
+            var pendingReceivedGifts = (await _bll.Gifts.GetAllPendingArchivedForUserAsync(User.UserGuidId(), false))
                 .Select(e => _mapper.Map(e));
             return Ok(pendingReceivedGifts);
         }
@@ -524,67 +524,79 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> PutPendingArchivedGift(Guid giftId, V1DTO.ArchivedGiftDTO archivedGiftDTO)
         {
-            throw new NotImplementedException();
-            // // Don't allow wrong data
-            // if (giftDTO.GiftId.Equals(Guid.Empty) || giftDTO.UserReceiverId.Equals(Guid.Empty) 
-            //                                               || giftId != giftDTO.GiftId)
-            // {
-            //     return BadRequest(new V1DTO.MessageDTO($"Could not find gift with id {giftId.ToString()} or {giftDTO.GiftId}"));
-            // }
-            // // Mark gifted and archive
-            // var confirmedArchivedGift = _mapper.Map(await _bll.Gifts.MarkAsGiftedAsync(_mapper.MapReservedGiftDTOToBLL(giftDTO), User.UserGuidId()));
-            // if (confirmedArchivedGift == null)
-            // {
-            //     _logger.LogError($"EDIT. No such reserved Gift: {giftDTO.GiftId}, user: {User.UserGuidId().ToString()}");
-            //     return NotFound(new V1DTO.MessageDTO($"No reserved Gift found for id {giftId.ToString()}"));
-            // }
-            // // Save updates to db
-            // await _bll.SaveChangesAsync();
-            //
-            // return NoContent();
+            // Don't allow wrong data
+            if (archivedGiftDTO.GiftId.Equals(Guid.Empty) 
+                || archivedGiftDTO.UserGiverId.Equals(Guid.Empty)
+                || giftId != archivedGiftDTO.GiftId)
+            {
+                return BadRequest(new V1DTO.MessageDTO($"Could not find gift with id {giftId.ToString()} or {archivedGiftDTO.GiftId}"));
+            }
+            // Make sure target gift exists and is in pending archival status
+            var targetGift = await _bll.Gifts.GetPendingArchivedForUserAsync(giftId, User.UserGuidId());
+            if(targetGift == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Could not find gift with id {giftId.ToString()}"));
+            }
+            // Confirm getting this gift / archive it
+            var confirmedArchivedGift = _mapper.Map(await _bll.Gifts.ConfirmPendingArchivedAsync(_mapper.MapArchivedGiftDTOToBLL(archivedGiftDTO), User.UserGuidId()));
+            if (confirmedArchivedGift == null)
+            {
+                _logger.LogError($"EDIT. No such pending received Gift: {archivedGiftDTO.GiftId}, user: {User.UserGuidId().ToString()}");
+                return NotFound(new V1DTO.MessageDTO($"No pending received Gift found for id {giftId.ToString()}"));
+            }
+            // Save updates to db
+            await _bll.SaveChangesAsync();
+            
+            return NoContent();
         }
         
-        // PUT: api/Gifts/Archived/5
+        // POST: api/Gifts/Reactivated
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         /// <summary>
-        ///     Update confirmed Archived Gift - reactivate it
+        ///     "Reactivate" archived entry - add new Gift with the same data that the existing confirmed archived gift has
         /// </summary>
-        /// <param name="giftId"></param>
         /// <param name="archivedGiftDTO"></param>
         /// <returns></returns>
-        [HttpPut("archived/{giftId}")]
+        [HttpPost("reactivated")]
         [Produces("application/json")]
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> PutArchivedGift(Guid giftId, V1DTO.ArchivedGiftDTO archivedGiftDTO)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(V1DTO.GiftDTO))]
+        public async Task<ActionResult<V1DTO.GiftDTO>> PostGift(V1DTO.ArchivedGiftDTO archivedGiftDTO)
         {
-            throw new NotImplementedException();
-            // // Don't allow wrong data
-            // if (giftDTO.GiftId.Equals(Guid.Empty) || giftDTO.UserReceiverId.Equals(Guid.Empty) 
-            //                                               || giftId != giftDTO.GiftId)
-            // {
-            //     return BadRequest(new V1DTO.MessageDTO($"Could not find gift with id {giftId.ToString()} or {giftDTO.GiftId}"));
-            // }
-            // // Mark gifted and archive
-            // var updatedArchivedGift = _mapper.Map(await _bll.Gifts.MarkAsGiftedAsync(_mapper.MapReservedGiftDTOToBLL(giftDTO), User.UserGuidId()));
-            // if (updatedArchivedGift == null)
-            // {
-            //     _logger.LogError($"EDIT. No such reserved Gift: {giftDTO.GiftId}, user: {User.UserGuidId().ToString()}");
-            //     return NotFound(new V1DTO.MessageDTO($"No reserved Gift found for id {giftId.ToString()}"));
-            // }
-            // // Save updates to db
-            // await _bll.SaveChangesAsync();
-            //
-            // return NoContent();
+            if (archivedGiftDTO.GiftId.Equals(Guid.Empty) || archivedGiftDTO.UserGiverId.Equals(Guid.Empty))
+            {
+                return BadRequest(new V1DTO.MessageDTO($"Could not find gift with id {archivedGiftDTO.GiftId.ToString()}"));
+            }
+            // Make sure target gift exists and is in archived status
+            var targetGift = await _bll.Gifts.GetArchivedForUserAsync(archivedGiftDTO.GiftId, User.UserGuidId());
+            if(targetGift == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Could not find gift with id {archivedGiftDTO.GiftId.ToString()}"));
+            }
+            // Add new gift based on archived gift
+            var archivedGiftBLL = _mapper.MapArchivedGiftDTOToBLL(archivedGiftDTO);
+            var newGift = _mapper.Map(await _bll.Gifts.ReactivateArchivedAsync(archivedGiftBLL, User.UserGuidId()));
+            if (newGift == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Could not find gift with id {archivedGiftDTO.GiftId.ToString()}"));
+            }
+            // Save to db
+            await _bll.SaveChangesAsync();
+
+            // Send back updated Gift
+            return CreatedAtAction(
+                "GetPersonalGift",
+                new {id = archivedGiftBLL.GiftId, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
+                newGift
+            );
         }
-        
+
         // DELETE: api/Gifts/Archived/Pending/5
         /// <summary>
-        ///     Delete pending Archived Gift - Decline archival, change Gift back to active status
+        ///     Delete pending Archived Gift - Deny archival, change Gift back to active status
         /// </summary>
         /// <param name="giftId"></param>
         /// <param name="archivedGiftDTO"></param>
@@ -597,30 +609,30 @@ namespace WebApp.ApiControllers._1._0
         public async Task<ActionResult<V1DTO.GiftDTO>> DeletePendingArchivedGift(Guid giftId,
             V1DTO.ArchivedGiftDTO archivedGiftDTO)
         {
-            throw new NotImplementedException();
-            // // Don't allow wrong data
-            // if (giftDTO.GiftId.Equals(Guid.Empty) || giftDTO.UserReceiverId.Equals(Guid.Empty) 
-            //                                               || giftId != giftDTO.GiftId)
-            // {
-            //     return BadRequest(new V1DTO.MessageDTO($"Could not find gift with id {giftId.ToString()} or {giftDTO.GiftId}"));
-            // }
-            // // Cancel reservation, reactivate Gift
-            // var deletedPendingGift = _mapper.Map(await _bll.Gifts.CancelReservationAsync(_mapper.MapReservedGiftDTOToBLL(giftDTO), User.UserGuidId()));
-            // if (deletedPendingGift == null)
-            // {
-            //     _logger.LogError($"DELETE. No such reservedGift: {giftId.ToString()}, user: {User.UserGuidId().ToString()}");
-            //     return NotFound(new V1DTO.MessageDTO($"ReservedGift with id {giftId.ToString()} not found"));
-            // }
-            // // Save updates to db
-            // await _bll.SaveChangesAsync();
-            //
-            // // Send back updated Gift with additional info, not deleted ReservedGift (it is just an implementation detail)
-            // return Ok(deletedPendingGift);
+            // Don't allow wrong data
+            if (archivedGiftDTO.GiftId.Equals(Guid.Empty) 
+                || archivedGiftDTO.UserGiverId.Equals(Guid.Empty) 
+                || giftId != archivedGiftDTO.GiftId)
+            {
+                return BadRequest(new V1DTO.MessageDTO($"Could not find gift with id {giftId.ToString()} or {archivedGiftDTO.GiftId}"));
+            }
+            // Deny getting gift and reactivate it instead
+            var reactivatedGift = _mapper.Map(await _bll.Gifts.DenyPendingArchivedAsync(_mapper.MapArchivedGiftDTOToBLL(archivedGiftDTO), User.UserGuidId()));
+            if (reactivatedGift == null)
+            {
+                _logger.LogError($"DELETE. No such reservedGift: {giftId.ToString()}, user: {User.UserGuidId().ToString()}");
+                return NotFound(new V1DTO.MessageDTO($"ReservedGift with id {giftId.ToString()} not found"));
+            }
+            // Save updates to db
+            await _bll.SaveChangesAsync();
+            
+            // Send back updated Gift with additional info, not deleted ReservedGift (it is just an implementation detail)
+            return Ok(reactivatedGift);
         }
         
         // DELETE: api/Gifts/Archived/5
         /// <summary>
-        ///     Delete Archived Gift - Delete all info about this Gift (except from giver Friend's archive). Cannot be undone.
+        ///     Delete Archived Gift - Delete all info about this Gift (except from giver Friend's archive). Cannot be undone!
         /// </summary>
         /// <param name="giftId"></param>
         /// <param name="archivedGiftDTO"></param>
@@ -630,28 +642,70 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.ArchivedGiftDTO>))]
-        public async Task<ActionResult<V1DTO.GiftDTO>> DeleteArchivedGift(Guid giftId,
-            V1DTO.ArchivedGiftDTO archivedGiftDTO)
+        public async Task<ActionResult<V1DTO.GiftDTO>> DeleteArchivedGift(Guid giftId, V1DTO.ArchivedGiftDTO archivedGiftDTO) 
         {
-            throw new NotImplementedException();
-            // // Don't allow wrong data
-            // if (giftDTO.GiftId.Equals(Guid.Empty) || giftDTO.UserReceiverId.Equals(Guid.Empty) 
-            //                                               || giftId != giftDTO.GiftId)
-            // {
-            //     return BadRequest(new V1DTO.MessageDTO($"Could not find gift with id {giftId.ToString()} or {giftDTO.GiftId}"));
-            // }
-            // // Cancel reservation, reactivate Gift
-            // var deletedArchivedGift = _mapper.Map(await _bll.Gifts.CancelReservationAsync(_mapper.MapReservedGiftDTOToBLL(giftDTO), User.UserGuidId()));
-            // if (deletedArchivedGift == null)
-            // {
-            //     _logger.LogError($"DELETE. No such reservedGift: {giftId.ToString()}, user: {User.UserGuidId().ToString()}");
-            //     return NotFound(new V1DTO.MessageDTO($"ReservedGift with id {giftId.ToString()} not found"));
-            // }
-            // // Save updates to db
-            // await _bll.SaveChangesAsync();
-            //
-            // // Send back updated Gift with additional info, not deleted ReservedGift (it is just an implementation detail)
-            // return Ok(deletedArchivedGift);
+            // Don't allow wrong data
+            if (archivedGiftDTO.GiftId.Equals(Guid.Empty) 
+                || archivedGiftDTO.UserGiverId.Equals(Guid.Empty) 
+                || giftId != archivedGiftDTO.GiftId)
+            {
+                return BadRequest(new V1DTO.MessageDTO($"Could not find archived gift with id {giftId.ToString()} or {archivedGiftDTO.GiftId}"));
+            }
+            // Delete archived gift
+            var deletedArchivedGift = _mapper.Map(await _bll.Gifts.DeleteArchivedAsync(_mapper.MapArchivedGiftDTOToBLL(archivedGiftDTO), User.UserGuidId()));
+            if (deletedArchivedGift == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Could not find archived gift with id {giftId.ToString()}"));
+            }
+            // Save updates to db
+            await _bll.SaveChangesAsync();
+            
+            // Send back updated Gift with additional info, not deleted ReservedGift (it is just an implementation detail)
+            return Ok(deletedArchivedGift);
         }
+        
+        
+        // // PUT: api/Gifts/Archived/5
+        // // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // // more details see https://aka.ms/RazorPagesCRUD.
+        // /// <summary>
+        // ///     Update confirmed Archived Gift - reactivate it
+        // /// </summary>
+        // /// <param name="giftId"></param>
+        // /// <param name="archivedGiftDTO"></param>
+        // /// <returns></returns>
+        // [HttpPut("archived/{giftId}")]
+        // [Produces("application/json")]
+        // [Consumes("application/json")]
+        // [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
+        // [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
+        // [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        // [ProducesResponseType(StatusCodes.Status204NoContent)]
+        // public async Task<IActionResult> PutArchivedGift(Guid giftId, V1DTO.ArchivedGiftDTO archivedGiftDTO)
+        // {
+        //     // Don't allow wrong data
+        //     if (archivedGiftDTO.GiftId.Equals(Guid.Empty) 
+        //         || archivedGiftDTO.UserGiverId.Equals(Guid.Empty)
+        //         || giftId != archivedGiftDTO.GiftId) {
+        //         return BadRequest(new V1DTO.MessageDTO($"Could not find gift with id {giftId.ToString()} or {archivedGiftDTO.GiftId}"));
+        //     }
+        //     // Make sure target gift exists and is in archived status
+        //     var targetGift = await _bll.Gifts.GetArchivedForUserAsync(giftId, User.UserGuidId());
+        //     if(targetGift == null)
+        //     {
+        //         return NotFound(new V1DTO.MessageDTO($"Could not find gift with id {giftId.ToString()}"));
+        //     }
+        //     // Reactivate this gift
+        //     var reactivatedGift = _mapper.Map(await _bll.Gifts.ReactivateArchivedAsync(_mapper.MapArchivedGiftDTOToBLL(archivedGiftDTO), User.UserGuidId()));
+        //     if (reactivatedGift == null)
+        //     {
+        //         _logger.LogError($"EDIT. No such pending received Gift: {archivedGiftDTO.GiftId}, user: {User.UserGuidId().ToString()}");
+        //         return NotFound(new V1DTO.MessageDTO($"No pending received Gift found for id {giftId.ToString()}"));
+        //     }
+        //     // Save updates to db
+        //     await _bll.SaveChangesAsync();
+        //     
+        //     return NoContent();
+        // }
     }
 }

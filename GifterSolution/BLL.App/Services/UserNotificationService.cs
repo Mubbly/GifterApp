@@ -1,4 +1,6 @@
-﻿using BLL.App.Mappers;
+﻿using System;
+using System.Threading.Tasks;
+using BLL.App.Mappers;
 using com.mubbly.gifterapp.BLL.Base.Services;
 using Contracts.BLL.App.Mappers;
 using Contracts.BLL.App.Services;
@@ -17,6 +19,24 @@ namespace BLL.App.Services
         public UserNotificationService(IAppUnitOfWork uow) : base(uow, uow.UserNotifications,
             new UserNotificationServiceMapper())
         {
+        }
+        
+        /**
+         * Change active notification to inactive status
+         * @param userId is mandatory and represents current user's Id
+         */
+        public new async Task<BLLAppDTO.UserNotificationBLL> UpdateAsync(BLLAppDTO.UserNotificationBLL entity, object? userId = null)
+        {
+            // UserId is mandatory for updating Notification
+            if (userId == null)
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+            // Update notification to inactive status
+            entity.IsActive = false;
+            entity.AppUserId = new Guid(userId.ToString());
+            entity.NotificationId = entity.NotificationId;
+            return await base.UpdateAsync(entity, userId);
         }
     }
 }

@@ -14,6 +14,6 @@ namespace Contracts.DAL.App.Repositories
         Task<DALAppDTO.ArchivedGiftDAL> GetGiftedByGiftIdAsync(Guid giftId, Guid? userId = null, bool noTracking = true);
         Task<DALAppDTO.ArchivedGiftDAL> GetReceivedByGiftIdAsync(Guid giftId, Guid? userId = null, bool noTracking = true);
         Task<DALAppDTO.ArchivedGiftDAL> GetPendingReceivedByGiftIdAsync(Guid giftId, Guid? userId = null, bool noTracking = true);
-
+        
     }
 }

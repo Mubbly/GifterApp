@@ -20,11 +20,11 @@ export class FriendshipsIndex {
     // private _pendingFriendships: Optional<IFriendshipResponse[]> = null;
     private _pendingSentFriendships: Optional<IFriendshipResponse[]> = null;
     private _pendingReceivedFriendships: Optional<IFriendshipResponse[]> = null;
-    private _noPendingFriendships: boolean = this._pendingSentFriendships === null && this._pendingReceivedFriendships === null;
+    private _noPendingFriendships: boolean = true;
 
     private _successMessage: Optional<string> = null;
     private _errorMessage: Optional<string> = null;
-    private _noPendingFriendshipsMessage: string = this.MESSAGE_NO_PENDING_FRIENDSHIPS;
+    private _noPendingFriendshipsMessage: Optional<string> = null;
 
     constructor(private friendshipService: FriendshipService, 
         private router: Router, private appState: AppState) {}
@@ -35,6 +35,7 @@ export class FriendshipsIndex {
         }
         this.getPersonalSentFriendRequests();
         this.getPersonalReceivedFriendRequests();
+        this._noPendingFriendships = !this._pendingSentFriendships!.length && !this._pendingReceivedFriendships!.length; // TODO: fix
     }
 
     onAcceptFriend(event: Event, friendId: string) {
@@ -47,8 +48,8 @@ export class FriendshipsIndex {
         this.deleteFriendship(friendId);
     }
 
-    private getPersonalSentFriendRequests(): void {
-        this.friendshipService
+    private getPersonalSentFriendRequests(): Promise<void> {
+        return this.friendshipService
         .getAllSentPendingFriendships()
         .then((response) => {
             if (!UtilFunctions.isSuccessful(response)) {
@@ -68,8 +69,8 @@ export class FriendshipsIndex {
         });
     }
     
-    private getPersonalReceivedFriendRequests(): void {
-        this.friendshipService
+    private getPersonalReceivedFriendRequests(): Promise<void> {
+        return this.friendshipService
         .getAllReceivedPendingFriendships()
         .then((response) => {
             if (!UtilFunctions.isSuccessful(response)) {

@@ -33,7 +33,7 @@ export class GiftsDelete {
         .then(
             response => {
                 if (UtilFunctions.isSuccessful(response)) {
-                    this.router.navigateToRoute('giftsIndex', {});
+                    this.router.navigateToRoute(Utils.PERSONAL_PROFILE_ROUTE);
                 } else {
                     this._errorMessage = UtilFunctions.getErrorMessage(response);
 
@@ -45,7 +45,9 @@ export class GiftsDelete {
 
     private getGift(id: string): void {
         if(UtilFunctions.existsAndIsString(id)) {
-            this.giftService.get(id).then(
+            this.giftService
+            .getPersonal(id)
+            .then(
                 response => {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._gift = response.data!;

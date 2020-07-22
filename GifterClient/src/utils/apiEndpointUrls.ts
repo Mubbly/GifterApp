@@ -26,5 +26,15 @@ export const USER_NOTIFICATIONS = 'UserNotifications';
 export const USER_PERMISSIONS = 'UserPermissions';
 export const USER_PROFILES = 'UserProfiles';
 export const WISHLISTS = 'Wishlists';
-// Personal
+// States
+export const RESERVED = 'Reserved';
+export const ARCHIVED = 'Archived';
+export const PENDING = 'Pending';
+export const REACTIVATED = 'Reactivated';
+export const GIVEN = 'Given';
+export const RECEIVED = 'Received';
+export const ACTIVE = 'Active';
+export const INACTIVE = 'Inactive';
+// User specific
 export const PERSONAL = 'Personal';
+export const USER = 'User';

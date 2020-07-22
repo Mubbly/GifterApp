@@ -345,6 +345,24 @@ textarea {
     font-style: italic;
 }
 
+.full-width {
+    width: 100%;
+    min-width: 100%;
+}
+
+.icon:hover {
+    box-shadow: 0 0 0.5rem #C5CAE9 !important;
+    /* box-shadow: 0 2px 2px 0 #C5CAE9, 0 2px 2px 0 #C5CAE9; */
+    border-color: #9FA8DA !important;
+    border-radius: 50%;
+}
+
+.no-hover.icon:hover {
+    box-shadow: none !important;
+    border-color: none !important;
+    border-radius: 100% !important;
+}
+
 .reserved-actions {
     margin: 0 25px 0 0;
 }
@@ -761,6 +779,10 @@ table tbody tr:first-of-type {
     border-top: none;
 }
 
+.button.homepage {
+    background-color: #9FA8DA !important;
+}
+
 
 /* DARK THEME */
 
@@ -837,6 +859,10 @@ body.dark-theme .button,
 body.dark-theme input[type='submit']:not(.search-button) {
     background: #7E57C2 !important;
     border: 1px solid #7E57C2 !important;
+}
+
+body.dark-theme .button.homepage {
+    background-color: #9575CD !important;
 }
 
 body.dark-theme .button:hover,

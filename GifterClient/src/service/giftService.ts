@@ -6,6 +6,7 @@ import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
 import { AppState } from 'state/appState';
 import { IFetchResponse } from 'types/IFetchResponse';
 import { IReservedGift, IReservedGiftEdit } from '../domain/IReservedGift';
+import { IArchivedGiftEdit, IArchivedGiftPendingEdit } from '../domain/IArchivedGift';
 
 @autoinject
 export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
@@ -17,7 +18,7 @@ export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/User/${userId}`, {
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.USER}/${userId}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
@@ -50,7 +51,7 @@ export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/Reserved/${ApiEndpointUrls.PERSONAL}`, {
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.RESERVED}/${ApiEndpointUrls.PERSONAL}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
@@ -81,7 +82,7 @@ export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/Reserved/${ApiEndpointUrls.PERSONAL}/${giftId}`, {
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.RESERVED}/${ApiEndpointUrls.PERSONAL}/${giftId}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
@@ -119,7 +120,7 @@ export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
             comment: null
         }
         try {
-            const response = await this.httpClient.post(`${this.apiEndpointUrl}/Reserved`, 
+            const response = await this.httpClient.post(`${this.apiEndpointUrl}/${ApiEndpointUrls.RESERVED}`, 
                 JSON.stringify(targetReservedGift),
                 { 
                     cache: "no-store",
@@ -157,7 +158,7 @@ export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
             comment: null
         }
         try {
-            const response = await this.httpClient.put(`${this.apiEndpointUrl}/Reserved/${targetGiftId}`, 
+            const response = await this.httpClient.put(`${this.apiEndpointUrl}/${ApiEndpointUrls.RESERVED}/${targetGiftId}`, 
             JSON.stringify(targetReservedGift),
                 { 
                     cache: "no-store",
@@ -194,7 +195,7 @@ export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
             comment: null
         }
         try {
-            const response = await this.httpClient.delete(`${this.apiEndpointUrl}/Reserved/${targetGiftId}`, 
+            const response = await this.httpClient.delete(`${this.apiEndpointUrl}/${ApiEndpointUrls.RESERVED}/${targetGiftId}`, 
                 JSON.stringify(targetReservedGift),
                 { 
                     cache: "no-store",
@@ -228,7 +229,7 @@ export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/Archived/Given`, {
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.ARCHIVED}/${ApiEndpointUrls.GIVEN}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
@@ -259,7 +260,7 @@ export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/Archived/Received`, {
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.ARCHIVED}/${ApiEndpointUrls.RECEIVED}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
@@ -290,7 +291,7 @@ export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/Archived/Received/Pending`, {
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.ARCHIVED}/${ApiEndpointUrls.RECEIVED}/${ApiEndpointUrls.PENDING}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
@@ -321,7 +322,7 @@ export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/Archived/Given/${giftId}`, {
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.ARCHIVED}/${ApiEndpointUrls.GIVEN}/${giftId}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
@@ -352,7 +353,7 @@ export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/Archived/Received/${giftId}`, {
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.ARCHIVED}/${ApiEndpointUrls.RECEIVED}/${giftId}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
@@ -371,6 +372,182 @@ export class GiftService extends BaseService<IGift, IGiftCreate, IGiftEdit> {
                 errorMessage: response.statusText
             }
 
+        } catch (reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
+    }
+
+    /** Confirm you got this gift - add to archive */
+    async confirmArchival(entity: IGift): Promise<IFetchResponse<IGift[]>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
+
+        if(entity.userGiverId === null || entity.userGiverId === '') {
+            return {
+                status: 400,
+                errorMessage: 'Bad request - userGiverId missing'
+            }
+        }
+        const targetGiftId = entity.id;
+        const targetArchivedGift: IArchivedGiftPendingEdit = {
+            giftId: targetGiftId,
+            userGiverId: entity.userGiverId!,
+            comment: null
+        }
+        try {
+            const response = await this.httpClient.put(`${this.apiEndpointUrl}/${ApiEndpointUrls.ARCHIVED}/${ApiEndpointUrls.PENDING}/${targetGiftId}`, 
+                JSON.stringify(targetArchivedGift),
+                {
+                    cache: "no-store",
+                    headers: AUTH_HEADERS
+                }
+            );
+
+            if(response.ok) {
+                console.log('response', response);
+                return {
+                    status: response.status
+                    // no data
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+        } catch (reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
+    }
+
+    /** Deny you got this gift - reactivate it */
+    async denyArchival(entity: IGift): Promise<IFetchResponse<IGift[]>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
+
+        if(entity.userGiverId === null || entity.userGiverId === '') {
+            return {
+                status: 400,
+                errorMessage: 'Bad request - userGiverId missing'
+            }
+        }
+        const targetGiftId = entity.id;
+        const targetArchivedGift: IArchivedGiftPendingEdit = {
+            giftId: targetGiftId,
+            userGiverId: entity.userGiverId!,
+            comment: null
+        }
+        try {
+            const response = await this.httpClient.delete(`${this.apiEndpointUrl}/${ApiEndpointUrls.ARCHIVED}/${ApiEndpointUrls.PENDING}/${targetGiftId}`, 
+                JSON.stringify(targetArchivedGift),
+                { 
+                    cache: "no-store",
+                    headers: AUTH_HEADERS
+                }
+            );
+
+            if(response.ok) {
+                console.log('response', response);
+                return {
+                    status: response.status
+                    // no data
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+        } catch (reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
+    }
+
+    /** Reactivate already confirmed archived Gift to have someone gift it again. Current archival entry will be kept */
+    async reactivateArchived(entity: IGift): Promise<IFetchResponse<IGift[]>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
+
+        if(entity.userGiverId === null || entity.userGiverId === '') {
+            return {
+                status: 400,
+                errorMessage: 'Bad request - userGiverId missing'
+            }
+        }
+        const targetGiftId = entity.id;
+        const targetArchivedGift: IArchivedGiftPendingEdit = {
+            giftId: targetGiftId,
+            userGiverId: entity.userGiverId!,
+            comment: null
+        }
+        try {
+            const response = await this.httpClient.post(`${this.apiEndpointUrl}/${ApiEndpointUrls.REACTIVATED}`, 
+                JSON.stringify(targetArchivedGift),
+                { 
+                    cache: "no-store",
+                    headers: AUTH_HEADERS
+                }
+            );
+
+            if(response.ok) {
+                console.log('response', response);
+                return {
+                    status: response.status
+                    // no data
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
+        } catch (reason) {
+            return {
+                status: 0,
+                errorMessage: JSON.stringify(reason)
+            }
+        }
+    }
+
+    /** Delete already confirmed archived Gift, will no longer appear in your archive or anywhere else */
+    async deleteArchived(entity: IGift): Promise<IFetchResponse<IGift[]>> {
+        const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
+
+        if(entity.userGiverId === null || entity.userGiverId === '') {
+            return {
+                status: 400,
+                errorMessage: 'Bad request - userGiverId missing'
+            }
+        }
+        const targetGiftId = entity.id;
+        const targetArchivedGift: IArchivedGiftPendingEdit = {
+            giftId: targetGiftId,
+            userGiverId: entity.userGiverId!,
+            comment: null
+        }
+        try {
+            const response = await this.httpClient.delete(`${this.apiEndpointUrl}/${ApiEndpointUrls.ARCHIVED}/${targetGiftId}`, 
+                JSON.stringify(targetArchivedGift),
+                { 
+                    cache: "no-store",
+                    headers: AUTH_HEADERS
+                }
+            );
+
+            if(response.ok) {
+                console.log('response', response);
+                return {
+                    status: response.status
+                    // no data
+                }
+            }
+            return {
+                status: response.status,
+                errorMessage: response.statusText
+            }
         } catch (reason) {
             return {
                 status: 0,

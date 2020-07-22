@@ -24,12 +24,14 @@ namespace BLL.App.DTO
         public bool IsPinned { get; set; }
         
         // TODO: Move to separate GiftResponseDTO
-        public DateTime? ReservedFrom { get; set; } = null;
-        public DateTime? ArchivedFrom { get; set; } = null;
-        public Guid? UserGiverId { get; set; } = null;
-        public Guid? UserReceiverId { get; set; } = null;
-        public string? UserReceiverName { get; set; } = null;
-        public string? UserGiverName { get; set; } = null;
+        public DateTime? ReservedFrom { get; set; }
+        public DateTime? ArchivedFrom { get; set; }
+
+        public bool? IsArchivalConfirmed { get; set; } = false;
+        public Guid? UserGiverId { get; set; }
+        public Guid? UserReceiverId { get; set; }
+        public string? UserReceiverName { get; set; }
+        public string? UserGiverName { get; set; }
 
         public Guid ActionTypeId { get; set; }
         public ActionTypeBLL? ActionType { get; set; } = default!;

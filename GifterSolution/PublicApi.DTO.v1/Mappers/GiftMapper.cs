@@ -9,6 +9,10 @@ namespace PublicApi.DTO.v1.Mappers
             return Mapper.Map<BLLAppDTO.ReservedGiftBLL>(inObject);
         }
         
+        public BLLAppDTO.ArchivedGiftBLL MapArchivedGiftDTOToBLL(ArchivedGiftDTO inObject)
+        {
+            return Mapper.Map<BLLAppDTO.ArchivedGiftBLL>(inObject);
+        }
         // public ReservedGiftResponseDTO MapReservedGiftResponseBLLToResponseDTO(BLLAppDTO.ReservedGiftResponseBLL inObject)
         // {
         //     return Mapper.Map<ReservedGiftResponseDTO>(inObject);

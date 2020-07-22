@@ -34,14 +34,14 @@ export class ArchivedGiftsIndex {
         this.getReceivedGifts();
     }
 
-    onConfirm(event: Event, gift: IGift) {
+    onConfirmReceiving(event: Event, gift: IGift) {
         event.preventDefault();
-        this.confirmArchival(gift);
+        this.confirmReceiving(gift);
     }
 
-    onDeny(event: Event, gift: IGift) {
+    onDenyReceiving(event: Event, gift: IGift) {
         event.preventDefault();
-        this.denyArchival(gift);
+        this.denyReceiving(gift);
     }
 
     onReactivate(event: Event, gift: IGift) {
@@ -79,6 +79,29 @@ export class ArchivedGiftsIndex {
         });
     }
 
+    private getPendingReceivedGifts(): void {
+        this.giftService
+        .getAllPendingReceivedArchived()
+        .then((response) => {
+            if(!Utils.isSuccessful(response)) {
+                this.handleErrors(response);
+            } else {
+                if(!response.data || response.data.length <= 0) {
+                    return;
+                }
+                this._pendingReceivedGifts = response.data;
+                this._pendingReceivedGifts.forEach(gift => {
+                    if(gift.archivedFrom) {
+                        gift.archivedFrom = Utils.formatAsHtml5Date(gift.archivedFrom);
+                    }
+                });
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
     private getReceivedGifts(): void {
         this.giftService
         .getAllReceivedArchived()
@@ -104,22 +127,14 @@ export class ArchivedGiftsIndex {
         });
     }
 
-    private getPendingReceivedGifts(): void {
+    private confirmReceiving(gift: IGift): void {
         this.giftService
-        .getAllPendingReceivedArchived()
+        .confirmArchival(gift)
         .then((response) => {
             if(!Utils.isSuccessful(response)) {
                 this.handleErrors(response);
             } else {
-                if(!response.data || response.data.length <= 0) {
-                    return;
-                }
-                this._pendingReceivedGifts = response.data;
-                this._pendingReceivedGifts.forEach(gift => {
-                    if(gift.archivedFrom) {
-                        gift.archivedFrom = Utils.formatAsHtml5Date(gift.archivedFrom);
-                    }
-                });
+                Utils.refreshPage(); // TODO: Some better approach to update data on the page?
             }
         })
         .catch((error) => {
@@ -127,20 +142,49 @@ export class ArchivedGiftsIndex {
         });
     }
 
-    private confirmArchival(gift: IGift): void {
-        //TODO
-    }
-
-    private denyArchival(gift: IGift): void {
-        //TODO
+    private denyReceiving(gift: IGift): void {
+        this.giftService
+        .denyArchival(gift)
+        .then((response) => {
+            if(!Utils.isSuccessful(response)) {
+                this.handleErrors(response);
+            } else {
+                Utils.refreshPage(); // TODO: Some better approach to update data on the page?
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     private reactivate(gift: IGift): void {
-        //TODO
+        this.giftService
+        .reactivateArchived(gift)
+        .then((response) => {
+            if(!Utils.isSuccessful(response)) {
+                this.handleErrors(response);
+            } else {
+                this.router.navigateToRoute(Utils.PERSONAL_PROFILE_ROUTE);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     private delete(gift: IGift): void {
-        //TODO
+        this.giftService
+        .deleteArchived(gift)
+        .then((response) => {
+            if(!Utils.isSuccessful(response)) {
+                this.handleErrors(response);
+            } else {
+                Utils.refreshPage(); // TODO: Some better approach to update data on the page?
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     /**
