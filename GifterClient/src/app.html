@@ -12,7 +12,8 @@
 
                     <ul if.bind="!appState.jwt" class="navbar-nav account">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" route-href="route: accountRegister; params.bind: {}">Register</a>
+                            <a class="nav-link text-dark"
+                                route-href="route: accountRegister; params.bind: {}">Register</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" route-href="route: accountLogin; params.bind: {}">Login</a>
@@ -21,33 +22,54 @@
 
                     <ul class="navbar-nav account flex">
                         <li class="nav-item">
-                            <a if.bind="!appState.isDarkTheme" href="#" click.delegate="onToggleTheme($event)" class="nav-link" title="Toggle theme"><img src="/icons/icon-switch-on.png" class="icon no-hover on"/></a>
-                            <a if.bind="appState.isDarkTheme" href="#" click.delegate="onToggleTheme($event)" class="nav-link" title="Toggle theme"><img src="/icons/icon-switch-off.png" class="icon no-hover off"/></a>
+                            <a if.bind="!appState.isDarkTheme" href="#" click.delegate="onToggleTheme($event)"
+                                class="nav-link" title="Toggle theme"><img src="/icons/icon-switch-on.png"
+                                    class="icon no-hover on" /></a>
+                            <a if.bind="appState.isDarkTheme" href="#" click.delegate="onToggleTheme($event)"
+                                class="nav-link" title="Toggle theme"><img src="/icons/icon-switch-off.png"
+                                    class="icon no-hover off" /></a>
                         </li>
                         <li if.bind="appState.jwt" class="nav-item dropdown">
-                            <a href="#" role="button" class="nav-link text-dark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Notifications">
-                                <img src="/icons/icon-notifications-white-m.png" class="icon no-hover notifications"/>
+                            <a if.bind="_notifications.length" href="#" role="button" class="nav-link text-dark"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Notifications">
+                                <img if.bind="appState.isDarkTheme" src="/icons/icon-new-notifications-white-m.png"
+                                    class="icon no-hover notifications" />
+                                <img if.bind="!appState.isDarkTheme" src="/icons/icon-new-notifications-m.png"
+                                    class="icon no-hover notifications" />
                             </a>
-                                <div if.bind="_notifications" repeat.for="notification of _notifications" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#" click.delegate="onNotificationClick($event, notification)">${notification.notification.notificationValue}</a>
-                                </div>
-                                <div if.bind="_noNotificationMessage" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <p>${_noNotificationMessage}</p>
-                                </div>
-                              </li>
+                            <a if.bind="!_notifications.length" href="#" role="button" class="nav-link text-dark"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Notifications">
+                                <img if.bind="appState.isDarkTheme" src="/icons/icon-no-notifications-white-m.png"
+                                    class="icon no-hover notifications" />
+                                <img if.bind="!appState.isDarkTheme" src="/icons/icon-no-notifications-m.png"
+                                    class="icon no-hover notifications" />
+                            </a>
+                            <div if.bind="_notifications.length" repeat.for="notification of _notifications"
+                                class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#"
+                                    click.delegate="onNotificationClick($event, notification)">${notification.notification.notificationValue}</a>
+                            </div>
+                            <div if.bind="_noNotificationMessage" class="dropdown-menu"
+                                aria-labelledby="navbarDropdown">
+                                <p>${_noNotificationMessage}</p>
+                            </div>
+                        </li>
                         </li>
                         <li if.bind="appState.jwt" class="nav-item dropdown">
-                            <a href="#" role="button" class="nav-link text-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Help">Help</a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" route-href="route: profilesPersonal; params.bind: {}">My profile</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" route-href="route: search; params.bind: {}">User search</a>
-                                    <a class="dropdown-item" route-href="route: aboutHelp; params.bind: {}">FAQ</a>
-                                    <a class="dropdown-item" route-href="route: aboutIndex; params.bind: {}">About</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" route-href="route: aboutContacts; params.bind: {}">Contact us</a>
-                                </div>
-                              </li>
+                            <a href="#" role="button" class="nav-link text-dark dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" title="Help">Help</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" route-href="route: profilesPersonal; params.bind: {}">My
+                                    profile</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" route-href="route: search; params.bind: {}">User search</a>
+                                <a class="dropdown-item" route-href="route: aboutHelp; params.bind: {}">FAQ</a>
+                                <a class="dropdown-item" route-href="route: aboutIndex; params.bind: {}">About</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" route-href="route: aboutContacts; params.bind: {}">Contact
+                                    us</a>
+                            </div>
+                        </li>
                         </li>
                         <!-- <div if.bind="appState.jwt" class="separator">|</div> -->
                         <li if.bind="appState.jwt" class="nav-item">
@@ -64,7 +86,7 @@
             </div>
         </nav>
     </header>
-    
+
     <div class="container body">
         <main role="main">
             <router-view></router-view>
@@ -73,7 +95,11 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 – GifterApp by Melissa Eenmaa – Icons from <a href="https://www.materialui.co/icons" title="Material UI">www.materialui.co/icons</a> & <a href="https://icons8.com/" title="Icons8">Icons8</a> & by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+            &copy; 2020 – GifterApp by Melissa Eenmaa – Icons from <a href="https://www.materialui.co/icons"
+                title="Material UI">www.materialui.co/icons</a> & <a href="https://icons8.com/"
+                title="Icons8">Icons8</a> & by <a href="https://www.flaticon.com/authors/freepik"
+                title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">
+                www.flaticon.com</a>
         </div>
     </footer>
 </template>

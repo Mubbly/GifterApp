@@ -30,9 +30,7 @@ export class HomeIndex {
     }
 
     activate(props: any) {
-        if(!this.appState.jwt) {
-            this.router.navigateToRoute(Utils.LOGIN_ROUTE);
-        } else {
+        if(this.appState.jwt) {
             this.getPersonalFullProfile();
             this._userFullName = this.appState.userFullName ? this.appState.userFullName : this.DEFAULT_NAME;
         }
