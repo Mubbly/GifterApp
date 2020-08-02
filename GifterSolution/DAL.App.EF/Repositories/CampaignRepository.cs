@@ -20,20 +20,36 @@ namespace DAL.App.EF.Repositories
             base(dbContext, new DALMapper<DomainApp.Campaign, DALAppDTO.CampaignDAL>())
         {
         }
-        
+
+        /** Includes donatees collection */
+        public new async Task<IEnumerable<DALAppDTO.CampaignDAL>> GetAllAsync(object? userId = null, bool noTracking = true)
+        {
+            var query = PrepareQuery(userId, noTracking);
+            var campaigns =
+                await query
+                    .Include(c => c.CampaignDonatees)
+                    .OrderBy(c => c.CreatedAt)
+                    .Select(c => Mapper.Map(c))
+                    .ToListAsync();
+            return campaigns;
+        }
+
+        /** Includes donatees collection */
         public async Task<IEnumerable<DALAppDTO.CampaignDAL>> GetAllPersonalAsync(Guid userId, bool noTracking = true)
         {
             // TODO : Fix tracking, and populating middle tables by EF?
-            var personalCampaigns = 
+            var userCampaigns = 
                 await RepoDbContext
                     .UserCampaigns
+                    .AsNoTracking()
                     .Include(a => a.Campaign)
+                    .Include(a => a.Campaign!.CampaignDonatees)
                     .Where(cd => cd.AppUserId == userId)
                     .OrderBy(e => e.CreatedAt)
                     .Select(e => Mapper.Map(e.Campaign!))
                     .ToListAsync();
 
-            return personalCampaigns;
+            return userCampaigns;
         }
 
         // public async Task<IEnumerable<Campaign>> AllAsync(Guid? userId = null)

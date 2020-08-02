@@ -6,6 +6,7 @@ import { IFetchResponse } from 'types/IFetchResponse';
 import { IBaseEntity, IBaseCreateEntity, IBaseEditEntity } from 'domain/base/IBaseEntity';
 import { AppState } from 'state/appState';
 import { Optional } from 'types/generalTypes';
+import * as Utils from 'utils/utilFunctions';
 
 @autoinject
 export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBaseCreateEntity, TEntityEdit extends IBaseEditEntity> {
@@ -13,9 +14,9 @@ export class BaseService<TEntity extends IBaseEntity, TEntityCreate extends IBas
     // private _jwt: Optional<string> = null;
 
     constructor(protected apiEndpointUrl: string, protected httpClient: HttpClient, protected appState: AppState) {
-        this.httpClient.configure(config => { // TODO: change environment to backendUrl
+        this.httpClient.configure(config => {
             config
-                .withBaseUrl(Environment.backendUrlLocal)
+                .withBaseUrl(ApiEndpointUrls.API_BASE_URL)
                 .withDefaults({
                     credentials: 'same-origin',
                     headers: {

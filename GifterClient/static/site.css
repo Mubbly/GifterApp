@@ -25,9 +25,6 @@ th {
     white-space: nowrap;
 }
 
-
-/* */
-
 ul.navbar-nav {
     flex-wrap: wrap;
 }
@@ -186,12 +183,42 @@ h1.username {
     margin-top: -20.5%;
 }
 
-.button.add-gift {
+.profile .button.add-gift {
     width: 30%;
 }
 
 .flex.icon-group {
     justify-content: flex-end;
+}
+
+.flex.donatees {
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.card.donatee {
+    width: 100%;
+    flex: 1 0 32%;
+    margin-right: 2rem;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+.donatee-info {
+    flex-direction: column;
+    /* flex: 0 0 80%; */
+}
+
+.donatee-options {
+    justify-self: flex-end;
+    align-items: flex-end;
+    justify-content: space-between;
+    /* flex: 0 0 20%; */
+}
+
+.donatee-date-options {
+    justify-content: space-between;
 }
 
 
@@ -350,7 +377,7 @@ textarea {
     min-width: 100%;
 }
 
-.icon:hover {
+a .icon:hover {
     box-shadow: 0 0 0.5rem #C5CAE9 !important;
     /* box-shadow: 0 2px 2px 0 #C5CAE9, 0 2px 2px 0 #C5CAE9; */
     border-color: #9FA8DA !important;
@@ -654,6 +681,16 @@ a.icon:hover {
 .flex-center {
     justify-self: center;
     align-self: center;
+}
+
+li.theme-toggle.not-authorized {
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+li.theme-toggle a,
+li.notifications a {
+    padding-right: .2rem !important;
 }
 
 

@@ -140,6 +140,7 @@ namespace WebApp.ApiControllers._1._0
         {
             // Create donatee
             var bllEntity = _mapper.Map(donateeDTO);
+            bllEntity.IsActive = true;
             _bll.Donatees.Add(bllEntity, campaignId, User.UserGuidId());
             await _bll.SaveChangesAsync();
 

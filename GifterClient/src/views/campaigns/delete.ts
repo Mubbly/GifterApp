@@ -38,7 +38,7 @@ export class CampaignsDelete {
 
     private getCampaign(id: string): void {
         if (Utils.existsAndIsString(id)) {
-            this.campaignService.get(id).then((response) => {
+            this.campaignService.getPersonal(id).then((response) => {
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {

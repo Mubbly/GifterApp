@@ -50,7 +50,7 @@ namespace DAL.App.EF.Repositories
                 .OrderBy(r => r.CreatedAt)
                 // .Include(r => r.Gift)
                 // .ThenInclude(g => g != null ? g.Wishlist : null)
-                // .ThenInclude(w => w != null ? w.AppUser : null) // TODO: Error InvalidOperationException instance of type Gift cannot be tracked blabla
+                // .ThenInclude(w => w != null ? w.AppUser : null) // TODO: Error InvalidOperationException instance of type Gift cannot be tracked blabla. AsNoTracking?
                 .FirstOrDefaultAsync();
             
             return Mapper.Map(reservedGift);

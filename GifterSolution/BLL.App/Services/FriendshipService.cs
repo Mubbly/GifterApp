@@ -121,12 +121,13 @@ namespace BLL.App.Services
             var existingFriendship = await UOW.Friendships.GetForUserAsync(userGuidId, friendId, true);
             var existingPendingRequest = await UOW.Friendships.GetForUserAsync(userGuidId, friendId, false);
             
+            // TODO: Handle pending relationship differently, confirm it or something in case it is received.
             if (existingFriendship != null || existingPendingRequest != null)
             {
                 // return new BLLAppDTO.FriendshipBLL();
                 throw new NotSupportedException($"Could not add friendship - relationship between users {userGuidId.ToString()} {entity.AppUser2Id} already exists");
             }
-            
+
             // Add new UserNotification for the friend (about friend request)
             var userNotificationBLL = new BLLAppDTO.UserNotificationBLL
             {

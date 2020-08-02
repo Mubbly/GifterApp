@@ -8,6 +8,8 @@ namespace Contracts.DAL.App.Repositories
 {
     public interface ICampaignRepository : IBaseRepository<DALAppDTO.CampaignDAL>, ICampaignRepositoryCustom
     {
+        new Task<IEnumerable<DALAppDTO.CampaignDAL>> GetAllAsync(object? userId = null,
+            bool noTracking = true);
         Task<IEnumerable<DALAppDTO.CampaignDAL>> GetAllPersonalAsync(Guid userId, bool noTracking = true);
     }
 }

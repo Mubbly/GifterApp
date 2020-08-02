@@ -11,6 +11,7 @@ import { AppState } from "state/appState";
 export class CampaignDetails {
     private _campaign: Optional<ICampaign> = null;
     private _errorMessage: Optional<string> = null;
+    private _isCampaignManager = false;
 
     constructor(
         private campaignService: CampaignService,
@@ -42,6 +43,14 @@ export class CampaignDetails {
                 }
             });
         }
+    }
+
+    /** 
+     * Sets _isCampaignManager based on param
+     * HTML view depends on it 
+     */
+    private setCampaignManager(isCampaignManager: boolean) {
+        this._isCampaignManager = isCampaignManager;
     }
 
     /**

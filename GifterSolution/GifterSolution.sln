@@ -36,6 +36,7 @@ ProjectSection(SolutionItems) = preProject
 	..\.gitignore = ..\.gitignore
 	.dockerignore = .dockerignore
 	Dockerfile = Dockerfile
+	..\makefile = ..\makefile
 EndProjectSection
 EndProject
 Global

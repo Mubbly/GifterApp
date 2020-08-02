@@ -43,7 +43,8 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
         public async Task<ActionResult<IEnumerable<V1DTO.CampaignDTO>>> GetCampaigns()
         {
-            return Ok((await _bll.Campaigns.GetAllAsync()).Select(e => _mapper.Map(e)));
+            return Ok((await _bll.Campaigns.GetAllAsync(User.UserGuidId()))
+                .Select(e => _mapper.Map(e)));
         }
 
         // GET: api/Campaigns/5
@@ -62,7 +63,7 @@ namespace WebApp.ApiControllers._1._0
             var campaign = await _bll.Campaigns.FirstOrDefaultAsync(id); 
             if (campaign == null)
             {
-                return NotFound(new V1DTO.MessageDTO($"Campaign with id {id} not found"));
+                return NotFound(new V1DTO.MessageDTO($"Campaign with id {id.ToString()} not found"));
             }
 
             return Ok(_mapper.Map(campaign));
@@ -101,7 +102,7 @@ namespace WebApp.ApiControllers._1._0
             var campaign = await _bll.Campaigns.GetPersonalAsync(id, User.UserGuidId());
             if (campaign == null)
             {
-                return NotFound(new V1DTO.MessageDTO($"Campaign with id {id} not found"));
+                return NotFound(new V1DTO.MessageDTO($"Campaign with id {id.ToString()} not found"));
             }
 
             return Ok(_mapper.Map(campaign));
@@ -138,7 +139,7 @@ namespace WebApp.ApiControllers._1._0
                 return NotFound(new V1DTO.MessageDTO($"No Campaign found for this user with id {id}"));
             }
             // Update existing campaign
-            await _bll.Campaigns.UpdateAsync(_mapper.Map(campaignDTO), User.UserId());
+            await _bll.Campaigns.UpdateAsync(_mapper.Map(campaignDTO), User.UserGuidId());
             await _bll.SaveChangesAsync();
 
             return NoContent();

@@ -5,15 +5,16 @@ import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
 import * as Environment from '../../../config/environment.json';
 import { AppState } from 'state/appState';
 import { IFetchResponse } from 'types/IFetchResponse';
+import * as Utils from 'utils/utilFunctions';
 
 @autoinject
 export class AppUserService {
-    private readonly appUserApiEndpointUrl = ApiEndpointUrls.APP_USERS;
+    private readonly appUserEndpointUrl = ApiEndpointUrls.APP_USERS;
 
     constructor(protected httpClient: HttpClient, protected appState: AppState) {
-        this.httpClient.configure(config => { // TODO: change environment to backendUrl
+        this.httpClient.configure(config => {
             config
-                .withBaseUrl(Environment.backendUrlLocal)
+                .withBaseUrl(ApiEndpointUrls.API_BASE_URL)
                 .withDefaults({
                     credentials: 'same-origin',
                     headers: {
@@ -40,7 +41,7 @@ export class AppUserService {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(this.appUserApiEndpointUrl, {
+                .fetch(this.appUserEndpointUrl, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
@@ -71,7 +72,7 @@ export class AppUserService {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.appUserApiEndpointUrl}/name/${name}`, {
+                .fetch(`${this.appUserEndpointUrl}/name/${name}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
@@ -102,7 +103,7 @@ export class AppUserService {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.appUserApiEndpointUrl}/${id}`, {
+                .fetch(`${this.appUserEndpointUrl}/${id}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
@@ -133,7 +134,7 @@ export class AppUserService {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.appUserApiEndpointUrl}/${ApiEndpointUrls.PERSONAL}`, {
+                .fetch(`${this.appUserEndpointUrl}/${ApiEndpointUrls.PERSONAL}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
@@ -164,7 +165,7 @@ export class AppUserService {
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .put(`${this.appUserApiEndpointUrl}/${entity.id}`, JSON.stringify(entity), { 
+                .put(`${this.appUserEndpointUrl}/${entity.id}`, JSON.stringify(entity), { 
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 }

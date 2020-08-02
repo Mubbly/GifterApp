@@ -41,6 +41,12 @@ export class DonateesIndex {
         }
     }
 
+    // TODO...
+    onReserveDonateeGift(event: Event, donatee: IDonatee) {
+        event.preventDefault();
+        console.warn("Not implemented");
+    }
+
     private getCampaignDonatees(campaignId: string): void {
         // Cannot get donatees for a certain Campaign without its ID
         if(!campaignId || campaignId == '') {

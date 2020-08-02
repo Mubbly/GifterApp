@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PublicApi.DTO.v1.Mappers;
+using WebApp.Helpers;
 using V1DTO = PublicApi.DTO.v1;
 
 namespace WebApp.ApiControllers._1._0

@@ -4,7 +4,6 @@
     "logLevel": "debug",
 
 
-    "backendUrl": "https://mubbly.gifterapp.com/api/v1.0/",
-    "backendUrlLocal": "https://localhost:5001/api/v1.0/",
-    "swaggerUrl": "https://mubbly.gifterapp.com/swagger/index.html"
+    "backendUrl": "https://localhost:5001/api/v1.0/",
+    "swaggerUrl": "https://localhost:5000/swagger/index.html"
 }

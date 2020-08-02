@@ -2,7 +2,6 @@
     "debug": false,
     "testing": false,
 
-    "backendUrl": "https://mubbly.gifterapp.com/api/v1.0/",
-    "backendUrlLocal": "http://localhost:5001/api/v1.0/",
-    "swaggerUrl": "https://mubbly.gifterapp.com/swagger/index.html"
+    "backendUrl": "https://gifterapp-server.azurewebsites.net/api/v1.0/",
+    "swaggerUrl": "https://gifterapp-server.azurewebsites.net/swagger/index.html"
 }

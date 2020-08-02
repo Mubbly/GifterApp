@@ -5,12 +5,13 @@
             For <a route-href="route: campaignsDetails; params.bind: { id: _campaignId }">${_campaignName}</a> campaign
         </p>
         <p if.bind="_ownsCurrentCampaign">
-            <a route-href="route: donateesCreate; params.bind: { campaignId: _campaignId, campaignName: _campaignName }" class="button">Add new</a>      
+            <a route-href="route: donateesCreate; params.bind: { campaignId: _campaignId, campaignName: _campaignName }"
+                class="button">Add new</a>
         </p>
     </section>
-    <section>
+    <section class="flex donatees">
         <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
-        <table class="table">
+        <!-- <table class="table">
             <thead>
                 <tr>
                     <th>
@@ -52,51 +53,52 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr repeat.for="donatee of _donatees">
-                    <td>
-                        ${donatee.firstName + ' ' + donatee.lastName}
-                    </td>
-                    <td>
-                        ${donatee.gender}
-                    </td>
-                    <td>
-                        ${donatee.age}
-                    </td>
-                    <td>
-                        ${donatee.bio}
-                    </td>
-                    <td>
-                        ${donatee.giftName}
-                    </td>
-                    <td>
-                        ${donatee.giftDescription}
-                    </td>
-                    <td>
-                        ${donatee.giftImage}
-                    </td>
-                    <td>
-                        ${donatee.giftUrl}
-                    </td>
-                    <td if.bind="!_isActive">
-                        ${donatee.giftReservedFrom ? donatee.giftReservedFrom : ''}
-                    </td>
-                    <td>
-                        ${donatee.activeFrom}
-                    </td>
-                    <td>
-                        ${donatee.activeTo}
-                    </td>
-                    <td>
-                        <input class="check-box" disabled="disabled" type="checkbox" checked.bind="donatee.isActive"/>
-                    </td>
-                    <td if.bind="_ownsCurrentCampaign">
-                        <a route-href="route: donateesEdit; params.bind: { id: donatee.id, campaignId: _campaignId, campaignName: _campaignName }" class="button">Edit</a>        
-                        <a route-href="route: donateesDetails; params.bind: { id: donatee.id }" class="button">Details</a>
-                        <a route-href="route: donateesDelete; params.bind: { id: donatee.id }" class="button">Delete</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+            <tbody> -->
+        <div repeat.for="donatee of _donatees" class="donatee flex card">
+            <div class="donatee-info flex ${!donatee.isActive ? 'text-muted' : ''}">
+                <div class="donatee-labels flex">
+                    <div class="flex-row"><strong>${donatee.firstName + ' ' + donatee.lastName}</strong></div>
+                    <div class="flex-row" if.bind="donatee.age">&nbsp;| ${donatee.age}</div>
+                    <div class="flex-row" if.bind="donatee.gender">&nbsp;| ${donatee.gender}</div>
+                </div>
+                <div class="donatee-bio flex-column">
+                    ${donatee.bio}
+                </div>
+                <hr>
+                <div class="donatee-gift flex-column">
+                    <div class="gift-name"><strong>${donatee.giftName}</strong></div>
+                    <div class="gift-desc">${donatee.giftDescription}</div>
+                    <a if.bind="donatee.giftImage" href="${donatee.giftImage}">Image</a>
+                    <a if.bind="donatee.giftUrl" href="${donatee.giftUrl}">Shop</a>
+                </div>
+                <hr>
+                <div class="donatee-date-options flex flex-row">
+                    <div class="donatee-dates flex">
+                        <div class="${donatee.isActive ? 'successmessage' : 'errormessage'} active-status flex-row">
+                            <strong>${donatee.isActive ? '✓' : '✗'}&nbsp;</strong>
+                        </div>
+                        <div class="active-period flex-row">
+                            ${donatee.activeFrom} to ${donatee.activeTo}
+                        </div>
+                        <!-- <div if.bind="!_isActive" class="reserved-period">
+                            Reserved since: ${donatee.giftReservedFrom ? donatee.giftReservedFrom : ''}
+                        </div> -->
+                    </div>
+                    <a if.bind="donatee.isActive" href="#" title="Reserve" class="flex button reserve"
+                        click.delegate="onReserveDonateeGift($event, donatee)">
+                        Reserve
+                    </a>
+                </div>
+            </div>
+            <div if.bind="_ownsCurrentCampaign" class="donatee-manager-options-container flex flex-column">
+                <div if.bind="_ownsCurrentCampaign" class="donatee-manager-options flex">
+                    <a route-href="route: donateesEdit; params.bind: { id: donatee.id, campaignId: _campaignId, campaignName: _campaignName }"
+                        class="flex-column" title="Edit"><img src="/icons/icon-edit-grey-m.png" class="icon"
+                            alt="Edit" /></a>
+                    <a route-href="route: donateesDelete; params.bind: { id: donatee.id }" class="flex-column"
+                        title="Delete"><img src="/icons/icon-delete-grey-m.png" class="icon" alt="Delete" /></a>
+                </div>
+            </div>
+        </div>
     </section>
 </template>

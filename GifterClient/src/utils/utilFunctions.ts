@@ -1,5 +1,7 @@
 import { IFetchResponse } from 'types/IFetchResponse';
 import { Optional, HTML5DateString } from 'types/generalTypes';
+import * as DevEnvironment from '../../config/environment.json';
+import * as ProdEnvironment from '../../config/environment.production.json';
 
 export const STATUS_CODE_OK = 200;
 export const STATUS_CODE_LAST_SUCCESS = 300;
@@ -13,6 +15,13 @@ export const HOME_ROUTE = "homeIndex";
 export const LOGIN_ROUTE = "accountLogin";
 export const PERSONAL_PROFILE_ROUTE = "profilesPersonal";
 export const DARK_THEME_CLASS = 'dark-theme';
+
+/** Get backendUrl (base api url) etc. Set to prod by default, change manually if dev is needed. TODO: props inaccessible right now */
+export function getEnvironmentProperties() {
+    let dev = DevEnvironment;
+    let prod = ProdEnvironment;
+    return dev;
+}
 
 export function isSuccessful(response: Response | IFetchResponse<any>): boolean {
     return response.status >= STATUS_CODE_OK && response.status < STATUS_CODE_LAST_SUCCESS;

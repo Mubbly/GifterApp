@@ -4,7 +4,7 @@
         <!-- <hr> -->
         <form submit.trigger="onSubmit($event)">
             <input type="text" class="search-input" title="Search users" value.bind="_searchInput" placeholder="Name"/>
-            <input type="submit" value="Search" class="search-button icon"/>
+            <input type="submit" value="Search" class="search-button icon no-hover"/>
         </form>
         <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
         <p if.bind="_successMessage" class="successMessage">${_successMessage}</p>

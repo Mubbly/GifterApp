@@ -12,6 +12,7 @@ import { NotificationService } from './service/notificationService';
 import { IFetchResponse } from './types/IFetchResponse';
 import { IUserNotification } from './domain/IUserNotification';
 import { NotificationTypes } from 'domain/PredefinedData';
+import { HttpClient } from 'aurelia-fetch-client';
 
 @autoinject
 export class App {
@@ -28,15 +29,16 @@ export class App {
     private _notifications: IUserNotification[] = [];
     private _noNotificationMessage: Optional<string> = null;
 
-    constructor(private appState: AppState, 
+    constructor(private appState: AppState,
         private notificationService: NotificationService) {
     }
 
     activate() {
         this.initAppTheme();
         this.getAllActiveNotifications();
-        // setInterval(this.getAllNewNotifications, 5000); // Check for new notifications after every 10 minutes (600000ms) or 5mins (300000ms). TODO: For testing, 5sek (5000).
+        
         // this.initNavTabs();
+        // setInterval(this.getAllActiveNotifications, 5000); // Check for new notifications after every 10 minutes (600000ms) or 5mins (300000ms). TODO: For testing, 5sek (5000).
     }
 
     configureRouter(config: RouterConfiguration, router: Router): void {

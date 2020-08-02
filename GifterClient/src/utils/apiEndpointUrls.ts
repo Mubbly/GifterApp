@@ -1,8 +1,14 @@
+import * as DevEnvironment from '../../config/environment.json';
+import * as ProdEnvironment from '../../config/environment.production.json';
+import * as Utils from 'utils/utilFunctions';
+
+// BASE URL
+export const API_BASE_URL = DevEnvironment.backendUrl; // Utils.getEnvironmentProperties().backendUrl;
+
 // Account
 export const ACCOUNT_LOGIN = 'account/login';
 export const ACCOUNT_REGISTER = 'account/register';
-
-// General
+// Data
 export const ACTION_TYPES = 'admin/ActionTypes';
 export const APP_USERS = 'AppUsers';
 export const ARCHIVED_GIFTS = 'ArchivedGifts';

@@ -22,6 +22,9 @@ namespace BLL.App.DTO
         public virtual DateTime ActiveToDate { get; set; }
 
         public virtual bool IsActive { get; set; }
+        
+        public int UserCampaignsCount { get; set; }
+        public int CampaignDonateesCount { get; set; }
 
         // List of mapped campaigns and (campaign manager) users
         [InverseProperty(nameof(UserCampaignBLL.Campaign))]

@@ -23,7 +23,7 @@ namespace BLL.App.Services
 
         public async Task<IEnumerable<BLLAppDTO.DonateeBLL>> GetAllForCampaignAsync(Guid campaignId, Guid? userId, bool noTracking = true)
         {
-            var campaignDonatees = await Repository.GetAllForCampaignAsync(campaignId, userId, noTracking);
+            var campaignDonatees = await UOW.Donatees.GetAllForCampaignAsync(campaignId, userId, noTracking);
             return campaignDonatees.Select(e => Mapper.Map(e));
         }
 
@@ -47,7 +47,7 @@ namespace BLL.App.Services
             }
             
             var dalDonatee = Mapper.Map(bllDonatee);
-            var dalDonateeTracked = Repository.Add(dalDonatee);
+            var dalDonateeTracked = UOW.Donatees.Add(dalDonatee);
             
             UOW.AddToEntityTracker(dalDonateeTracked, bllDonatee);
             var bllNewDonatee = Mapper.Map(dalDonateeTracked);

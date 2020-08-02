@@ -39,7 +39,7 @@ namespace WebApp.ApiControllers._1._0.Identity
         // GET: api/AppUsers
         [HttpGet]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTOIdentity.AppUserDTO>))]
         public async Task<ActionResult<IEnumerable<V1DTOIdentity.AppUserDTO>>> GetAppUsers()
         {
             var allDomainUsers = await _userManager.Users.ToListAsync();
@@ -51,7 +51,7 @@ namespace WebApp.ApiControllers._1._0.Identity
         [HttpGet("name/{name}")]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTOIdentity.AppUserDTO>))]
         public async Task<ActionResult<IEnumerable<V1DTOIdentity.AppUserDTO>>> GetAppUsersByName(string name)
         {
             // TODO: Move to BLL
@@ -74,13 +74,13 @@ namespace WebApp.ApiControllers._1._0.Identity
         [HttpGet("{id}")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTOIdentity.AppUserDTO>))]
         public async Task<ActionResult<V1DTOIdentity.AppUserDTO>> GetAppUser(Guid id)
         {
             var domainUser = await _userManager.FindByIdAsync(id.ToString());
             if (domainUser == null)
             {
-                return NotFound(new V1DTO.MessageDTO($"User with id {id} not found"));
+                return NotFound(new V1DTO.MessageDTO($"User with id {id.ToString()} not found"));
             }
             var user = _mapper.Map(domainUser);
             return Ok(user);
@@ -90,7 +90,7 @@ namespace WebApp.ApiControllers._1._0.Identity
         [HttpGet("personal")]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTOIdentity.AppUserDTO>))]
         public async Task<ActionResult<V1DTOIdentity.AppUserDTO>> GetCurrentAppUser()
         {
             var domainUser = await _userManager.FindByIdAsync(User.UserGuidId().ToString());
@@ -110,22 +110,22 @@ namespace WebApp.ApiControllers._1._0.Identity
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(V1DTO.MessageDTO))]
-        [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(IEnumerable<V1DTO.CampaignDTO>))]
+        [ProducesResponseType(StatusCodes.Status204NoContent, Type = typeof(IEnumerable<V1DTOIdentity.AppUserDTO>))]
         public async Task<IActionResult> PutAppUser(Guid id, V1DTOIdentity.AppUserDTO appUser)
         {
             // Don't allow wrong data
             if (id != appUser.Id)
             {
-                return BadRequest(new V1DTO.MessageDTO($"Cannot update the user with id {id}"));
+                return BadRequest(new V1DTO.MessageDTO($"Cannot update the user with id {id.ToString()}"));
             }
             var domainUser = await _userManager.FindByIdAsync(id.ToString());
             if (domainUser == null)
             {
-                return NotFound(new V1DTO.MessageDTO($"User with id {id} not found"));
+                return NotFound(new V1DTO.MessageDTO($"User with id {id.ToString()} not found"));
             }
             if (domainUser.Id != User.UserGuidId())
             {
-                return BadRequest(new V1DTO.MessageDTO($"Cannot update the user with id {id}"));
+                return BadRequest(new V1DTO.MessageDTO($"Cannot update the user with id {id.ToString()}"));
             }
             
             //await _userManager.UpdateSecurityStampAsync(_mapper.Map(appUser));
