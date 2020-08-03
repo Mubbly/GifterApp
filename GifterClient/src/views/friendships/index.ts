@@ -16,6 +16,8 @@ export class FriendshipsIndex {
 
     private _errorMessage: Optional<string> = null;
 
+    private _showLoader: boolean = false;
+
     constructor(private friendshipService: FriendshipService, 
         private profileService: ProfileService,
         private router: Router, 
@@ -50,9 +52,11 @@ export class FriendshipsIndex {
     }
 
     private getPersonalConfirmedFriendships(): Promise<void> {
+        this._showLoader = true;
         return this.friendshipService
         .getAllConfirmed()
         .then((response) => {
+            this._showLoader = false;
             if (!UtilFunctions.isSuccessful(response)) {
                 this.handleErrors(response);
             } else {

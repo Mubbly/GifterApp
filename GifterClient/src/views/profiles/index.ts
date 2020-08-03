@@ -48,6 +48,8 @@ export class ProfilesIndex {
     private _showEmail: boolean = false;
     private _profileBannerUrl: Optional<string> = null;
 
+    private _showLoader: boolean = false;
+
     constructor(
         private profileService: ProfileService,
         private appUserService: AppUserService,
@@ -106,9 +108,11 @@ export class ProfilesIndex {
 
      /** Get user's full profile including wishlist and gifts if there are any. Default initial one if not edited yet. */
     private getFullProfile(userId: string): Promise<void> {
+        this._showLoader = true;
         return this.profileService
             .getFullForUser(userId)
             .then((response) => {
+                this._showLoader = false;
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {                    
@@ -261,6 +265,7 @@ export class ProfilesIndex {
                 this.router.navigateToRoute(Utils.LOGIN_ROUTE);
                 break;
             default:
+                this._showLoader = false;
                 this._errorMessage = Utils.getErrorMessage(response);
         }
     }

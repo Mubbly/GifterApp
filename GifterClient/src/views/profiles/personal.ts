@@ -31,6 +31,8 @@ export class ProfilesPersonal {
 
     private _draggedElement = null;
 
+    private _showLoader: boolean = false;
+
     constructor(
         private profileService: ProfileService,
         private appUserService: AppUserService,
@@ -65,9 +67,11 @@ export class ProfilesPersonal {
      * Get user's personal profile. Default initial one if not edited yet.
      */
     private getPersonalFullProfile(): void {
+        this._showLoader = true;
         this.profileService
             .getFullPersonal()
             .then((response) => {
+                this._showLoader = false;
                 if (!Utils.isSuccessful(response)) {
                     this.handleErrors(response);
                 } else {                    

@@ -693,6 +693,10 @@ li.notifications a {
     padding-right: .2rem !important;
 }
 
+.loader {
+    max-width: 100px;
+}
+
 
 /* From backend interface */
 

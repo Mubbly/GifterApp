@@ -20,6 +20,10 @@ export class ArchivedGiftsIndex {
     private _noReceivedGiftsMessage: Optional<string> = null;
     private _errorMessage: Optional<string> = null;
 
+    private _showPendingLoader: boolean = false;
+    private _showGivenLoader: boolean = false;
+    private _showReceivedLoader: boolean = false;
+
     constructor(private reservedArchivedGiftService: ArchivedGiftService,
         private giftService: GiftService,
         private router: Router, 
@@ -55,9 +59,11 @@ export class ArchivedGiftsIndex {
     }
 
     private getGivenGifts(): void {
+        this._showGivenLoader = true;
         this.giftService
         .getAllGivenArchived()
         .then((response) => {
+            this._showGivenLoader = false;
             if(!Utils.isSuccessful(response)) {
                 this.handleErrors(response);
             } else {
@@ -80,9 +86,11 @@ export class ArchivedGiftsIndex {
     }
 
     private getPendingReceivedGifts(): void {
+        this._showPendingLoader = true;
         this.giftService
         .getAllPendingReceivedArchived()
         .then((response) => {
+            this._showPendingLoader = false;
             if(!Utils.isSuccessful(response)) {
                 this.handleErrors(response);
             } else {
@@ -103,9 +111,11 @@ export class ArchivedGiftsIndex {
     }
 
     private getReceivedGifts(): void {
+        this._showReceivedLoader = true;
         this.giftService
         .getAllReceivedArchived()
         .then((response) => {
+            this._showReceivedLoader = false;
             if(!Utils.isSuccessful(response)) {
                 this._errorMessage = Utils.getErrorMessage(response);
             } else {

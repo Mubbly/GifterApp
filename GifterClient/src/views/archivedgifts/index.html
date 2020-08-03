@@ -11,6 +11,7 @@
             <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
         </section>
         <section class="archived-gifts-cards cards-wrapper">
+            <!-- <img class="loader" if.bind="_showGivenLoader" src="/icons/icon-loader-fast.apng" alt="Loader"> -->
             <section if.bind="_pendingReceivedGifts.length" class="my-pending-gifts card">
                 <h2>Pending received</h2>
                 <table class="table">
@@ -82,6 +83,7 @@
             <section class="my-archived-gifts">
                 <section class="my-given-gifts card">
                     <h2>Given by me</h2>
+                    <img class="loader" if.bind="_showGivenLoader" src="/icons/icon-loader-fast.apng" alt="Loader">
                     <p if.bind="_noGivenGiftsMessage" class="text-muted">${_noGivenGiftsMessage}</p>
                     <table if.bind="_givenGifts.length" class="table">
                         <thead>
@@ -145,6 +147,7 @@
                 </section>
                 <section class="my-received-gifts card">
                     <h2>Received</h2>
+                    <img class="loader" if.bind="_showReceivedLoader" src="/icons/icon-loader-fast.apng" alt="Loader">
                     <p if.bind="_noReceivedGiftsMessage" class="text-muted">${_noReceivedGiftsMessage}</p>
                     <table if.bind="_receivedGifts.length" class="table">
                         <thead>

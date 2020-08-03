@@ -6,6 +6,7 @@
         <a route-href="route: invitedusersIndex; params.bind: {}" title="Invitations to join"><img src="/icons/icon-invited-users-grey-m.png" alt="Invitations to join" class="icon" /></a> 
     </p>
     <!-- <hr if.bind="_confirmedFriendships.length <= 0"> -->
+    <img if.bind="_showLoader" src="/icons/icon-loader-fast.apng" alt="Loader">
     <p if.bind="_errorMessage" class="${_confirmedFriendships.length <= 0 ? 'text-muted' : 'errormessage'}">${_errorMessage}</p>
     <section if.bind="_confirmedFriendships.length > 0" class="card">
         <table class="table">

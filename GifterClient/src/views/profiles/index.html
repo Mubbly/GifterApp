@@ -1,4 +1,5 @@
 <template>
+    <img if.bind="_showLoader" src="/icons/icon-loader-fast.apng" alt="Loader">
     <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
     <section if.bind="_profile" class="profile other flex">
         <section class="profile-info flex-column">
