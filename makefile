@@ -22,6 +22,10 @@ dpush-image-server: ## Push server docker image to dockerhub
 dpush-image-client: ## Push client docker image to dockerhub
 	docker push $(client_image_name)
 
+dpush-images: ## Push client docker image to dockerhub
+	docker push $(server_image_name)
+	docker push $(client_image_name)
+
 # NOTE: For side by side usage in local env mapping frontend port 80 to 8080 to avoid conflic with backend on port 80.
 # 		In azure both will run on port 80
 dcreate-containers: ## Create docker containers from server and client for local
@@ -57,7 +61,7 @@ az-create-plan: ## Ran only once to create azure subscription plan
 		--name basic1
 
 # NOTE: Server will run on gifterapp.azurewebsites.net (user doesn't see this in normal operations)
-az-create-container-server: ## Create server container in azure
+az-create-webapp-server: ## Create server container in azure
 	az webapp create \
 		--resource-group gifterappResourceGroup \
 		--name gifterapp-server \
@@ -65,20 +69,25 @@ az-create-container-server: ## Create server container in azure
 		--plan basic1
 
 # NOTE: Client will run on gifterapp.azurewebsites.net
-az-create-container-client: ## Create client container in azure
+az-create-webapp-client: ## Create client container in azure
 	az webapp create \
 		--resource-group gifterappResourceGroup \
 		--name gifterapp \
 		--deployment-container-image-name $(client_image_name) \
 		--plan basic1
 
-az-container-restart: ## Restart azure webapp will update images
+az-webapp-restart: ## Restart azure webapp will update images
 	az webapp restart \
 		--name gifterapp \
 		--resource-group gifterappResourceGroup
 	az webapp restart \
 		--name gifterapp-server \
 		--resource-group gifterappResourceGroup
+
+az-update: ## Build and push docker images, restart azure webapp
+	make dbuild-images \
+		&& make dpush-images \
+		&& make az-webapp-restart
 		
 help: ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
