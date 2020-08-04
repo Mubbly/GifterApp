@@ -122,12 +122,14 @@ namespace BLL.App.Services
             return newDefaultProfile;
         }
 
+        // TODO: FIX! Wishlist is being added twice (with different id). This will ruin interacting with gifts unless the wrong one is deleted first.
         /** Initial wishlist for a new user with no existing profiles */
         private BLLAppDTO.WishlistBLL AddDefaultWishlist(Guid userId)
         {
             var defaultWishlistBLL = new BLLAppDTO.WishlistBLL
             {
-                AppUserId = userId
+                AppUserId = userId,
+                Comment = "Default profile Wishlist"
             };
             // Add
             var defaultWishlistDAL = Mapper.MapWishlistToDAL(defaultWishlistBLL);

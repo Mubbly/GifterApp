@@ -7,6 +7,7 @@ import * as UtilFunctions from 'utils/utilFunctions';
 import * as ApiEndpointUrls from 'utils/apiEndpointUrls';
 import * as Utils from 'utils/utilFunctions';
 import { AccountLogin } from './login';
+import { ILoginResponse } from 'types/ILoginResponse';
 
 @autoinject
 export class AccountRegister {    

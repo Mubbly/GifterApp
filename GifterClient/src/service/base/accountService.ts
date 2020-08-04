@@ -58,7 +58,7 @@ export class AccountService {
 
             if(response.ok) {
                 const data = (await response.json()) as ILoginResponse;
-                this.login(email, password);
+                // this.login(email, password);
                 return {
                     status: response.status,
                     data: data

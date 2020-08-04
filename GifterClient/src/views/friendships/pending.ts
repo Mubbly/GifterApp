@@ -20,7 +20,8 @@ export class FriendshipsIndex {
     // private _pendingFriendships: Optional<IFriendshipResponse[]> = null;
     private _pendingSentFriendships: Optional<IFriendshipResponse[]> = null;
     private _pendingReceivedFriendships: Optional<IFriendshipResponse[]> = null;
-    private _noPendingFriendships: boolean = true;
+    private _noPendingReceivedFriendships: Optional<string> = null;
+    private _noPendingSentFriendships: Optional<string> = null;
 
     private _successMessage: Optional<string> = null;
     private _errorMessage: Optional<string> = null;
@@ -35,7 +36,6 @@ export class FriendshipsIndex {
         }
         this.getPersonalSentFriendRequests();
         this.getPersonalReceivedFriendRequests();
-        this._noPendingFriendships = !this._pendingSentFriendships!.length && !this._pendingReceivedFriendships!.length; // TODO: fix
     }
 
     onAcceptFriend(event: Event, friendId: string) {
@@ -61,6 +61,8 @@ export class FriendshipsIndex {
                     this._pendingSentFriendships.forEach(friend => {
                         friend.lastActive = Utils.formatAsHtml5Date(friend.lastActive);
                     });
+                } else {
+                    this._noPendingSentFriendships = this.MESSAGE_NO_PENDING_FRIENDSHIPS;
                 }
             }
         })
@@ -82,6 +84,8 @@ export class FriendshipsIndex {
                     this._pendingReceivedFriendships.forEach(friend => {
                         friend.lastActive = Utils.formatAsHtml5Date(friend.lastActive);
                     });
+                } else {
+                    this._noPendingReceivedFriendships = this.MESSAGE_NO_PENDING_FRIENDSHIPS;
                 }
             }
         })

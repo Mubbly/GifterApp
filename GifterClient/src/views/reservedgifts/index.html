@@ -10,8 +10,10 @@
             <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
         </section>
     </section>
-    <section if.bind="_reservedGifts.length" class="my-reserved-gifts card">
-        <table class="table">
+    <section class="my-reserved-gifts card">
+        <h2>By me</h2>
+        <p if.bind="_noReservationsMessage" class="text-muted">${_noReservationsMessage}</p>
+        <table if.bind="_reservedGifts.length" class="table">
             <thead>
                 <tr>
                     <th>

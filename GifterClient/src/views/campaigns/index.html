@@ -11,7 +11,8 @@
             <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
         </section>
         <section class="card">
-            <table class="table">
+            <p if.bind="_noCampaignsMessage" class="text-muted">${_noCampaignsMessage}</p>
+            <table if.bind="_campaigns.length" class="table">
                 <thead>
                     <tr>
                         <th>

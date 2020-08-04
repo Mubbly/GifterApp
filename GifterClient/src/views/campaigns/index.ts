@@ -10,9 +10,12 @@ import { CampaignsPersonal } from './personal';
 
 @autoinject
 export class CampaignsIndex {
+    private readonly ERROR_NO_CAMPAIGNS_MESSAGE = 'There are currently no active campaigns';
     private _campaigns: ICampaign[] = [];
     private _isCampaignManager: boolean = false;
     private _errorMessage: Optional<string> = null;
+
+    private _noCampaignsMessage: Optional<string> = null;
 
     constructor(
         private campaignService: CampaignService,
@@ -39,6 +42,10 @@ export class CampaignsIndex {
             if (!Utils.isSuccessful(response)) {
                 this.handleErrors(response);
             } else {
+                if(!response.data || response.data.length <= 0) {
+                    this._noCampaignsMessage = this.ERROR_NO_CAMPAIGNS_MESSAGE;
+                    return;
+                }
                 this._campaigns = response.data!;
 
                 this._campaigns.forEach(campaign => {

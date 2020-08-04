@@ -9,6 +9,7 @@ import { ActionTypeService } from 'service/actionTypeService';
 import { StatusService } from 'service/statusService';
 import { IActionType } from 'domain/IActionType';
 import { IStatus } from 'domain/IStatus';
+import * as Utils from 'utils/utilFunctions';
 
 @autoinject
 export class DonateesEdit {
@@ -40,6 +41,8 @@ export class DonateesEdit {
                 response => {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._donatee = response.data!;
+                        this._donatee!.activeFrom = Utils.formatAsHtml5Date(this._donatee.activeFrom);
+                        this._donatee!.activeTo = Utils.formatAsHtml5Date(this._donatee.activeTo);
                     } else {
                         this._errorMessage = UtilFunctions.getErrorMessage(response);
 
@@ -69,7 +72,7 @@ export class DonateesEdit {
             || UtilFunctions.isNullOrEmpty(giftNameInput)
             || UtilFunctions.isNullOrEmpty(activeFromInput)
             || UtilFunctions.isNullOrEmpty(activeToInput)) {
-            alert("Name missing!")
+            alert("Names or dates missing!")
             return;
         }
         let lastNameInput = <Optional<string>>this._donatee!.lastName;

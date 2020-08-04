@@ -158,7 +158,7 @@ namespace WebApp.ApiControllers._1._0
             var gift = await _bll.Gifts.GetForUserAsync(id, User.UserGuidId());
             if (gift == null)
             {
-                return NotFound(new V1DTO.MessageDTO($"Gift with id {id} not found"));
+                return NotFound(new V1DTO.MessageDTO($"Gift with id {id.ToString()} not found"));
             }
             return Ok(_mapper.Map(gift));
         }

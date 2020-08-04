@@ -2,10 +2,10 @@
     <h1>Pending friend requests</h1>
     <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
     <p if.bind="_successMessage" class="successmessage">${_successMessage}</p>
-    <p if.bind="_noPendingFriendships" class="text-muted">${_noPendingFriendshipsMessage}</p>
-    <section if.bind="_pendingReceivedFriendships" class="card">
+    <section class="card">
         <h2>Received</h2>
-        <table class="table">
+        <p if.bind="_noPendingReceivedFriendships" class="text-muted">${_noPendingReceivedFriendships}</p>
+        <table if.bind="_pendingReceivedFriendships" class="table">
             <thead>
                 <tr>
                     <th>
@@ -34,9 +34,10 @@
             </tbody>
         </table>
     </section>
-    <section if.bind="_pendingSentFriendships" class="card">
+    <section class="card">
         <h2>Sent</h2>
-        <table class="table">
+        <p if.bind="_noPendingSentFriendships" class="text-muted">${_noPendingSentFriendships}</p>
+        <table if.bind="_pendingSentFriendships" class="table">
             <thead>
                 <tr>
                     <th>

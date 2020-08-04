@@ -62,7 +62,7 @@ export class GiftsEdit {
 
     private getGift(id: string): void {
         if(UtilFunctions.existsAndIsString(id)) {
-            this.giftService.get(id).then(
+            this.giftService.getPersonal(id).then(
                 response => {
                     if(UtilFunctions.isSuccessful(response)) {
                         this._gift = response.data!;

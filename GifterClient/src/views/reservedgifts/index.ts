@@ -10,11 +10,13 @@ import { IFetchResponse } from 'types/IFetchResponse';
 
 @autoinject
 export class ReservedGiftsIndex {
-    private readonly ERROR_NO_RESERVED_GIFTS = "You have currently not reserved any gifts. To see gifted ones go to Archive.";
+    private readonly ERROR_NO_RESERVED_GIFTS = "No currently reserved gifts. To see gifted ones go to Archive.";
 
     private _reservedGifts: IGift[] = [];
     private _errorMessage: Optional<string> = null;
     private _currentDate: string = Utils.formatAsHtml5Date(new Date().toUTCString());
+
+    private _noReservationsMessage: Optional<string> = null;
 
     constructor(private giftService: GiftService,
         private router: Router, 
@@ -45,7 +47,7 @@ export class ReservedGiftsIndex {
                 this.handleErrors(response);
             } else {
                 if(!response.data || response.data.length <= 0) {
-                    this._errorMessage = this.ERROR_NO_RESERVED_GIFTS;
+                    this._noReservationsMessage = this.ERROR_NO_RESERVED_GIFTS;
                     return;
                 }
                 this._reservedGifts = response.data!;

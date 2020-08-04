@@ -670,6 +670,10 @@ a.icon:hover {
     margin: 0 5px;
 }
 
+*:focus {
+    outline: none;
+}
+
 .half {
     width: 50%;
 }

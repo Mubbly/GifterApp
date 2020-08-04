@@ -85,7 +85,7 @@ namespace WebApp.ApiControllers._1._0.Identity
             await _bll.SaveChangesAsync();
 
             // Log user in
-            return await LogIn(appUser);
+            return await LogUserIn(appUser);
         }
 
         /// <summary>
@@ -165,12 +165,16 @@ namespace WebApp.ApiControllers._1._0.Identity
                     // TODO 
                 }
             }
+            // Save user activity
+            newRegisteredUser.LastActive = DateTime.Now;
+            await _userManager.UpdateAsync(newRegisteredUser);
+            await _bll.SaveChangesAsync();
             
             // Log new user in
-            return await LogIn(newRegisteredUser);
+            return await LogUserIn(newRegisteredUser);
         }
 
-        private async Task<IActionResult> LogIn(DomainIdentity.AppUser appUser)
+        private async Task<IActionResult> LogUserIn(DomainIdentity.AppUser appUser)
         {
             var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(appUser); // get the User analog
             var jwt = IdentityExtensions.GenerateJWT(
@@ -183,7 +187,6 @@ namespace WebApp.ApiControllers._1._0.Identity
 
             _logger.LogInformation($"Web-Api login. Token generated for user {appUser.Email}");
             return Ok(new JwtResponseDTO()
-            
             {
                 Token = jwt,
                 Status = $"User {appUser.Email} logged in.",
