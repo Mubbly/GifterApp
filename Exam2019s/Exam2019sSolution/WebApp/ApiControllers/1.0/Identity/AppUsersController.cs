@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.App.DTO.Identity;
 using Contracts.BLL.App;
 using Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using PublicApi.DTO.v1.Mappers;
 using V1DTO = PublicApi.DTO.v1;
 using V1DTOIdentity = PublicApi.DTO.v1.Identity;
-using DomainIdentity = Domain.App.Identity;
 
 namespace WebApp.ApiControllers._1._0.Identity
 {
@@ -24,11 +24,11 @@ namespace WebApp.ApiControllers._1._0.Identity
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class AppUsersController : ControllerBase
     {
-        private readonly UserManager<DomainIdentity.AppUser> _userManager;
         private readonly IAppBLL _bll;
+        private readonly UserManager<AppUserBLL> _userManager;
         private readonly AppUserMapper _mapper = new AppUserMapper();
 
-        public AppUsersController(UserManager<DomainIdentity.AppUser> userManager, IAppBLL bll)
+        public AppUsersController(UserManager<AppUserBLL> userManager, IAppBLL bll)
         {
             _userManager = userManager;
             _bll = bll;
@@ -98,8 +98,9 @@ namespace WebApp.ApiControllers._1._0.Identity
             {
                 return NotFound(new V1DTO.MessageDTO("User not found"));
             }
-            var user = _mapper.Map(domainUser);
-            return Ok(user);        
+
+            var userDTO = _mapper.Map(domainUser);
+            return Ok(userDTO);   
         }
 
         // PUT: api/AppUsers/5

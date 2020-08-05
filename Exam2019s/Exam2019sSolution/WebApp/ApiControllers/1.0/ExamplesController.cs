@@ -33,7 +33,7 @@ namespace WebApp.ApiControllers._1._0
         
         // GET: api/Examples
         /// <summary>
-        ///     Get all Example
+        ///     Get all Examples
         /// </summary>
         /// <returns>List of Examples</returns>
         [HttpGet]
@@ -42,7 +42,22 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.ExampleDTO>))]
         public async Task<ActionResult<IEnumerable<V1DTO.ExampleDTO>>> GetExamples()
         {
-            return Ok((await _bll.Example.GetAllAsync()).Select(e => _mapper.Map(e)));
+            return Ok((await _bll.Example.GetAllWithUserDataAsync(User.UserGuidId())).Select(e => _mapper.Map(e)));
+        }
+        
+        // GET: api/Personal/Examples
+        /// <summary>
+        ///     Get all personal Examples
+        /// </summary>
+        /// <returns>List of Examples</returns>
+        [HttpGet("personal")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.ExampleDTO>))]
+        public async Task<ActionResult<IEnumerable<V1DTO.ExampleDTO>>> GetPersonalExamples()
+        {
+            return Ok((await _bll.Example.GetAllPersonalAsync(User.UserGuidId()))
+                .Select(e => _mapper.Map(e)));
         }
 
         // GET: api/Examples/5
@@ -58,7 +73,28 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.ExampleDTO>))]
         public async Task<ActionResult<V1DTO.ExampleDTO>> GetExample(Guid id)
         {
-            var example = await _bll.Example.FirstOrDefaultAsync(id);
+            var example = await _bll.Example.GetWithUserDataAsync(id, User.UserGuidId());
+            if (example == null)
+            {
+                return NotFound(new V1DTO.MessageDTO($"Example with id {id.ToString()} not found"));
+            }
+            return Ok(_mapper.Map(example));
+        }
+        
+        // GET: api/Examples/Personal/5
+        /// <summary>
+        ///     Get a single Example
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Example object</returns>
+        [HttpGet("personal/{id}")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(V1DTO.MessageDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.ExampleDTO>))]
+        public async Task<ActionResult<V1DTO.ExampleDTO>> GetPersonalExample(Guid id)
+        {
+            var example = await _bll.Example.GetPersonalAsync(id, User.UserGuidId());
             if (example == null)
             {
                 return NotFound(new V1DTO.MessageDTO($"Example with id {id.ToString()} not found"));
@@ -89,11 +125,12 @@ namespace WebApp.ApiControllers._1._0
             {
                 return BadRequest(new V1DTO.MessageDTO("id and example.id do not match"));
             }
-            var example = await _bll.Example.FirstOrDefaultAsync(exampleDTO.Id, User.UserGuidId());
+            // Only allow editing own Examples
+            var example = await _bll.Example.GetPersonalAsync(exampleDTO.Id, User.UserGuidId());
             if (example == null)
             {
                 _logger.LogError($"EDIT. No such example: {exampleDTO.Id}, user: {User.UserGuidId()}");
-                return NotFound(new V1DTO.MessageDTO($"No Example found for id {id}"));
+                return NotFound(new V1DTO.MessageDTO($"No Example found for id {id.ToString()}"));
             }
             // Update existing example
             await _bll.Example.UpdateAsync(_mapper.Map(exampleDTO), User.UserGuidId());
@@ -119,7 +156,7 @@ namespace WebApp.ApiControllers._1._0
         {
             // Create example
             var bllEntity = _mapper.Map(exampleDTO);
-            _bll.Example.Add(bllEntity);
+            _bll.Example.Add(bllEntity, User.UserGuidId());
             await _bll.SaveChangesAsync();
 
             exampleDTO.Id = bllEntity.Id;
@@ -127,7 +164,7 @@ namespace WebApp.ApiControllers._1._0
                 "GetExample",
                 new {id = exampleDTO.Id, version = HttpContext.GetRequestedApiVersion()?.ToString() ?? "0"},
                 exampleDTO
-                );
+            );
         }
 
         // DELETE: api/Examples/5
@@ -143,11 +180,12 @@ namespace WebApp.ApiControllers._1._0
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<V1DTO.ExampleDTO>))]
         public async Task<ActionResult<V1DTO.ExampleDTO>> DeleteExample(Guid id)
         {
-            var example = await _bll.Example.FirstOrDefaultAsync(id, User.UserGuidId());
+            // Only allow deleting own Examples
+            var example = await _bll.Example.GetPersonalAsync(id, User.UserGuidId());
             if (example == null)
             {
                 _logger.LogError($"DELETE. No such example: {id}, user: {User.UserGuidId()}");
-                return NotFound(new V1DTO.MessageDTO($"Example with id {id} not found"));
+                return NotFound(new V1DTO.MessageDTO($"Example with id {id.ToString()} not found"));
             }
             await _bll.Example.RemoveAsync(id);
             await _bll.SaveChangesAsync();

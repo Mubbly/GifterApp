@@ -1,0 +1,46 @@
+<template>
+    <section class="example-intro">
+        <section class="intro">
+            <h1>Examples</h1>
+            <div>
+                <p><i>Just an example request page for a boilerplate app</i></p>
+                <p>
+                    <a route-href="route: examplesCreate; params.bind: {}" class="button">Create new</a>
+                </p>
+            </div>
+            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+        </section>
+    </section>
+    <section class="examples card">
+        <h1>My examples</h1>
+        <p if.bind="_noExamplesMessage" class="text-muted">${_noExamplesMessage}</p>
+        <table if.bind="_examples.length" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr repeat.for="example of _examples">
+                    <td>
+                        ${example.name}
+                    </td>
+                    <td>
+                        ${example.description}
+                    </td>
+                    <td class="icon-group">
+                        <a route-href="route: examplesDetails; params.bind: { id: example.id }" class="flex-column" title="Details"><img src="/icons/icon-info-grey.png" class="icon" alt="Details"/></a>
+                        <a route-href="route: examplesEdit; params.bind: { id: example.id }" class="flex-column" title="Edit"><img src="/icons/icon-edit-grey.png" class="icon" alt="Edit"/></a>
+                        <a route-href="route: examplesDelete; params.bind: { id: example.id }" class="flex-column" title="Delete"><img src="/icons/icon-delete-grey.png" class="icon" alt="Delete"/></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</template>

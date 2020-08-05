@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using PublicApi.DTO.v1;
 using PublicApi.DTO.v1.Identity;
 using PublicApi.DTO.v1.Mappers;
-using DomainIdentity=Domain.App.Identity;
+using DomainIdentity=Domain.App.Identity; // Using Domain due to userManager and signInManager
 
 namespace WebApp.ApiControllers._1._0.Identity
 {

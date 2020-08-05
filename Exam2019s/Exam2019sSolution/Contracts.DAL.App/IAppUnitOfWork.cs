@@ -8,6 +8,6 @@ namespace Contracts.DAL.App
         // Example:
         // IActionTypeRepository ActionTypes { get; }
         
-        IExampleRepository Example { get; }
+        IExampleRepository Examples { get; }
     }
 }

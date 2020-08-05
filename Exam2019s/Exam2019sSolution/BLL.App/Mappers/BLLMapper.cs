@@ -1,5 +1,10 @@
 ﻿using AutoMapper;
+using BLL.App.DTO;
+using BLL.App.DTO.Identity;
 using com.mubbly.gifterapp.BLL.Base.Mappers;
+using DAL.App.DTO;
+using DAL.App.DTO.Identity;
+
 namespace BLL.App.Mappers
 {
     public class BLLMapper<TLeftObject, TRightObject> : BaseMapper<TLeftObject, TRightObject>
@@ -8,16 +13,11 @@ namespace BLL.App.Mappers
     {
         public BLLMapper() : base()
         {
-            // Example:
-            // MapperConfigurationExpression.CreateMap<AppUserBLL, AppUserDAL>();
-            // MapperConfigurationExpression.CreateMap<AppUserDAL, AppUserBLL>();
-            // MapperConfigurationExpression.CreateMap<InvitedUserBLL, InvitedUserDAL>();
-            // MapperConfigurationExpression.CreateMap<InvitedUserDAL, InvitedUserBLL>();
-            // MapperConfigurationExpression.CreateMap<FriendshipBLL, FriendshipDAL>();
-            // MapperConfigurationExpression.CreateMap<FriendshipDAL, FriendshipBLL>();
-            // MapperConfigurationExpression.CreateMap<FriendshipDAL, FriendshipResponseBLL>();
-            // MapperConfigurationExpression.CreateMap<PrivateMessageBLL, PrivateMessageDAL>();
-            // MapperConfigurationExpression.CreateMap<PrivateMessageDAL, PrivateMessageBLL>();
+            MapperConfigurationExpression.CreateMap<AppUserBLL, AppUserDAL>();
+            MapperConfigurationExpression.CreateMap<AppUserDAL, AppUserBLL>();
+            
+            MapperConfigurationExpression.CreateMap<ExampleBLL, ExampleDAL>();
+            MapperConfigurationExpression.CreateMap<ExampleDAL, ExampleBLL>();
 
             Mapper = new Mapper(new MapperConfiguration(MapperConfigurationExpression));
         }

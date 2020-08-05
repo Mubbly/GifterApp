@@ -15,7 +15,7 @@ namespace DAL.App.EF
         // Example:
         // public IActionTypeRepository ActionTypes =>
         //     GetRepository<IActionTypeRepository>(() => new ActionTypeRepository(UOWDbContext));
-        public IExampleRepository Example =>
+        public IExampleRepository Examples =>
             GetRepository<IExampleRepository>(() => new ExampleRepository(UOWDbContext));
     }
 }

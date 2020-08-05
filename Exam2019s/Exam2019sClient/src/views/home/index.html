@@ -1,0 +1,10 @@
+<template>
+    <section if.bind="!appState.jwt" class="home-unauthorized">
+        <h1>Welcome to Exam app!</h1>
+        <p class="text-muted"><i>Please <a route-href="route: accountLogin; params.bind: {}">log in</a> to continue.</i></p>
+    </section>
+
+    <section if.bind="appState.jwt" class="home-authorized">
+        <h1 class="welcome-text">Welcome back, ${_userFullName}!</h1>    
+    </section>
+</template>

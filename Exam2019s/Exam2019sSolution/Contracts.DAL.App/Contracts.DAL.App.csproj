@@ -7,6 +7,7 @@
     <ItemGroup>
       <PackageReference Include="com.mubbly.gifterapp.DAL.Base" Version="1.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
       <ProjectReference Include="..\DAL.App.DTO\DAL.App.DTO.csproj" />
     </ItemGroup>
 
