@@ -50,6 +50,22 @@ namespace DAL.App.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "QuizTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    EditedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    EditedAt = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(maxLength: 256, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuizTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -179,6 +195,134 @@ namespace DAL.App.EF.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Quizzes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    EditedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    EditedAt = table.Column<DateTime>(nullable: true),
+                    AppUserId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 256, nullable: false),
+                    Description = table.Column<string>(maxLength: 1024, nullable: true),
+                    QuizTypeId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Quizzes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Quizzes_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Quizzes_QuizTypes_QuizTypeId",
+                        column: x => x.QuizTypeId,
+                        principalTable: "QuizTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Questions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    EditedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    EditedAt = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(maxLength: 256, nullable: false),
+                    QuizId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Questions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Questions_Quizzes_QuizId",
+                        column: x => x.QuizId,
+                        principalTable: "Quizzes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Answers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    EditedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    EditedAt = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(maxLength: 256, nullable: false),
+                    IsCorrect = table.Column<bool>(nullable: false),
+                    QuestionId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Answers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Answers_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuizResponses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    EditedBy = table.Column<string>(maxLength: 256, nullable: true),
+                    EditedAt = table.Column<DateTime>(nullable: true),
+                    AppUserId = table.Column<Guid>(nullable: false),
+                    AnswerId = table.Column<Guid>(nullable: false),
+                    QuestionId = table.Column<Guid>(nullable: false),
+                    QuizId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuizResponses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QuizResponses_Answers_AnswerId",
+                        column: x => x.AnswerId,
+                        principalTable: "Answers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_QuizResponses_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_QuizResponses_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_QuizResponses_Quizzes_QuizId",
+                        column: x => x.QuizId,
+                        principalTable: "Quizzes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Answers_QuestionId_IsCorrect",
+                table: "Answers",
+                columns: new[] { "QuestionId", "IsCorrect" },
+                unique: true,
+                filter: "[IsCorrect] = 1");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -222,6 +366,41 @@ namespace DAL.App.EF.Migrations
                 name: "IX_Examples_AppUserId",
                 table: "Examples",
                 column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Questions_QuizId",
+                table: "Questions",
+                column: "QuizId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizResponses_AnswerId",
+                table: "QuizResponses",
+                column: "AnswerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizResponses_AppUserId",
+                table: "QuizResponses",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizResponses_QuestionId",
+                table: "QuizResponses",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizResponses_QuizId",
+                table: "QuizResponses",
+                column: "QuizId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Quizzes_AppUserId",
+                table: "Quizzes",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Quizzes_QuizTypeId",
+                table: "Quizzes",
+                column: "QuizTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -245,10 +424,25 @@ namespace DAL.App.EF.Migrations
                 name: "Examples");
 
             migrationBuilder.DropTable(
+                name: "QuizResponses");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Answers");
+
+            migrationBuilder.DropTable(
+                name: "Questions");
+
+            migrationBuilder.DropTable(
+                name: "Quizzes");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "QuizTypes");
         }
     }
 }

@@ -1,0 +1,23 @@
+<template>
+    <section class="quiz-intro">
+        <section class="intro">
+            <h1>Quizzes</h1>
+            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+        </section>
+    </section>
+    <section class="quizzes">
+        <p if.bind="_noQuizzesMessage" class="text-muted">${_noQuizzesMessage}</p>
+        <div if.bind="_quizzes.length" class="card" repeat.for="quiz of _quizzes">
+            <h1>
+                <a route-href="route: quizzesDetails; params.bind: { id: quiz.id }" class="flex-column"
+                    title="Questions">
+                    ${quiz.name}
+                </a>
+            </h1>
+            <p>
+                ${quiz.description}
+            </p>
+        </div>
+        </table>
+    </section>
+</template>

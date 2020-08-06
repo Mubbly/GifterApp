@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Domain.App;
 using Domain.App.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -67,73 +69,187 @@ namespace DAL.App.EF.Helpers
 
         public static void SeedData(AppDbContext context, UserManager<AppUser> userManager)
         {
-            // Example:
-            // Insert predefined actionTypes
-            // var actionTypes = new[]
-            // {
-            //     new ActionType
-            //     {
-            //         ActionTypeValue = "Activate",
-            //         Comment = "Change from reserved or archived status to active status",
-            //         Id = new Guid("00000000-0000-0000-0000-000000000001")
-            //     },
-            //     new ActionType
-            //     {
-            //         ActionTypeValue = "Reserve",
-            //         Comment = "Change from active status to reserved status",
-            //         Id = new Guid("00000000-0000-0000-0000-000000000002")
-            //     },
-            //     new ActionType
-            //     {
-            //         ActionTypeValue = "Archive",
-            //         Comment = "Move from reserved or active status to archived status",
-            //         Id = new Guid("00000000-0000-0000-0000-000000000003")
-            //     }
-            // };
-            //
-            // foreach (var actionType in actionTypes)
-            //     if (!context.ActionTypes.Any(a => a.Id == actionType.Id))
-            //         context.ActionTypes.Add(actionType);
-            // context.SaveChanges();
+            var quizTypes = new[]
+            {
+                new QuizType
+                {
+                    Name = "Quiz",
+                    Id = new Guid("00000000-0000-0000-0000-000000000001")
+                },
+                new QuizType
+                {
+                    Name = "Poll",
+                    Id = new Guid("00000000-0000-0000-0000-000000000002")
+                }
+            };
+            
+            foreach (var quizType in quizTypes)
+                if (!context.QuizTypes.Any(a => a.Id == quizType.Id))
+                    context.QuizTypes.Add(quizType);
+            context.SaveChanges();
+
 
             // EXAMPLE for when test user depends on some predefined data:
             // Test user related data
-            // var user = userManager.FindByEmailAsync("test@test.com").Result;
-            // if (user != null)
-            // {
-            //     var testUserWishlist = new Wishlist
-            //     {
-            //         Id = new Guid("00000000-0000-0000-0000-000000000001"),
-            //         AppUserId = user!.Id,
-            //         Comment = "Test wishlist"
-            //     };
-            //
-            //     if (!context.Wishlists.Any(w => w.Id == testUserWishlist.Id))
-            //     {
-            //         context.Wishlists.Add(testUserWishlist);
-            //     }
-            //     context.SaveChanges();
-            //
-            //     var testUserProfile = new Profile
-            //     {
-            //         Id = new Guid("00000000-0000-0000-0000-000000000001"),
-            //         WishlistId = new Guid("00000000-0000-0000-0000-000000000001"),
-            //         AppUserId = user!.Id,
-            //         Age = 70,
-            //         Gender = "Female",
-            //         Bio =
-            //             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
-            //             "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
-            //             "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. " +
-            //             "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. " +
-            //             "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-            //     };
-            //     if (!context.Profiles.Any(p => p.Id == testUserProfile.Id))
-            //     {
-            //         context.Profiles.Add(testUserProfile);
-            //     }
-            //     context.SaveChanges();
-            // }
+            var user = userManager.FindByEmailAsync("test@test.com").Result;
+            if (user != null)
+            {
+                var quizzes = new[]
+                {
+                    new Quiz
+                    {
+                        Name = "Quiz",
+                        Description = "Only one answer is correct for each question",
+                        QuizTypeId =  new Guid("00000000-0000-0000-0000-000000000001"),
+                        AppUserId = user!.Id,
+                        Id = new Guid("00000000-0000-0000-0000-000000000001")
+                    },
+                    new Quiz
+                    {
+                        Name = "Poll",
+                        Description = "There are no correct answers",
+                        QuizTypeId = new Guid("00000000-0000-0000-0000-000000000002"),
+                        AppUserId = user!.Id,
+                        Id = new Guid("00000000-0000-0000-0000-000000000002")
+                    }
+                };
+                
+                foreach (var quiz in quizzes)
+                    if (!context.Quizzes.Any(a => a.Id == quiz.Id))
+                        context.Quizzes.Add(quiz);
+                context.SaveChanges();
+                
+                var questions = new[]
+                {
+                    new Question
+                    {
+                        Name = "USA president",
+                        QuizId =  new Guid("00000000-0000-0000-0000-000000000001"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000001")
+                    },
+                    new Question
+                    {
+                        Name = "Estonia president",
+                        QuizId = new Guid("00000000-0000-0000-0000-000000000001"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000002")
+                    },
+                    new Question
+                    {
+                        Name = "Favorite flower",
+                        QuizId = new Guid("00000000-0000-0000-0000-000000000002"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000003")
+                    },
+                    new Question
+                    {
+                        Name = "Favorite band",
+                        QuizId = new Guid("00000000-0000-0000-0000-000000000002"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000004")
+                    }
+                };
+                
+                foreach (var question in questions)
+                    if (!context.Questions.Any(a => a.Id == question.Id))
+                        context.Questions.Add(question);
+                context.SaveChanges();
+                
+                var answers = new[]
+                {
+                    new Answer
+                    {
+                        Name = "Donald Duck",
+                        QuestionId =  new Guid("00000000-0000-0000-0000-000000000001"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000001")
+                    },
+                    new Answer
+                    {
+                        Name = "Donald Trump",
+                        QuestionId = new Guid("00000000-0000-0000-0000-000000000001"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000002")
+                    },
+                    new Answer
+                    {
+                        Name = "Kristiina Ojuland",
+                        QuestionId = new Guid("00000000-0000-0000-0000-000000000002"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000003")
+                    },
+                    new Answer
+                    {
+                        Name = "Kersti Kaljulaid",
+                        QuestionId = new Guid("00000000-0000-0000-0000-000000000002"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000004")
+                    },
+                    new Answer
+                    {
+                        Name = "Tulip",
+                        QuestionId = new Guid("00000000-0000-0000-0000-000000000003"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000005")
+                    },
+                    new Answer
+                    {
+                        Name = "Rose",
+                        QuestionId = new Guid("00000000-0000-0000-0000-000000000003"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000006")
+                    },
+                    new Answer
+                    {
+                        Name = "Lord of the Lost",
+                        QuestionId = new Guid("00000000-0000-0000-0000-000000000004"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000007")
+                    },
+                    new Answer
+                    {
+                        Name = "Justin Bieber",
+                        QuestionId = new Guid("00000000-0000-0000-0000-000000000004"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000008")
+                    },
+                };
+                
+                foreach (var answer in answers)
+                    if (!context.Answers.Any(a => a.Id == answer.Id))
+                        context.Answers.Add(answer);
+                context.SaveChanges();
+                
+                var quizResponses = new[]
+                {
+                    new QuizResponse
+                    {
+                        AppUserId = user!.Id,
+                        AnswerId = new Guid("00000000-0000-0000-0000-000000000001"),
+                        QuestionId = new Guid("00000000-0000-0000-0000-000000000001"),
+                        QuizId = new Guid("00000000-0000-0000-0000-000000000001"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000001")
+                    },
+                    new QuizResponse
+                    {
+                        AppUserId = user!.Id,
+                        AnswerId = new Guid("00000000-0000-0000-0000-000000000004"),
+                        QuestionId = new Guid("00000000-0000-0000-0000-000000000002"),
+                        QuizId = new Guid("00000000-0000-0000-0000-000000000001"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000002")
+                    },
+                    new QuizResponse
+                    {
+                        AppUserId = user!.Id,
+                        AnswerId = new Guid("00000000-0000-0000-0000-000000000006"),
+                        QuestionId = new Guid("00000000-0000-0000-0000-000000000003"),
+                        QuizId = new Guid("00000000-0000-0000-0000-000000000002"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000003")
+                    },
+                    new QuizResponse
+                    {
+                        AppUserId = user!.Id,
+                        AnswerId = new Guid("00000000-0000-0000-0000-000000000007"),
+                        QuestionId = new Guid("00000000-0000-0000-0000-000000000004"),
+                        QuizId = new Guid("00000000-0000-0000-0000-000000000002"),
+                        Id = new Guid("00000000-0000-0000-0000-000000000004")
+                    }
+                };
+                
+                foreach (var quizResponse in quizResponses)
+                    if (!context.QuizResponses.Any(a => a.Id == quizResponse.Id))
+                        context.QuizResponses.Add(quizResponse);
+                context.SaveChanges();
+            }
         }
     }
 }

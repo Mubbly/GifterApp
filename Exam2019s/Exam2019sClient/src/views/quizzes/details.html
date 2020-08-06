@@ -1,0 +1,31 @@
+<template>
+    <section class="question-intro">
+        <section class="intro">
+            <h1>Questions</h1>
+            <p if.bind="_successMessage" class="successmessage">${_successMessage}</p>
+        </section>
+    </section>
+    <section if.bind="!_successMessage" class="questions">
+        <p if.bind="_noQuestionsMessage" class="text-muted">${_noQuestionsMessage}</p>
+        <form if.bind="_questions.length" submit.trigger="onSubmit($event)">
+            <fieldset repeat.for="question of _questions" id="${question.id}">
+                <h2 class="purple control-label">${question.name}</h2>
+                <div class="form-group">
+                    <div class="flex">
+                        <ol if.bind="question.answers.length">
+                            <li repeat.for="answer of question.answers">
+                                <input id="answer.name" type="radio" name="${question.id}" model.bind="answer"
+                                    change.delegate="onSelect($event, question.id, answer.id)" />
+                                <label for="answer.name">${answer.name}</label>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="form-group">
+                <input type="submit" value="Save" class="button" />
+            </fieldset>
+        </form>
+        <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+    </section>
+</template>

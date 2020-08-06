@@ -5,6 +5,135 @@
     </section>
 
     <section if.bind="appState.jwt" class="home-authorized">
-        <h1 class="welcome-text">Welcome back, ${_userFullName}!</h1>    
+        <p class="text-muted icon-group">Welcome back, ${_userFullName}!</p>    
+        <!-- <p>
+            <a route-href="route: quizzesIndex; params.bind: {}" class="button to-quizzes homepage">Answer quizzes</a> 
+        </p> -->
+        <section class="quiz-stats home">
+            <h1>Quiz reports</h1>
+            <p if.bind="_noQuizzesMessage" class="text-muted">${_noQuizzesMessage}</p>
+            <div if.bind="_quizzes.length" class="panel-group" id="accordion">
+                <div repeat.for="quiz of _quizzes" class="panel panel-default card">
+                    <div class="flex flex-row flex-space-btwn">
+                        <h3 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#id-${quiz.id}" click.delegate="onQuizClick($event, quiz.id)">
+                                ★ ${quiz.name}
+                            </a> 
+                        </h3>
+                        <p class="text-muted panel-title">${quiz.description}</p>
+                    </div>
+                    <div id="id-${quiz.id}" class="panel-collapse collapse in">
+                      <div class="panel-body">
+                          <div repeat.for="question of _quizReports[quiz.id].reportQuestions" class="question-stats">
+                            <hr>
+                              <p class="purple"><strong>${question.name}</strong></p>
+                              <p repeat.for="answer of question.reportAnswers">
+                                ${answer.responseCount} - ${answer.name}
+                              </p>
+                            </div>
+                        <!-- <div class="flex flex-row">
+                            <div repeat.for="question of _quizReports[quiz.id].reportQuestions" class="flex flex-column question-stats">
+                                <p class="purple"><strong>${question.name}</strong></p>
+                                <p repeat.for="answer of question.reportAnswers">
+                                  ${answer.responseCount} - ${answer.name}
+                                </p>
+                              </div>
+                        </div> -->
+                            <hr>
+                            <p class="text-muted">Total responses: ${_quizReports[quiz.id].totalResponseCount}</p>
+                            <a route-href="route: quizzesDetails; params.bind: { id: quiz.id }" class="button to-quiz">Answer quiz</a> 
+                      </div>
+                    </div>
+                  </div>
+                <!-- <div if.bind="_quizzes.length" repeat.for="quiz of _quizzes" class="panel panel-default card">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#id-${quiz.id}">
+                        ★ ${quiz.name}</a>
+                    </h4>
+                  <div id="id-${quiz.id}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        ${_quizReport.questions}
+                    </div>
+                  </div>
+                </div> -->
+                <!-- onQuizClick -->
+                <!-- <div class="panel panel-default card">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                        ★ How do I add my gift requests?</a>
+                    </h4>
+                  <div id="collapse2" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul>
+                            <li>Click "My profile" in the page navigation menu to go to your profile</li>
+                            <li>Click "Edit profile" icon next to your name and add info to let others know who you are and what you like!</li>
+                            <li>Click "Add new gift" button to insert a new specific gift into your Wishlist</li>
+                            &nbsp;
+                            <li><i>Optional: Click "Archive" button near the gift to remove it from the Wishlist</i></li>
+                            <li><i>Optional: Click "Archive" in the page navigation menu to see the gifts you have archived</i></li>
+                            <li><i>Optional: Click "Re-activate" button near the archived gift to add it back to Wishlist</i></li>
+                        </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default card">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                        ★ How do I find friends?</a>
+                    </h4>
+                  <div id="collapse3" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul>
+                            <li>Click "Friends" in the page navigation menu to go to your friendslist</li>
+                            <li>Click "Search" button if you want to find people who are not in your friendslist</li>
+                            <li>Click "Invite friends" button if you didn't find the person you were searching for</li>
+                            <li>Click on a person's name to see their profile and Wishlist</li>
+                            &nbsp;
+                            <li><i>Optional: Click "Add friend" to send a friend request to a person</i></li>
+                            <li><i>Optional: Click "Unfriend" to remove a person from your friendlist</i></li>
+                        </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-default card">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">
+                          ★ How do I make gifts for others?</a>
+                      </h4>
+                    <div id="collapse4" class="panel-collapse collapse">
+                      <div class="panel-body">
+                          <ul>
+                            <li>Click "Friends" in the page navigation menu to go to your friendslist</li>
+                            <li>Click on a person's name to see their profile and Wishlist</li>
+                            &nbsp;
+                            <li>Click "Reserve" button near the gift you want to gift to them</li>
+                            <li>Go and buy/make their gift and give/send it to them in person!</li>
+                            <li>Click "Mark gifted" button near the gift after the person has received the gift from you</li>
+                            &nbsp;
+                            <li><i>Optional: Click "Cancel" button near the gift if you no more wish to gift something you reserved</i></li>
+                            <li><i>Optional: Click "Archive" button in the navigation menu to see already gifted gifts</i></li>
+                          </ul>
+                      </div>
+                    </div>
+                  </div>
+                <div class="panel panel-default card">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">
+                          ★ How do I become a Campaign Manager?</a>
+                      </h4>
+                    <div id="collapse5" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        <p>Contact the site owner to request the Campaign Manager role.</p>
+                        <p>Please provide the following information with your e-mail:</p>
+                        <ul>
+                            <li>Your contact information to verify identity</li>
+                            <li>What institution you are representing or collaborating with, if any</li>
+                            <li>Description(s) of the planned campaign(s)</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div> -->
+              </div> 
+        </section>
     </section>
 </template>

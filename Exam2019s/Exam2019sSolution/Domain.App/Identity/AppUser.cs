@@ -27,10 +27,12 @@ namespace Domain.App.Identity
         
         public string FullName => FirstName + " " + LastName;
 
-
-        // Example:
-        // List of all notifications that correspond to this user
-        // [InverseProperty(nameof(UserNotification.AppUser))]
-        // public ICollection<UserNotification>? UserNotifications { get; set; }
+        // Quizzes that this user has created
+        [InverseProperty(nameof(Quiz.AppUser))]
+        public virtual ICollection<Quiz>? Quizzes { get; set; }
+        
+        // Responses that this user has given to quizzes/polls
+        [InverseProperty(nameof(QuizResponse.AppUser))]
+        public virtual ICollection<QuizResponse>? QuizResponses { get; set; }
     }
 }

@@ -2,6 +2,14 @@ import { IExample } from "domain/IExample";
 import { IAppUser } from "domain/IAppUser";
 import { ExampleService } from "service/exampleService";
 import { AppUserService } from "service/base/appUserService";
+import { IQuiz } from '../domain/IQuiz';
+import { IQuestion } from '../domain/IQuestion';
+import { IAnswer } from '../domain/IAnswer';
+import { IQuizResponse } from '../domain/IQuizResponse';
+import { QuizService } from '../service/quizService';
+import { QuestionService } from '../service/questionService';
+import { AnswerService } from '../service/answerService';
+import { QuizResponseService } from '../service/quizResponseService';
 
 // Types
 
@@ -13,22 +21,38 @@ export type HTML5DateString = string;
 
 export enum ExamEntities {
     Example = "Example",
-    AppUser = "AppUser"
+    AppUser = "AppUser",
+    Quiz = "Quiz",
+    Question = "Question",
+    Answer = "Answer",
+    QuizResponse = "QuizResponse"
 }
 
 export type ExamEntity =
     | ExamEntities.Example
-    | ExamEntities.AppUser;
+    | ExamEntities.AppUser
+    | ExamEntities.Quiz
+    | ExamEntities.Question
+    | ExamEntities.Answer
+    | ExamEntities.QuizResponse;
 
 export type ExamInterface =
     | IExample
-    | IAppUser;
+    | IAppUser
+    | IQuiz
+    | IQuestion
+    | IAnswer
+    | IQuizResponse;
 
 export type GeneralInterface<ExamInterface> = { props: ExamInterface };
 
 export type ExamService =
     | ExampleService
-    | AppUserService;
+    | AppUserService
+    | QuizService
+    | QuestionService
+    | AnswerService
+    | QuizResponseService;
 
 export enum ViewTypes {
     Index = "Index",

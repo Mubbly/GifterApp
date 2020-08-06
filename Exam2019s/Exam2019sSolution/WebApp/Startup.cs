@@ -9,6 +9,8 @@ using Contracts.DAL.App;
 using DAL.App.EF;
 using DAL.App.EF.Helpers;
 using Domain.App.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;

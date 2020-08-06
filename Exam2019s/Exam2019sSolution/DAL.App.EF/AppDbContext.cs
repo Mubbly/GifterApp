@@ -28,6 +28,12 @@ namespace DAL.App.EF
         // public DbSet<ActionType> ActionTypes { get; set; } = default!;
         
         public DbSet<Example> Examples { get; set; } = default!;
+        
+        public DbSet<Quiz> Quizzes { get; set; } = default!;
+        public DbSet<Question> Questions { get; set; } = default!;
+        public DbSet<Answer> Answers { get; set; } = default!;
+        public DbSet<QuizResponse> QuizResponses { get; set; } = default!;
+        public DbSet<QuizType> QuizTypes { get; set; } = default!;
 
         public void AddToEntityTracker(IDomainEntityId<Guid> internalEntity, IDomainEntityId<Guid> externalEntity)
         {
@@ -42,6 +48,14 @@ namespace DAL.App.EF
             foreach (var relationship in modelBuilder.Model
                 .GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            
+            // Make sure that only one answer can be 'true' per one question (for Polls)
+            modelBuilder.Entity<Answer>()
+                .HasIndex(e => new { e.QuestionId, e.IsCorrect })
+                .IsUnique().HasFilter($"[{nameof(Answer.IsCorrect)}] = 1");
+
+            
+            
             
             // Example:
             // modelBuilder.Entity<Wishlist>()

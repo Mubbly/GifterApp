@@ -8,6 +8,11 @@ export const ACCOUNT_REGISTER = 'account/register';
 // Data
 export const APP_USERS = 'AppUsers';
 export const EXAMPLES = 'Examples';
+export const QUIZZES = 'Quizzes';
+export const QUESTIONS = 'Questions';
+export const ANSWERS = 'Answers';
+export const QUIZ_RESPONSES = 'QuizResponses';
+
 // User specific
 export const PERSONAL = 'Personal';
 export const USER = 'User';

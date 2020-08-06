@@ -1,4 +1,7 @@
 import { IBaseEntity } from "./base/IBaseEntity";
+import { IQuiz } from "./IQuiz";
+import { Optional } from "types/generalTypes";
+import { IQuizResponse } from "./IQuizResponse";
 
 export interface ICurrentUser extends IBaseEntity {
     firstName: string,
@@ -13,8 +16,11 @@ export interface IAppUser extends IBaseEntity {
     fullName: string;
     dateJoined: string;
 
-    // userExamples: number;
-    // etc
+    // Quizzes that this user has created
+    userQuizzes: Optional<IQuiz[]>;
+
+    // Responses that this user has given to quizzes/polls
+    userQuizResponses: Optional<IQuizResponse[]>;
 }
 
 export interface IAppUserEdit extends IBaseEntity {
