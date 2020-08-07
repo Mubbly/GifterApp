@@ -12,7 +12,9 @@ export const QUIZZES = 'Quizzes';
 export const QUESTIONS = 'Questions';
 export const ANSWERS = 'Answers';
 export const QUIZ_RESPONSES = 'QuizResponses';
+export const QUIZ_TYPES = 'QuizTypes'
 
-// User specific
+// Specific keywords
 export const PERSONAL = 'Personal';
-export const USER = 'User';
+export const USERS = 'Users';
+export const REPORT = 'Report';

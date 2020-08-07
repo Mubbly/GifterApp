@@ -8,7 +8,7 @@
     <section if.bind="!_successMessage" class="questions">
         <p if.bind="_noQuestionsMessage" class="text-muted">${_noQuestionsMessage}</p>
         <form if.bind="_questions.length" submit.trigger="onSubmit($event)">
-            <fieldset repeat.for="question of _questions" id="${question.id}">
+            <fieldset if.bind="!_isCreator" repeat.for="question of _questions" id="${question.id}">
                 <h2 class="purple control-label">${question.name}</h2>
                 <div class="form-group">
                     <div class="flex">
@@ -17,6 +17,41 @@
                                 <input id="answer.name" type="radio" name="${question.id}" model.bind="answer"
                                     change.delegate="onSelect($event, question.id, answer.id)" /><label for="answer.name">${answer.name}</label>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset if.bind="_isCreator" repeat.for="question of _questions" id="${question.id}">
+                <h2 class="purple control-label">${question.name}</h2>
+                <div class="form-group">
+                    <div class="flex">
+                        <div>
+                            <div if.bind="question.answers.length" repeat.for="answer of question.answers" class="flex answer">
+                                <input id="answer.name" type="radio" name="${question.id}" model.bind="answer"
+                                    change.delegate="onSelect($event, question.id, answer.id)" /><label for="answer.name">${answer.name}</label>
+                            </div>
+                            <a class="flex" route-href="route: adminAnswersCreate; params.bind: { id: question.id, name: question.name }"><img src="/icons/icon-add-grey.png" alt="Add answers"/></a>
+                            <!-- <a if.bind="!_isAnswerInputVisible" class="flex" click.delegate="addAnswer($event)" href="#"><img src="/icons/icon-add-grey.png" alt="Add answers"/></a> -->
+                            <!-- <form if.bind="_isAnswerInputVisible" submit.trigger="onSubmit($event)">
+                                <div class="form-group">
+                                    <label class="control-label" for="Name">Name</label>
+                                    <input class="form-control" type="text" data-val="true"
+                                        data-val-maxlength="The field Name must be a string or array type with a maximum length of &#x27;256&#x27;."
+                                        data-val-maxlength-max="256"
+                                        data-val-minlength="The field Name must be a string or array type with a minimum length of &#x27;1&#x27;."
+                                        data-val-minlength-min="1" data-val-required="The Name field is required." id="Name"
+                                        maxlength="256" name="Name" value.bind="_name" />
+                                    <span class="text-danger field-validation-valid" data-valmsg-for="Name"
+                                        data-valmsg-replace="true"></span>
+                                </div>
+                                <div class="form-group form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" data-val="true"
+                                            data-val-required="The IsCorrect field is required." id="IsCorrect" name="IsCorrect"
+                                            value.bind="_isCorrect" /> IsCorrect
+                                    </label>
+                                </div>
+                            </form> -->
                         </div>
                     </div>
                 </div>

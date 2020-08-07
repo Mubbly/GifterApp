@@ -8,17 +8,20 @@ import * as Utils from 'utils/utilFunctions';
 import { AppState } from "state/appState";
 import { IQuizCreate, IQuiz } from "domain/IQuiz";
 import { IQuizType } from "domain/IQuizType";
+import { QuizTypeService } from "service/quizTypeService";
+import { AdminIndex } from '../index';
 
 @autoinject
 export class QuizzesCreate {
     private _name = "";
     private _description = null;
     private _quizTypeId = "";
-    private _quizTypes: Optional<IQuizType> = null;
+    private _quizTypes: IQuizType[] = [];
     private _errorMessage: Optional<string> = null;
 
     constructor(
-        private QuizService: QuizService,
+        private quizTypeService: QuizTypeService,
+        private quizService: QuizService,
         private router: Router,
         private appState: AppState
     ) {}
@@ -30,14 +33,12 @@ export class QuizzesCreate {
         if(!this.appState.jwt) {
             this.router.navigateToRoute(Utils.LOGIN_ROUTE);
         }
-        // this._quizTypes = getQuizTypes(); // TODO
+        this.getQuizTypes();
     }
 
     // On submit create new Quiz
     onSubmit(event: Event) {
         event.preventDefault();
-
-        console.warn("Not implemented");
 
         let newQuiz: IQuizCreate = {
             name: this._name,
@@ -46,22 +47,38 @@ export class QuizzesCreate {
             quizTypeId: this._quizTypeId,
 
         };
-        // this.createQuiz(newQuiz);
+        this.createQuiz(newQuiz);
     }
 
-    // private createQuiz(newQuiz: IQuiz): void {
-    //     this.QuizService
-    //         .create(newQuiz)
-    //         .then((response) => {
-    //             if (!UtilFunctions.isSuccessful(response)) {
-    //                 this._errorMessage = UtilFunctions.getErrorMessage(response);
-    //             } else {
-    //                 var createdQuizId = response.data?.id;
-    //                 this.router.navigateToRoute(Utils.CREATE_QUESTIONS_ROUTE, { id: createdQuizId});
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         });
-    // }
+    private getQuizTypes(): void {
+        this.quizTypeService
+            .getAll()
+            .then((response) => {
+                if (!Utils.isSuccessful(response)) {
+                    this._errorMessage = Utils.getErrorMessage(response);
+                } else {
+                    if(response.data) {
+                        this._quizTypes = response.data;
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    private createQuiz(newQuiz: IQuizCreate): void {
+        this.quizService
+            .create(newQuiz)
+            .then((response) => {
+                if (!UtilFunctions.isSuccessful(response)) {
+                    this._errorMessage = UtilFunctions.getErrorMessage(response);
+                } else {
+                    this.router.navigateToRoute(Utils.ADMIN_ROUTE);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
 }

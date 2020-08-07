@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DAL.App.EF;
 using Domain.App;
+using Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -32,6 +33,16 @@ namespace WebApp.ApiControllers._1._0
         {
             var quizzes = await _context.Quizzes.ToListAsync();
             return quizzes;
+        }
+        
+        // GET: api/Personal/Quizzes
+        [HttpGet("personal")]
+        public async Task<ActionResult<IEnumerable<Quiz>>> GetPersonalQuizzes()
+        {
+            var personalQuizzes = await _context.Quizzes
+                .Where(q => q.AppUserId == User.UserGuidId())
+                .ToListAsync();
+            return personalQuizzes;
         }
 
         // GET: api/Quizzes/5

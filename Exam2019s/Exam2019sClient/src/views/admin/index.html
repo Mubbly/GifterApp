@@ -1,6 +1,44 @@
 <template>
     <h1>Hello, admin!</h1>
-    <a route-href="route: adminQuizzesCreate; params.bind: {}" class="button">Create quizzes</a>
-    <a route-href="route: adminQuestionsCreate; params.bind: {}" class="button">Create questions</a>
-    <a route-href="route: adminAnswersCreate; params.bind: {}" class="button">Create answers</a>
+    <p class="text-muted"><i>Note: Only admin users can create quizzes</i></p>
+    <hr>
+    <a route-href="route: adminQuizzesCreate; params.bind: {}" class="button">Create quiz</a>
+    <section class="personal-quizzes">
+        <section class="intro">
+            <h1>My quizzes</h1>        
+            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+        </section>
+        <section if.bind="_personalQuizzes.length" class="card">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr repeat.for="quiz of _personalQuizzes">
+                        <td>
+                            <a route-href="route: quizzesDetails; params.bind: { id: quiz.id }">${quiz.name}</a>
+                        </td>
+                        <td>
+                            ${quiz.name}
+                        </td>
+                        <td>
+                            ${quiz.description}
+                        </td>
+                        <td class="flex icon-group">   
+                            <a route-href="route: adminQuestionsCreate; params.bind: { id: quiz.id, name: quiz.name }" class="flex-column button" title="Add questions">Add questions</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
 </template>

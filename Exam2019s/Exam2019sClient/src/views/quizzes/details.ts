@@ -11,6 +11,7 @@ import { AnswerService } from "../../service/answerService";
 import { IQuizResponse, IQuizResponseCreate } from "domain/IQuizResponse";
 import { forEach } from "lodash";
 import { QuizResponseService } from "service/quizResponseService";
+import { QuizService } from '../../service/quizService';
 
 @autoinject
 export class QuizzesDetails {
@@ -25,12 +26,15 @@ export class QuizzesDetails {
     private _errorMessage: Optional<string> = null;
 
     private _quizId: string = "";
+    private _isCreator: boolean = false;
+    // private _isAnswerInputVisible: boolean = false;
 
     private _mapOfQuestionAnswers: Record<string, string> = {};
 
     constructor(
         private appState: AppState,
         private router: Router,
+        private quizService: QuizService,
         private questionService: QuestionService,
         private answerService: AnswerService,
         private quizResponseService: QuizResponseService
@@ -44,8 +48,14 @@ export class QuizzesDetails {
         } else {
             this.getAllQuestions(params.id);
             this._quizId = params.id;
+            this.getIsUserQuizCreator(this._quizId);
         }
     }
+
+    // addAnswer(event: Event) {
+    //     event.preventDefault();
+    //     this._isAnswerInputVisible = true;
+    // }
 
     onSelect(event: Event, questionId: string, answerId: string) {
         event.preventDefault();
@@ -140,6 +150,23 @@ export class QuizzesDetails {
                 console.log(error);
                 return [];
             });
+    }
+
+    private getIsUserQuizCreator(quizId: string) {
+        this.quizService
+        .get(quizId)
+        .then((response) => {
+            if(!Utils.isSuccessful(response)) {
+                this.handleErrors(response);
+            } else {
+                if(response.data) {
+                    this._isCreator = response.data.appUserId === this.appState.userId;
+                }
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     /**

@@ -29,30 +29,22 @@
                     <span class="text-danger field-validation-valid" data-valmsg-for="Description"
                         data-valmsg-replace="true"></span>
                 </div>
-                <!-- <div class="form-group">
-                    <label class="control-label" for="StatusId">Quiz type</label>
-                    <select class="form-control" data-val="true" data-val-required="The StatusId field is required."
-                        id="StatusId" name="StatusId" value.bind="_quizTypeId">
-                        <option repeat.for="quizType of _quizTypes" value="${quizType.id}">${quizType.name}</option>
-                    </select>
-                </div> -->
                 <div class="form-group">
                     <label class="control-label" for="QuizTypeId">Quiz type</label>
                     <select class="form-control" data-val="true" data-val-required="The QuizTypeId field is required."
                         id="QuizTypeId" name="QuizTypeId" value.bind="_quizTypeId">
-                        <option value="00000000-0000-0000-0000-000000000001">Quiz - one correct answer</option>
-                        <option value="00000000-0000-0000-0000-000000000002">Poll - no correct answers</option>
+                        <option repeat.for="quizType of _quizTypes" value="${quizType.id}">${quizType.name}</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="button" />
+                </div>
             </form>
-            </d iv>
-            <div class="form-group">
-                <input type="submit" value="Create" class="button" />
             </div>
         </div>
     </div>
 
     <div>
-        <a route-href="route: examplesIndex; params.bind: {}">Back to list</a>
+        <a route-href="route: adminIndex; params.bind: {}">Back to list</a>
     </div>
 </template>

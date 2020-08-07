@@ -17,7 +17,7 @@ export class ExampleService extends BaseService<IExample, IExampleCreate, IExamp
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.USER}/${userId}`, {
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.USERS}/${userId}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });

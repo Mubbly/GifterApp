@@ -1,15 +1,16 @@
 import { Optional } from "types/generalTypes";
 import { IQuiz } from "./IQuiz";
+import { IBaseEntity } from "./base/IBaseEntity";
 
-export interface IQuizType {
+export interface IQuizTypeCreate {
     name: string;
     // Quizzes that have this type
     quizzes?: Optional<IQuiz[]>;
 }
 
-// export interface IQuizResponseEdit extends IBaseEntity, IQuizResponseCreate {
+export interface IQuizTypeEdit extends IBaseEntity, IQuizTypeCreate {
 
-// }
-// export interface IQuizResponse extends IQuizResponseEdit {
+}
+export interface IQuizType extends IQuizTypeEdit {
 
-// }
+}

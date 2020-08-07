@@ -13,6 +13,7 @@ export const STATUS_CODE_SERVER_ERROR = 500;
 
 export const HOME_ROUTE = "homeIndex";
 export const LOGIN_ROUTE = "accountLogin";
+export const ADMIN_ROUTE = "adminIndex";
 export const EXAMPLES_ROUTE = "examplesIndex";
 export const DARK_THEME_CLASS = 'dark-theme';
 

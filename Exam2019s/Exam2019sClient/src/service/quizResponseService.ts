@@ -18,7 +18,7 @@ export class QuizResponseService extends BaseService<IQuizResponse, IQuizRespons
         const AUTH_HEADERS = { 'Authorization': 'Bearer ' + this.appState.jwt}
         try {
             const response = await this.httpClient
-                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.QUIZZES}/${quizId}/report`, {
+                .fetch(`${this.apiEndpointUrl}/${ApiEndpointUrls.QUIZZES}/${quizId}/${ApiEndpointUrls.REPORT}`, {
                     cache: "no-store",
                     headers: AUTH_HEADERS
                 });
