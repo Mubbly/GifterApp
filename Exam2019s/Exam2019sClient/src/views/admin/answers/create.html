@@ -1,0 +1,38 @@
+<template>
+    <h1>Create</h1>
+
+    <h4>Answer</h4>
+    <hr>
+    <div class="row">
+        <div class="col-md-4">
+            <p if.bind="_errorMessage" class="errormessage">${_errorMessage}</p>
+            <form submit.trigger="onSubmit($event)">
+                <div class="form-group">
+                    <label class="control-label" for="Name">Name</label>
+                    <input class="form-control" type="text" data-val="true"
+                        data-val-maxlength="The field Name must be a string or array type with a maximum length of &#x27;256&#x27;."
+                        data-val-maxlength-max="256"
+                        data-val-minlength="The field Name must be a string or array type with a minimum length of &#x27;1&#x27;."
+                        data-val-minlength-min="1" data-val-required="The Name field is required." id="Name"
+                        maxlength="256" name="Name" value.bind="_name" />
+                    <span class="text-danger field-validation-valid" data-valmsg-for="Name"
+                        data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" data-val="true"
+                            data-val-required="The IsCorrect field is required." id="IsCorrect" name="IsCorrect"
+                            value.bind="_isCorrect" /> IsCorrect
+                    </label>
+                </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Create" class="button" />
+        </div>
+    </div>
+    </div>
+
+    <div>
+        <a route-href="route: examplesIndex; params.bind: {}">Back to list</a>
+    </div>
+</template>

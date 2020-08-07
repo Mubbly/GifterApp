@@ -54,44 +54,9 @@ namespace WebApp.ApiControllers._1._0
             {
                 return NotFound();
             }
-            var questions = await _context.Questions
-                .Where(q => q.QuizId == quiz.Id)
-                .Include(q => q.Answers)
-                .ThenInclude(a => a.QuizResponses)
-                .ToListAsync();
 
-            // Create a report showing how many people responded to which answers on which questions under queried quiz
-            var quizReport = new QuizReportDTO(quiz.Name, new List<ReportQuestionsDTO>());
-            foreach (var question in questions)
-            {
-                // Add question data
-                var reportQuestions = new ReportQuestionsDTO(question.Name, new List<ReportAnswersDTO>());
-                quizReport.ReportQuestions.Add(reportQuestions);
-                
-                var answers = question?.Answers;
-                if (answers == null)
-                {
-                    continue;
-                }
-                foreach (var answer in answers)
-                {
-                    // Add answer data
-                    var reportAnswers = new ReportAnswersDTO(answer.Name, 0);
-                    reportQuestions.ReportAnswers.Add(reportAnswers);
-                    
-                    if (answer.QuizResponses == null)
-                    {
-                        continue;
-                    }
-                    // Add answer counts
-                    reportAnswers.ResponseCount = answer.QuizResponses.Count;
-                    quizReport.TotalResponseCount += answer.QuizResponses.Count;
-                }
-                // Sort answers by counts
-                reportQuestions.ReportAnswers = reportQuestions.ReportAnswers
-                    .OrderByDescending(ra => ra.ResponseCount)
-                    .ToList();
-            }
+            // Create a report showing how many people responded to which answers (and on which questions) under given quiz plus other data
+            var quizReport = await GetQuizReport(quiz);
             return quizReport;
         }
 
@@ -208,6 +173,55 @@ namespace WebApp.ApiControllers._1._0
         private bool QuizResponseExists(Guid id)
         {
             return _context.QuizResponses.Any(e => e.Id == id);
+        }
+        
+         /** Create a report showing how many people responded to which answers (and on which questions) under given quiz plus other data */
+        private async Task<QuizReportDTO> GetQuizReport(Quiz quiz)
+        {
+            var questions = await _context.Questions
+                .Where(q => q.QuizId == quiz.Id)
+                .Include(q => q.Answers)
+                .ThenInclude(a => a.QuizResponses)
+                .ToListAsync();
+            
+            var quizReport = new QuizReportDTO(quiz.Name, new List<ReportQuestionsDTO>());
+            foreach (var question in questions)
+            {
+                // Add question data
+                var reportQuestions = new ReportQuestionsDTO(question.Name, new List<ReportAnswersDTO>());
+                quizReport.ReportQuestions.Add(reportQuestions);
+                
+                var answers = question?.Answers;
+                if (answers == null)
+                {
+                    continue;
+                }
+                foreach (var answer in answers)
+                {
+                    // Add answer data
+                    var reportAnswers = new ReportAnswersDTO(answer.Name, 0);
+                    reportQuestions.ReportAnswers.Add(reportAnswers);
+                    
+                    if (answer.QuizResponses == null)
+                    {
+                        continue;
+                    }
+
+                    var isTypeQuiz = quiz.QuizTypeId == new Guid("00000000-0000-0000-0000-000000000001");
+                    if (isTypeQuiz)
+                    {
+                        reportAnswers.IsCorrect = answer.IsCorrect;
+                    }
+                    // Add answer counts
+                    reportAnswers.ResponseCount = answer.QuizResponses.Count;
+                    quizReport.TotalResponseCount += answer.QuizResponses.Count;
+                }
+                // Sort answers by counts
+                reportQuestions.ReportAnswers = reportQuestions.ReportAnswers
+                    .OrderByDescending(ra => ra.ResponseCount)
+                    .ToList();
+            }
+            return quizReport;
         }
     }
 }

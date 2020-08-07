@@ -12,13 +12,12 @@
                 <h2 class="purple control-label">${question.name}</h2>
                 <div class="form-group">
                     <div class="flex">
-                        <ol if.bind="question.answers.length">
-                            <li repeat.for="answer of question.answers">
+                        <div>
+                            <div if.bind="question.answers.length" repeat.for="answer of question.answers" class="flex answer">
                                 <input id="answer.name" type="radio" name="${question.id}" model.bind="answer"
-                                    change.delegate="onSelect($event, question.id, answer.id)" />
-                                <label for="answer.name">${answer.name}</label>
-                            </li>
-                        </ol>
+                                    change.delegate="onSelect($event, question.id, answer.id)" /><label for="answer.name">${answer.name}</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </fieldset>

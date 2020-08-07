@@ -492,6 +492,8 @@ input[type='radio']:checked:before {
 
 input[type='radio'] {
     border-radius: 50% !important;
+    min-width: 20px;
+    min-height: 20px;
 }
 
 input[type='radio'],
@@ -509,6 +511,14 @@ input[type='radio']:checked:before {
 
 textarea {
     overflow: hidden;
+}
+
+form {
+    margin-top: 2rem;
+}
+
+.answer {
+    padding-bottom: 10px;
 }
 
 
@@ -578,7 +588,8 @@ body.dark-theme table tbody tr {
 body.dark-theme .navbar,
 body.dark-theme .dropdown-menu,
 body.dark-theme input,
-body.dark-theme textarea {
+body.dark-theme textarea,
+body.dark-theme select {
     background: #424242 !important;
 }
 
@@ -647,10 +658,20 @@ body.dark-theme input[type='password']:hover,
 body.dark-theme textarea:hover,
 body.dark-theme input[type='checkbox']:hover,
 body.dark-theme input[type='radio']:hover,
-body.dark-theme input[type='checkbox']:checked,
-body.dark-theme input[type='radio']:checked {
+body.dark-theme select:hover,
+body.dark-theme select:focus {
     box-shadow: 0 0 .5rem #9575CD !important;
     /* box-shadow: 0 2px 2px 0 #C5CAE9, 0 2px 2px 0 #C5CAE9; */
+    border: 1px solid #9575CD !important;
+    color: #F5F5F5;
+}
+
+body.dark-theme select {
+    color: #F5F5F5;
+}
+
+body.dark-theme input[type='checkbox']:checked,
+body.dark-theme input[type='radio']:checked {
     border: 1px solid #9575CD !important;
     color: #F5F5F5;
 }

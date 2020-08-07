@@ -19,7 +19,7 @@ namespace PublicApi.DTO.v1
         public string Name { get; set; } = default!;
         
         [Required] public int TotalResponseCount { get; set; }
-
+        
         [Required] 
         public ICollection<ReportQuestionsDTO> ReportQuestions { get; set; } = new List<ReportQuestionsDTO>();
     }
@@ -53,6 +53,8 @@ namespace PublicApi.DTO.v1
         }
         
         [Required] public string Name { get; set; } = default!;
+
+        [Required] public bool? IsCorrect { get; set; }
         [Required] public int ResponseCount { get; set; }
     }
 }

@@ -7,11 +7,12 @@ import { IQuizType } from "./IQuizType";
 export interface IQuizCreate {
     name: string;
     description: Optional<string>;
-    quizType: IQuizType;
+    quizTypeId: string;
+    quizType?: IQuizType;
 
     // AppUser that created the quiz
     appUserId: string;
-    appUser: IAppUser;
+    appUser?: IAppUser;
 
     // Questions the quiz contains
     questions?: Optional<IQuestion[]>;

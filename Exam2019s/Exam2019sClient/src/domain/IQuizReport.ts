@@ -13,5 +13,6 @@ interface IQuizQuestion {
 
 interface IQuizAnswer {
     name: string;
+    isCorrect?: boolean;
     responseCount: number;
 }
