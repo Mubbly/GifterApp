@@ -18,7 +18,7 @@
 * Base packages uploaded and imported via NuGet
 * <strong>Front-end</strong> client web application written using Aurelia framework and TypeScript
 * <strong>Design</strong> currently implemented in plain CSS (will be changed to SASS or LESS).
-* Both back-end and back-end were publicly hosted using Docker and Azure
+* Both back-end and front-end were publicly hosted using Docker and Azure
 * Created by Melissa Eenmaa, 2020
 
 ### 🏁 About the app
