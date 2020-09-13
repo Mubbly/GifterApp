@@ -41,14 +41,14 @@ Once it is available again the URL will appear here.
 
 ## :camera: Screenshots
 
-### Homepage
+### :house: Homepage
 #### Not logged in
 ![homepage](Documents/screenshots/homepage.png)
 ![homepage](Documents/screenshots/login.png)
 #### Logged in
 ![homepage_loggedin](Documents/screenshots/homepage_loggedin.png)
 
-### Users
+### :dancer: :gift: Users & Gifts
 #### Personal profile
 ![homepage_loggedin](Documents/screenshots/profile_personal.png)
 #### Friend's profile
@@ -61,13 +61,12 @@ Once it is available again the URL will appear here.
 ![homepage_loggedin](Documents/screenshots/friendlist.png)
 #### Invited users
 ![homepage_loggedin](Documents/screenshots/invited_users.png)
-
 ### Reserved gifts
 ![homepage_loggedin](Documents/screenshots/gifts_reserved.png)
 ### Archived gifts
 ![homepage_loggedin](Documents/screenshots/gifts_archived.png)
 
-### Campaigns
+### :gift_heart: Campaigns
 #### All public
 ![homepage_loggedin](Documents/screenshots/campaigns.png)
 #### Personal
@@ -75,7 +74,7 @@ Once it is available again the URL will appear here.
 #### Donatees for specific Campaign
 ![homepage_loggedin](Documents/screenshots/campaign_donatees.png)
 
-### Examples of the light theme
+### :sun_with_face: Examples of the light theme
 #### Homepage
 ![homepage_loggedin](Documents/screenshots/lighttheme_homepage.png)
 #### Archived gifts
