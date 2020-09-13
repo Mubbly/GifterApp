@@ -15,6 +15,7 @@
   * Public layer - Public Data Transfer Objects (DTOs) and API Controllers using REST API
 * JSON Web Token (JWT) was used for authorization
 * Swagger was used for versioned API documentation
+* Base packages uploaded and imported via NuGet
 * <strong>Front-end</strong> client web application written using Aurelia framework and TypeScript
 * <strong>Design</strong> currently implemented in plain CSS (will be changed to SASS or LESS).
 * Both back-end and back-end were publicly hosted using Docker and Azure
@@ -40,4 +41,44 @@ Once it is available again the URL will appear here.
 
 ## :camera: Screenshots
 
-<i>To be added</i>
+### Homepage
+#### Not logged in
+![homepage](Documents/screenshots/homepage.png)
+![homepage](Documents/screenshots/login.png)
+#### Logged in
+![homepage_loggedin](Documents/screenshots/homepage_loggedin.png)
+
+### Users
+#### Personal profile
+![homepage_loggedin](Documents/screenshots/profile_personal.png)
+#### Friend's profile
+![homepage_loggedin](Documents/screenshots/profile_friend.png)
+#### User search
+![homepage_loggedin](Documents/screenshots/search.png)
+#### User search results
+![homepage_loggedin](Documents/screenshots/search_results.png)
+#### Friendlist
+![homepage_loggedin](Documents/screenshots/friendlist.png)
+#### Invited users
+![homepage_loggedin](Documents/screenshots/invited_users.png)
+
+### Reserved gifts
+![homepage_loggedin](Documents/screenshots/gifts_reserved.png)
+### Archived gifts
+![homepage_loggedin](Documents/screenshots/gifts_archived.png)
+
+### Campaigns
+#### All public
+![homepage_loggedin](Documents/screenshots/campaigns.png)
+#### Personal
+![homepage_loggedin](Documents/screenshots/campaigns_personal.png)
+#### Donatees for specific Campaign
+![homepage_loggedin](Documents/screenshots/campaign_donatees.png)
+
+### Examples of the light theme
+#### Homepage
+![homepage_loggedin](Documents/screenshots/lighttheme_homepage.png)
+#### Archived gifts
+![homepage_loggedin](Documents/screenshots/lighttheme_gifts_archived.png)
+
+
