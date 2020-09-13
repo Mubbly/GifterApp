@@ -8,7 +8,7 @@
 
 ### 🔧 Behind the project
 * Started as a personal school project for the subject "ICD0009 Building Distributed Systems". Got a grade 5 (A).
-* <strong>Back-end</strong> written in C# using .NET Core and distributed architecture:
+* <strong>Back-end</strong> written in C# using .NET Core, Entity Framework (EF) and distributed architecture:
   * Domain - Database models
   * Data Access Layer (DAL) - Repositories and Unit of Work (UOW)
   * Business Logic Layer (BLL) - Services
