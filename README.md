@@ -13,6 +13,7 @@
   * Data Access Layer (DAL) - Repositories and Unit of Work (UOW)
   * Business Logic Layer (BLL) - Services
   * Public layer - Public Data Transfer Objects (DTOs) and API Controllers using REST API
+* Microsoft SQL Server (MSSQL) was used as a database
 * JSON Web Token (JWT) was used for authorization
 * Swagger was used for versioned API documentation
 * Base packages uploaded and imported via NuGet
