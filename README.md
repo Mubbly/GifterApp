@@ -33,6 +33,8 @@
   * Inviting new users to join
   * Reserving gifts (from other users' Wishlists), cancelling or gifting them
   * Archiving gifts (personal or others users'), reactivating or deleting them
+  * Seeing all Campaigns and interacting with Donatees/their gifts
+  * Creating new Campaigns and adding Donatees (only users with Campaign Manager role)
 
 ## 🚴 Usage
 
