@@ -1,7 +1,4 @@
 <div align="center">
-
-
-# Gifter App
   <h1><code>GifterApp</code></h1>
 
   <strong>A social media platform dedicated to gift exhange between users and donation campaigns.</strong>
