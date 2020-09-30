@@ -22,6 +22,8 @@
 * Both back-end and front-end were publicly hosted using Docker and Azure
 * Created by Melissa Eenmaa, 2020
 
+📃 NOTE: NEEDS REFACTORING! Especially regarding DRY principle. Many things were done quickly to meet the tight deadlines.
+
 ### 🏁 About the app
 * Working features:
   * Registering & logging in
